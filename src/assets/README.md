@@ -1,6 +1,6 @@
 # Assets Directory
 
-This directory contains app icons and other assets for OpenWhispr.
+This directory contains app icons and other assets for MoonlitVoice.
 
 ## Required Icons
 
