@@ -1,6 +1,6 @@
 # AriaKey
 
-[![Downloads](https://img.shields.io/github/downloads/GravityPoet/moonlit-voice-pro/total?style=flat&color=blue)](https://github.com/GravityPoet/moonlit-voice-pro/releases)
+[![Downloads](https://img.shields.io/github/downloads/GravityPoet/AriaKey/total?style=flat&color=blue)](https://github.com/GravityPoet/AriaKey/releases)
 
 An open source desktop dictation application that converts speech to text using OpenAI Whisper. Features both local and cloud processing options for maximum flexibility and privacy.
 
@@ -8,7 +8,7 @@ App listing copy (ZH/EN): [`docs/marketing/APP_STORE_COPY.md`](docs/marketing/AP
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=GravityPoet/moonlit-voice-pro&type=date&legend=top-left)](https://www.star-history.com/#GravityPoet/moonlit-voice-pro&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=GravityPoet/AriaKey&type=date&legend=top-left)](https://www.star-history.com/#GravityPoet/AriaKey&type=date&legend=top-left)
 
 ## License
 
@@ -68,8 +68,8 @@ Keep `LICENSE`, `NOTICE`, and `resources/legal/OPEN_SOURCE_NOTICES.txt` in both 
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/GravityPoet/moonlit-voice-pro.git
-   cd moonlit-voice-pro
+   git clone https://github.com/GravityPoet/AriaKey.git
+   cd AriaKey
    ```
 
 2. **Install dependencies**:
@@ -703,7 +703,7 @@ AriaKey is designed with privacy and security in mind:
 
 ### Getting Help
 
-- Check the [Issues](https://github.com/GravityPoet/moonlit-voice-pro/issues) page
+- Check the [Issues](https://github.com/GravityPoet/AriaKey/issues) page
 - Review the console logs for debugging information
 - For local processing: Ensure whisper.cpp is accessible and models are downloaded
 - For cloud processing: Verify your OpenAI API key and billing status

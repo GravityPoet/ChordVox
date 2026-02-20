@@ -195,7 +195,7 @@
   "publish": {
     "provider": "github",
     "owner": "GravityPoet",
-    "repo": "moonlit-voice-pro",
+    "repo": "AriaKey",
     "private": false,
     "releaseType": "draft"
   }

@@ -617,7 +617,7 @@ export default function AuthenticationStep({
       <p className="text-[10px] text-muted-foreground/80 leading-tight text-center">
         {t("auth.legal.prefix")}{" "}
         <a
-          href="https://github.com/GravityPoet/moonlit-voice-pro/blob/main/docs/legal/TERMS.md"
+          href="https://github.com/GravityPoet/AriaKey/blob/main/docs/legal/TERMS.md"
           target="_blank"
           rel="noopener noreferrer"
           className="text-link underline decoration-link/30 hover:decoration-link/60 transition-colors"
@@ -626,7 +626,7 @@ export default function AuthenticationStep({
         </a>{" "}
         {t("auth.legal.and")}{" "}
         <a
-          href="https://github.com/GravityPoet/moonlit-voice-pro/blob/main/docs/legal/PRIVACY.md"
+          href="https://github.com/GravityPoet/AriaKey/blob/main/docs/legal/PRIVACY.md"
           target="_blank"
           rel="noopener noreferrer"
           className="text-link underline decoration-link/30 hover:decoration-link/60 transition-colors"
