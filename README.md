@@ -16,6 +16,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you are preparing a paid desktop distribution, see [`docs/COMMERCIAL_RELEASE.md`](docs/COMMERCIAL_RELEASE.md) for release automation and license validation setup.
 
+## Attribution and License Compliance
+
+This project includes code derived from `OpenWhispr/openwhispr` under the MIT License.
+Keep `LICENSE`, `NOTICE`, and `resources/legal/OPEN_SOURCE_NOTICES.txt` in both source and release artifacts.
+
 ## Features
 
 - ☁️ **OpenWhispr Cloud**: Sign in and transcribe instantly — no API keys needed, with free and Pro plans
