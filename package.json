@@ -1,7 +1,7 @@
 {
-  "name": "open-whispr",
+  "name": "ariakey",
   "version": "1.4.11",
-  "description": "A desktop dictation application using whisper.cpp for speech-to-text transcription",
+  "description": "AriaKey - AI Voice Keyboard. Dictate & AI Refine Offline.",
   "main": "main.js",
   "private": true,
   "scripts": {
@@ -58,8 +58,8 @@
     "desktop-app"
   ],
   "author": {
-    "name": "MoonlitVoice Team",
-    "email": "support@moonlitvoice.app"
+    "name": "AriaKey Team",
+    "email": "support@ariakey.app"
   },
   "license": "MIT",
   "devDependencies": {

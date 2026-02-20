@@ -54,9 +54,9 @@ export default function SupportDropdown({ className }: SupportDropdownProps) {
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={async () => {
-            const result = await window.electronAPI?.openExternal("mailto:support@moonlitvoice.app");
+            const result = await window.electronAPI?.openExternal("mailto:support@ariakey.app");
             if (!result?.success) {
-              openExternal("https://mail.google.com/mail/?view=cm&to=support@moonlitvoice.app");
+              openExternal("https://mail.google.com/mail/?view=cm&to=support@ariakey.app");
             }
           }}
         >

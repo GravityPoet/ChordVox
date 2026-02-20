@@ -1,8 +1,8 @@
-# MoonlitVoice Privacy Policy (Draft)
+# AriaKey Privacy Policy (Draft)
 
 Last updated: 2026-02-21
 
-This is a draft privacy policy for MoonlitVoice and should be reviewed by legal counsel before commercial launch.
+This is a draft privacy policy for AriaKey and should be reviewed by legal counsel before commercial launch.
 
 ## 1. Data Processing Modes
 
@@ -31,7 +31,7 @@ When using external AI providers or payment platforms, their privacy policies al
 
 ## 7. Open Source Attribution
 
-MoonlitVoice includes software under open source licenses. See:
+AriaKey includes software under open source licenses. See:
 
 - `LICENSE`
 - `NOTICE`

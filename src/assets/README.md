@@ -1,6 +1,6 @@
 # Assets Directory
 
-This directory contains app icons and other assets for MoonlitVoice.
+This directory contains app icons and other assets for AriaKey.
 
 ## Required Icons
 

@@ -1,12 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-CACHE_DIR="$HOME/.cache/moonlitvoice"
+CACHE_DIR="$HOME/.cache/ariakey"
 MODELS_DIR="$CACHE_DIR/models"
 
 if [ -d "$MODELS_DIR" ]; then
   rm -rf "$MODELS_DIR"
-  echo "Removed MoonlitVoice cached models"
+  echo "Removed AriaKey cached models"
 fi
 
 if [ -d "$CACHE_DIR" ]; then

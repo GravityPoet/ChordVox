@@ -171,7 +171,7 @@ class WhisperManager {
       }
     }
 
-    debugLogger.info("MoonlitVoice dependency check", status);
+    debugLogger.info("AriaKey dependency check", status);
 
     // Log a summary for easy scanning
     const serverStatus = status.whisperServer.available

@@ -6,7 +6,7 @@ const http = require("http");
 const { pipeline } = require("stream");
 const debugLogger = require("./debugLogger");
 
-const USER_AGENT = "MoonlitVoice/1.0";
+const USER_AGENT = "AriaKey/1.0";
 const PROGRESS_THROTTLE_MS = 100;
 const MAX_REDIRECTS = 5;
 const DEFAULT_TIMEOUT = 60000;

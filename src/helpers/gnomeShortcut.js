@@ -1,12 +1,12 @@
 const { execFileSync } = require("child_process");
 const debugLogger = require("./debugLogger");
 
-const DBUS_SERVICE_NAME = "com.moonlitvoice.App";
-const DBUS_OBJECT_PATH = "/com/moonlitvoice/App";
-const DBUS_INTERFACE = "com.moonlitvoice.App";
+const DBUS_SERVICE_NAME = "com.ariakey.App";
+const DBUS_OBJECT_PATH = "/com/ariakey/App";
+const DBUS_INTERFACE = "com.ariakey.App";
 
 const KEYBINDING_PATH =
-  "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/moonlitvoice/";
+  "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ariakey/";
 const KEYBINDING_SCHEMA = "org.gnome.settings-daemon.plugins.media-keys.custom-keybinding";
 
 // Valid pattern for GNOME shortcut format (e.g., "<Alt>r", "<Control><Shift>space")
@@ -89,7 +89,7 @@ class GnomeShortcutManager {
   }
 
   _createInterfaceClass(dbusModule, callback) {
-    class MoonlitVoiceInterface extends dbusModule.interface.Interface {
+    class AriaKeyInterface extends dbusModule.interface.Interface {
       constructor() {
         super(DBUS_INTERFACE);
         this._callback = callback;
@@ -102,13 +102,13 @@ class GnomeShortcutManager {
       }
     }
 
-    MoonlitVoiceInterface.configureMembers({
+    AriaKeyInterface.configureMembers({
       methods: {
         Toggle: { inSignature: "", outSignature: "" },
       },
     });
 
-    return MoonlitVoiceInterface;
+    return AriaKeyInterface;
   }
 
   static isValidShortcut(shortcut) {
@@ -137,7 +137,7 @@ class GnomeShortcutManager {
 
       execFileSync(
         "gsettings",
-        ["set", `${KEYBINDING_SCHEMA}:${KEYBINDING_PATH}`, "name", "MoonlitVoice Toggle"],
+        ["set", `${KEYBINDING_SCHEMA}:${KEYBINDING_PATH}`, "name", "AriaKey Toggle"],
         { stdio: "pipe" }
       );
       execFileSync(

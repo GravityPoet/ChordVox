@@ -166,7 +166,7 @@ class EnvironmentManager {
   async createProductionEnvFile(apiKey) {
     const envPath = path.join(app.getPath("userData"), ".env");
 
-    const envContent = `# MoonlitVoice Environment Variables
+    const envContent = `# AriaKey Environment Variables
 # This file was created automatically for production use
 OPENAI_API_KEY=${apiKey}
 `;
@@ -180,7 +180,7 @@ OPENAI_API_KEY=${apiKey}
   async saveAllKeysToEnvFile() {
     const envPath = path.join(app.getPath("userData"), ".env");
 
-    let envContent = "# MoonlitVoice Environment Variables\n";
+    let envContent = "# AriaKey Environment Variables\n";
 
     for (const key of PERSISTED_KEYS) {
       if (process.env[key]) {

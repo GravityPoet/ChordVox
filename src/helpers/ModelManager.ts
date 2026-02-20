@@ -46,7 +46,7 @@ class ModelManager {
 
   private getModelsDir(): string {
     const homeDir = app.getPath("home");
-    return path.join(homeDir, ".cache", "moonlitvoice", "models");
+    return path.join(homeDir, ".cache", "ariakey", "models");
   }
 
   async ensureModelsDir(): Promise<void> {

@@ -375,7 +375,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       } else if (isOpenWhisprCloudMode) {
         if (!isSignedIn) {
           const err = new Error(
-            "MoonlitVoice Cloud requires sign-in. Please sign in again or switch to BYOK mode."
+            "AriaKey Cloud requires sign-in. Please sign in again or switch to BYOK mode."
           );
           err.code = "AUTH_REQUIRED";
           throw err;
@@ -2125,7 +2125,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       } else if (error.code === "AUTH_EXPIRED" || error.code === "AUTH_REQUIRED") {
         errorTitle = "Sign-in Required";
         errorDescription =
-          "Your MoonlitVoice Cloud session is unavailable. Please sign in again from Settings.";
+          "Your AriaKey Cloud session is unavailable. Please sign in again from Settings.";
       }
 
       this.onError?.({
