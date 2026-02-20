@@ -154,6 +154,7 @@ const ClipboardManager = require("./src/helpers/clipboard");
 const WhisperManager = require("./src/helpers/whisper");
 const ParakeetManager = require("./src/helpers/parakeet");
 const SenseVoiceManager = require("./src/helpers/sensevoice");
+const LicenseManager = require("./src/helpers/licenseManager");
 const TrayManager = require("./src/helpers/tray");
 const IPCHandlers = require("./src/helpers/ipcHandlers");
 const UpdateManager = require("./src/updater");
@@ -172,6 +173,7 @@ let clipboardManager = null;
 let whisperManager = null;
 let parakeetManager = null;
 let senseVoiceManager = null;
+let licenseManager = null;
 let trayManager = null;
 let updateManager = null;
 let globeKeyManager = null;
@@ -236,6 +238,7 @@ function initializeCoreManagers() {
   whisperManager = new WhisperManager();
   parakeetManager = new ParakeetManager();
   senseVoiceManager = new SenseVoiceManager();
+  licenseManager = new LicenseManager();
   updateManager = new UpdateManager();
   windowsKeyManager = new WindowsKeyManager();
 
@@ -247,6 +250,7 @@ function initializeCoreManagers() {
     whisperManager,
     parakeetManager,
     senseVoiceManager,
+    licenseManager,
     windowManager,
     updateManager,
     windowsKeyManager,

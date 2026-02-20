@@ -183,6 +183,21 @@ export interface FilePickResult {
   error?: string;
 }
 
+export interface LicenseStatusResult {
+  success: boolean;
+  configured: boolean;
+  requiresServerValidation?: boolean;
+  status: "unlicensed" | "active" | "expired" | "offline_grace" | "invalid";
+  isActive: boolean;
+  keyPresent: boolean;
+  plan?: string | null;
+  expiresAt?: string | null;
+  lastValidatedAt?: string | null;
+  offlineGraceUntil?: string | null;
+  message?: string | null;
+  error?: string | null;
+}
+
 export interface PasteToolsResult {
   platform: "darwin" | "win32" | "linux";
   available: boolean;
@@ -423,6 +438,10 @@ declare global {
       saveCustomTranscriptionKey?: (key: string) => Promise<void>;
       getCustomReasoningKey?: () => Promise<string | null>;
       saveCustomReasoningKey?: (key: string) => Promise<void>;
+      licenseGetStatus?: () => Promise<LicenseStatusResult>;
+      licenseActivate?: (licenseKey: string) => Promise<LicenseStatusResult>;
+      licenseValidate?: () => Promise<LicenseStatusResult>;
+      licenseClear?: () => Promise<LicenseStatusResult>;
 
       // Dictation key persistence (file-based for reliable startup)
       getDictationKey?: () => Promise<string | null>;

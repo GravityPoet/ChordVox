@@ -20,6 +20,7 @@ class IPCHandlers {
     this.whisperManager = managers.whisperManager;
     this.parakeetManager = managers.parakeetManager;
     this.senseVoiceManager = managers.senseVoiceManager;
+    this.licenseManager = managers.licenseManager;
     this.windowManager = managers.windowManager;
     this.updateManager = managers.updateManager;
     this.windowsKeyManager = managers.windowsKeyManager;
@@ -944,6 +945,70 @@ class IPCHandlers {
 
     ipcMain.handle("save-custom-reasoning-key", async (event, key) => {
       return this.environmentManager.saveCustomReasoningKey(key);
+    });
+
+    ipcMain.handle("license-get-status", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.getStatus();
+    });
+
+    ipcMain.handle("license-activate", async (_event, licenseKey) => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.activateLicense(licenseKey);
+    });
+
+    ipcMain.handle("license-validate", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.validateLicense();
+    });
+
+    ipcMain.handle("license-clear", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.clearLicense();
     });
 
     // Dictation key handlers for reliable persistence across restarts
