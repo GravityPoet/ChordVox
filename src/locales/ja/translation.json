@@ -1,9 +1,9 @@
 {
   "app": {
-    "name": "MoonlitVoice",
-    "loading": "MoonlitVoice を読み込み中...",
+    "name": "AriaKey",
+    "loading": "AriaKey を読み込み中...",
     "oauth": {
-      "redirectTitle": "MoonlitVoice にリダイレクト中",
+      "redirectTitle": "AriaKey にリダイレクト中",
       "closeTab": "このタブは閉じて構いません"
     },
     "buttons": {
@@ -36,7 +36,7 @@
       "sectionTitle": "言語",
       "sectionDescription": "インターフェースと文字起こしの言語を個別に設定",
       "uiLabel": "インターフェース言語",
-      "uiDescription": "MoonlitVoice のインターフェースで使用する言語を選択",
+      "uiDescription": "AriaKey のインターフェースで使用する言語を選択",
       "transcriptionLabel": "文字起こし言語",
       "transcriptionDescription": "より正確な文字起こしのために話す言語を選択",
       "uiOption": {
@@ -59,12 +59,12 @@
       "hide": "ディクテーションパネルを非表示"
     },
     "openControlPanel": "コントロールパネルを開く",
-    "quit": "MoonlitVoice を終了",
-    "tooltip": "MoonlitVoice - 音声ディクテーション"
+    "quit": "AriaKey を終了",
+    "tooltip": "AriaKey - 音声ディクテーション"
   },
   "menu": {
-    "appLabel": "MoonlitVoice",
-    "quit": "MoonlitVoice を終了",
+    "appLabel": "AriaKey",
+    "quit": "AriaKey を終了",
     "speech": "スピーチ",
     "help": "ヘルプ",
     "learnMore": "詳細を見る",
@@ -81,8 +81,8 @@
       "message": "ブラウザでリンクを開けませんでした:\n{{url}}\n\nエラー: {{error}}"
     },
     "loadFailure": {
-      "title": "MoonlitVoice の読み込みに失敗しました",
-      "message": "MoonlitVoice の UI を読み込めませんでした。",
+      "title": "AriaKey の読み込みに失敗しました",
+      "message": "AriaKey の UI を読み込めませんでした。",
       "detail": {
         "window": "ウィンドウ: {{windowName}}",
         "error": "エラー {{errorCode}}: {{errorDescription}}",
@@ -93,17 +93,17 @@
   },
   "startup": {
     "error": {
-      "title": "MoonlitVoice 起動エラー",
+      "title": "AriaKey 起動エラー",
       "message": "アプリケーションの起動に失敗しました:\n\n{{error}}\n\nこの問題を報告してください。"
     },
     "globeHotkey": {
       "title": "Globe ホットキーが使用できません",
-      "message": "MoonlitVoice は Globe キーのホットキーを有効にできませんでした。",
+      "message": "AriaKey は Globe キーのホットキーを有効にできませんでした。",
       "details": {
         "unknown": "Globe リスナーの起動中に不明なエラーが発生しました。",
         "fallback": "Globe キーのショートカットは無効のままになります。既存のキーボードショートカットは引き続き使用できます。",
         "devHint": "`npm run compile:globe` を実行し、アプリを再ビルドしてリスナーバイナリを再生成してください。",
-        "reinstallHint": "MoonlitVoice を再インストールするか、問題が解決しない場合はサポートにお問い合わせください。"
+        "reinstallHint": "AriaKey を再インストールするか、問題が解決しない場合はサポートにお問い合わせください。"
       }
     }
   },
@@ -123,9 +123,9 @@
     "accessibility": "このプラットフォームではアクセシビリティ設定を利用できません。"
   },
   "titleBar": {
-    "quitTitle": "MoonlitVoice を終了",
-    "quitConfirmTitle": "MoonlitVoice を終了しますか？",
-    "quitConfirmDescription": "MoonlitVoice を終了し、バックグラウンドプロセスを停止します。",
+    "quitTitle": "AriaKey を終了",
+    "quitConfirmTitle": "AriaKey を終了しますか？",
+    "quitConfirmDescription": "AriaKey を終了し、バックグラウンドプロセスを停止します。",
     "quit": "終了",
     "cancel": "キャンセル"
   },
@@ -201,7 +201,7 @@
       "accessibilityTitle": "アクセシビリティ",
       "accessibilityDescription": "アプリへのテキスト貼り付けに使用",
       "testAndGrant": "テストして許可",
-      "requiredForApp": "MoonlitVoice の動作に必要です",
+      "requiredForApp": "AriaKey の動作に必要です",
       "microphoneRequired": "マイクへのアクセスが必要です"
     },
     "transcription": {
@@ -229,7 +229,7 @@
       "problemTitle": "アップデートで問題が発生しました",
       "problemDescription": "アップデートを完了できませんでした。後でもう一度お試しください。",
       "installTitle": "アップデートをインストール",
-      "installDescription": "MoonlitVoice はアップデートを適用するために再起動します。作業中のデータは保存されます。",
+      "installDescription": "AriaKey はアップデートを適用するために再起動します。作業中のデータは保存されます。",
       "couldNotInstallTitle": "アップデートをインストールできませんでした",
       "couldNotInstallDescription": "問題が発生しました。もう一度お試しください。",
       "couldNotDownloadTitle": "アップデートをダウンロードできませんでした",
@@ -274,8 +274,8 @@
       "toStart": "開始するには"
     },
     "cloudMigration": {
-      "title": "MoonlitVoice Pro へようこそ",
-      "description": "7 日間の無料トライアルが有効です！より高速で正確な文字起こしのために MoonlitVoice Cloud に切り替えました。以前の設定は保存されています。設定からいつでも戻せます。",
+      "title": "AriaKey Pro へようこそ",
+      "description": "7 日間の無料トライアルが有効です！より高速で正確な文字起こしのために AriaKey Cloud に切り替えました。以前の設定は保存されています。設定からいつでも戻せます。",
       "viewSettings": "設定を表示"
     },
     "aiCta": {
@@ -423,7 +423,7 @@
       "micErrors": {
         "accessFailed": "マイクへのアクセスに失敗しました。もう一度お試しください。",
         "noMicrophones": "マイクが検出されませんでした。{{settingsPath}} でマイクを接続または選択してください。",
-        "permissionDenied": "権限が拒否されました。{{privacyPath}} を開いて MoonlitVoice を許可してください。",
+        "permissionDenied": "権限が拒否されました。{{privacyPath}} を開いて AriaKey を許可してください。",
         "couldNotStart": "選択したマイクを開始できませんでした。{{settingsPath}} で入力デバイスを選択してから、テストを再実行してください。",
         "noActiveInput": "アクティブな音声入力が見つかりませんでした。{{settingsPath}} でマイクを選択してください。",
         "unknown": "マイクへのアクセスに失敗しました: {{error}}。別の入力デバイスを選択してもう一度お試しください。",
@@ -452,8 +452,8 @@
         "accessibilityNeeded": "テキストの自動貼り付けを有効にするには、システム設定でアクセシビリティの権限を許可してください。",
         "windowsReady": "Windows では自動貼り付けに特別な権限は必要ありません。準備完了です！",
         "linuxReadyWithMethod": "{{method}} を使用した自動貼り付けが利用可能です。準備完了です！",
-        "waylandClipboardMode": "この Wayland セッションでは自動貼り付けが利用できません。MoonlitVoice はテキストをクリップボードにコピーしますので、Ctrl+V で貼り付けてください。",
-        "optionalPasteTool": "自動貼り付けには {{tool}} をインストールしてください:\n\n{{installCmd}}{{waylandNote}}\n\nインストールしなくても MoonlitVoice は使用できます。テキストがクリップボードにコピーされるので、Ctrl+V で貼り付けてください。"
+        "waylandClipboardMode": "この Wayland セッションでは自動貼り付けが利用できません。AriaKey はテキストをクリップボードにコピーしますので、Ctrl+V で貼り付けてください。",
+        "optionalPasteTool": "自動貼り付けには {{tool}} をインストールしてください:\n\n{{installCmd}}{{waylandNote}}\n\nインストールしなくても AriaKey は使用できます。テキストがクリップボードにコピーされるので、Ctrl+V で貼り付けてください。"
       },
       "alerts": {
         "accessibilityNeeded": "アクセシビリティの権限が必要です！システム設定で許可してください。"
@@ -466,7 +466,7 @@
         "defaultPasteTool": "xdotool",
         "xdotoolXwayland": "xdotool（XWayland アプリ）"
       },
-      "accessibilityTestText": "MoonlitVoice アクセシビリティテスト",
+      "accessibilityTestText": "AriaKey アクセシビリティテスト",
       "warning": {
         "messages": {
           "macos": "サウンド設定で入力デバイスを確認してください",
@@ -536,7 +536,7 @@
       "continueWithGoogle": "Google で続ける"
     },
     "welcomeSubtitle": "音声でどこでもディクテーション",
-    "welcomeTitle": "MoonlitVoice へようこそ"
+    "welcomeTitle": "AriaKey へようこそ"
   },
   "cleanupPrompt": "クリーンアップ",
   "developerSection": {
@@ -741,10 +741,10 @@
     "recheckChecking": "確認中...",
     "title": "自動貼り付け",
     "usingMethodPrefix": "使用中:",
-    "waylandClipboardDescription": "この Wayland セッションでは自動貼り付けが利用できません。MoonlitVoice はテキストをクリップボードにコピーしますので、Ctrl+V で手動で貼り付けてください。",
+    "waylandClipboardDescription": "この Wayland セッションでは自動貼り付けが利用できません。AriaKey はテキストをクリップボードにコピーしますので、Ctrl+V で手動で貼り付けてください。",
     "waylandClipboardTitle": "Wayland でのクリップボードモード",
     "windowsReady": "Windows は自動貼り付けに標準対応しています。設定は不要です！",
-    "withoutToolPrefix": "このツールがない場合、MoonlitVoice はテキストをクリップボードにコピーします。Ctrl+V で手動で貼り付けてください。",
+    "withoutToolPrefix": "このツールがない場合、AriaKey はテキストをクリップボードにコピーします。Ctrl+V で手動で貼り付けてください。",
     "xwaylandAppsOnly": "自動貼り付けは XWayland アプリのみで動作します"
   },
   "promptStudio": {
@@ -794,7 +794,7 @@
       "none": "なし",
       "outputLabel": "出力",
       "processing": "処理中...",
-      "openwhisprCloud": "MoonlitVoice Cloud",
+      "openwhisprCloud": "AriaKey Cloud",
       "providerLabel": "プロバイダー",
       "run": "テスト実行"
     },
@@ -980,13 +980,13 @@
       "description": "文字起こしのクリーンアップ、コマンド処理、エラー修正を行いながら、あなたの話し方を維持します。",
       "enableTextCleanup": "テキスト補正を有効にする",
       "enableTextCleanupDescription": "AI が文字起こしの品質を向上",
-      "openwhisprCloud": "MoonlitVoice Cloud",
+      "openwhisprCloud": "AriaKey Cloud",
       "openwhisprCloudDescription": "設定不要ですぐに使えます。",
       "title": "AI テキスト補正",
       "toasts": {
         "switchedCloud": {
-          "description": "テキスト補正に MoonlitVoice のクラウドサービスを使用します。",
-          "title": "MoonlitVoice Cloud に切り替えました"
+          "description": "テキスト補正に AriaKey のクラウドサービスを使用します。",
+          "title": "AriaKey Cloud に切り替えました"
         },
         "switchedCustom": {
           "description": "独自のプロバイダーと API キーを設定してください。",
@@ -1034,7 +1034,7 @@
       "howItWorksDescription": "追加した単語は AI プロンプトに含まれ、文字起こしのクリーンアップ時にこれらの用語を正確に認識・保持します。",
       "howItWorksTitle": "仕組み",
       "noWords": "まだ単語が追加されていません",
-      "placeholder": "例: MoonlitVoice、Kubernetes、田中先生...",
+      "placeholder": "例: AriaKey、Kubernetes、田中先生...",
       "pressEnterToAdd": "Enter で追加",
       "removeWord": "単語を削除",
       "tipDescription": "固有名詞、専門用語、誤って文字起こしされやすい単語を追加してください。",
@@ -1047,7 +1047,7 @@
       "appearance": {
         "auto": "自動",
         "dark": "ダーク",
-        "description": "MoonlitVoice の外観を設定",
+        "description": "AriaKey の外観を設定",
         "light": "ライト",
         "theme": "テーマ",
         "themeDescription": "ライト、ダーク、またはシステムに合わせる",
@@ -1075,7 +1075,7 @@
       },
       "startup": {
         "launchAtLogin": "ログイン時に起動",
-        "launchAtLoginDescription": "ログイン時に MoonlitVoice を自動的に起動",
+        "launchAtLoginDescription": "ログイン時に AriaKey を自動的に起動",
         "title": "起動設定"
       },
       "updates": {
@@ -1107,7 +1107,7 @@
           },
           "installUpdate": {
             "confirmText": "インストールして再起動",
-            "description": "MoonlitVoice はアップデートを適用するために再起動します。",
+            "description": "AriaKey はアップデートを適用するために再起動します。",
             "title": "アップデートをインストール"
           },
           "noUpdates": {
@@ -1138,13 +1138,13 @@
     "permissions": {
       "accessibilityDescription": "文字起こし後の自動貼り付けに必要",
       "accessibilityTitle": "アクセシビリティ",
-      "description": "MoonlitVoice の正常動作に必要なシステム権限をテスト・管理",
+      "description": "AriaKey の正常動作に必要なシステム権限をテスト・管理",
       "microphoneDescription": "音声録音とディクテーションに必要",
       "microphoneTitle": "マイク",
       "resetAccessibility": {
-        "description": "MoonlitVoice をアクセシビリティの権限から削除します。システム設定 > プライバシーとセキュリティ > アクセシビリティ で再度許可する必要があります。",
+        "description": "AriaKey をアクセシビリティの権限から削除します。システム設定 > プライバシーとセキュリティ > アクセシビリティ で再度許可する必要があります。",
         "label": "アクセシビリティの権限をリセット",
-        "rowDescription": "アプリの再インストールや再ビルド後の問題を修正するために、システム設定で MoonlitVoice を削除してから再追加",
+        "rowDescription": "アプリの再インストールや再ビルド後の問題を修正するために、システム設定で AriaKey を削除してから再追加",
         "title": "アクセシビリティの権限をリセット"
       },
       "test": "テスト",
@@ -1159,7 +1159,7 @@
       "description": "デバイスからのデータ送信を管理します。初期設定ではすべてオフです。",
       "title": "プライバシー",
       "usageAnalytics": "使用状況の分析",
-      "usageAnalyticsDescription": "匿名のパフォーマンスデータを共有して MoonlitVoice の改善にご協力ください。文字起こしの内容は送信されません。タイミングとエラーデータのみです。"
+      "usageAnalyticsDescription": "匿名のパフォーマンスデータを共有して AriaKey の改善にご協力ください。文字起こしの内容は送信されません。タイミングとエラーデータのみです。"
     },
     "prompts": {
       "description": "テキスト補正と指示検出を行う統合システムプロンプトの表示、カスタマイズ、テスト",
@@ -1168,14 +1168,14 @@
     "transcription": {
       "customSetup": "カスタム設定",
       "customSetupDescription": "独自のプロバイダーと API キーを使用。",
-      "description": "MoonlitVoice の音声文字起こし方法を選択",
-      "openwhisprCloud": "MoonlitVoice Cloud",
+      "description": "AriaKey の音声文字起こし方法を選択",
+      "openwhisprCloud": "AriaKey Cloud",
       "openwhisprCloudDescription": "設定不要ですぐに使えます。",
       "title": "音声テキスト変換",
       "toasts": {
         "switchedCloud": {
-          "description": "文字起こしに MoonlitVoice のクラウドサービスを使用します。",
-          "title": "MoonlitVoice Cloud に切り替えました"
+          "description": "文字起こしに AriaKey のクラウドサービスを使用します。",
+          "title": "AriaKey Cloud に切り替えました"
         },
         "switchedCustom": {
           "description": "独自のプロバイダーと API キーを設定してください。",

@@ -1,9 +1,9 @@
 {
   "app": {
-    "name": "MoonlitVoice",
-    "loading": "Chargement d'MoonlitVoice...",
+    "name": "AriaKey",
+    "loading": "Chargement d'AriaKey...",
     "oauth": {
-      "redirectTitle": "Redirection vers MoonlitVoice",
+      "redirectTitle": "Redirection vers AriaKey",
       "closeTab": "Vous pouvez fermer cet onglet"
     },
     "buttons": {
@@ -36,7 +36,7 @@
       "sectionTitle": "Langue",
       "sectionDescription": "Configurez séparément la langue de l'interface et de la transcription",
       "uiLabel": "Langue de l'interface",
-      "uiDescription": "Choisissez la langue utilisée dans l'interface MoonlitVoice",
+      "uiDescription": "Choisissez la langue utilisée dans l'interface AriaKey",
       "transcriptionLabel": "Langue de transcription",
       "transcriptionDescription": "Choisissez la langue que vous parlez pour une transcription plus précise",
       "uiOption": {
@@ -59,12 +59,12 @@
       "hide": "Masquer le panneau de dictée"
     },
     "openControlPanel": "Ouvrir le panneau de contrôle",
-    "quit": "Quitter MoonlitVoice",
-    "tooltip": "MoonlitVoice - Dictée vocale"
+    "quit": "Quitter AriaKey",
+    "tooltip": "AriaKey - Dictée vocale"
   },
   "menu": {
-    "appLabel": "MoonlitVoice",
-    "quit": "Quitter MoonlitVoice",
+    "appLabel": "AriaKey",
+    "quit": "Quitter AriaKey",
     "speech": "Parole",
     "help": "Aide",
     "learnMore": "En savoir plus",
@@ -81,8 +81,8 @@
       "message": "Impossible d'ouvrir le lien dans votre navigateur :\n{{url}}\n\nErreur : {{error}}"
     },
     "loadFailure": {
-      "title": "Échec du chargement d'MoonlitVoice",
-      "message": "MoonlitVoice n'a pas pu charger son interface.",
+      "title": "Échec du chargement d'AriaKey",
+      "message": "AriaKey n'a pas pu charger son interface.",
       "detail": {
         "window": "Fenêtre : {{windowName}}",
         "error": "Erreur {{errorCode}} : {{errorDescription}}",
@@ -93,17 +93,17 @@
   },
   "startup": {
     "error": {
-      "title": "Erreur de démarrage MoonlitVoice",
+      "title": "Erreur de démarrage AriaKey",
       "message": "Échec du démarrage de l'application :\n\n{{error}}\n\nVeuillez signaler ce problème."
     },
     "globeHotkey": {
       "title": "Raccourci Globe indisponible",
-      "message": "MoonlitVoice n'a pas pu activer la touche Globe.",
+      "message": "AriaKey n'a pas pu activer la touche Globe.",
       "details": {
         "unknown": "Erreur inconnue lors du démarrage de l'écouteur Globe.",
         "fallback": "Le raccourci Globe restera désactivé ; les raccourcis actuels continueront de fonctionner.",
         "devHint": "Exécutez `npm run compile:globe` puis reconstruisez l'application pour régénérer le binaire.",
-        "reinstallHint": "Réinstallez MoonlitVoice ou contactez le support si le problème persiste."
+        "reinstallHint": "Réinstallez AriaKey ou contactez le support si le problème persiste."
       }
     }
   },
@@ -123,9 +123,9 @@
     "accessibility": "Les paramètres d'accessibilité ne sont pas disponibles sur cette plateforme."
   },
   "titleBar": {
-    "quitTitle": "Quitter MoonlitVoice",
-    "quitConfirmTitle": "Quitter MoonlitVoice ?",
-    "quitConfirmDescription": "Cela fermera MoonlitVoice et arrêtera les processus en arrière-plan.",
+    "quitTitle": "Quitter AriaKey",
+    "quitConfirmTitle": "Quitter AriaKey ?",
+    "quitConfirmDescription": "Cela fermera AriaKey et arrêtera les processus en arrière-plan.",
     "quit": "Quitter",
     "cancel": "Annuler"
   },
@@ -201,7 +201,7 @@
       "accessibilityTitle": "Accessibilité",
       "accessibilityDescription": "Pour coller du texte dans les applications",
       "testAndGrant": "Tester et autoriser",
-      "requiredForApp": "Nécessaire pour le bon fonctionnement d'MoonlitVoice",
+      "requiredForApp": "Nécessaire pour le bon fonctionnement d'AriaKey",
       "microphoneRequired": "Accès microphone requis"
     },
     "transcription": {
@@ -229,7 +229,7 @@
       "problemTitle": "Problème pendant la mise à jour",
       "problemDescription": "Nous n'avons pas pu terminer la mise à jour. Réessayez plus tard.",
       "installTitle": "Installer la mise à jour",
-      "installDescription": "MoonlitVoice va redémarrer pour appliquer la mise à jour. Le travail en cours sera sauvegardé.",
+      "installDescription": "AriaKey va redémarrer pour appliquer la mise à jour. Le travail en cours sera sauvegardé.",
       "couldNotInstallTitle": "Impossible d'installer la mise à jour",
       "couldNotInstallDescription": "Une erreur est survenue. Veuillez réessayer.",
       "couldNotDownloadTitle": "Impossible de télécharger la mise à jour",
@@ -274,8 +274,8 @@
       "toStart": "pour démarrer"
     },
     "cloudMigration": {
-      "title": "Bienvenue sur MoonlitVoice Pro",
-      "description": "Votre essai gratuit de 7 jours est actif ! Nous avons basculé la transcription vers MoonlitVoice Cloud pour des résultats plus rapides et plus précis. Vos anciens réglages sont conservés : vous pouvez revenir en arrière à tout moment dans Paramètres.",
+      "title": "Bienvenue sur AriaKey Pro",
+      "description": "Votre essai gratuit de 7 jours est actif ! Nous avons basculé la transcription vers AriaKey Cloud pour des résultats plus rapides et plus précis. Vos anciens réglages sont conservés : vous pouvez revenir en arrière à tout moment dans Paramètres.",
       "viewSettings": "Voir les paramètres"
     },
     "aiCta": {
@@ -423,7 +423,7 @@
       "micErrors": {
         "accessFailed": "L'accès au microphone a échoué. Veuillez réessayer.",
         "noMicrophones": "Aucun micro détecté. Connectez ou sélectionnez un micro dans {{settingsPath}}.",
-        "permissionDenied": "Autorisation refusée. Ouvrez {{privacyPath}} et autorisez MoonlitVoice.",
+        "permissionDenied": "Autorisation refusée. Ouvrez {{privacyPath}} et autorisez AriaKey.",
         "couldNotStart": "Impossible de démarrer le micro sélectionné. Choisissez une entrée dans {{settingsPath}} puis relancez le test.",
         "noActiveInput": "Aucune entrée audio active trouvée. Choisissez un micro dans {{settingsPath}}.",
         "unknown": "Accès au micro échoué : {{error}}. Choisissez un autre appareil et réessayez.",
@@ -452,8 +452,8 @@
         "accessibilityNeeded": "Accordez les permissions d'accessibilité dans les paramètres système pour activer le collage automatique.",
         "windowsReady": "Windows ne demande pas de permissions spéciales pour le collage automatique. Tout est prêt !",
         "linuxReadyWithMethod": "Le collage automatique est disponible via {{method}}. Tout est prêt !",
-        "waylandClipboardMode": "Le collage automatique n'est pas disponible dans cette session Wayland. MoonlitVoice copiera le texte dans le presse-papiers et vous pourrez coller avec Ctrl+V.",
-        "optionalPasteTool": "Pour le collage automatique, installez {{tool}} :\n\n{{installCmd}}{{waylandNote}}\n\nSans cela, vous pouvez quand même utiliser MoonlitVoice : le texte sera copié dans le presse-papiers et vous pourrez coller avec Ctrl+V."
+        "waylandClipboardMode": "Le collage automatique n'est pas disponible dans cette session Wayland. AriaKey copiera le texte dans le presse-papiers et vous pourrez coller avec Ctrl+V.",
+        "optionalPasteTool": "Pour le collage automatique, installez {{tool}} :\n\n{{installCmd}}{{waylandNote}}\n\nSans cela, vous pouvez quand même utiliser AriaKey : le texte sera copié dans le presse-papiers et vous pourrez coller avec Ctrl+V."
       },
       "alerts": {
         "accessibilityNeeded": "Permissions d'accessibilité requises ! Veuillez les accorder dans les paramètres système."
@@ -466,7 +466,7 @@
         "defaultPasteTool": "xdotool",
         "xdotoolXwayland": "xdotool (apps XWayland)"
       },
-      "accessibilityTestText": "Test d'accessibilité MoonlitVoice",
+      "accessibilityTestText": "Test d'accessibilité AriaKey",
       "warning": {
         "messages": {
           "macos": "Vérifiez les réglages Son pour choisir votre périphérique d'entrée",
@@ -536,7 +536,7 @@
       "continueWithGoogle": "Continuer avec Google"
     },
     "welcomeSubtitle": "Dictez n'importe où en utilisant votre voix",
-    "welcomeTitle": "Bienvenue sur MoonlitVoice"
+    "welcomeTitle": "Bienvenue sur AriaKey"
   },
   "cleanupPrompt": "Correction",
   "developerSection": {
@@ -741,10 +741,10 @@
     "recheckChecking": "Vérification...",
     "title": "Collage automatique",
     "usingMethodPrefix": "Utilisation de",
-    "waylandClipboardDescription": "Le collage automatique n'est pas disponible dans cette session Wayland. MoonlitVoice copiera le texte dans le presse-papiers et vous pourrez coller manuellement avec Ctrl+V.",
+    "waylandClipboardDescription": "Le collage automatique n'est pas disponible dans cette session Wayland. AriaKey copiera le texte dans le presse-papiers et vous pourrez coller manuellement avec Ctrl+V.",
     "waylandClipboardTitle": "Mode presse-papiers sur Wayland",
     "windowsReady": "Windows prend en charge le collage automatique nativement. Aucune configuration requise !",
-    "withoutToolPrefix": "Sans cet outil, MoonlitVoice copiera le texte dans le presse-papiers. Vous pourrez ensuite coller manuellement avec Ctrl+V.",
+    "withoutToolPrefix": "Sans cet outil, AriaKey copiera le texte dans le presse-papiers. Vous pourrez ensuite coller manuellement avec Ctrl+V.",
     "xwaylandAppsOnly": "le collage automatique fonctionne uniquement pour les apps XWayland"
   },
   "promptStudio": {
@@ -794,7 +794,7 @@
       "none": "Aucun",
       "outputLabel": "Sortie",
       "processing": "Traitement...",
-      "openwhisprCloud": "MoonlitVoice Cloud",
+      "openwhisprCloud": "AriaKey Cloud",
       "providerLabel": "Fournisseur",
       "run": "Lancer le test"
     },
@@ -980,13 +980,13 @@
       "description": "Corrige les transcriptions, gère les commandes et corrige les erreurs tout en préservant votre ton.",
       "enableTextCleanup": "Activer la correction de texte",
       "enableTextCleanupDescription": "L'IA améliore la qualité de transcription",
-      "openwhisprCloud": "MoonlitVoice Cloud",
+      "openwhisprCloud": "AriaKey Cloud",
       "openwhisprCloudDescription": "Fonctionne directement. Aucune configuration requise.",
       "title": "Amélioration du texte par IA",
       "toasts": {
         "switchedCloud": {
-          "description": "L'amélioration de texte utilisera le service cloud MoonlitVoice.",
-          "title": "Basculé vers MoonlitVoice Cloud"
+          "description": "L'amélioration de texte utilisera le service cloud AriaKey.",
+          "title": "Basculé vers AriaKey Cloud"
         },
         "switchedCustom": {
           "description": "Configurez votre propre fournisseur et clé API.",
@@ -1034,7 +1034,7 @@
       "howItWorksDescription": "Les mots que vous ajoutez sont inclus dans le prompt IA pour que le modèle reconnaisse et préserve ces termes lors de la correction de la transcription.",
       "howItWorksTitle": "Comment ça marche",
       "noWords": "Aucun mot ajouté",
-      "placeholder": "ex. MoonlitVoice, Kubernetes, Dr. Martinez...",
+      "placeholder": "ex. AriaKey, Kubernetes, Dr. Martinez...",
       "pressEnterToAdd": "Appuyez sur Entrée pour ajouter",
       "removeWord": "Supprimer le mot",
       "tipDescription": "Ajoutez des noms propres, termes techniques ou tout mot susceptible d'être mal transcrit.",
@@ -1047,7 +1047,7 @@
       "appearance": {
         "auto": "Auto",
         "dark": "Sombre",
-        "description": "Contrôlez l'apparence d'MoonlitVoice",
+        "description": "Contrôlez l'apparence d'AriaKey",
         "light": "Clair",
         "theme": "Thème",
         "themeDescription": "Choisissez clair, sombre ou suivre le système",
@@ -1075,7 +1075,7 @@
       },
       "startup": {
         "launchAtLogin": "Lancer au démarrage",
-        "launchAtLoginDescription": "Démarrer MoonlitVoice automatiquement à la connexion",
+        "launchAtLoginDescription": "Démarrer AriaKey automatiquement à la connexion",
         "title": "Démarrage"
       },
       "updates": {
@@ -1107,7 +1107,7 @@
           },
           "installUpdate": {
             "confirmText": "Installer et redémarrer",
-            "description": "MoonlitVoice va redémarrer pour appliquer la mise à jour.",
+            "description": "AriaKey va redémarrer pour appliquer la mise à jour.",
             "title": "Installer la mise à jour"
           },
           "noUpdates": {
@@ -1138,13 +1138,13 @@
     "permissions": {
       "accessibilityDescription": "Requis pour que le collage automatique fonctionne après la transcription",
       "accessibilityTitle": "Accessibilité",
-      "description": "Testez et gérez les permissions système requises pour le bon fonctionnement d'MoonlitVoice",
+      "description": "Testez et gérez les permissions système requises pour le bon fonctionnement d'AriaKey",
       "microphoneDescription": "Requis pour l'enregistrement vocal et la dictée",
       "microphoneTitle": "Microphone",
       "resetAccessibility": {
-        "description": "Cela supprimera MoonlitVoice des permissions d'accessibilité. Vous devrez accorder l'accès à nouveau dans Paramètres système > Confidentialité et sécurité > Accessibilité.",
+        "description": "Cela supprimera AriaKey des permissions d'accessibilité. Vous devrez accorder l'accès à nouveau dans Paramètres système > Confidentialité et sécurité > Accessibilité.",
         "label": "Réinitialiser les permissions d'accessibilité",
-        "rowDescription": "Corrigez les problèmes après une réinstallation ou une recompilation en supprimant puis en rajoutant MoonlitVoice dans les paramètres système",
+        "rowDescription": "Corrigez les problèmes après une réinstallation ou une recompilation en supprimant puis en rajoutant AriaKey dans les paramètres système",
         "title": "Réinitialiser les permissions d'accessibilité"
       },
       "test": "Tester",
@@ -1159,7 +1159,7 @@
       "description": "Contrôlez quelles données quittent votre appareil. Tout est désactivé par défaut.",
       "title": "Confidentialité",
       "usageAnalytics": "Analyse d'utilisation",
-      "usageAnalyticsDescription": "Aidez-nous à améliorer MoonlitVoice en partageant des métriques de performance anonymes. Nous n'envoyons jamais le contenu de vos transcriptions — uniquement des données de performance et d'erreurs."
+      "usageAnalyticsDescription": "Aidez-nous à améliorer AriaKey en partageant des métriques de performance anonymes. Nous n'envoyons jamais le contenu de vos transcriptions — uniquement des données de performance et d'erreurs."
     },
     "prompts": {
       "description": "Affichez, personnalisez et testez le prompt système unifié qui gère la correction du texte et la détection des instructions",
@@ -1168,14 +1168,14 @@
     "transcription": {
       "customSetup": "Configuration personnalisée",
       "customSetupDescription": "Utilisez votre propre fournisseur et clé API.",
-      "description": "Choisissez comment MoonlitVoice transcrit votre voix",
-      "openwhisprCloud": "MoonlitVoice Cloud",
+      "description": "Choisissez comment AriaKey transcrit votre voix",
+      "openwhisprCloud": "AriaKey Cloud",
       "openwhisprCloudDescription": "Fonctionne directement. Aucune configuration requise.",
       "title": "Reconnaissance vocale",
       "toasts": {
         "switchedCloud": {
-          "description": "La transcription utilisera le service cloud MoonlitVoice.",
-          "title": "Basculé vers MoonlitVoice Cloud"
+          "description": "La transcription utilisera le service cloud AriaKey.",
+          "title": "Basculé vers AriaKey Cloud"
         },
         "switchedCustom": {
           "description": "Configurez votre propre fournisseur et clé API.",

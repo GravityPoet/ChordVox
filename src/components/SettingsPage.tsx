@@ -725,8 +725,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
   const [isRemovingModels, setIsRemovingModels] = useState(false);
   const cachePathHint =
     typeof navigator !== "undefined" && /Windows/i.test(navigator.userAgent)
-      ? "%USERPROFILE%\\.cache\\moonlitvoice"
-      : "~/.cache/moonlitvoice";
+      ? "%USERPROFILE%\\.cache\\ariakey"
+      : "~/.cache/ariakey";
 
   const {
     status: updateStatus,

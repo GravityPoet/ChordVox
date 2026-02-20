@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const AGENT_NAME_KEY = "agentName";
 const DICTIONARY_KEY = "customDictionary";
-const DEFAULT_AGENT_NAME = "MoonlitVoice";
+const DEFAULT_AGENT_NAME = "AriaKey";
 
 export const getAgentName = (): string => {
   return localStorage.getItem(AGENT_NAME_KEY) || DEFAULT_AGENT_NAME;
