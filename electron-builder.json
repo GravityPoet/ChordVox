@@ -85,6 +85,7 @@
   "asarUnpack": ["**/node_modules/ffmpeg-static/**/*", "**/node_modules/better-sqlite3/**/*"],
   "extraResources": [
     "src/assets/**/*",
+    "resources/legal/**/*",
     "resources/bin/macos-globe-listener",
     "resources/bin/macos-fast-paste",
     "resources/bin/linux-fast-paste",
