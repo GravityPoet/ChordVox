@@ -41,4 +41,4 @@ AriaKey includes software under open source licenses. See:
 ## 8. Contact
 
 For privacy questions, open an issue in the project repository:
-[https://github.com/GravityPoet/moonlit-voice-pro/issues](https://github.com/GravityPoet/moonlit-voice-pro/issues)
+[https://github.com/GravityPoet/AriaKey/issues](https://github.com/GravityPoet/AriaKey/issues)
