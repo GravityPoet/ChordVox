@@ -336,6 +336,8 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       const localProvider = localStorage.getItem("localTranscriptionProvider") || "whisper";
       const whisperModel = localStorage.getItem("whisperModel") || "base";
       const parakeetModel = localStorage.getItem("parakeetModel") || "parakeet-tdt-0.6b-v3";
+      const senseVoiceModelPath = localStorage.getItem("senseVoiceModelPath") || "";
+      const senseVoiceBinaryPath = localStorage.getItem("senseVoiceBinaryPath") || "";
 
       const cloudTranscriptionMode =
         localStorage.getItem("cloudTranscriptionMode") ||
@@ -356,6 +358,16 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         if (localProvider === "nvidia") {
           activeModel = parakeetModel;
           result = await this.processWithLocalParakeet(audioBlob, parakeetModel, metadata);
+        } else if (localProvider === "sensevoice") {
+          activeModel = senseVoiceModelPath || "sensevoice";
+          result = await this.processWithLocalSenseVoice(
+            audioBlob,
+            {
+              modelPath: senseVoiceModelPath,
+              binaryPath: senseVoiceBinaryPath,
+            },
+            metadata
+          );
         } else {
           activeModel = whisperModel;
           result = await this.processWithLocalWhisper(audioBlob, whisperModel, metadata);
@@ -581,6 +593,86 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         }
       } else {
         throw new Error(`Parakeet failed: ${error.message}`);
+      }
+    }
+  }
+
+  async processWithLocalSenseVoice(audioBlob, config = {}, metadata = {}) {
+    const timings = {};
+
+    try {
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      const preferredLanguage = getBaseLanguageCode(localStorage.getItem("preferredLanguage"));
+      const supportedLanguages = new Set(["zh", "en", "yue", "ja", "ko"]);
+      const language =
+        preferredLanguage && supportedLanguages.has(preferredLanguage) ? preferredLanguage : "auto";
+
+      const options = {
+        modelPath: config.modelPath || "",
+        binaryPath: config.binaryPath || "",
+        language,
+      };
+
+      logger.debug(
+        "SenseVoice transcription starting",
+        {
+          audioFormat: audioBlob.type,
+          audioSizeBytes: audioBlob.size,
+          hasModelPath: !!options.modelPath,
+          hasBinaryPath: !!options.binaryPath,
+          language,
+        },
+        "performance"
+      );
+
+      const transcriptionStart = performance.now();
+      const result = await window.electronAPI.transcribeLocalSenseVoice(arrayBuffer, options);
+      timings.transcriptionProcessingDurationMs = Math.round(
+        performance.now() - transcriptionStart
+      );
+
+      logger.debug(
+        "SenseVoice transcription complete",
+        {
+          transcriptionProcessingDurationMs: timings.transcriptionProcessingDurationMs,
+          success: result.success,
+        },
+        "performance"
+      );
+
+      if (result.success && result.text) {
+        const reasoningStart = performance.now();
+        const text = await this.processTranscription(result.text, "local-sensevoice");
+        timings.reasoningProcessingDurationMs = Math.round(performance.now() - reasoningStart);
+
+        if (text !== null && text !== undefined) {
+          return { success: true, text: text || result.text, source: "local-sensevoice", timings };
+        }
+        throw new Error("No text transcribed");
+      } else if (result.success === false && result.message === "No audio detected") {
+        throw new Error("No audio detected");
+      } else {
+        throw new Error(result.message || result.error || "SenseVoice transcription failed");
+      }
+    } catch (error) {
+      if (error.message === "No audio detected") {
+        throw error;
+      }
+
+      const allowOpenAIFallback = localStorage.getItem("allowOpenAIFallback") === "true";
+      const isLocalMode = localStorage.getItem("useLocalWhisper") === "true";
+
+      if (allowOpenAIFallback && isLocalMode) {
+        try {
+          const fallbackResult = await this.processWithOpenAIAPI(audioBlob, metadata);
+          return { ...fallbackResult, source: "openai-fallback" };
+        } catch (fallbackError) {
+          throw new Error(
+            `SenseVoice failed: ${error.message}. OpenAI fallback also failed: ${fallbackError.message}`
+          );
+        }
+      } else {
+        throw new Error(`SenseVoice failed: ${error.message}`);
       }
     }
   }

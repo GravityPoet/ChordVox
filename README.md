@@ -12,6 +12,10 @@ An open source desktop dictation application that converts speech to text using 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. This means you can freely use, modify, and distribute this software for personal or commercial purposes.
 
+## Commercial Builds
+
+If you are preparing a paid desktop distribution, see [`docs/COMMERCIAL_RELEASE.md`](docs/COMMERCIAL_RELEASE.md) for release automation and license validation setup.
+
 ## Features
 
 - ☁️ **OpenWhispr Cloud**: Sign in and transcribe instantly — no API keys needed, with free and Pro plans

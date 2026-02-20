@@ -188,6 +188,10 @@ interface TranscriptionModelPickerProps {
   onLocalProviderSelect?: (providerId: string) => void;
   useLocalWhisper: boolean;
   onModeChange: (useLocal: boolean) => void;
+  senseVoiceModelPath?: string;
+  setSenseVoiceModelPath?: (path: string) => void;
+  senseVoiceBinaryPath?: string;
+  setSenseVoiceBinaryPath?: (path: string) => void;
   openaiApiKey: string;
   setOpenaiApiKey: (key: string) => void;
   groqApiKey: string;
@@ -214,6 +218,7 @@ const VALID_CLOUD_PROVIDER_IDS = CLOUD_PROVIDER_TABS.map((p) => p.id);
 const LOCAL_PROVIDER_TABS: Array<{ id: string; name: string; disabled?: boolean }> = [
   { id: "whisper", name: "OpenAI Whisper" },
   { id: "nvidia", name: "NVIDIA Parakeet" },
+  { id: "sensevoice", name: "SenseVoice (External)" },
 ];
 
 interface ModeToggleProps {
@@ -263,6 +268,10 @@ export default function TranscriptionModelPicker({
   onLocalProviderSelect,
   useLocalWhisper,
   onModeChange,
+  senseVoiceModelPath = "",
+  setSenseVoiceModelPath,
+  senseVoiceBinaryPath = "",
+  setSenseVoiceBinaryPath,
   openaiApiKey,
   setOpenaiApiKey,
   groqApiKey,
@@ -520,6 +529,47 @@ export default function TranscriptionModelPicker({
     [onLocalModelSelect, onLocalProviderSelect]
   );
 
+  const handleSenseVoiceModelPathChange = useCallback(
+    (value: string) => {
+      setSenseVoiceModelPath?.(value);
+      onLocalProviderSelect?.("sensevoice");
+      setInternalLocalProvider("sensevoice");
+      onLocalModelSelect(value);
+    },
+    [onLocalModelSelect, onLocalProviderSelect, setSenseVoiceModelPath]
+  );
+
+  const handleSenseVoiceBinaryPathChange = useCallback(
+    (value: string) => {
+      setSenseVoiceBinaryPath?.(value);
+      onLocalProviderSelect?.("sensevoice");
+      setInternalLocalProvider("sensevoice");
+    },
+    [onLocalProviderSelect, setSenseVoiceBinaryPath]
+  );
+
+  const handlePickSenseVoiceModel = useCallback(async () => {
+    try {
+      const result = await window.electronAPI?.pickSenseVoiceModelFile?.(senseVoiceModelPath);
+      if (result?.success && result.path) {
+        handleSenseVoiceModelPathChange(result.path);
+      }
+    } catch (error) {
+      console.error("[TranscriptionModelPicker] Failed to pick SenseVoice model:", error);
+    }
+  }, [senseVoiceModelPath, handleSenseVoiceModelPathChange]);
+
+  const handlePickSenseVoiceBinary = useCallback(async () => {
+    try {
+      const result = await window.electronAPI?.pickSenseVoiceBinary?.(senseVoiceBinaryPath);
+      if (result?.success && result.path) {
+        handleSenseVoiceBinaryPathChange(result.path);
+      }
+    } catch (error) {
+      console.error("[TranscriptionModelPicker] Failed to pick SenseVoice binary:", error);
+    }
+  }, [senseVoiceBinaryPath, handleSenseVoiceBinaryPathChange]);
+
   const handleBaseUrlBlur = useCallback(() => {
     if (!setCloudTranscriptionBaseUrl || selectedCloudProvider !== "custom") return;
 
@@ -761,6 +811,60 @@ export default function TranscriptionModelPicker({
     );
   };
 
+  const renderSenseVoiceConfig = () => {
+    return (
+      <div className="space-y-2">
+        <div className="rounded-md border border-border/50 bg-muted/20 px-2.5 py-2">
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            Use your own SenseVoice.cpp binary and local GGUF model file.
+          </p>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-foreground">SenseVoice Model (.gguf)</label>
+          <div className="flex items-center gap-1.5">
+            <Input
+              value={senseVoiceModelPath}
+              onChange={(e) => handleSenseVoiceModelPathChange(e.target.value)}
+              placeholder="/path/to/sense-voice-small-q4_k.gguf"
+              className="h-8 text-sm"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 px-2 text-xs"
+              onClick={handlePickSenseVoiceModel}
+            >
+              Browse
+            </Button>
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-foreground">
+            SenseVoice Binary (sense-voice-main)
+          </label>
+          <div className="flex items-center gap-1.5">
+            <Input
+              value={senseVoiceBinaryPath}
+              onChange={(e) => handleSenseVoiceBinaryPathChange(e.target.value)}
+              placeholder="/path/to/sense-voice-main"
+              className="h-8 text-sm"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 px-2 text-xs"
+              onClick={handlePickSenseVoiceBinary}
+            >
+              Browse
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={`space-y-2 ${className}`}>
       <ModeToggle useLocalWhisper={useLocalWhisper} onModeChange={handleModeChange} />
@@ -878,6 +982,7 @@ export default function TranscriptionModelPicker({
           <div className="p-2">
             {internalLocalProvider === "whisper" && renderLocalModels()}
             {internalLocalProvider === "nvidia" && renderParakeetModels()}
+            {internalLocalProvider === "sensevoice" && renderSenseVoiceConfig()}
           </div>
         </div>
       )}

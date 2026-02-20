@@ -1,4 +1,4 @@
-const { ipcMain, app, shell, BrowserWindow } = require("electron");
+const { ipcMain, app, shell, BrowserWindow, dialog } = require("electron");
 const path = require("path");
 const http = require("http");
 const https = require("https");
@@ -19,6 +19,8 @@ class IPCHandlers {
     this.clipboardManager = managers.clipboardManager;
     this.whisperManager = managers.whisperManager;
     this.parakeetManager = managers.parakeetManager;
+    this.senseVoiceManager = managers.senseVoiceManager;
+    this.licenseManager = managers.licenseManager;
     this.windowManager = managers.windowManager;
     this.updateManager = managers.updateManager;
     this.windowsKeyManager = managers.windowsKeyManager;
@@ -474,6 +476,137 @@ class IPCHandlers {
       return this.parakeetManager.getServerStatus();
     });
 
+    // SenseVoice handlers (external local model via sense-voice-main)
+    ipcMain.handle("transcribe-local-sensevoice", async (event, audioBlob, options = {}) => {
+      debugLogger.log("transcribe-local-sensevoice called", {
+        audioBlobType: typeof audioBlob,
+        audioBlobSize: audioBlob?.byteLength || audioBlob?.length || 0,
+        options,
+      });
+
+      try {
+        const result = await this.senseVoiceManager.transcribeLocalSenseVoice(audioBlob, options);
+
+        debugLogger.log("SenseVoice result", {
+          success: result.success,
+          hasText: !!result.text,
+          message: result.message,
+          error: result.error,
+        });
+
+        if (!result.success && result.message === "No audio detected") {
+          debugLogger.log("Sending no-audio-detected event to renderer");
+          event.sender.send("no-audio-detected");
+        }
+
+        return result;
+      } catch (error) {
+        debugLogger.error("Local SenseVoice transcription error", error);
+        const errorMessage = error.message || "Unknown error";
+
+        if (errorMessage.includes("model path is empty")) {
+          return {
+            success: false,
+            error: "sensevoice_model_not_set",
+            message: "SenseVoice model path is empty. Please select a local GGUF model.",
+          };
+        }
+        if (errorMessage.includes("model file not found")) {
+          return {
+            success: false,
+            error: "sensevoice_model_not_found",
+            message: errorMessage,
+          };
+        }
+        if (errorMessage.includes("binary not found")) {
+          return {
+            success: false,
+            error: "sensevoice_binary_not_found",
+            message: "SenseVoice binary not found. Please select sense-voice-main path.",
+          };
+        }
+        if (errorMessage.includes("timed out")) {
+          return {
+            success: false,
+            error: "sensevoice_timeout",
+            message: errorMessage,
+          };
+        }
+        if (errorMessage.includes("Audio buffer is empty")) {
+          return {
+            success: false,
+            error: "no_audio_data",
+            message: "No audio detected",
+          };
+        }
+
+        throw error;
+      }
+    });
+
+    ipcMain.handle("check-sensevoice-installation", async (_event, binaryPath = "") => {
+      return this.senseVoiceManager.checkInstallation(binaryPath);
+    });
+
+    ipcMain.handle("check-sensevoice-model-status", async (_event, modelPath = "") => {
+      return this.senseVoiceManager.checkModelStatus(modelPath);
+    });
+
+    ipcMain.handle("pick-sensevoice-model-file", async (event, defaultPath = "") => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const options = {
+          title: "Select SenseVoice model",
+          defaultPath: defaultPath || undefined,
+          properties: ["openFile"],
+          filters: [
+            { name: "GGUF model", extensions: ["gguf"] },
+            { name: "All files", extensions: ["*"] },
+          ],
+        };
+        const result = targetWindow
+          ? await dialog.showOpenDialog(targetWindow, options)
+          : await dialog.showOpenDialog(options);
+
+        if (result.canceled || !result.filePaths?.length) {
+          return { success: true, path: null, cancelled: true };
+        }
+
+        return { success: true, path: result.filePaths[0], cancelled: false };
+      } catch (error) {
+        return { success: false, error: error.message, path: null, cancelled: false };
+      }
+    });
+
+    ipcMain.handle("pick-sensevoice-binary", async (event, defaultPath = "") => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const options = {
+          title: "Select sense-voice-main binary",
+          defaultPath: defaultPath || undefined,
+          properties: ["openFile"],
+          filters: [
+            {
+              name: "SenseVoice binary",
+              extensions: process.platform === "win32" ? ["exe"] : ["*"],
+            },
+            { name: "All files", extensions: ["*"] },
+          ],
+        };
+        const result = targetWindow
+          ? await dialog.showOpenDialog(targetWindow, options)
+          : await dialog.showOpenDialog(options);
+
+        if (result.canceled || !result.filePaths?.length) {
+          return { success: true, path: null, cancelled: true };
+        }
+
+        return { success: true, path: result.filePaths[0], cancelled: false };
+      } catch (error) {
+        return { success: false, error: error.message, path: null, cancelled: false };
+      }
+    });
+
     // Utility handlers
     ipcMain.handle("cleanup-app", async (event) => {
       try {
@@ -814,6 +947,70 @@ class IPCHandlers {
       return this.environmentManager.saveCustomReasoningKey(key);
     });
 
+    ipcMain.handle("license-get-status", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.getStatus();
+    });
+
+    ipcMain.handle("license-activate", async (_event, licenseKey) => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.activateLicense(licenseKey);
+    });
+
+    ipcMain.handle("license-validate", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.validateLicense();
+    });
+
+    ipcMain.handle("license-clear", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.clearLicense();
+    });
+
     // Dictation key handlers for reliable persistence across restarts
     ipcMain.handle("get-dictation-key", async () => {
       return this.environmentManager.getDictationKey();
@@ -865,17 +1062,37 @@ class IPCHandlers {
         setVars.LOCAL_TRANSCRIPTION_PROVIDER = prefs.localTranscriptionProvider;
         if (prefs.localTranscriptionProvider === "nvidia") {
           setVars.PARAKEET_MODEL = prefs.model;
-          clearVars.push("LOCAL_WHISPER_MODEL");
+          clearVars.push("LOCAL_WHISPER_MODEL", "SENSEVOICE_MODEL_PATH", "SENSEVOICE_BINARY_PATH");
+        } else if (prefs.localTranscriptionProvider === "sensevoice") {
+          setVars.SENSEVOICE_MODEL_PATH = prefs.model;
+          if (prefs.senseVoiceBinaryPath) {
+            setVars.SENSEVOICE_BINARY_PATH = prefs.senseVoiceBinaryPath;
+          } else {
+            clearVars.push("SENSEVOICE_BINARY_PATH");
+          }
+          clearVars.push("PARAKEET_MODEL", "LOCAL_WHISPER_MODEL");
         } else {
           setVars.LOCAL_WHISPER_MODEL = prefs.model;
-          clearVars.push("PARAKEET_MODEL");
+          clearVars.push("PARAKEET_MODEL", "SENSEVOICE_MODEL_PATH", "SENSEVOICE_BINARY_PATH");
         }
       } else if (prefs.useLocalWhisper) {
         // Local mode enabled but no model selected - clear pre-warming vars
-        clearVars.push("LOCAL_TRANSCRIPTION_PROVIDER", "PARAKEET_MODEL", "LOCAL_WHISPER_MODEL");
+        clearVars.push(
+          "LOCAL_TRANSCRIPTION_PROVIDER",
+          "PARAKEET_MODEL",
+          "LOCAL_WHISPER_MODEL",
+          "SENSEVOICE_MODEL_PATH",
+          "SENSEVOICE_BINARY_PATH"
+        );
       } else {
         // Cloud mode - clear all local transcription vars
-        clearVars.push("LOCAL_TRANSCRIPTION_PROVIDER", "PARAKEET_MODEL", "LOCAL_WHISPER_MODEL");
+        clearVars.push(
+          "LOCAL_TRANSCRIPTION_PROVIDER",
+          "PARAKEET_MODEL",
+          "LOCAL_WHISPER_MODEL",
+          "SENSEVOICE_MODEL_PATH",
+          "SENSEVOICE_BINARY_PATH"
+        );
       }
 
       if (prefs.reasoningProvider === "local" && prefs.reasoningModel) {

@@ -26,13 +26,18 @@ class UpdateManager {
       return;
     }
 
-    // Configure auto-updater for GitHub releases
-    autoUpdater.setFeedURL({
-      provider: "github",
-      owner: "OpenWhispr",
-      repo: "openwhispr",
-      private: false,
-    });
+    // Prefer build-generated app-update.yml (from electron-builder publish settings).
+    // Optional override allows custom feeds without rebuilding.
+    const updateOwner = (process.env.OPENWHISPR_UPDATE_OWNER || "").trim();
+    const updateRepo = (process.env.OPENWHISPR_UPDATE_REPO || "").trim();
+    if (updateOwner && updateRepo) {
+      autoUpdater.setFeedURL({
+        provider: "github",
+        owner: updateOwner,
+        repo: updateRepo,
+        private: false,
+      });
+    }
 
     // Disable auto-download - let user control when to download
     autoUpdater.autoDownload = false;
