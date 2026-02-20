@@ -55,7 +55,7 @@ import { Skeleton } from "./ui/skeleton";
 import { Progress } from "./ui/progress";
 import { useToast } from "./ui/Toast";
 import { useTheme } from "../hooks/useTheme";
-import type { LocalTranscriptionProvider } from "../types/electron";
+import type { LicenseStatusResult, LocalTranscriptionProvider } from "../types/electron";
 import logger from "../utils/logger";
 import { SettingsRow } from "./ui/SettingsSection";
 import { useUsage } from "../hooks/useUsage";
@@ -125,6 +125,21 @@ function SectionHeader({ title, description }: { title: string; description?: st
       )}
     </div>
   );
+}
+
+function getLicenseStatusLabel(status: LicenseStatusResult["status"] | undefined): string {
+  switch (status) {
+    case "active":
+      return "Active";
+    case "offline_grace":
+      return "Offline Grace";
+    case "expired":
+      return "Expired";
+    case "invalid":
+      return "Invalid";
+    default:
+      return "Not Activated";
+  }
 }
 
 interface TranscriptionSectionProps {
@@ -736,6 +751,11 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
   const { agentName, setAgentName } = useAgentName();
   const [agentNameInput, setAgentNameInput] = useState(agentName);
   const { theme, setTheme } = useTheme();
+  const [licenseStatus, setLicenseStatus] = useState<LicenseStatusResult | null>(null);
+  const [licenseKeyInput, setLicenseKeyInput] = useState("");
+  const [licenseBusyAction, setLicenseBusyAction] = useState<
+    "activate" | "validate" | "clear" | null
+  >(null);
   const usage = useUsage();
   const hasShownApproachingToast = useRef(false);
   useEffect(() => {
@@ -751,6 +771,119 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
       });
     }
   }, [usage?.isApproachingLimit, usage?.wordsUsed, usage?.limit, toast, t, i18n.language]);
+
+  const refreshLicenseStatus = useCallback(async () => {
+    if (!window.electronAPI?.licenseGetStatus) return;
+    try {
+      const result = await window.electronAPI.licenseGetStatus();
+      setLicenseStatus(result);
+    } catch (error) {
+      logger.error("Failed to load license status", error, "license");
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshLicenseStatus();
+  }, [refreshLicenseStatus]);
+
+  const handleActivateLicense = useCallback(async () => {
+    if (!window.electronAPI?.licenseActivate) return;
+    const licenseKey = licenseKeyInput.trim();
+    if (!licenseKey) {
+      toast({
+        title: "License key required",
+        description: "Enter your license key before activating.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLicenseBusyAction("activate");
+    try {
+      const result = await window.electronAPI.licenseActivate(licenseKey);
+      setLicenseStatus(result);
+
+      if (result.success) {
+        setLicenseKeyInput("");
+        toast({
+          title: "License activated",
+          description: result.message || "This device is now activated.",
+          variant: "success",
+        });
+      } else {
+        toast({
+          title: "Activation failed",
+          description: result.message || result.error || "The license key could not be activated.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      logger.error("Failed to activate license", error, "license");
+      toast({
+        title: "Activation failed",
+        description: "Unexpected error while activating the license.",
+        variant: "destructive",
+      });
+    } finally {
+      setLicenseBusyAction(null);
+    }
+  }, [licenseKeyInput, toast]);
+
+  const handleValidateLicense = useCallback(async () => {
+    if (!window.electronAPI?.licenseValidate) return;
+    setLicenseBusyAction("validate");
+    try {
+      const result = await window.electronAPI.licenseValidate();
+      setLicenseStatus(result);
+      toast({
+        title: result.success ? "License validated" : "License check failed",
+        description: result.message || (result.success ? "License is valid." : "License is invalid."),
+        variant: result.success ? "success" : "destructive",
+      });
+    } catch (error) {
+      logger.error("Failed to validate license", error, "license");
+      toast({
+        title: "License check failed",
+        description: "Unexpected error while checking license status.",
+        variant: "destructive",
+      });
+    } finally {
+      setLicenseBusyAction(null);
+    }
+  }, [toast]);
+
+  const handleClearLicense = useCallback(() => {
+    if (!window.electronAPI?.licenseClear) return;
+
+    showConfirmDialog({
+      title: "Remove saved license?",
+      description: "This device will return to unlicensed mode until you activate again.",
+      confirmText: "Remove",
+      variant: "destructive",
+      onConfirm: async () => {
+        setLicenseBusyAction("clear");
+        try {
+          const result = await window.electronAPI.licenseClear();
+          setLicenseStatus(result);
+          setLicenseKeyInput("");
+          toast({
+            title: "License removed",
+            description: result.message || "Saved license state was cleared.",
+            variant: "success",
+          });
+        } catch (error) {
+          logger.error("Failed to clear license", error, "license");
+          toast({
+            title: "Could not remove license",
+            description: "Unexpected error while removing the saved license.",
+            variant: "destructive",
+          });
+        } finally {
+          setLicenseBusyAction(null);
+        }
+      },
+    });
+  }, [showConfirmDialog, toast]);
 
   const installTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -979,11 +1112,109 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     }
   }, [showAlertDialog, t]);
 
+  const renderLicensePanel = () => {
+    const status = licenseStatus?.status;
+    const licenseBadgeVariant: "success" | "warning" | "destructive" | "outline" =
+      status === "active"
+        ? "success"
+        : status === "offline_grace"
+          ? "warning"
+          : status === "expired" || status === "invalid"
+            ? "destructive"
+            : "outline";
+
+    const hintDescription = licenseStatus?.configured
+      ? "This build validates desktop keys against your license API."
+      : "License API is not configured. Set LICENSE_API_BASE_URL for real activation.";
+
+    return (
+      <div className="space-y-3">
+        <SectionHeader title="Desktop License" description={hintDescription} />
+        <SettingsPanel>
+          <SettingsPanelRow>
+            <SettingsRow
+              label="Current status"
+              description={
+                licenseStatus?.message ||
+                "Use a paid license key to unlock commercial usage on this device."
+              }
+            >
+              <Badge variant={licenseBadgeVariant}>{getLicenseStatusLabel(status)}</Badge>
+            </SettingsRow>
+          </SettingsPanelRow>
+          <SettingsPanelRow>
+            <div className="space-y-2">
+              <Input
+                value={licenseKeyInput}
+                onChange={(event) => setLicenseKeyInput(event.target.value)}
+                placeholder="Enter license key"
+                className="h-8 text-sm"
+              />
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  onClick={handleActivateLicense}
+                  disabled={licenseBusyAction !== null}
+                >
+                  {licenseBusyAction === "activate" ? (
+                    <>
+                      <Loader2 size={14} className="animate-spin" />
+                      Activating
+                    </>
+                  ) : (
+                    "Activate"
+                  )}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleValidateLicense}
+                  disabled={licenseBusyAction !== null || !licenseStatus?.keyPresent}
+                >
+                  {licenseBusyAction === "validate" ? (
+                    <>
+                      <Loader2 size={14} className="animate-spin" />
+                      Checking
+                    </>
+                  ) : (
+                    "Validate"
+                  )}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleClearLicense}
+                  disabled={licenseBusyAction !== null || !licenseStatus?.keyPresent}
+                >
+                  Clear
+                </Button>
+              </div>
+              {licenseStatus?.plan && (
+                <p className="text-[11px] text-muted-foreground">Plan: {licenseStatus.plan}</p>
+              )}
+              {licenseStatus?.expiresAt && (
+                <p className="text-[11px] text-muted-foreground">
+                  Expires: {new Date(licenseStatus.expiresAt).toLocaleString(i18n.language)}
+                </p>
+              )}
+              {licenseStatus?.lastValidatedAt && (
+                <p className="text-[11px] text-muted-foreground">
+                  Last check: {new Date(licenseStatus.lastValidatedAt).toLocaleString(i18n.language)}
+                </p>
+              )}
+            </div>
+          </SettingsPanelRow>
+        </SettingsPanel>
+      </div>
+    );
+  };
+
   const renderSectionContent = () => {
     switch (activeSection) {
       case "account":
         return (
           <div className="space-y-5">
+            {renderLicensePanel()}
             {!NEON_AUTH_URL ? (
               <>
                 <SectionHeader
