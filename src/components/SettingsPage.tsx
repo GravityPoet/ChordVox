@@ -144,6 +144,10 @@ interface TranscriptionSectionProps {
   setWhisperModel: (model: string) => void;
   parakeetModel: string;
   setParakeetModel: (model: string) => void;
+  senseVoiceModelPath: string;
+  setSenseVoiceModelPath: (path: string) => void;
+  senseVoiceBinaryPath: string;
+  setSenseVoiceBinaryPath: (path: string) => void;
   openaiApiKey: string;
   setOpenaiApiKey: (key: string) => void;
   groqApiKey: string;
@@ -179,6 +183,10 @@ function TranscriptionSection({
   setWhisperModel,
   parakeetModel,
   setParakeetModel,
+  senseVoiceModelPath,
+  setSenseVoiceModelPath,
+  senseVoiceBinaryPath,
+  setSenseVoiceBinaryPath,
   openaiApiKey,
   setOpenaiApiKey,
   groqApiKey,
@@ -336,11 +344,17 @@ function TranscriptionSection({
           selectedCloudModel={cloudTranscriptionModel}
           onCloudModelSelect={setCloudTranscriptionModel}
           selectedLocalModel={
-            localTranscriptionProvider === "nvidia" ? parakeetModel : whisperModel
+            localTranscriptionProvider === "nvidia"
+              ? parakeetModel
+              : localTranscriptionProvider === "sensevoice"
+                ? senseVoiceModelPath
+                : whisperModel
           }
           onLocalModelSelect={(modelId) => {
             if (localTranscriptionProvider === "nvidia") {
               setParakeetModel(modelId);
+            } else if (localTranscriptionProvider === "sensevoice") {
+              setSenseVoiceModelPath(modelId);
             } else {
               setWhisperModel(modelId);
             }
@@ -363,6 +377,10 @@ function TranscriptionSection({
           setMistralApiKey={setMistralApiKey}
           customTranscriptionApiKey={customTranscriptionApiKey}
           setCustomTranscriptionApiKey={setCustomTranscriptionApiKey}
+          senseVoiceModelPath={senseVoiceModelPath}
+          setSenseVoiceModelPath={setSenseVoiceModelPath}
+          senseVoiceBinaryPath={senseVoiceBinaryPath}
+          setSenseVoiceBinaryPath={setSenseVoiceBinaryPath}
           cloudTranscriptionBaseUrl={cloudTranscriptionBaseUrl}
           setCloudTranscriptionBaseUrl={setCloudTranscriptionBaseUrl}
           variant="settings"
@@ -620,6 +638,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     whisperModel,
     localTranscriptionProvider,
     parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
     uiLanguage,
     preferredLanguage,
     cloudTranscriptionProvider,
@@ -647,6 +667,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     setWhisperModel,
     setLocalTranscriptionProvider,
     setParakeetModel,
+    setSenseVoiceModelPath,
+    setSenseVoiceBinaryPath,
     setCloudTranscriptionProvider,
     setCloudTranscriptionModel,
     setCloudTranscriptionBaseUrl,
@@ -1706,6 +1728,10 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
             setWhisperModel={setWhisperModel}
             parakeetModel={parakeetModel}
             setParakeetModel={setParakeetModel}
+            senseVoiceModelPath={senseVoiceModelPath}
+            setSenseVoiceModelPath={setSenseVoiceModelPath}
+            senseVoiceBinaryPath={senseVoiceBinaryPath}
+            setSenseVoiceBinaryPath={setSenseVoiceBinaryPath}
             openaiApiKey={openaiApiKey}
             setOpenaiApiKey={setOpenaiApiKey}
             groqApiKey={groqApiKey}

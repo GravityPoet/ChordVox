@@ -98,6 +98,17 @@ contextBridge.exposeInMainWorld("electronAPI", {
   cancelParakeetDownload: () => ipcRenderer.invoke("cancel-parakeet-download"),
   getParakeetDiagnostics: () => ipcRenderer.invoke("get-parakeet-diagnostics"),
 
+  // Local SenseVoice (external CLI + local GGUF model)
+  transcribeLocalSenseVoice: (audioBlob, options) =>
+    ipcRenderer.invoke("transcribe-local-sensevoice", audioBlob, options),
+  checkSenseVoiceInstallation: (binaryPath) =>
+    ipcRenderer.invoke("check-sensevoice-installation", binaryPath),
+  checkSenseVoiceModelStatus: (modelPath) =>
+    ipcRenderer.invoke("check-sensevoice-model-status", modelPath),
+  pickSenseVoiceModelFile: (defaultPath) =>
+    ipcRenderer.invoke("pick-sensevoice-model-file", defaultPath),
+  pickSenseVoiceBinary: (defaultPath) => ipcRenderer.invoke("pick-sensevoice-binary", defaultPath),
+
   // Parakeet server functions (faster repeated transcriptions)
   parakeetServerStart: (modelName) => ipcRenderer.invoke("parakeet-server-start", modelName),
   parakeetServerStop: () => ipcRenderer.invoke("parakeet-server-stop"),

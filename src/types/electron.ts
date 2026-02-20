@@ -1,4 +1,4 @@
-export type LocalTranscriptionProvider = "whisper" | "nvidia";
+export type LocalTranscriptionProvider = "whisper" | "nvidia" | "sensevoice";
 
 export interface TranscriptionItem {
   id: number;
@@ -155,6 +155,34 @@ export interface ParakeetDiagnosticsResult {
   models: string[];
 }
 
+export interface SenseVoiceCheckResult {
+  installed: boolean;
+  working: boolean;
+  path?: string;
+  error?: string;
+}
+
+export interface SenseVoiceModelStatusResult {
+  success: boolean;
+  modelPath: string;
+  downloaded: boolean;
+  size_mb?: number;
+}
+
+export interface SenseVoiceTranscriptionResult {
+  success: boolean;
+  text?: string;
+  message?: string;
+  error?: string;
+}
+
+export interface FilePickResult {
+  success: boolean;
+  path: string | null;
+  cancelled?: boolean;
+  error?: string;
+}
+
 export interface PasteToolsResult {
   platform: "darwin" | "win32" | "linux";
   available: boolean;
@@ -209,6 +237,7 @@ declare global {
         useLocalWhisper: boolean;
         localTranscriptionProvider: LocalTranscriptionProvider;
         model?: string;
+        senseVoiceBinaryPath?: string;
         reasoningProvider: string;
         reasoningModel?: string;
       }) => Promise<void>;
@@ -270,6 +299,23 @@ declare global {
         error?: string;
       }>;
       getParakeetDiagnostics: () => Promise<ParakeetDiagnosticsResult>;
+
+      // SenseVoice operations (external CLI + local GGUF)
+      transcribeLocalSenseVoice: (
+        audioBlob: ArrayBuffer,
+        options?: {
+          modelPath?: string;
+          binaryPath?: string;
+          language?: string;
+          threads?: number;
+          timeoutMs?: number;
+          noGpu?: boolean;
+        }
+      ) => Promise<SenseVoiceTranscriptionResult>;
+      checkSenseVoiceInstallation: (binaryPath?: string) => Promise<SenseVoiceCheckResult>;
+      checkSenseVoiceModelStatus: (modelPath: string) => Promise<SenseVoiceModelStatusResult>;
+      pickSenseVoiceModelFile: (defaultPath?: string) => Promise<FilePickResult>;
+      pickSenseVoiceBinary: (defaultPath?: string) => Promise<FilePickResult>;
 
       // Local AI model management
       modelGetAll: () => Promise<any[]>;

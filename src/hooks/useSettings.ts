@@ -22,6 +22,8 @@ export interface TranscriptionSettings {
   whisperModel: string;
   localTranscriptionProvider: LocalTranscriptionProvider;
   parakeetModel: string;
+  senseVoiceModelPath: string;
+  senseVoiceBinaryPath: string;
   allowOpenAIFallback: boolean;
   allowLocalFallback: boolean;
   fallbackWhisperModel: string;
@@ -98,13 +100,35 @@ function useSettingsInternal() {
   const [localTranscriptionProvider, setLocalTranscriptionProvider] =
     useLocalStorage<LocalTranscriptionProvider>("localTranscriptionProvider", "whisper", {
       serialize: String,
-      deserialize: (value) => (value === "nvidia" ? "nvidia" : "whisper"),
+      deserialize: (value) => {
+        if (value === "nvidia") return "nvidia";
+        if (value === "sensevoice") return "sensevoice";
+        return "whisper";
+      },
     });
 
   const [parakeetModel, setParakeetModel] = useLocalStorage("parakeetModel", "", {
     serialize: String,
     deserialize: String,
   });
+
+  const [senseVoiceModelPath, setSenseVoiceModelPath] = useLocalStorage(
+    "senseVoiceModelPath",
+    "",
+    {
+      serialize: String,
+      deserialize: String,
+    }
+  );
+
+  const [senseVoiceBinaryPath, setSenseVoiceBinaryPath] = useLocalStorage(
+    "senseVoiceBinaryPath",
+    "",
+    {
+      serialize: String,
+      deserialize: String,
+    }
+  );
 
   const [allowOpenAIFallback, setAllowOpenAIFallback] = useLocalStorage(
     "allowOpenAIFallback",
@@ -655,12 +679,22 @@ function useSettingsInternal() {
   useEffect(() => {
     if (typeof window === "undefined" || !window.electronAPI?.syncStartupPreferences) return;
 
-    const model = localTranscriptionProvider === "nvidia" ? parakeetModel : whisperModel;
+    let model = whisperModel;
+    if (localTranscriptionProvider === "nvidia") {
+      model = parakeetModel;
+    } else if (localTranscriptionProvider === "sensevoice") {
+      model = senseVoiceModelPath;
+    }
+
     window.electronAPI
       .syncStartupPreferences({
         useLocalWhisper,
         localTranscriptionProvider,
         model: model || undefined,
+        senseVoiceBinaryPath:
+          localTranscriptionProvider === "sensevoice" && senseVoiceBinaryPath
+            ? senseVoiceBinaryPath
+            : undefined,
         reasoningProvider,
         reasoningModel: reasoningProvider === "local" ? reasoningModel : undefined,
       })
@@ -676,6 +710,8 @@ function useSettingsInternal() {
     localTranscriptionProvider,
     whisperModel,
     parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
     reasoningProvider,
     reasoningModel,
   ]);
@@ -689,6 +725,10 @@ function useSettingsInternal() {
       if (settings.localTranscriptionProvider !== undefined)
         setLocalTranscriptionProvider(settings.localTranscriptionProvider);
       if (settings.parakeetModel !== undefined) setParakeetModel(settings.parakeetModel);
+      if (settings.senseVoiceModelPath !== undefined)
+        setSenseVoiceModelPath(settings.senseVoiceModelPath);
+      if (settings.senseVoiceBinaryPath !== undefined)
+        setSenseVoiceBinaryPath(settings.senseVoiceBinaryPath);
       if (settings.allowOpenAIFallback !== undefined)
         setAllowOpenAIFallback(settings.allowOpenAIFallback);
       if (settings.allowLocalFallback !== undefined)
@@ -711,6 +751,8 @@ function useSettingsInternal() {
       setWhisperModel,
       setLocalTranscriptionProvider,
       setParakeetModel,
+      setSenseVoiceModelPath,
+      setSenseVoiceBinaryPath,
       setAllowOpenAIFallback,
       setAllowLocalFallback,
       setFallbackWhisperModel,
@@ -760,6 +802,8 @@ function useSettingsInternal() {
     uiLanguage,
     localTranscriptionProvider,
     parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
     allowOpenAIFallback,
     allowLocalFallback,
     fallbackWhisperModel,
@@ -788,6 +832,8 @@ function useSettingsInternal() {
     setUiLanguage,
     setLocalTranscriptionProvider,
     setParakeetModel,
+    setSenseVoiceModelPath,
+    setSenseVoiceBinaryPath,
     setAllowOpenAIFallback,
     setAllowLocalFallback,
     setFallbackWhisperModel,
