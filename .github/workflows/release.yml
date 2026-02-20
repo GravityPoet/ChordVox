@@ -88,11 +88,11 @@ jobs:
       - name: Build and publish Linux release
         run: >
           npm run build:linux -- --publish always
-          -c.extraMetadata.version=${{ steps.release_meta.outputs.version }}
-          -c.publish.owner=${{ github.repository_owner }}
-          -c.publish.repo=${{ github.event.repository.name }}
-          -c.publish.releaseType=draft
-          -c.publish.private=false
+          --config.extraMetadata.version=${{ steps.release_meta.outputs.version }}
+          --config.publish.owner=${{ github.repository_owner }}
+          --config.publish.repo=${{ github.event.repository.name }}
+          --config.publish.releaseType=draft
+          --config.publish.private=false
         env:
           GH_TOKEN: ${{ env.GH_TOKEN }}
           VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
@@ -164,11 +164,11 @@ jobs:
       - name: Build and publish Windows release
         run: >
           npm run build:win -- --publish always
-          -c.extraMetadata.version=${{ steps.release_meta.outputs.version }}
-          -c.publish.owner=${{ github.repository_owner }}
-          -c.publish.repo=${{ github.event.repository.name }}
-          -c.publish.releaseType=draft
-          -c.publish.private=false
+          --config.extraMetadata.version=${{ steps.release_meta.outputs.version }}
+          --config.publish.owner=${{ github.repository_owner }}
+          --config.publish.repo=${{ github.event.repository.name }}
+          --config.publish.releaseType=draft
+          --config.publish.private=false
         env:
           GH_TOKEN: ${{ env.GH_TOKEN }}
           VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
@@ -283,14 +283,14 @@ jobs:
           set -euo pipefail
           EXTRA_ARGS=""
           if [ "${{ steps.signing.outputs.enabled }}" != "true" ]; then
-            EXTRA_ARGS="-c.mac.identity=null -c.mac.notarize=false -c.mac.hardenedRuntime=false"
+            EXTRA_ARGS="--config.mac.identity=null --config.mac.notarize=false --config.mac.hardenedRuntime=false"
           fi
           npm run build:mac -- --${{ matrix.arch }} --publish always \
-            -c.extraMetadata.version=${{ steps.release_meta.outputs.version }} \
-            -c.publish.owner=${{ github.repository_owner }} \
-            -c.publish.repo=${{ github.event.repository.name }} \
-            -c.publish.releaseType=draft \
-            -c.publish.private=false \
+            --config.extraMetadata.version=${{ steps.release_meta.outputs.version }} \
+            --config.publish.owner=${{ github.repository_owner }} \
+            --config.publish.repo=${{ github.event.repository.name }} \
+            --config.publish.releaseType=draft \
+            --config.publish.private=false \
             $EXTRA_ARGS
         env:
           TARGET_ARCH: ${{ matrix.arch }}
