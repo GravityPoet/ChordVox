@@ -1,12 +1,12 @@
 # OpenWhispr
 
-[![Downloads](https://img.shields.io/github/downloads/OpenWhispr/openwhispr/total?style=flat&color=blue)](https://github.com/OpenWhispr/openwhispr/releases)
+[![Downloads](https://img.shields.io/github/downloads/GravityPoet/moonlit-voice-pro/total?style=flat&color=blue)](https://github.com/GravityPoet/moonlit-voice-pro/releases)
 
 An open source desktop dictation application that converts speech to text using OpenAI Whisper. Features both local and cloud processing options for maximum flexibility and privacy.
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=OpenWhispr/openwhispr&type=date&legend=top-left)](https://www.star-history.com/#OpenWhispr/openwhispr&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=GravityPoet/moonlit-voice-pro&type=date&legend=top-left)](https://www.star-history.com/#GravityPoet/moonlit-voice-pro&type=date&legend=top-left)
 
 ## License
 
@@ -66,7 +66,7 @@ Keep `LICENSE`, `NOTICE`, and `resources/legal/OPEN_SOURCE_NOTICES.txt` in both 
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/OpenWhispr/openwhispr.git
+   git clone https://github.com/GravityPoet/moonlit-voice-pro.git
    cd openwhispr
    ```
 
@@ -701,7 +701,7 @@ OpenWhispr is designed with privacy and security in mind:
 
 ### Getting Help
 
-- Check the [Issues](https://github.com/OpenWhispr/openwhispr/issues) page
+- Check the [Issues](https://github.com/GravityPoet/moonlit-voice-pro/issues) page
 - Review the console logs for debugging information
 - For local processing: Ensure whisper.cpp is accessible and models are downloaded
 - For cloud processing: Verify your OpenAI API key and billing status

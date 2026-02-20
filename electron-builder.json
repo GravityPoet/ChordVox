@@ -194,8 +194,8 @@
   },
   "publish": {
     "provider": "github",
-    "owner": "OpenWhispr",
-    "repo": "openwhispr",
+    "owner": "GravityPoet",
+    "repo": "moonlit-voice-pro",
     "private": false,
     "releaseType": "draft"
   }
