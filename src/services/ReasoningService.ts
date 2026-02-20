@@ -1045,7 +1045,7 @@ class ReasoningService extends BaseReasoningService {
         });
 
         if (!res.success) {
-          const err: any = new Error(res.error || "OpenWhispr cloud reasoning failed");
+          const err: any = new Error(res.error || "MoonlitVoice cloud reasoning failed");
           err.code = res.code;
           throw err;
         }

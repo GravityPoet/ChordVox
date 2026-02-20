@@ -1,9 +1,9 @@
 {
   "app": {
-    "name": "OpenWhispr",
-    "loading": "OpenWhispr wird geladen...",
+    "name": "MoonlitVoice",
+    "loading": "MoonlitVoice wird geladen...",
     "oauth": {
-      "redirectTitle": "Weiterleitung zu OpenWhispr",
+      "redirectTitle": "Weiterleitung zu MoonlitVoice",
       "closeTab": "Sie können diesen Tab schließen"
     },
     "buttons": {
@@ -36,7 +36,7 @@
       "sectionTitle": "Sprache",
       "sectionDescription": "Oberflächen- und Transkriptionssprache unabhängig einstellen",
       "uiLabel": "Sprache der Oberfläche",
-      "uiDescription": "Wählen Sie die Sprache für die OpenWhispr-Oberfläche",
+      "uiDescription": "Wählen Sie die Sprache für die MoonlitVoice-Oberfläche",
       "transcriptionLabel": "Transkriptionssprache",
       "transcriptionDescription": "Wählen Sie die Sprache, die Sie sprechen, für genauere Transkription",
       "uiOption": {
@@ -59,12 +59,12 @@
       "hide": "Diktierfeld ausblenden"
     },
     "openControlPanel": "Kontrollzentrum öffnen",
-    "quit": "OpenWhispr beenden",
-    "tooltip": "OpenWhispr – Sprachdiktat"
+    "quit": "MoonlitVoice beenden",
+    "tooltip": "MoonlitVoice – Sprachdiktat"
   },
   "menu": {
-    "appLabel": "OpenWhispr",
-    "quit": "OpenWhispr beenden",
+    "appLabel": "MoonlitVoice",
+    "quit": "MoonlitVoice beenden",
     "speech": "Sprache",
     "help": "Hilfe",
     "learnMore": "Mehr erfahren",
@@ -81,8 +81,8 @@
       "message": "Der Link konnte im Browser nicht geöffnet werden:\n{{url}}\n\nFehler: {{error}}"
     },
     "loadFailure": {
-      "title": "OpenWhispr konnte nicht geladen werden",
-      "message": "OpenWhispr konnte die Benutzeroberfläche nicht laden.",
+      "title": "MoonlitVoice konnte nicht geladen werden",
+      "message": "MoonlitVoice konnte die Benutzeroberfläche nicht laden.",
       "detail": {
         "window": "Fenster: {{windowName}}",
         "error": "Fehler {{errorCode}}: {{errorDescription}}",
@@ -93,17 +93,17 @@
   },
   "startup": {
     "error": {
-      "title": "OpenWhispr-Startfehler",
+      "title": "MoonlitVoice-Startfehler",
       "message": "Die Anwendung konnte nicht gestartet werden:\n\n{{error}}\n\nBitte melden Sie dieses Problem."
     },
     "globeHotkey": {
       "title": "Globe-Hotkey nicht verfügbar",
-      "message": "OpenWhispr konnte den Globe-Hotkey nicht aktivieren.",
+      "message": "MoonlitVoice konnte den Globe-Hotkey nicht aktivieren.",
       "details": {
         "unknown": "Unbekannter Fehler beim Starten des Globe-Listeners.",
         "fallback": "Der Globe-Hotkey bleibt deaktiviert; vorhandene Tastenkürzel funktionieren weiterhin.",
         "devHint": "Führen Sie `npm run compile:globe` aus und bauen Sie die App neu, um die Binary neu zu erzeugen.",
-        "reinstallHint": "Installieren Sie OpenWhispr neu oder kontaktieren Sie den Support, wenn das Problem bestehen bleibt."
+        "reinstallHint": "Installieren Sie MoonlitVoice neu oder kontaktieren Sie den Support, wenn das Problem bestehen bleibt."
       }
     }
   },
@@ -123,9 +123,9 @@
     "accessibility": "Bedienungshilfen-Einstellungen sind auf dieser Plattform nicht verfügbar."
   },
   "titleBar": {
-    "quitTitle": "OpenWhispr beenden",
-    "quitConfirmTitle": "OpenWhispr beenden?",
-    "quitConfirmDescription": "Dadurch wird OpenWhispr geschlossen und Hintergrundprozesse werden gestoppt.",
+    "quitTitle": "MoonlitVoice beenden",
+    "quitConfirmTitle": "MoonlitVoice beenden?",
+    "quitConfirmDescription": "Dadurch wird MoonlitVoice geschlossen und Hintergrundprozesse werden gestoppt.",
     "quit": "Beenden",
     "cancel": "Abbrechen"
   },
@@ -201,7 +201,7 @@
       "accessibilityTitle": "Bedienungshilfen",
       "accessibilityDescription": "Zum Einfügen von Text in Apps",
       "testAndGrant": "Testen & erteilen",
-      "requiredForApp": "Erforderlich, damit OpenWhispr funktioniert",
+      "requiredForApp": "Erforderlich, damit MoonlitVoice funktioniert",
       "microphoneRequired": "Mikrofonzugriff erforderlich"
     },
     "transcription": {
@@ -229,7 +229,7 @@
       "problemTitle": "Beim Update ist ein Problem aufgetreten",
       "problemDescription": "Das Update konnte nicht abgeschlossen werden. Bitte versuchen Sie es später erneut.",
       "installTitle": "Update installieren",
-      "installDescription": "OpenWhispr startet neu, um das Update anzuwenden. Laufende Arbeit wird gespeichert.",
+      "installDescription": "MoonlitVoice startet neu, um das Update anzuwenden. Laufende Arbeit wird gespeichert.",
       "couldNotInstallTitle": "Update konnte nicht installiert werden",
       "couldNotInstallDescription": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       "couldNotDownloadTitle": "Update konnte nicht heruntergeladen werden",
@@ -274,8 +274,8 @@
       "toStart": "zum Starten"
     },
     "cloudMigration": {
-      "title": "Willkommen bei OpenWhispr Pro",
-      "description": "Ihre 7-Tage-Testphase ist aktiv! Wir haben die Transkription auf OpenWhispr Cloud umgestellt für schnellere und genauere Ergebnisse. Ihre bisherigen Einstellungen sind gespeichert – wechseln Sie jederzeit in den Einstellungen zurück.",
+      "title": "Willkommen bei MoonlitVoice Pro",
+      "description": "Ihre 7-Tage-Testphase ist aktiv! Wir haben die Transkription auf MoonlitVoice Cloud umgestellt für schnellere und genauere Ergebnisse. Ihre bisherigen Einstellungen sind gespeichert – wechseln Sie jederzeit in den Einstellungen zurück.",
       "viewSettings": "Einstellungen anzeigen"
     },
     "aiCta": {
@@ -423,7 +423,7 @@
       "micErrors": {
         "accessFailed": "Mikrofonzugriff fehlgeschlagen. Bitte versuchen Sie es erneut.",
         "noMicrophones": "Keine Mikrofone erkannt. Verbinden oder wählen Sie ein Mikrofon in {{settingsPath}}.",
-        "permissionDenied": "Berechtigung verweigert. Öffnen Sie {{privacyPath}} und erlauben Sie OpenWhispr.",
+        "permissionDenied": "Berechtigung verweigert. Öffnen Sie {{privacyPath}} und erlauben Sie MoonlitVoice.",
         "couldNotStart": "Ausgewähltes Mikrofon konnte nicht gestartet werden. Wählen Sie ein Eingabegerät in {{settingsPath}} und führen Sie den Test erneut aus.",
         "noActiveInput": "Keine aktive Audioeingabe gefunden. Wählen Sie ein Mikrofon in {{settingsPath}}.",
         "unknown": "Mikrofonzugriff fehlgeschlagen: {{error}}. Wählen Sie ein anderes Eingabegerät und versuchen Sie es erneut.",
@@ -452,8 +452,8 @@
         "accessibilityNeeded": "Bitte gewähren Sie Bedienungshilfen-Berechtigungen in den Systemeinstellungen, um automatisches Einfügen zu ermöglichen.",
         "windowsReady": "Windows benötigt keine speziellen Berechtigungen für automatisches Einfügen. Alles bereit!",
         "linuxReadyWithMethod": "Automatisches Einfügen ist mit {{method}} verfügbar. Alles bereit!",
-        "waylandClipboardMode": "Automatisches Einfügen ist in dieser Wayland-Sitzung nicht verfügbar. OpenWhispr kopiert den Text in die Zwischenablage und Sie können mit Ctrl+V einfügen.",
-        "optionalPasteTool": "Für automatisches Einfügen installieren Sie {{tool}}:\n\n{{installCmd}}{{waylandNote}}\n\nOhne dieses Tool können Sie OpenWhispr weiterhin nutzen – Text wird in die Zwischenablage kopiert und Sie können mit Ctrl+V einfügen."
+        "waylandClipboardMode": "Automatisches Einfügen ist in dieser Wayland-Sitzung nicht verfügbar. MoonlitVoice kopiert den Text in die Zwischenablage und Sie können mit Ctrl+V einfügen.",
+        "optionalPasteTool": "Für automatisches Einfügen installieren Sie {{tool}}:\n\n{{installCmd}}{{waylandNote}}\n\nOhne dieses Tool können Sie MoonlitVoice weiterhin nutzen – Text wird in die Zwischenablage kopiert und Sie können mit Ctrl+V einfügen."
       },
       "alerts": {
         "accessibilityNeeded": "Bedienungshilfen-Berechtigungen erforderlich! Bitte erlauben Sie diese in den Systemeinstellungen."
@@ -466,7 +466,7 @@
         "defaultPasteTool": "xdotool",
         "xdotoolXwayland": "xdotool (XWayland-Apps)"
       },
-      "accessibilityTestText": "OpenWhispr Bedienungshilfen-Test",
+      "accessibilityTestText": "MoonlitVoice Bedienungshilfen-Test",
       "warning": {
         "messages": {
           "macos": "Prüfen Sie die Toneinstellungen, um Ihr Eingabegerät auszuwählen",
@@ -536,7 +536,7 @@
       "continueWithGoogle": "Weiter mit Google"
     },
     "welcomeSubtitle": "Diktieren Sie überall mit Ihrer Stimme",
-    "welcomeTitle": "Willkommen bei OpenWhispr"
+    "welcomeTitle": "Willkommen bei MoonlitVoice"
   },
   "cleanupPrompt": "Textbereinigung",
   "developerSection": {
@@ -741,10 +741,10 @@
     "recheckChecking": "Wird geprüft...",
     "title": "Automatisches Einfügen",
     "usingMethodPrefix": "Verwendet",
-    "waylandClipboardDescription": "Automatisches Einfügen ist in dieser Wayland-Sitzung nicht verfügbar. OpenWhispr kopiert den Text in Ihre Zwischenablage, damit Sie ihn manuell mit Ctrl+V einfügen können.",
+    "waylandClipboardDescription": "Automatisches Einfügen ist in dieser Wayland-Sitzung nicht verfügbar. MoonlitVoice kopiert den Text in Ihre Zwischenablage, damit Sie ihn manuell mit Ctrl+V einfügen können.",
     "waylandClipboardTitle": "Zwischenablage-Modus unter Wayland",
     "windowsReady": "Windows unterstützt automatisches Einfügen direkt. Keine Einrichtung erforderlich!",
-    "withoutToolPrefix": "Ohne dieses Tool kopiert OpenWhispr den Text in Ihre Zwischenablage. Sie können ihn dann manuell mit Ctrl+V einfügen.",
+    "withoutToolPrefix": "Ohne dieses Tool kopiert MoonlitVoice den Text in Ihre Zwischenablage. Sie können ihn dann manuell mit Ctrl+V einfügen.",
     "xwaylandAppsOnly": "Automatisches Einfügen funktioniert nur für XWayland-Apps"
   },
   "promptStudio": {
@@ -794,7 +794,7 @@
       "none": "Keine",
       "outputLabel": "Ausgabe",
       "processing": "Verarbeitung...",
-      "openwhisprCloud": "OpenWhispr Cloud",
+      "openwhisprCloud": "MoonlitVoice Cloud",
       "providerLabel": "Anbieter",
       "run": "Test ausführen"
     },
@@ -980,13 +980,13 @@
       "description": "Bereinigt Transkriptionen, verarbeitet Befehle und korrigiert Fehler unter Beibehaltung Ihres Stils.",
       "enableTextCleanup": "Textbereinigung aktivieren",
       "enableTextCleanupDescription": "KI verbessert die Transkriptionsqualität",
-      "openwhisprCloud": "OpenWhispr Cloud",
+      "openwhisprCloud": "MoonlitVoice Cloud",
       "openwhisprCloudDescription": "Funktioniert sofort. Keine Konfiguration nötig.",
       "title": "KI-Textverbesserung",
       "toasts": {
         "switchedCloud": {
-          "description": "Textverbesserung verwendet jetzt den OpenWhispr-Cloud-Dienst.",
-          "title": "Zu OpenWhispr Cloud gewechselt"
+          "description": "Textverbesserung verwendet jetzt den MoonlitVoice-Cloud-Dienst.",
+          "title": "Zu MoonlitVoice Cloud gewechselt"
         },
         "switchedCustom": {
           "description": "Konfigurieren Sie Ihren eigenen Anbieter und API-Schlüssel.",
@@ -1034,7 +1034,7 @@
       "howItWorksDescription": "Hinzugefügte Wörter werden in den KI-Prompt aufgenommen, damit das Modell diese Begriffe bei der Transkriptionsbereinigung erkennt und beibehält.",
       "howItWorksTitle": "So funktioniert es",
       "noWords": "Noch keine Wörter hinzugefügt",
-      "placeholder": "z. B. OpenWhispr, Kubernetes, Dr. Martinez...",
+      "placeholder": "z. B. MoonlitVoice, Kubernetes, Dr. Martinez...",
       "pressEnterToAdd": "Enter drücken zum Hinzufügen",
       "removeWord": "Wort entfernen",
       "tipDescription": "Fügen Sie Eigennamen, Fachbegriffe oder andere Wörter hinzu, die möglicherweise falsch transkribiert werden.",
@@ -1047,7 +1047,7 @@
       "appearance": {
         "auto": "Auto",
         "dark": "Dunkel",
-        "description": "Steuern Sie das Erscheinungsbild von OpenWhispr",
+        "description": "Steuern Sie das Erscheinungsbild von MoonlitVoice",
         "light": "Hell",
         "theme": "Design",
         "themeDescription": "Wählen Sie zwischen Hell, Dunkel oder Systemstandard",
@@ -1075,7 +1075,7 @@
       },
       "startup": {
         "launchAtLogin": "Beim Anmelden starten",
-        "launchAtLoginDescription": "OpenWhispr automatisch starten, wenn Sie sich anmelden",
+        "launchAtLoginDescription": "MoonlitVoice automatisch starten, wenn Sie sich anmelden",
         "title": "Autostart"
       },
       "updates": {
@@ -1107,7 +1107,7 @@
           },
           "installUpdate": {
             "confirmText": "Installieren & neu starten",
-            "description": "OpenWhispr startet neu, um das Update anzuwenden.",
+            "description": "MoonlitVoice startet neu, um das Update anzuwenden.",
             "title": "Update installieren"
           },
           "noUpdates": {
@@ -1138,13 +1138,13 @@
     "permissions": {
       "accessibilityDescription": "Erforderlich, damit automatisches Einfügen nach der Transkription funktioniert",
       "accessibilityTitle": "Bedienungshilfen",
-      "description": "Systemberechtigungen testen und verwalten, die OpenWhispr für den ordnungsgemäßen Betrieb benötigt",
+      "description": "Systemberechtigungen testen und verwalten, die MoonlitVoice für den ordnungsgemäßen Betrieb benötigt",
       "microphoneDescription": "Erforderlich für Sprachaufnahme und Diktat",
       "microphoneTitle": "Mikrofon",
       "resetAccessibility": {
-        "description": "Dadurch wird OpenWhispr aus den Bedienungshilfen-Berechtigungen entfernt. Sie müssen den Zugriff unter Systemeinstellungen > Datenschutz & Sicherheit > Bedienungshilfen erneut gewähren.",
+        "description": "Dadurch wird MoonlitVoice aus den Bedienungshilfen-Berechtigungen entfernt. Sie müssen den Zugriff unter Systemeinstellungen > Datenschutz & Sicherheit > Bedienungshilfen erneut gewähren.",
         "label": "Bedienungshilfen-Berechtigungen zurücksetzen",
-        "rowDescription": "Probleme nach Neuinstallation oder Neuerstellung der App beheben, indem OpenWhispr in den Systemeinstellungen entfernt und erneut hinzugefügt wird",
+        "rowDescription": "Probleme nach Neuinstallation oder Neuerstellung der App beheben, indem MoonlitVoice in den Systemeinstellungen entfernt und erneut hinzugefügt wird",
         "title": "Bedienungshilfen-Berechtigungen zurücksetzen"
       },
       "test": "Testen",
@@ -1159,7 +1159,7 @@
       "description": "Steuern Sie, welche Daten Ihr Gerät verlassen. Standardmäßig ist alles deaktiviert.",
       "title": "Datenschutz",
       "usageAnalytics": "Nutzungsanalysen",
-      "usageAnalyticsDescription": "Helfen Sie uns, OpenWhispr zu verbessern, indem Sie anonyme Leistungsdaten teilen. Wir senden niemals Transkriptionsinhalte – nur Timing- und Fehlerdaten."
+      "usageAnalyticsDescription": "Helfen Sie uns, MoonlitVoice zu verbessern, indem Sie anonyme Leistungsdaten teilen. Wir senden niemals Transkriptionsinhalte – nur Timing- und Fehlerdaten."
     },
     "prompts": {
       "description": "Den einheitlichen System-Prompt anzeigen, anpassen und testen, der Textbereinigung und Anweisungserkennung steuert",
@@ -1168,14 +1168,14 @@
     "transcription": {
       "customSetup": "Benutzerdefinierte Einrichtung",
       "customSetupDescription": "Verwenden Sie Ihren eigenen Anbieter und API-Schlüssel.",
-      "description": "Wählen Sie, wie OpenWhispr Ihre Stimme transkribiert",
-      "openwhisprCloud": "OpenWhispr Cloud",
+      "description": "Wählen Sie, wie MoonlitVoice Ihre Stimme transkribiert",
+      "openwhisprCloud": "MoonlitVoice Cloud",
       "openwhisprCloudDescription": "Funktioniert sofort. Keine Konfiguration nötig.",
       "title": "Sprache-zu-Text",
       "toasts": {
         "switchedCloud": {
-          "description": "Transkription verwendet jetzt den OpenWhispr-Cloud-Dienst.",
-          "title": "Zu OpenWhispr Cloud gewechselt"
+          "description": "Transkription verwendet jetzt den MoonlitVoice-Cloud-Dienst.",
+          "title": "Zu MoonlitVoice Cloud gewechselt"
         },
         "switchedCustom": {
           "description": "Konfigurieren Sie Ihren eigenen Anbieter und API-Schlüssel.",

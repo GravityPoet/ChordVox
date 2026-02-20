@@ -1,9 +1,9 @@
 {
-  "appId": "com.herotools.openwispr",
-  "productName": "OpenWhispr",
+  "appId": "com.gravitypoet.moonlitvoice",
+  "productName": "MoonlitVoice",
   "protocols": {
-    "name": "OpenWhispr Protocol",
-    "schemes": ["openwhispr"]
+    "name": "MoonlitVoice Protocol",
+    "schemes": ["moonlitvoice"]
   },
   "directories": {
     "output": "dist"
@@ -117,8 +117,8 @@
     "notarize": true,
     "extendInfo": {
       "LSUIElement": false,
-      "NSMicrophoneUsageDescription": "OpenWhispr needs microphone access for speech-to-text transcription.",
-      "NSAccessibilityUsageDescription": "OpenWhispr needs accessibility permissions to paste transcribed text into other applications."
+      "NSMicrophoneUsageDescription": "MoonlitVoice needs microphone access for speech-to-text transcription.",
+      "NSAccessibilityUsageDescription": "MoonlitVoice needs accessibility permissions to paste transcribed text into other applications."
     }
   },
   "win": {
@@ -185,7 +185,7 @@
     "include": "resources/nsis/cleanup-models.nsh"
   },
   "dmg": {
-    "title": "OpenWhispr",
+    "title": "MoonlitVoice",
     "icon": "src/assets/icon.icns",
     "window": {
       "width": 540,

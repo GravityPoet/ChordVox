@@ -58,8 +58,8 @@
     "desktop-app"
   ],
   "author": {
-    "name": "OpenWhispr Team",
-    "email": "support@openwhispr.com"
+    "name": "MoonlitVoice Team",
+    "email": "support@moonlitvoice.app"
   },
   "license": "MIT",
   "devDependencies": {
