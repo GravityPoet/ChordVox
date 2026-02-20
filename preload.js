@@ -98,6 +98,17 @@ contextBridge.exposeInMainWorld("electronAPI", {
   cancelParakeetDownload: () => ipcRenderer.invoke("cancel-parakeet-download"),
   getParakeetDiagnostics: () => ipcRenderer.invoke("get-parakeet-diagnostics"),
 
+  // Local SenseVoice (external CLI + local GGUF model)
+  transcribeLocalSenseVoice: (audioBlob, options) =>
+    ipcRenderer.invoke("transcribe-local-sensevoice", audioBlob, options),
+  checkSenseVoiceInstallation: (binaryPath) =>
+    ipcRenderer.invoke("check-sensevoice-installation", binaryPath),
+  checkSenseVoiceModelStatus: (modelPath) =>
+    ipcRenderer.invoke("check-sensevoice-model-status", modelPath),
+  pickSenseVoiceModelFile: (defaultPath) =>
+    ipcRenderer.invoke("pick-sensevoice-model-file", defaultPath),
+  pickSenseVoiceBinary: (defaultPath) => ipcRenderer.invoke("pick-sensevoice-binary", defaultPath),
+
   // Parakeet server functions (faster repeated transcriptions)
   parakeetServerStart: (modelName) => ipcRenderer.invoke("parakeet-server-start", modelName),
   parakeetServerStop: () => ipcRenderer.invoke("parakeet-server-stop"),
@@ -179,6 +190,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveCustomTranscriptionKey: (key) => ipcRenderer.invoke("save-custom-transcription-key", key),
   getCustomReasoningKey: () => ipcRenderer.invoke("get-custom-reasoning-key"),
   saveCustomReasoningKey: (key) => ipcRenderer.invoke("save-custom-reasoning-key", key),
+  licenseGetStatus: () => ipcRenderer.invoke("license-get-status"),
+  licenseActivate: (licenseKey) => ipcRenderer.invoke("license-activate", licenseKey),
+  licenseValidate: () => ipcRenderer.invoke("license-validate"),
+  licenseClear: () => ipcRenderer.invoke("license-clear"),
 
   // Dictation key persistence (file-based for reliable startup)
   getDictationKey: () => ipcRenderer.invoke("get-dictation-key"),

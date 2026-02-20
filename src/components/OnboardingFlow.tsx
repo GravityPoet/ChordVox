@@ -74,6 +74,8 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
     whisperModel,
     localTranscriptionProvider,
     parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
     cloudTranscriptionProvider,
     cloudTranscriptionModel,
     cloudTranscriptionBaseUrl,
@@ -91,6 +93,8 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
     setMistralApiKey,
     updateTranscriptionSettings,
     preferredLanguage,
+    setSenseVoiceModelPath,
+    setSenseVoiceBinaryPath,
   } = useSettings();
 
   const [hotkey, setHotkey] = useState(dictationKey || getDefaultHotkey());
@@ -157,7 +161,12 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   }, [setActivationMode]);
 
   useEffect(() => {
-    const modelToCheck = localTranscriptionProvider === "nvidia" ? parakeetModel : whisperModel;
+    const modelToCheck =
+      localTranscriptionProvider === "nvidia"
+        ? parakeetModel
+        : localTranscriptionProvider === "sensevoice"
+          ? senseVoiceModelPath
+          : whisperModel;
     if (!useLocalWhisper || !modelToCheck) {
       setIsModelDownloaded(false);
       return;
@@ -165,10 +174,22 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 
     const checkStatus = async () => {
       try {
-        const result =
-          localTranscriptionProvider === "nvidia"
-            ? await window.electronAPI?.checkParakeetModelStatus(modelToCheck)
-            : await window.electronAPI?.checkModelStatus(modelToCheck);
+        if (localTranscriptionProvider === "nvidia") {
+          const result = await window.electronAPI?.checkParakeetModelStatus(modelToCheck);
+          setIsModelDownloaded(result?.downloaded ?? false);
+          return;
+        }
+
+        if (localTranscriptionProvider === "sensevoice") {
+          const modelStatus = await window.electronAPI?.checkSenseVoiceModelStatus(modelToCheck);
+          const installStatus = await window.electronAPI?.checkSenseVoiceInstallation(
+            senseVoiceBinaryPath
+          );
+          setIsModelDownloaded(Boolean(modelStatus?.downloaded && installStatus?.working));
+          return;
+        }
+
+        const result = await window.electronAPI?.checkModelStatus(modelToCheck);
         setIsModelDownloaded(result?.downloaded ?? false);
       } catch (error) {
         console.error("Failed to check model status:", error);
@@ -177,7 +198,14 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
     };
 
     checkStatus();
-  }, [useLocalWhisper, whisperModel, parakeetModel, localTranscriptionProvider]);
+  }, [
+    useLocalWhisper,
+    whisperModel,
+    parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
+    localTranscriptionProvider,
+  ]);
 
   // Auto-register default hotkey when entering the activation step
   // (step 3 for non-signed-in, step 2 for signed-in users)
@@ -442,11 +470,17 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
                 updateTranscriptionSettings({ cloudTranscriptionModel: model })
               }
               selectedLocalModel={
-                localTranscriptionProvider === "nvidia" ? parakeetModel : whisperModel
+                localTranscriptionProvider === "nvidia"
+                  ? parakeetModel
+                  : localTranscriptionProvider === "sensevoice"
+                    ? senseVoiceModelPath
+                    : whisperModel
               }
               onLocalModelSelect={(modelId) => {
                 if (localTranscriptionProvider === "nvidia") {
                   updateTranscriptionSettings({ parakeetModel: modelId });
+                } else if (localTranscriptionProvider === "sensevoice") {
+                  updateTranscriptionSettings({ senseVoiceModelPath: modelId });
                 } else {
                   updateTranscriptionSettings({ whisperModel: modelId });
                 }
@@ -454,11 +488,15 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
               selectedLocalProvider={localTranscriptionProvider}
               onLocalProviderSelect={(provider) =>
                 updateTranscriptionSettings({
-                  localTranscriptionProvider: provider as "whisper" | "nvidia",
+                  localTranscriptionProvider: provider as "whisper" | "nvidia" | "sensevoice",
                 })
               }
               useLocalWhisper={useLocalWhisper}
               onModeChange={(isLocal) => updateTranscriptionSettings({ useLocalWhisper: isLocal })}
+              senseVoiceModelPath={senseVoiceModelPath}
+              setSenseVoiceModelPath={setSenseVoiceModelPath}
+              senseVoiceBinaryPath={senseVoiceBinaryPath}
+              setSenseVoiceBinaryPath={setSenseVoiceBinaryPath}
               openaiApiKey={openaiApiKey}
               setOpenaiApiKey={setOpenaiApiKey}
               groqApiKey={groqApiKey}
@@ -665,7 +703,11 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
         // For non-signed-in users: Setup - check if configuration is complete
         if (useLocalWhisper) {
           const modelToCheck =
-            localTranscriptionProvider === "nvidia" ? parakeetModel : whisperModel;
+            localTranscriptionProvider === "nvidia"
+              ? parakeetModel
+              : localTranscriptionProvider === "sensevoice"
+                ? senseVoiceModelPath
+                : whisperModel;
           return modelToCheck !== "" && isModelDownloaded;
         } else {
           // For cloud mode, check if appropriate API key is set

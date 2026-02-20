@@ -18,6 +18,7 @@ export const PROVIDER_ICONS: Record<string, string> = {
   qwen: qwenIcon,
   groq: groqIcon,
   nvidia: nvidiaIcon,
+  sensevoice: llamaIcon,
   "openai-oss": openaiOssIcon,
 };
 
