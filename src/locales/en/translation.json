@@ -1123,6 +1123,23 @@
         "title": "Remove downloaded models?"
       },
       "removing": "Removing...",
+      "settingsTransfer": {
+        "description": "Export current settings to a file, or restore settings from a file.",
+        "export": "Export Settings",
+        "exportFailedDescription": "Failed to export settings. Please try again.",
+        "exportFailedTitle": "Export failed",
+        "exportSuccessDescription": "Settings exported to: {{path}}",
+        "exportSuccessTitle": "Export successful",
+        "import": "Import Settings",
+        "importConfirmButton": "Import & Overwrite",
+        "importConfirmDescription": "This will overwrite current settings and restart the app when done.",
+        "importConfirmTitle": "Import settings now?",
+        "importFailedDescription": "Failed to import settings. Please verify the file format.",
+        "importFailedTitle": "Import failed",
+        "importSuccessDescription": "Settings imported. The app will restart now.",
+        "importSuccessTitle": "Import successful",
+        "title": "Settings Backup"
+      },
       "resetAll": {
         "confirmText": "Delete Everything",
         "description": "This will permanently delete all settings, transcriptions, and cached data. The app will reload after reset.",

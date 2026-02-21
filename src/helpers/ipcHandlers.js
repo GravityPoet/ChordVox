@@ -3,6 +3,7 @@ const path = require("path");
 const http = require("http");
 const https = require("https");
 const crypto = require("crypto");
+const fsPromises = require("fs/promises");
 const AppUtils = require("../utils");
 const debugLogger = require("./debugLogger");
 const GnomeShortcutManager = require("./gnomeShortcut");
@@ -605,6 +606,69 @@ class IPCHandlers {
         return { success: true, path: result.filePaths[0], cancelled: false };
       } catch (error) {
         return { success: false, error: error.message, path: null, cancelled: false };
+      }
+    });
+
+    ipcMain.handle("export-settings-file", async (event, payload = {}) => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const options = {
+          title: "Export AriaKey Settings",
+          defaultPath: `AriaKey-settings-${timestamp}.json`,
+          filters: [{ name: "JSON", extensions: ["json"] }],
+        };
+
+        const result = targetWindow
+          ? await dialog.showSaveDialog(targetWindow, options)
+          : await dialog.showSaveDialog(options);
+
+        if (result.canceled || !result.filePath) {
+          return { success: true, cancelled: true };
+        }
+
+        await fsPromises.writeFile(result.filePath, JSON.stringify(payload, null, 2), "utf8");
+        return { success: true, cancelled: false, filePath: result.filePath };
+      } catch (error) {
+        debugLogger.error("Failed to export settings file:", error);
+        return { success: false, cancelled: false, error: error.message };
+      }
+    });
+
+    ipcMain.handle("import-settings-file", async (event) => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const options = {
+          title: "Import AriaKey Settings",
+          properties: ["openFile"],
+          filters: [{ name: "JSON", extensions: ["json"] }],
+        };
+
+        const result = targetWindow
+          ? await dialog.showOpenDialog(targetWindow, options)
+          : await dialog.showOpenDialog(options);
+
+        if (result.canceled || !result.filePaths?.length) {
+          return { success: true, cancelled: true };
+        }
+
+        const filePath = result.filePaths[0];
+        const raw = await fsPromises.readFile(filePath, "utf8");
+        let parsed;
+        try {
+          parsed = JSON.parse(raw);
+        } catch (parseError) {
+          return {
+            success: false,
+            cancelled: false,
+            error: `Invalid JSON file: ${parseError.message}`,
+          };
+        }
+
+        return { success: true, cancelled: false, filePath, data: parsed };
+      } catch (error) {
+        debugLogger.error("Failed to import settings file:", error);
+        return { success: false, cancelled: false, error: error.message };
       }
     });
 

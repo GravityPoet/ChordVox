@@ -1123,6 +1123,23 @@
         "title": "删除已下载的模型？"
       },
       "removing": "正在删除...",
+      "settingsTransfer": {
+        "description": "导出当前配置到文件，或从文件恢复配置",
+        "export": "导出设置",
+        "exportFailedDescription": "导出配置失败，请重试。",
+        "exportFailedTitle": "导出失败",
+        "exportSuccessDescription": "配置已导出到：{{path}}",
+        "exportSuccessTitle": "导出成功",
+        "import": "导入设置",
+        "importConfirmButton": "导入并覆盖",
+        "importConfirmDescription": "这会覆盖当前设置，并在完成后自动重启应用。",
+        "importConfirmTitle": "确认导入设置？",
+        "importFailedDescription": "导入配置失败，请确认文件格式正确。",
+        "importFailedTitle": "导入失败",
+        "importSuccessDescription": "配置已导入，应用即将重启。",
+        "importSuccessTitle": "导入成功",
+        "title": "设置备份"
+      },
       "resetAll": {
         "confirmText": "删除所有数据",
         "description": "这将永久删除所有设置、转录记录和缓存数据。重置后应用将重新加载。",

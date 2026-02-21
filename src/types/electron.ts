@@ -195,6 +195,17 @@ export interface FilePickResult {
   error?: string;
 }
 
+export interface SettingsFileOperationResult {
+  success: boolean;
+  cancelled?: boolean;
+  filePath?: string;
+  error?: string;
+}
+
+export interface SettingsImportResult extends SettingsFileOperationResult {
+  data?: any;
+}
+
 export interface CallTraceSession {
   runId: string;
   profileId: DictationProfileId;
@@ -308,6 +319,8 @@ declare global {
         reasoningProvider: string;
         reasoningModel?: string;
       }) => Promise<void>;
+      exportSettingsFile: (payload: any) => Promise<SettingsFileOperationResult>;
+      importSettingsFile: () => Promise<SettingsImportResult>;
 
       // Clipboard operations
       readClipboard: () => Promise<string>;
