@@ -39,8 +39,10 @@ class UpdateManager {
       });
     }
 
-    // Disable auto-download - let user control when to download
-    autoUpdater.autoDownload = false;
+    // Production default: download updates automatically after detection.
+    // Can be disabled with OPENWHISPR_AUTO_DOWNLOAD_UPDATES=false.
+    autoUpdater.autoDownload =
+      String(process.env.OPENWHISPR_AUTO_DOWNLOAD_UPDATES || "true").toLowerCase() !== "false";
 
     // Enable auto-install on quit - if user ignores update and quits normally,
     // the update will install automatically (best UX)
