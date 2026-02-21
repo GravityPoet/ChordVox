@@ -12,6 +12,9 @@ const PERSISTED_KEYS = [
   "MISTRAL_API_KEY",
   "CUSTOM_TRANSCRIPTION_API_KEY",
   "CUSTOM_REASONING_API_KEY",
+  "LICENSE_API_BASE_URL",
+  "LICENSE_PRODUCT_ID",
+  "LICENSE_ALLOW_DEV_KEYS",
   "LOCAL_TRANSCRIPTION_PROVIDER",
   "PARAKEET_MODEL",
   "LOCAL_WHISPER_MODEL",
@@ -120,6 +123,28 @@ class EnvironmentManager {
     return this._saveKey("CUSTOM_REASONING_API_KEY", key);
   }
 
+  getLicenseApiBaseUrl() {
+    return this._getKey("LICENSE_API_BASE_URL");
+  }
+
+  saveLicenseApiBaseUrl(url) {
+    const normalized = String(url || "").trim().replace(/\/+$/, "");
+    const result = this._saveKey("LICENSE_API_BASE_URL", normalized);
+    this.saveAllKeysToEnvFile().catch(() => {});
+    return { ...result, value: normalized };
+  }
+
+  getLicenseProductId() {
+    return this._getKey("LICENSE_PRODUCT_ID");
+  }
+
+  saveLicenseProductId(productId) {
+    const normalized = String(productId || "").trim();
+    const result = this._saveKey("LICENSE_PRODUCT_ID", normalized);
+    this.saveAllKeysToEnvFile().catch(() => {});
+    return { ...result, value: normalized };
+  }
+
   getDictationKey() {
     return this._getKey("DICTATION_KEY");
   }
@@ -180,13 +205,44 @@ OPENAI_API_KEY=${apiKey}
   async saveAllKeysToEnvFile() {
     const envPath = path.join(app.getPath("userData"), ".env");
 
-    let envContent = "# AriaKey Environment Variables\n";
+    const existingMap = new Map();
+    const orderedKeys = [];
+
+    try {
+      const existingContent = await fsPromises.readFile(envPath, "utf8");
+      const lines = existingContent.split(/\r?\n/);
+      for (const line of lines) {
+        const match = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+        if (!match) continue;
+        const key = match[1];
+        const value = match[2] || "";
+        if (!existingMap.has(key)) {
+          orderedKeys.push(key);
+        }
+        existingMap.set(key, value);
+      }
+    } catch {
+      // No previous env file; start fresh.
+    }
 
     for (const key of PERSISTED_KEYS) {
-      if (process.env[key]) {
-        envContent += `${key}=${process.env[key]}\n`;
+      const value = process.env[key];
+      if (value) {
+        if (!existingMap.has(key)) {
+          orderedKeys.push(key);
+        }
+        existingMap.set(key, value);
+      } else if (existingMap.has(key)) {
+        existingMap.delete(key);
       }
     }
+
+    const lines = ["# AriaKey Environment Variables"];
+    for (const key of orderedKeys) {
+      if (!existingMap.has(key)) continue;
+      lines.push(`${key}=${existingMap.get(key)}`);
+    }
+    const envContent = `${lines.join("\n")}\n`;
 
     await fsPromises.writeFile(envPath, envContent, "utf8");
     require("dotenv").config({ path: envPath });

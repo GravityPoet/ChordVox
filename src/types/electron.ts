@@ -444,6 +444,8 @@ declare global {
       saveCustomTranscriptionKey?: (key: string) => Promise<void>;
       getCustomReasoningKey?: () => Promise<string | null>;
       saveCustomReasoningKey?: (key: string) => Promise<void>;
+      getLicenseApiBaseUrl?: () => Promise<string | null>;
+      saveLicenseApiBaseUrl?: (url: string) => Promise<{ success: boolean; value?: string }>;
       licenseGetStatus?: () => Promise<LicenseStatusResult>;
       licenseActivate?: (licenseKey: string) => Promise<LicenseStatusResult>;
       licenseValidate?: () => Promise<LicenseStatusResult>;

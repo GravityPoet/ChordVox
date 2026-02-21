@@ -200,6 +200,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveCustomTranscriptionKey: (key) => ipcRenderer.invoke("save-custom-transcription-key", key),
   getCustomReasoningKey: () => ipcRenderer.invoke("get-custom-reasoning-key"),
   saveCustomReasoningKey: (key) => ipcRenderer.invoke("save-custom-reasoning-key", key),
+  getLicenseApiBaseUrl: () => ipcRenderer.invoke("get-license-api-base-url"),
+  saveLicenseApiBaseUrl: (url) => ipcRenderer.invoke("save-license-api-base-url", url),
   licenseGetStatus: () => ipcRenderer.invoke("license-get-status"),
   licenseActivate: (licenseKey) => ipcRenderer.invoke("license-activate", licenseKey),
   licenseValidate: () => ipcRenderer.invoke("license-validate"),

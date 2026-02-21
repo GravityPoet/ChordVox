@@ -962,6 +962,16 @@ class IPCHandlers {
       return this.environmentManager.saveCustomReasoningKey(key);
     });
 
+    ipcMain.handle("get-license-api-base-url", async () => {
+      return this.environmentManager.getLicenseApiBaseUrl();
+    });
+
+    ipcMain.handle("save-license-api-base-url", async (_event, url) => {
+      const result = this.environmentManager.saveLicenseApiBaseUrl(url);
+      this.licenseManager?.refreshConfig?.();
+      return result;
+    });
+
     ipcMain.handle("license-get-status", async () => {
       if (!this.licenseManager) {
         return {

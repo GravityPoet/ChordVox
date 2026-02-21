@@ -35,14 +35,15 @@ Main-process license manager:
 - UI:
   - Account section in settings contains a "Desktop License" panel
 
-### Environment variables
+### Environment variables (desktop app)
 
 ```bash
 LICENSE_API_BASE_URL=
-LICENSE_PRODUCT_ID=openwhispr-pro
+LICENSE_PRODUCT_ID=ariakey-pro
 LICENSE_API_TOKEN=
 LICENSE_API_TIMEOUT_MS=8000
 LICENSE_OFFLINE_GRACE_HOURS=168
+LICENSE_ALLOW_DEV_KEYS=false
 ```
 
 ### Expected API contract (server side)
@@ -55,7 +56,7 @@ Request body:
 ```json
 {
   "licenseKey": "XXXX-XXXX-XXXX",
-  "productId": "openwhispr-pro",
+  "productId": "ariakey-pro",
   "machineId": "stable-machine-fingerprint",
   "appVersion": "1.5.0",
   "platform": "darwin",
@@ -76,4 +77,17 @@ Typical success response:
 }
 ```
 
-When no license API is configured, only keys prefixed with `DEV-` are accepted for local testing.
+When no license API is configured, only keys prefixed with `DEV-` are accepted **and only when** `LICENSE_ALLOW_DEV_KEYS=true` (or `NODE_ENV=development`).
+
+### New: ready-to-run license backend
+
+This repository now includes `services/license-server`:
+
+- API: `POST /v1/licenses/activate`, `POST /v1/licenses/validate`
+- Storage: SQLite
+- Admin tooling: issue/revoke/list licenses via CLI
+
+See:
+
+- `services/license-server/README.md`
+- `docs/LICENSE_SALES_FLOW.md`

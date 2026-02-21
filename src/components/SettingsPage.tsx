@@ -143,18 +143,21 @@ function SectionHeader({ title, description }: { title: string; description?: st
   );
 }
 
-function getLicenseStatusLabel(status: LicenseStatusResult["status"] | undefined): string {
+function getLicenseStatusLabel(
+  status: LicenseStatusResult["status"] | undefined,
+  t: (key: string) => string
+): string {
   switch (status) {
     case "active":
-      return "Active";
+      return t("settingsPage.account.desktopLicense.statusLabels.active");
     case "offline_grace":
-      return "Offline Grace";
+      return t("settingsPage.account.desktopLicense.statusLabels.offlineGrace");
     case "expired":
-      return "Expired";
+      return t("settingsPage.account.desktopLicense.statusLabels.expired");
     case "invalid":
-      return "Invalid";
+      return t("settingsPage.account.desktopLicense.statusLabels.invalid");
     default:
-      return "Not Activated";
+      return t("settingsPage.account.desktopLicense.statusLabels.notActivated");
   }
 }
 
@@ -774,9 +777,12 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
   const { theme, setTheme } = useTheme();
   const [licenseStatus, setLicenseStatus] = useState<LicenseStatusResult | null>(null);
   const [licenseKeyInput, setLicenseKeyInput] = useState("");
+  const [licenseApiBaseUrlInput, setLicenseApiBaseUrlInput] = useState("");
   const [licenseBusyAction, setLicenseBusyAction] = useState<
     "activate" | "validate" | "clear" | null
   >(null);
+  const [licenseApiBusy, setLicenseApiBusy] = useState(false);
+  const [showLicenseKeyInput, setShowLicenseKeyInput] = useState(false);
   const usage = useUsage();
   const hasShownApproachingToast = useRef(false);
   useEffect(() => {
@@ -803,17 +809,34 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     }
   }, []);
 
+  const loadLicenseApiBaseUrl = useCallback(async () => {
+    if (!window.electronAPI?.getLicenseApiBaseUrl) return;
+    try {
+      const value = await window.electronAPI.getLicenseApiBaseUrl();
+      setLicenseApiBaseUrlInput(value || "");
+    } catch (error) {
+      logger.error("Failed to load license API base URL", error, "license");
+    }
+  }, []);
+
   useEffect(() => {
     refreshLicenseStatus();
-  }, [refreshLicenseStatus]);
+    loadLicenseApiBaseUrl();
+  }, [loadLicenseApiBaseUrl, refreshLicenseStatus]);
+
+  useEffect(() => {
+    if (licenseStatus?.isActive && licenseStatus?.keyPresent) {
+      setShowLicenseKeyInput(false);
+    }
+  }, [licenseStatus?.isActive, licenseStatus?.keyPresent]);
 
   const handleActivateLicense = useCallback(async () => {
     if (!window.electronAPI?.licenseActivate) return;
     const licenseKey = licenseKeyInput.trim();
     if (!licenseKey) {
       toast({
-        title: "License key required",
-        description: "Enter your license key before activating.",
+        title: t("settingsPage.account.desktopLicense.toasts.keyRequiredTitle"),
+        description: t("settingsPage.account.desktopLicense.toasts.keyRequiredDescription"),
         variant: "destructive",
       });
       return;
@@ -826,29 +849,34 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
 
       if (result.success) {
         setLicenseKeyInput("");
+        setShowLicenseKeyInput(false);
         toast({
-          title: "License activated",
-          description: result.message || "This device is now activated.",
+          title: t("settingsPage.account.desktopLicense.toasts.activatedTitle"),
+          description:
+            result.message || t("settingsPage.account.desktopLicense.toasts.activatedDescription"),
           variant: "success",
         });
       } else {
         toast({
-          title: "Activation failed",
-          description: result.message || result.error || "The license key could not be activated.",
+          title: t("settingsPage.account.desktopLicense.toasts.activationFailedTitle"),
+          description:
+            result.message ||
+            result.error ||
+            t("settingsPage.account.desktopLicense.toasts.activationFailedDescription"),
           variant: "destructive",
         });
       }
     } catch (error) {
       logger.error("Failed to activate license", error, "license");
       toast({
-        title: "Activation failed",
-        description: "Unexpected error while activating the license.",
+        title: t("settingsPage.account.desktopLicense.toasts.activationFailedTitle"),
+        description: t("settingsPage.account.desktopLicense.toasts.activationUnexpectedError"),
         variant: "destructive",
       });
     } finally {
       setLicenseBusyAction(null);
     }
-  }, [licenseKeyInput, toast]);
+  }, [licenseKeyInput, t, toast]);
 
   const handleValidateLicense = useCallback(async () => {
     if (!window.electronAPI?.licenseValidate) return;
@@ -857,29 +885,70 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
       const result = await window.electronAPI.licenseValidate();
       setLicenseStatus(result);
       toast({
-        title: result.success ? "License validated" : "License check failed",
-        description: result.message || (result.success ? "License is valid." : "License is invalid."),
+        title: result.success
+          ? t("settingsPage.account.desktopLicense.toasts.validatedTitle")
+          : t("settingsPage.account.desktopLicense.toasts.validateFailedTitle"),
+        description:
+          result.message ||
+          (result.success
+            ? t("settingsPage.account.desktopLicense.toasts.validatedDescription")
+            : t("settingsPage.account.desktopLicense.toasts.invalidDescription")),
         variant: result.success ? "success" : "destructive",
       });
     } catch (error) {
       logger.error("Failed to validate license", error, "license");
       toast({
-        title: "License check failed",
-        description: "Unexpected error while checking license status.",
+        title: t("settingsPage.account.desktopLicense.toasts.validateFailedTitle"),
+        description: t("settingsPage.account.desktopLicense.toasts.validateUnexpectedError"),
         variant: "destructive",
       });
     } finally {
       setLicenseBusyAction(null);
     }
-  }, [toast]);
+  }, [t, toast]);
+
+  const handleSaveLicenseApiBaseUrl = useCallback(async () => {
+    if (!window.electronAPI?.saveLicenseApiBaseUrl) return;
+    setLicenseApiBusy(true);
+    try {
+      const result = await window.electronAPI.saveLicenseApiBaseUrl(licenseApiBaseUrlInput);
+      if (!result?.success) {
+        toast({
+          title: t("settingsPage.account.desktopLicense.toasts.licenseApiSaveFailedTitle"),
+          description: t(
+            "settingsPage.account.desktopLicense.toasts.licenseApiSaveFailedDescription"
+          ),
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setLicenseApiBaseUrlInput(result.value || "");
+      await refreshLicenseStatus();
+      toast({
+        title: t("settingsPage.account.desktopLicense.toasts.licenseApiSavedTitle"),
+        description: t("settingsPage.account.desktopLicense.toasts.licenseApiSavedDescription"),
+        variant: "success",
+      });
+    } catch (error) {
+      logger.error("Failed to save license API base URL", error, "license");
+      toast({
+        title: t("settingsPage.account.desktopLicense.toasts.licenseApiSaveFailedTitle"),
+        description: t("settingsPage.account.desktopLicense.toasts.licenseApiSaveFailedDescription"),
+        variant: "destructive",
+      });
+    } finally {
+      setLicenseApiBusy(false);
+    }
+  }, [licenseApiBaseUrlInput, refreshLicenseStatus, t, toast]);
 
   const handleClearLicense = useCallback(() => {
     if (!window.electronAPI?.licenseClear) return;
 
     showConfirmDialog({
-      title: "Remove saved license?",
-      description: "This device will return to unlicensed mode until you activate again.",
-      confirmText: "Remove",
+      title: t("settingsPage.account.desktopLicense.dialogs.removeTitle"),
+      description: t("settingsPage.account.desktopLicense.dialogs.removeDescription"),
+      confirmText: t("settingsPage.account.desktopLicense.dialogs.removeConfirm"),
       variant: "destructive",
       onConfirm: async () => {
         setLicenseBusyAction("clear");
@@ -888,15 +957,16 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
           setLicenseStatus(result);
           setLicenseKeyInput("");
           toast({
-            title: "License removed",
-            description: result.message || "Saved license state was cleared.",
+            title: t("settingsPage.account.desktopLicense.toasts.removedTitle"),
+            description:
+              result.message || t("settingsPage.account.desktopLicense.toasts.removedDescription"),
             variant: "success",
           });
         } catch (error) {
           logger.error("Failed to clear license", error, "license");
           toast({
-            title: "Could not remove license",
-            description: "Unexpected error while removing the saved license.",
+            title: t("settingsPage.account.desktopLicense.toasts.removeFailedTitle"),
+            description: t("settingsPage.account.desktopLicense.toasts.removeFailedDescription"),
             variant: "destructive",
           });
         } finally {
@@ -904,7 +974,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
         }
       },
     });
-  }, [showConfirmDialog, toast]);
+  }, [showConfirmDialog, t, toast]);
 
   const installTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -1234,6 +1304,9 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
 
   const renderLicensePanel = () => {
     const status = licenseStatus?.status;
+    const isActive = Boolean(licenseStatus?.isActive);
+    const keyPresent = Boolean(licenseStatus?.keyPresent);
+    const showKeyInput = !isActive || !keyPresent || showLicenseKeyInput;
     const licenseBadgeVariant: "success" | "warning" | "destructive" | "outline" =
       status === "active"
         ? "success"
@@ -1244,82 +1317,138 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
             : "outline";
 
     const hintDescription = licenseStatus?.configured
-      ? "This build validates desktop keys against your license API."
-      : "License API is not configured. Set LICENSE_API_BASE_URL for real activation.";
+      ? t("settingsPage.account.desktopLicense.descriptionConfigured")
+      : t("settingsPage.account.desktopLicense.descriptionNotConfigured");
 
     return (
       <div className="space-y-3">
-        <SectionHeader title="Desktop License" description={hintDescription} />
+        <SectionHeader title={t("settingsPage.account.desktopLicense.title")} description={hintDescription} />
         <SettingsPanel>
           <SettingsPanelRow>
             <SettingsRow
-              label="Current status"
+              label={t("settingsPage.account.desktopLicense.currentStatusLabel")}
               description={
                 licenseStatus?.message ||
-                "Use a paid license key to unlock commercial usage on this device."
+                t("settingsPage.account.desktopLicense.currentStatusDescription")
               }
             >
-              <Badge variant={licenseBadgeVariant}>{getLicenseStatusLabel(status)}</Badge>
+              <Badge variant={licenseBadgeVariant}>{getLicenseStatusLabel(status, t)}</Badge>
             </SettingsRow>
           </SettingsPanelRow>
           <SettingsPanelRow>
-            <div className="space-y-2">
-              <Input
-                value={licenseKeyInput}
-                onChange={(event) => setLicenseKeyInput(event.target.value)}
-                placeholder="Enter license key"
-                className="h-8 text-sm"
-              />
+            <div className="space-y-3">
+              <div className="space-y-2">
+                <p className="text-[11px] font-medium text-foreground">
+                  {t("settingsPage.account.desktopLicense.licenseApiUrlLabel")}
+                </p>
+                <Input
+                  value={licenseApiBaseUrlInput}
+                  onChange={(event) => setLicenseApiBaseUrlInput(event.target.value)}
+                  placeholder={t("settingsPage.account.desktopLicense.licenseApiUrlPlaceholder")}
+                  className="h-8 text-sm"
+                />
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleSaveLicenseApiBaseUrl}
+                    disabled={licenseApiBusy}
+                  >
+                    {licenseApiBusy ? (
+                      <>
+                        <Loader2 size={14} className="animate-spin" />
+                        {t("settingsPage.account.desktopLicense.actions.saving")}
+                      </>
+                    ) : (
+                      t("settingsPage.account.desktopLicense.actions.save")
+                    )}
+                  </Button>
+                </div>
+                <p className="text-[11px] text-muted-foreground">
+                  {t("settingsPage.account.desktopLicense.licenseApiUrlDescription")}
+                </p>
+              </div>
+
+              {showKeyInput ? (
+                <Input
+                  value={licenseKeyInput}
+                  onChange={(event) => setLicenseKeyInput(event.target.value)}
+                  placeholder={t("settingsPage.account.desktopLicense.inputPlaceholder")}
+                  className="h-8 text-sm"
+                />
+              ) : (
+                <p className="text-[11px] text-muted-foreground">
+                  {t("settingsPage.account.desktopLicense.activatedHint")}
+                </p>
+              )}
+
               <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  onClick={handleActivateLicense}
-                  disabled={licenseBusyAction !== null}
-                >
-                  {licenseBusyAction === "activate" ? (
-                    <>
-                      <Loader2 size={14} className="animate-spin" />
-                      Activating
-                    </>
-                  ) : (
-                    "Activate"
-                  )}
-                </Button>
+                {showKeyInput ? (
+                  <Button
+                    size="sm"
+                    onClick={handleActivateLicense}
+                    disabled={licenseBusyAction !== null}
+                  >
+                    {licenseBusyAction === "activate" ? (
+                      <>
+                        <Loader2 size={14} className="animate-spin" />
+                        {t("settingsPage.account.desktopLicense.actions.activating")}
+                      </>
+                    ) : (
+                      t("settingsPage.account.desktopLicense.actions.activate")
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setShowLicenseKeyInput(true)}
+                    disabled={licenseBusyAction !== null}
+                  >
+                    {t("settingsPage.account.desktopLicense.actions.changeKey")}
+                  </Button>
+                )}
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={handleValidateLicense}
-                  disabled={licenseBusyAction !== null || !licenseStatus?.keyPresent}
+                  disabled={licenseBusyAction !== null || !keyPresent}
                 >
                   {licenseBusyAction === "validate" ? (
                     <>
                       <Loader2 size={14} className="animate-spin" />
-                      Checking
+                      {t("settingsPage.account.desktopLicense.actions.checking")}
                     </>
                   ) : (
-                    "Validate"
+                    t("settingsPage.account.desktopLicense.actions.validate")
                   )}
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={handleClearLicense}
-                  disabled={licenseBusyAction !== null || !licenseStatus?.keyPresent}
+                  disabled={licenseBusyAction !== null || !keyPresent}
                 >
-                  Clear
+                  {t("settingsPage.account.desktopLicense.actions.clear")}
                 </Button>
               </div>
               {licenseStatus?.plan && (
-                <p className="text-[11px] text-muted-foreground">Plan: {licenseStatus.plan}</p>
+                <p className="text-[11px] text-muted-foreground">
+                  {t("settingsPage.account.desktopLicense.meta.plan", { plan: licenseStatus.plan })}
+                </p>
               )}
               {licenseStatus?.expiresAt && (
                 <p className="text-[11px] text-muted-foreground">
-                  Expires: {new Date(licenseStatus.expiresAt).toLocaleString(i18n.language)}
+                  {t("settingsPage.account.desktopLicense.meta.expires", {
+                    date: new Date(licenseStatus.expiresAt).toLocaleString(i18n.language),
+                  })}
                 </p>
               )}
               {licenseStatus?.lastValidatedAt && (
                 <p className="text-[11px] text-muted-foreground">
-                  Last check: {new Date(licenseStatus.lastValidatedAt).toLocaleString(i18n.language)}
+                  {t("settingsPage.account.desktopLicense.meta.lastCheck", {
+                    date: new Date(licenseStatus.lastValidatedAt).toLocaleString(i18n.language),
+                  })}
                 </p>
               )}
             </div>
@@ -1335,24 +1464,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
         return (
           <div className="space-y-5">
             {renderLicensePanel()}
-            {!NEON_AUTH_URL ? (
-              <>
-                <SectionHeader
-                  title={t("settingsPage.account.title")}
-                  description={t("settingsPage.account.notConfigured")}
-                />
-                <SettingsPanel>
-                  <SettingsPanelRow>
-                    <SettingsRow
-                      label={t("settingsPage.account.featuresDisabled")}
-                      description={t("settingsPage.account.featuresDisabledDescription")}
-                    >
-                      <Badge variant="warning">{t("settingsPage.account.disabled")}</Badge>
-                    </SettingsRow>
-                  </SettingsPanelRow>
-                </SettingsPanel>
-              </>
-            ) : isLoaded && isSignedIn && user ? (
+            {NEON_AUTH_URL && (isLoaded && isSignedIn && user ? (
               <>
                 <SectionHeader title={t("settingsPage.account.title")} />
                 <SettingsPanel>
@@ -1662,7 +1774,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                   </SettingsPanelRow>
                 </SettingsPanel>
               </>
-            )}
+            ))}
           </div>
         );
 

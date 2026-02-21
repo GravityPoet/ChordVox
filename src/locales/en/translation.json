@@ -953,6 +953,67 @@
         "description": "Unlimited transcriptions, priority processing, and more.",
         "title": "Try Pro free for 7 days"
       },
+      "desktopLicense": {
+        "title": "Desktop License",
+        "descriptionConfigured": "This build validates desktop keys against your license API.",
+        "descriptionNotConfigured": "License API is not configured yet. Enter your License API URL below to enable activation.",
+        "currentStatusLabel": "Current status",
+        "currentStatusDescription": "Use a paid license key to unlock commercial usage on this device.",
+        "licenseApiUrlLabel": "License API URL",
+        "licenseApiUrlPlaceholder": "https://license.your-domain.com",
+        "licenseApiUrlDescription": "Set this once, then users can activate directly with a license key in this app.",
+        "inputPlaceholder": "Enter license key",
+        "activatedHint": "This device is activated. Use \"Change key\" only when replacing the license.",
+        "actions": {
+          "activate": "Activate",
+          "activating": "Activating",
+          "validate": "Validate",
+          "checking": "Checking",
+          "clear": "Clear",
+          "changeKey": "Change key",
+          "save": "Save",
+          "saving": "Saving"
+        },
+        "statusLabels": {
+          "active": "Active",
+          "offlineGrace": "Offline Grace",
+          "expired": "Expired",
+          "invalid": "Invalid",
+          "notActivated": "Not Activated"
+        },
+        "meta": {
+          "plan": "Plan: {{plan}}",
+          "expires": "Expires: {{date}}",
+          "lastCheck": "Last check: {{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "Remove saved license?",
+          "removeDescription": "This device will return to unlicensed mode until you activate again.",
+          "removeConfirm": "Remove"
+        },
+        "toasts": {
+          "keyRequiredTitle": "License key required",
+          "keyRequiredDescription": "Enter your license key before activating.",
+          "activatedTitle": "License activated",
+          "activatedDescription": "This device is now activated.",
+          "activationFailedTitle": "Activation failed",
+          "activationFailedDescription": "The license key could not be activated.",
+          "activationUnexpectedError": "Unexpected error while activating the license.",
+          "validatedTitle": "License validated",
+          "validateFailedTitle": "License check failed",
+          "validatedDescription": "License is valid.",
+          "invalidDescription": "License is invalid.",
+          "validateUnexpectedError": "Unexpected error while checking license status.",
+          "removedTitle": "License removed",
+          "removedDescription": "Saved license state was cleared.",
+          "removeFailedTitle": "Could not remove license",
+          "removeFailedDescription": "Unexpected error while removing the saved license.",
+          "licenseApiSavedTitle": "License API saved",
+          "licenseApiSavedDescription": "License activation now uses the new API URL.",
+          "licenseApiSaveFailedTitle": "Could not save License API",
+          "licenseApiSaveFailedDescription": "Please check the URL and try again."
+        }
+      },
       "user": "User",
       "wordsRemaining": "{{remaining}} remaining"
     },

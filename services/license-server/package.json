@@ -1,0 +1,17 @@
+{
+  "name": "ariakey-license-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AriaKey desktop license activation and validation service",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "init-db": "node scripts/init-db.js",
+    "admin": "node scripts/license-admin.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "dotenv": "^16.6.1"
+  }
+}
+
