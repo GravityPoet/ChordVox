@@ -17,6 +17,8 @@ interface UpdateInfo {
   releaseDate?: string;
   releaseNotes?: string;
   files?: any[];
+  manualDownloadUrl?: string | null;
+  manualOnly?: boolean;
 }
 
 interface UpdateProgress {
@@ -224,7 +226,35 @@ export function useUpdater() {
     updateGlobalState({ isChecking: true, error: null });
     try {
       const result = await window.electronAPI.checkForUpdates();
-      updateGlobalState({ isChecking: false });
+      if (result?.updateAvailable) {
+        updateGlobalState({
+          isChecking: false,
+          status: {
+            ...globalState.status,
+            updateAvailable: true,
+            updateDownloaded: false,
+          },
+          info: {
+            version: result.version,
+            releaseDate: result.releaseDate,
+            releaseNotes:
+              typeof result.releaseNotes === "string" ? result.releaseNotes : undefined,
+            files: result.files,
+            manualDownloadUrl: result.manualDownloadUrl ?? null,
+            manualOnly: result.manualOnly === true,
+          },
+        });
+      } else {
+        updateGlobalState({
+          isChecking: false,
+          status: {
+            ...globalState.status,
+            updateAvailable: false,
+            updateDownloaded: false,
+          },
+          info: null,
+        });
+      }
       return result;
     } catch (error) {
       updateGlobalState({
@@ -240,7 +270,7 @@ export function useUpdater() {
       });
       return {
         updateAvailable: false,
-        message: "You are running the latest version",
+        message: "Unable to check updates right now",
       };
     }
   }, []);

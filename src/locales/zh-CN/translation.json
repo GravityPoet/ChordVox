@@ -1206,7 +1206,7 @@
             "title": "即将完成"
           },
           "checkFailed": {
-            "description": "检查更新时出错，请稍后重试。",
+            "description": "检查更新时出错，请稍后重试。{{message}}",
             "title": "无法检查更新"
           },
           "downloadFailed": {
@@ -1226,6 +1226,11 @@
             "description": "你已经是最新版本。",
             "title": "无可用更新"
           },
+          "manualUpdateAvailable": {
+            "confirmText": "打开下载页面",
+            "description": "检测到新版本 v{{version}}。当前环境无法自动下载安装，请打开 Release 页面手动下载。",
+            "title": "检测到新版本"
+          },
           "updateAvailable": {
             "description": "有可用更新：v{{version}}",
             "title": "有可用更新"
@@ -1237,6 +1242,7 @@
         },
         "downloadUpdate": "下载更新 {{version}}",
         "downloading": "下载中... {{progress}}%",
+        "openReleasePage": "打开下载页面",
         "installAndRestart": "安装并重启",
         "latestVersion": "你已经是最新版本",
         "newVersion": "有更新的版本可用",

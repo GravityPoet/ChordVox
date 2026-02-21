@@ -1206,7 +1206,7 @@
             "title": "Almost there"
           },
           "checkFailed": {
-            "description": "We had trouble checking for updates. Please try again later.",
+            "description": "We had trouble checking for updates. Please try again later. {{message}}",
             "title": "Couldn't check for updates"
           },
           "downloadFailed": {
@@ -1226,6 +1226,11 @@
             "description": "You're on the latest version.",
             "title": "No Updates"
           },
+          "manualUpdateAvailable": {
+            "confirmText": "Open download page",
+            "description": "Version v{{version}} is available. Automatic download isn't available in this environment, so please open the Release page to update.",
+            "title": "Update available"
+          },
           "updateAvailable": {
             "description": "Update available: v{{version}}",
             "title": "Update Available"
@@ -1237,6 +1242,7 @@
         },
         "downloadUpdate": "Download Update {{version}}",
         "downloading": "Downloading... {{progress}}%",
+        "openReleasePage": "Open download page",
         "installAndRestart": "Install & Restart",
         "latestVersion": "You're on the latest version",
         "newVersion": "A newer version is available",
