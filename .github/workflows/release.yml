@@ -91,7 +91,7 @@ jobs:
           --config.extraMetadata.version=${{ steps.release_meta.outputs.version }}
           --config.publish.owner=${{ github.repository_owner }}
           --config.publish.repo=${{ github.event.repository.name }}
-          --config.publish.releaseType=draft
+          --config.publish.releaseType=release
           --config.publish.private=false
         env:
           GH_TOKEN: ${{ env.GH_TOKEN }}
@@ -167,7 +167,7 @@ jobs:
           --config.extraMetadata.version=${{ steps.release_meta.outputs.version }}
           --config.publish.owner=${{ github.repository_owner }}
           --config.publish.repo=${{ github.event.repository.name }}
-          --config.publish.releaseType=draft
+          --config.publish.releaseType=release
           --config.publish.private=false
         env:
           GH_TOKEN: ${{ env.GH_TOKEN }}
@@ -289,7 +289,7 @@ jobs:
             --config.extraMetadata.version=${{ steps.release_meta.outputs.version }} \
             --config.publish.owner=${{ github.repository_owner }} \
             --config.publish.repo=${{ github.event.repository.name }} \
-            --config.publish.releaseType=draft \
+            --config.publish.releaseType=release \
             --config.publish.private=false \
             $EXTRA_ARGS
         env:
