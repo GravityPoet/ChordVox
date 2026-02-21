@@ -130,17 +130,28 @@ npm run pack
 # or dist/linux-unpacked/open-whispr (Linux)
 ```
 
-**Note (macOS unsigned builds)**: You may see a Gatekeeper warning on first launch.
+**Note (macOS unsigned / not notarized builds)**: Gatekeeper may block first launch.
 
-- First try: right-click the app and choose **Open**
-- If macOS shows "AriaKey.app is damaged and can't be opened", run:
+### macOS first-launch warning (3 steps)
+
+If macOS shows one of these dialogs:
+- `“AriaKey.app” is damaged and can't be opened`
+- `Apple cannot verify “AriaKey.app” is free of malware`
+
+Do this:
+
+1. Move `AriaKey.app` to `/Applications`.
+2. Right-click `AriaKey.app` -> **Open** once.
+3. If still blocked, run:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/AriaKey.app
 open /Applications/AriaKey.app
 ```
 
-This only needs to be done once per install.
+Why this happens:
+- Apps downloaded from browsers usually get macOS quarantine metadata.
+- Local builds copied directly from disk may not have that metadata, so you may not have seen this warning before.
 
 #### Windows
 

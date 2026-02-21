@@ -117,6 +117,9 @@ export default function DeveloperSection() {
         <p className="text-[12px] text-muted-foreground mt-1 leading-relaxed">
           {t("developerSection.description")}
         </p>
+        <p className="text-[12px] text-muted-foreground mt-1 leading-relaxed">
+          {t("developerSection.localOnlyNotice")}
+        </p>
       </div>
 
       {/* Debug Toggle */}

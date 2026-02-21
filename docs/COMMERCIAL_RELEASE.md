@@ -22,6 +22,23 @@ This repo ships with `.github/workflows/release.yml`.
 
 If Apple secrets are not configured, the workflow still builds unsigned macOS artifacts.
 
+### Customer-facing macOS unblock steps (use in release notes/support replies)
+
+For unsigned/notarized-later macOS builds, customers may see Gatekeeper dialogs like:
+- "`AriaKey.app` is damaged and can't be opened"
+- "Apple cannot verify `AriaKey.app`..."
+
+Use this exact 3-step guidance:
+
+1. Move `AriaKey.app` into `/Applications`.
+2. Right-click `AriaKey.app` -> **Open** once.
+3. If still blocked, run:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/AriaKey.app
+open /Applications/AriaKey.app
+```
+
 ## 2) Desktop license validation skeleton
 
 Main-process license manager:

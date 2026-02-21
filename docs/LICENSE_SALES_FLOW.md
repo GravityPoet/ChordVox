@@ -67,3 +67,18 @@ VITE_OPENWHISPR_OAUTH_CALLBACK_URL=https://app.your-domain.com/?panel=true
 ```
 
 如果你暂时只卖“授权激活版”，可以先不上账号系统，仅保留桌面授权激活流程。
+
+## 8) 客户安装遇到「已损坏 / 无法验证」弹窗（macOS）
+
+当你还没做 Apple Notarization（公证）时，这是常见现象，不是应用真的损坏。
+
+给客户统一回复这 3 步：
+
+1. 把 `AriaKey.app` 拖到 `Applications`。
+2. 在 `Applications` 里右键 `AriaKey.app` -> **打开**。
+3. 若仍被拦截，在终端执行：
+
+```bash
+xattr -dr com.apple.quarantine /Applications/AriaKey.app
+open /Applications/AriaKey.app
+```

@@ -547,6 +547,7 @@
       "label": "Debug mode"
     },
     "description": "Capture detailed logs to help diagnose issues",
+    "localOnlyNotice": "Logs are stored locally on this device and are never uploaded automatically.",
     "openLogsFolder": "Open Logs Folder",
     "performanceNote": {
       "description": "Debug logging writes to disk continuously and may slightly affect performance. Disable when not troubleshooting.",
@@ -956,9 +957,10 @@
       "desktopLicense": {
         "title": "Desktop License",
         "descriptionConfigured": "This build validates desktop keys against your license API.",
-        "descriptionNotConfigured": "License API is not configured yet. Enter your License API URL below to enable activation.",
+        "descriptionNotConfigured": "License service is not ready yet. Please contact support.",
         "currentStatusLabel": "Current status",
         "currentStatusDescription": "Use a paid license key to unlock commercial usage on this device.",
+        "currentStatusNotConfigured": "License service is not ready on this build yet. Please contact support.",
         "licenseApiUrlLabel": "License API URL",
         "licenseApiUrlPlaceholder": "https://license.your-domain.com",
         "licenseApiUrlDescription": "Set this once, then users can activate directly with a license key in this app.",
@@ -998,6 +1000,7 @@
           "activatedDescription": "This device is now activated.",
           "activationFailedTitle": "Activation failed",
           "activationFailedDescription": "The license key could not be activated.",
+          "serverNotReadyDescription": "License service is not ready yet. Please contact support.",
           "activationUnexpectedError": "Unexpected error while activating the license.",
           "validatedTitle": "License validated",
           "validateFailedTitle": "License check failed",
