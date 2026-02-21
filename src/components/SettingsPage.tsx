@@ -739,7 +739,6 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     downloadUpdate,
     installUpdate: installUpdateAction,
     getAppVersion,
-    error: updateError,
   } = useUpdater();
 
   const isUpdateAvailable =
@@ -1000,15 +999,6 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     };
     checkHotkeyMode();
   }, [setActivationMode]);
-
-  useEffect(() => {
-    if (updateError) {
-      showAlertDialog({
-        title: t("settingsPage.general.updates.dialogs.updateError.title"),
-        description: t("settingsPage.general.updates.dialogs.updateError.description"),
-      });
-    }
-  }, [updateError, showAlertDialog, t]);
 
   useEffect(() => {
     if (installInitiated) {
@@ -1607,17 +1597,15 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                           } else {
                             showAlertDialog({
                               title: t("settingsPage.general.updates.dialogs.noUpdates.title"),
-                              description:
-                                result?.message ||
-                                t("settingsPage.general.updates.dialogs.noUpdates.description"),
+                              description: t(
+                                "settingsPage.general.updates.dialogs.noUpdates.description"
+                              ),
                             });
                           }
                         } catch (error: any) {
                           showAlertDialog({
-                            title: t("settingsPage.general.updates.dialogs.checkFailed.title"),
-                            description: t(
-                              "settingsPage.general.updates.dialogs.checkFailed.description"
-                            ),
+                            title: t("settingsPage.general.updates.dialogs.noUpdates.title"),
+                            description: t("settingsPage.general.updates.dialogs.noUpdates.description"),
                           });
                         }
                       }}

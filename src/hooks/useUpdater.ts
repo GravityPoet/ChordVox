@@ -220,9 +220,19 @@ export function useUpdater() {
     } catch (error) {
       updateGlobalState({
         isChecking: false,
-        error: error instanceof Error ? error : new Error(String(error)),
+        status: {
+          ...globalState.status,
+          updateAvailable: false,
+          updateDownloaded: false,
+        },
+        info: null,
+        // Do not surface transient check errors to users as blocking failures.
+        error: null,
       });
-      throw error;
+      return {
+        updateAvailable: false,
+        message: "You are running the latest version",
+      };
     }
   }, []);
 
