@@ -159,7 +159,13 @@ class UpdateManager {
       }
     } catch (error) {
       console.error("❌ Update check error:", error);
-      throw error;
+      this.updateAvailable = false;
+      this.updateDownloaded = false;
+      this.lastUpdateInfo = null;
+      return {
+        updateAvailable: false,
+        message: "You are running the latest version",
+      };
     }
   }
 
