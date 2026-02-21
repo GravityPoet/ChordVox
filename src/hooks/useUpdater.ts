@@ -137,11 +137,20 @@ function registerEventListeners() {
   // Update error
   if (window.electronAPI.onUpdateError) {
     const dispose = window.electronAPI.onUpdateError((_event, error) => {
+      // Treat transient updater failures as "no update" for end users.
+      // This avoids noisy error popups when feed/signing is unavailable.
+      console.warn("Updater event error (suppressed):", error);
       updateGlobalState({
+        status: {
+          ...globalState.status,
+          updateAvailable: false,
+          updateDownloaded: false,
+        },
+        info: null,
         isChecking: false,
         isDownloading: false,
         isInstalling: false,
-        error: error instanceof Error ? error : new Error(String(error)),
+        error: null,
       });
     });
     if (dispose) cleanupFunctions.push(dispose);

@@ -49,6 +49,27 @@ export interface HotkeySettings {
   activationMode: "tap" | "push";
 }
 
+export interface SecondaryHotkeyProfile {
+  useLocalWhisper: boolean;
+  localTranscriptionProvider: LocalTranscriptionProvider;
+  whisperModel: string;
+  parakeetModel: string;
+  senseVoiceModelPath: string;
+  senseVoiceBinaryPath: string;
+  allowOpenAIFallback: boolean;
+  allowLocalFallback: boolean;
+  fallbackWhisperModel: string;
+  preferredLanguage: string;
+  cloudTranscriptionMode: string;
+  cloudTranscriptionProvider: string;
+  cloudTranscriptionModel: string;
+  cloudTranscriptionBaseUrl: string;
+  useReasoningModel: boolean;
+  reasoningModel: string;
+  reasoningProvider: string;
+  cloudReasoningMode: string;
+}
+
 export interface MicrophoneSettings {
   preferBuiltInMic: boolean;
   selectedMicDeviceId: string;
@@ -67,6 +88,7 @@ export interface ApiKeySettings {
 export interface PrivacySettings {
   cloudBackupEnabled: boolean;
   telemetryEnabled: boolean;
+  transcriptionHistoryEnabled: boolean;
 }
 
 export interface ThemeSettings {
@@ -413,6 +435,15 @@ function useSettingsInternal() {
     deserialize: (value) => value === "true",
   });
 
+  const [transcriptionHistoryEnabled, setTranscriptionHistoryEnabled] = useLocalStorage(
+    "transcriptionHistoryEnabled",
+    true,
+    {
+      serialize: String,
+      deserialize: (value) => value !== "false",
+    }
+  );
+
   // Custom endpoint API keys - synced to .env like other keys
   const [customTranscriptionApiKey, setCustomTranscriptionApiKeyLocal] = useLocalStorage(
     "customTranscriptionApiKey",
@@ -585,6 +616,136 @@ function useSettingsInternal() {
     },
     [setDictationKeyLocal]
   );
+
+  const [dictationKeySecondary, setDictationKeySecondaryLocal] = useLocalStorage(
+    "dictationKeySecondary",
+    "",
+    {
+      serialize: String,
+      deserialize: String,
+    }
+  );
+
+  const setDictationKeySecondary = useCallback(
+    (key: string) => {
+      setDictationKeySecondaryLocal(key);
+      if (typeof window !== "undefined" && window.electronAPI?.notifyHotkeyChanged) {
+        window.electronAPI.notifyHotkeyChanged(key, "secondary");
+      }
+    },
+    [setDictationKeySecondaryLocal]
+  );
+
+  const [secondaryHotkeyProfile, setSecondaryHotkeyProfileRaw] = useLocalStorage<
+    SecondaryHotkeyProfile | null
+  >("secondaryHotkeyProfile", null, {
+    serialize: JSON.stringify,
+    deserialize: (value) => {
+      if (!value) return null;
+      try {
+        const parsed = JSON.parse(value);
+        if (!parsed || typeof parsed !== "object") return null;
+        return {
+          useLocalWhisper: parsed.useLocalWhisper === true,
+          localTranscriptionProvider:
+            parsed.localTranscriptionProvider === "nvidia" ||
+            parsed.localTranscriptionProvider === "sensevoice"
+              ? parsed.localTranscriptionProvider
+              : "whisper",
+          whisperModel: typeof parsed.whisperModel === "string" ? parsed.whisperModel : "base",
+          parakeetModel: typeof parsed.parakeetModel === "string" ? parsed.parakeetModel : "",
+          senseVoiceModelPath:
+            typeof parsed.senseVoiceModelPath === "string" ? parsed.senseVoiceModelPath : "",
+          senseVoiceBinaryPath:
+            typeof parsed.senseVoiceBinaryPath === "string" ? parsed.senseVoiceBinaryPath : "",
+          allowOpenAIFallback: parsed.allowOpenAIFallback === true,
+          allowLocalFallback: parsed.allowLocalFallback === true,
+          fallbackWhisperModel:
+            typeof parsed.fallbackWhisperModel === "string" ? parsed.fallbackWhisperModel : "base",
+          preferredLanguage:
+            typeof parsed.preferredLanguage === "string" ? parsed.preferredLanguage : "auto",
+          cloudTranscriptionMode:
+            typeof parsed.cloudTranscriptionMode === "string"
+              ? parsed.cloudTranscriptionMode
+              : "byok",
+          cloudTranscriptionProvider:
+            typeof parsed.cloudTranscriptionProvider === "string"
+              ? parsed.cloudTranscriptionProvider
+              : "openai",
+          cloudTranscriptionModel:
+            typeof parsed.cloudTranscriptionModel === "string"
+              ? parsed.cloudTranscriptionModel
+              : "gpt-4o-mini-transcribe",
+          cloudTranscriptionBaseUrl:
+            typeof parsed.cloudTranscriptionBaseUrl === "string"
+              ? parsed.cloudTranscriptionBaseUrl
+              : API_ENDPOINTS.TRANSCRIPTION_BASE,
+          useReasoningModel: parsed.useReasoningModel !== false,
+          reasoningModel: typeof parsed.reasoningModel === "string" ? parsed.reasoningModel : "",
+          reasoningProvider:
+            typeof parsed.reasoningProvider === "string" ? parsed.reasoningProvider : "openai",
+          cloudReasoningMode:
+            typeof parsed.cloudReasoningMode === "string"
+              ? parsed.cloudReasoningMode
+              : "openwhispr",
+        } satisfies SecondaryHotkeyProfile;
+      } catch {
+        return null;
+      }
+    },
+  });
+
+  const setSecondaryHotkeyProfile = useCallback(
+    (profile: SecondaryHotkeyProfile | null) => {
+      setSecondaryHotkeyProfileRaw(profile);
+    },
+    [setSecondaryHotkeyProfileRaw]
+  );
+
+  const captureSecondaryHotkeyProfileFromCurrent = useCallback(() => {
+    const profile: SecondaryHotkeyProfile = {
+      useLocalWhisper,
+      localTranscriptionProvider,
+      whisperModel,
+      parakeetModel,
+      senseVoiceModelPath,
+      senseVoiceBinaryPath,
+      allowOpenAIFallback,
+      allowLocalFallback,
+      fallbackWhisperModel,
+      preferredLanguage,
+      cloudTranscriptionMode,
+      cloudTranscriptionProvider,
+      cloudTranscriptionModel,
+      cloudTranscriptionBaseUrl,
+      useReasoningModel,
+      reasoningModel,
+      reasoningProvider,
+      cloudReasoningMode,
+    };
+    setSecondaryHotkeyProfileRaw(profile);
+    return profile;
+  }, [
+    useLocalWhisper,
+    localTranscriptionProvider,
+    whisperModel,
+    parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
+    allowOpenAIFallback,
+    allowLocalFallback,
+    fallbackWhisperModel,
+    preferredLanguage,
+    cloudTranscriptionMode,
+    cloudTranscriptionProvider,
+    cloudTranscriptionModel,
+    cloudTranscriptionBaseUrl,
+    useReasoningModel,
+    reasoningModel,
+    reasoningProvider,
+    cloudReasoningMode,
+    setSecondaryHotkeyProfileRaw,
+  ]);
 
   const [activationMode, setActivationModeLocal] = useLocalStorage<"tap" | "push">(
     "activationMode",
@@ -826,6 +987,8 @@ function useSettingsInternal() {
     groqApiKey,
     mistralApiKey,
     dictationKey,
+    dictationKeySecondary,
+    secondaryHotkeyProfile,
     theme,
     setUseLocalWhisper,
     setWhisperModel,
@@ -858,6 +1021,9 @@ function useSettingsInternal() {
     customReasoningApiKey,
     setCustomReasoningApiKey,
     setDictationKey,
+    setDictationKeySecondary,
+    setSecondaryHotkeyProfile,
+    captureSecondaryHotkeyProfileFromCurrent,
     setTheme,
     activationMode,
     setActivationMode,
@@ -872,7 +1038,9 @@ function useSettingsInternal() {
     cloudBackupEnabled,
     setCloudBackupEnabled,
     telemetryEnabled,
+    transcriptionHistoryEnabled,
     setTelemetryEnabled,
+    setTranscriptionHistoryEnabled,
     updateTranscriptionSettings,
     updateReasoningSettings,
     updateApiKeys,

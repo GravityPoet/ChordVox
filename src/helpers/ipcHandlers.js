@@ -28,6 +28,7 @@ class IPCHandlers {
     this.sessionId = crypto.randomUUID();
     this.assemblyAiStreaming = null;
     this.deepgramStreaming = null;
+    this.secondaryHotkeyBeforeCapture = "";
     this.setupHandlers();
   }
 
@@ -621,6 +622,10 @@ class IPCHandlers {
       return await this.windowManager.updateHotkey(hotkey);
     });
 
+    ipcMain.handle("update-secondary-hotkey", async (event, hotkey) => {
+      return await this.windowManager.updateSecondaryHotkey(hotkey);
+    });
+
     ipcMain.handle("set-hotkey-listening-mode", async (event, enabled, newHotkey = null) => {
       this.windowManager.setHotkeyListeningMode(enabled);
       const hotkeyManager = this.windowManager.hotkeyManager;
@@ -636,6 +641,11 @@ class IPCHandlers {
         isRightSideModifier(hotkey);
 
       if (enabled) {
+        this.secondaryHotkeyBeforeCapture = this.windowManager.secondaryHotkey || "";
+        if (this.secondaryHotkeyBeforeCapture) {
+          await this.windowManager.unregisterSecondaryHotkey();
+        }
+
         // Entering capture mode - unregister globalShortcut so it doesn't consume key events
         const currentHotkey = hotkeyManager.getCurrentHotkey();
         if (currentHotkey && !usesNativeListener(currentHotkey)) {
@@ -660,6 +670,11 @@ class IPCHandlers {
           });
         }
       } else {
+        if (this.secondaryHotkeyBeforeCapture) {
+          await this.windowManager.updateSecondaryHotkey(this.secondaryHotkeyBeforeCapture);
+          this.secondaryHotkeyBeforeCapture = "";
+        }
+
         // Exiting capture mode - re-register globalShortcut if not already registered
         if (effectiveHotkey && !usesNativeListener(effectiveHotkey)) {
           const { globalShortcut } = require("electron");

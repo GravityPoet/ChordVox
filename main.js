@@ -550,12 +550,14 @@ async function startApp() {
             setTimeout(async () => {
               if (globeKeyDownTime === pressTime && !globeKeyIsRecording) {
                 globeKeyIsRecording = true;
-                windowManager.sendStartDictation();
+                windowManager.sendStartDictation("primary");
               }
             }, MIN_HOLD_DURATION_MS);
           } else {
             windowManager.showDictationPanel();
-            windowManager.mainWindow.webContents.send("toggle-dictation");
+            windowManager.mainWindow.webContents.send("toggle-dictation", {
+              profileId: "primary",
+            });
           }
         }
       }
@@ -575,7 +577,7 @@ async function startApp() {
           globeLastStopTime = Date.now();
           if (globeKeyIsRecording) {
             globeKeyIsRecording = false;
-            windowManager.sendStopDictation();
+            windowManager.sendStopDictation("primary");
           }
         }
       }
@@ -611,12 +613,14 @@ async function startApp() {
         setTimeout(() => {
           if (rightModDownTime === pressTime && !rightModIsRecording) {
             rightModIsRecording = true;
-            windowManager.sendStartDictation();
+            windowManager.sendStartDictation("primary");
           }
         }, MIN_HOLD_DURATION_MS);
       } else {
         windowManager.showDictationPanel();
-        windowManager.mainWindow.webContents.send("toggle-dictation");
+        windowManager.mainWindow.webContents.send("toggle-dictation", {
+          profileId: "primary",
+        });
       }
     });
 
@@ -631,7 +635,7 @@ async function startApp() {
         rightModLastStopTime = Date.now();
         if (rightModIsRecording) {
           rightModIsRecording = false;
-          windowManager.sendStopDictation();
+          windowManager.sendStopDictation("primary");
         } else {
           windowManager.hideDictationPanel();
         }
@@ -641,7 +645,7 @@ async function startApp() {
     globeKeyManager.start();
 
     // Reset native key state when hotkey changes
-    ipcMain.on("hotkey-changed", (_event, _newHotkey) => {
+    ipcMain.on("hotkey-changed", (_event, _newHotkey, _profileId = "primary") => {
       globeKeyDownTime = 0;
       globeKeyIsRecording = false;
       globeLastStopTime = 0;
@@ -676,7 +680,9 @@ async function startApp() {
         windowManager.startWindowsPushToTalk();
       } else if (activationMode === "tap") {
         windowManager.showDictationPanel();
-        windowManager.mainWindow.webContents.send("toggle-dictation");
+        windowManager.mainWindow.webContents.send("toggle-dictation", {
+          profileId: "primary",
+        });
       }
     });
 
@@ -738,7 +744,8 @@ async function startApp() {
       }
     });
 
-    ipcMain.on("hotkey-changed", (_event, hotkey) => {
+    ipcMain.on("hotkey-changed", (_event, hotkey, profileId = "primary") => {
+      if (profileId !== "primary") return;
       if (!isLiveWindow(windowManager.mainWindow)) return;
       windowManager.resetWindowsPushState();
       const activationMode = windowManager.getActivationMode();

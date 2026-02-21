@@ -9,6 +9,7 @@ import { hasStoredByokKey } from "../utils/byokDetection";
 
 const SHORT_CLIP_DURATION_SECONDS = 2.5;
 const REASONING_CACHE_TTL = 30000; // 30 seconds
+const SECONDARY_HOTKEY_PROFILE_KEY = "secondaryHotkeyProfile";
 
 const PLACEHOLDER_KEYS = {
   openai: "your_openai_api_key_here",
@@ -64,6 +65,7 @@ class AudioManager {
     this.stopRequestedDuringStreamingStart = false;
     this.streamingFallbackRecorder = null;
     this.streamingFallbackChunks = [];
+    this.activeHotkeyProfileId = "primary";
   }
 
   getWorkletBlobUrl() {
@@ -127,6 +129,53 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     this.onError = onError;
     this.onTranscriptionComplete = onTranscriptionComplete;
     this.onPartialTranscript = onPartialTranscript;
+  }
+
+  setActiveHotkeyProfile(profileId = "primary") {
+    this.activeHotkeyProfileId = profileId === "secondary" ? "secondary" : "primary";
+  }
+
+  getActiveHotkeyProfile() {
+    if (this.activeHotkeyProfileId !== "secondary") {
+      return null;
+    }
+    try {
+      const raw = localStorage.getItem(SECONDARY_HOTKEY_PROFILE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  getSettingValue(key, fallback = "") {
+    const profile = this.getActiveHotkeyProfile();
+    if (profile && Object.prototype.hasOwnProperty.call(profile, key)) {
+      const value = profile[key];
+      if (value === null || value === undefined || value === "") {
+        return fallback;
+      }
+      return value;
+    }
+    const value = localStorage.getItem(key);
+    if (value === null || value === undefined || value === "") {
+      return fallback;
+    }
+    return value;
+  }
+
+  getBooleanSetting(key, fallback = false) {
+    const value = this.getSettingValue(key, fallback ? "true" : "false");
+    if (typeof value === "boolean") {
+      return value;
+    }
+    return value === "true";
+  }
+
+  getStringSetting(key, fallback = "") {
+    const value = this.getSettingValue(key, fallback);
+    return typeof value === "string" ? value : String(value);
   }
 
   async getAudioConstraints() {
@@ -332,16 +381,17 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     const pipelineStart = performance.now();
 
     try {
-      const useLocalWhisper = localStorage.getItem("useLocalWhisper") === "true";
-      const localProvider = localStorage.getItem("localTranscriptionProvider") || "whisper";
-      const whisperModel = localStorage.getItem("whisperModel") || "base";
-      const parakeetModel = localStorage.getItem("parakeetModel") || "parakeet-tdt-0.6b-v3";
-      const senseVoiceModelPath = localStorage.getItem("senseVoiceModelPath") || "";
-      const senseVoiceBinaryPath = localStorage.getItem("senseVoiceBinaryPath") || "";
+      const useLocalWhisper = this.getBooleanSetting("useLocalWhisper", false);
+      const localProvider = this.getStringSetting("localTranscriptionProvider", "whisper");
+      const whisperModel = this.getStringSetting("whisperModel", "base");
+      const parakeetModel = this.getStringSetting("parakeetModel", "parakeet-tdt-0.6b-v3");
+      const senseVoiceModelPath = this.getStringSetting("senseVoiceModelPath", "");
+      const senseVoiceBinaryPath = this.getStringSetting("senseVoiceBinaryPath", "");
 
-      const cloudTranscriptionMode =
-        localStorage.getItem("cloudTranscriptionMode") ||
-        (hasStoredByokKey() ? "byok" : "openwhispr");
+      const cloudTranscriptionMode = this.getStringSetting(
+        "cloudTranscriptionMode",
+        hasStoredByokKey() ? "byok" : "openwhispr"
+      );
       const isSignedIn = localStorage.getItem("isSignedIn") === "true";
 
       const isOpenWhisprCloudMode = !useLocalWhisper && cloudTranscriptionMode === "openwhispr";
@@ -449,7 +499,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       // Send original audio to main process - FFmpeg in main process handles conversion
       // (renderer-side AudioContext conversion was unreliable with WebM/Opus format)
       const arrayBuffer = await audioBlob.arrayBuffer();
-      const language = getBaseLanguageCode(localStorage.getItem("preferredLanguage"));
+      const language = getBaseLanguageCode(this.getStringSetting("preferredLanguage", "auto"));
       const options = { model };
       if (language) {
         options.language = language;
@@ -505,8 +555,8 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         throw error;
       }
 
-      const allowOpenAIFallback = localStorage.getItem("allowOpenAIFallback") === "true";
-      const isLocalMode = localStorage.getItem("useLocalWhisper") === "true";
+      const allowOpenAIFallback = this.getBooleanSetting("allowOpenAIFallback", false);
+      const isLocalMode = this.getBooleanSetting("useLocalWhisper", false);
 
       if (allowOpenAIFallback && isLocalMode) {
         try {
@@ -528,7 +578,10 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
     try {
       const arrayBuffer = await audioBlob.arrayBuffer();
-      const language = validateLanguageForModel(localStorage.getItem("preferredLanguage"), model);
+      const language = validateLanguageForModel(
+        this.getStringSetting("preferredLanguage", "auto"),
+        model
+      );
       const options = { model };
       if (language) {
         options.language = language;
@@ -579,8 +632,8 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         throw error;
       }
 
-      const allowOpenAIFallback = localStorage.getItem("allowOpenAIFallback") === "true";
-      const isLocalMode = localStorage.getItem("useLocalWhisper") === "true";
+      const allowOpenAIFallback = this.getBooleanSetting("allowOpenAIFallback", false);
+      const isLocalMode = this.getBooleanSetting("useLocalWhisper", false);
 
       if (allowOpenAIFallback && isLocalMode) {
         try {
@@ -602,7 +655,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
     try {
       const arrayBuffer = await audioBlob.arrayBuffer();
-      const preferredLanguage = getBaseLanguageCode(localStorage.getItem("preferredLanguage"));
+      const preferredLanguage = getBaseLanguageCode(this.getStringSetting("preferredLanguage", "auto"));
       const supportedLanguages = new Set(["zh", "en", "yue", "ja", "ko"]);
       const language =
         preferredLanguage && supportedLanguages.has(preferredLanguage) ? preferredLanguage : "auto";
@@ -659,8 +712,8 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         throw error;
       }
 
-      const allowOpenAIFallback = localStorage.getItem("allowOpenAIFallback") === "true";
-      const isLocalMode = localStorage.getItem("useLocalWhisper") === "true";
+      const allowOpenAIFallback = this.getBooleanSetting("allowOpenAIFallback", false);
+      const isLocalMode = this.getBooleanSetting("useLocalWhisper", false);
 
       if (allowOpenAIFallback && isLocalMode) {
         try {
@@ -681,7 +734,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     // Get the current transcription provider
     const provider =
       typeof localStorage !== "undefined"
-        ? localStorage.getItem("cloudTranscriptionProvider") || "openai"
+        ? this.getStringSetting("cloudTranscriptionProvider", "openai")
         : "openai";
 
     // Check cache (invalidate if provider changed)
@@ -874,7 +927,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       return false;
     }
 
-    const storedValue = localStorage.getItem("useReasoningModel");
+    const storedValue = this.getSettingValue("useReasoningModel", "true");
     const now = Date.now();
     const cacheValid =
       this.reasoningAvailabilityCache &&
@@ -946,11 +999,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
     const reasoningModel =
       typeof window !== "undefined" && window.localStorage
-        ? localStorage.getItem("reasoningModel") || ""
+        ? this.getStringSetting("reasoningModel", "")
         : "";
     const reasoningProvider =
       typeof window !== "undefined" && window.localStorage
-        ? localStorage.getItem("reasoningProvider") || "auto"
+        ? this.getStringSetting("reasoningProvider", "auto")
         : "auto";
     const agentName =
       typeof window !== "undefined" && window.localStorage
@@ -1173,7 +1226,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     }
 
     const timings = {};
-    const language = getBaseLanguageCode(localStorage.getItem("preferredLanguage"));
+    const language = getBaseLanguageCode(this.getStringSetting("preferredLanguage", "auto"));
 
     const arrayBuffer = await audioBlob.arrayBuffer();
     const opts = {};
@@ -1197,11 +1250,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
     // Process with reasoning if enabled
     let processedText = result.text;
-    const useReasoningModel = localStorage.getItem("useReasoningModel") === "true";
+    const useReasoningModel = this.getBooleanSetting("useReasoningModel", true);
     if (useReasoningModel && processedText) {
       const reasoningStart = performance.now();
       const agentName = localStorage.getItem("agentName") || "";
-      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "openwhispr";
+      const cloudReasoningMode = this.getStringSetting("cloudReasoningMode", "openwhispr");
 
       if (cloudReasoningMode === "openwhispr") {
         const reasonResult = await withSessionRefresh(async () => {
@@ -1209,7 +1262,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
             agentName,
             customDictionary: this.getCustomDictionaryArray(),
             customPrompt: this.getCustomPrompt(),
-            language: localStorage.getItem("preferredLanguage") || "auto",
+            language: this.getStringSetting("preferredLanguage", "auto"),
             locale: localStorage.getItem("uiLanguage") || "en",
           });
           if (!res.success) {
@@ -1224,7 +1277,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
           processedText = reasonResult.text;
         }
       } else {
-        const reasoningModel = localStorage.getItem("reasoningModel") || "";
+        const reasoningModel = this.getStringSetting("reasoningModel", "");
         if (reasoningModel) {
           const result = await this.processWithReasoningModel(
             processedText,
@@ -1278,9 +1331,9 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
   async processWithOpenAIAPI(audioBlob, metadata = {}) {
     const timings = {};
-    const language = getBaseLanguageCode(localStorage.getItem("preferredLanguage"));
-    const allowLocalFallback = localStorage.getItem("allowLocalFallback") === "true";
-    const fallbackModel = localStorage.getItem("fallbackWhisperModel") || "base";
+    const language = getBaseLanguageCode(this.getStringSetting("preferredLanguage", "auto"));
+    const allowLocalFallback = this.getBooleanSetting("allowLocalFallback", false);
+    const fallbackModel = this.getStringSetting("fallbackWhisperModel", "base");
 
     try {
       const durationSeconds = metadata.durationSeconds ?? null;
@@ -1290,7 +1343,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         durationSeconds < SHORT_CLIP_DURATION_SECONDS;
 
       const model = this.getTranscriptionModel();
-      const provider = localStorage.getItem("cloudTranscriptionProvider") || "openai";
+      const provider = this.getStringSetting("cloudTranscriptionProvider", "openai");
 
       logger.debug(
         "Transcription request starting",
@@ -1582,7 +1635,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         );
       }
     } catch (error) {
-      const isOpenAIMode = localStorage.getItem("useLocalWhisper") !== "true";
+      const isOpenAIMode = !this.getBooleanSetting("useLocalWhisper", false);
 
       if (allowLocalFallback && isOpenAIMode) {
         try {
@@ -1616,12 +1669,12 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     try {
       const provider =
         typeof localStorage !== "undefined"
-          ? localStorage.getItem("cloudTranscriptionProvider") || "openai"
+          ? this.getStringSetting("cloudTranscriptionProvider", "openai")
           : "openai";
 
       const model =
         typeof localStorage !== "undefined"
-          ? localStorage.getItem("cloudTranscriptionModel") || ""
+          ? this.getStringSetting("cloudTranscriptionModel", "")
           : "";
 
       const trimmedModel = model.trim();
@@ -1662,11 +1715,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     // Get current provider and base URL to check if cache is valid
     const currentProvider =
       typeof localStorage !== "undefined"
-        ? localStorage.getItem("cloudTranscriptionProvider") || "openai"
+        ? this.getStringSetting("cloudTranscriptionProvider", "openai")
         : "openai";
     const currentBaseUrl =
       typeof localStorage !== "undefined"
-        ? localStorage.getItem("cloudTranscriptionBaseUrl") || ""
+        ? this.getStringSetting("cloudTranscriptionBaseUrl", "")
         : "";
 
     // Only use custom URL when provider is explicitly "custom"
@@ -1823,11 +1876,12 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
   }
 
   shouldUseStreaming(isSignedInOverride) {
-    const cloudTranscriptionMode =
-      localStorage.getItem("cloudTranscriptionMode") ||
-      (hasStoredByokKey() ? "byok" : "openwhispr");
+    const cloudTranscriptionMode = this.getStringSetting(
+      "cloudTranscriptionMode",
+      hasStoredByokKey() ? "byok" : "openwhispr"
+    );
     const isSignedIn = isSignedInOverride ?? localStorage.getItem("isSignedIn") === "true";
-    const useLocalWhisper = localStorage.getItem("useLocalWhisper") === "true";
+    const useLocalWhisper = this.getBooleanSetting("useLocalWhisper", false);
     const streamingDisabled = localStorage.getItem("deepgramStreaming") === "false";
 
     return (
@@ -1848,7 +1902,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       const [, wsResult] = await Promise.all([
         this.cacheMicrophoneDeviceId(),
         withSessionRefresh(async () => {
-          const warmupLang = localStorage.getItem("preferredLanguage");
+          const warmupLang = this.getStringSetting("preferredLanguage", "auto");
           const res = await window.electronAPI.deepgramStreamingWarmup({
             sampleRate: 16000,
             language: warmupLang && warmupLang !== "auto" ? warmupLang : undefined,
@@ -2055,7 +2109,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       // 4. Connect WebSocket — audio is already flowing from the pipeline above,
       //    so Deepgram receives data immediately (no idle timeout).
       const result = await withSessionRefresh(async () => {
-        const preferredLang = localStorage.getItem("preferredLanguage");
+        const preferredLang = this.getStringSetting("preferredLanguage", "auto");
         const res = await window.electronAPI.deepgramStreamingStart({
           sampleRate: 16000,
           language: preferredLang && preferredLang !== "auto" ? preferredLang : undefined,
@@ -2252,11 +2306,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       "streaming"
     );
 
-    const useReasoningModel = localStorage.getItem("useReasoningModel") === "true";
+    const useReasoningModel = this.getBooleanSetting("useReasoningModel", true);
     if (useReasoningModel && finalText) {
       const reasoningStart = performance.now();
       const agentName = localStorage.getItem("agentName") || "";
-      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "openwhispr";
+      const cloudReasoningMode = this.getStringSetting("cloudReasoningMode", "openwhispr");
 
       try {
         if (cloudReasoningMode === "openwhispr") {
@@ -2265,7 +2319,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
               agentName,
               customDictionary: this.getCustomDictionaryArray(),
               customPrompt: this.getCustomPrompt(),
-              language: localStorage.getItem("preferredLanguage") || "auto",
+              language: this.getStringSetting("preferredLanguage", "auto"),
               locale: localStorage.getItem("uiLanguage") || "en",
             });
             if (!res.success) {
@@ -2289,7 +2343,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
             "streaming"
           );
         } else {
-          const reasoningModel = localStorage.getItem("reasoningModel") || "";
+          const reasoningModel = this.getStringSetting("reasoningModel", "");
           if (reasoningModel) {
             const result = await this.processWithReasoningModel(
               finalText,

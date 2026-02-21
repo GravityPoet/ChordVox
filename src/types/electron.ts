@@ -1,4 +1,9 @@
 export type LocalTranscriptionProvider = "whisper" | "nvidia" | "sensevoice";
+export type DictationProfileId = "primary" | "secondary";
+
+export interface DictationHotkeyPayload {
+  profileId?: DictationProfileId;
+}
 
 export interface TranscriptionItem {
   id: number;
@@ -219,9 +224,9 @@ declare global {
       pasteText: (text: string, options?: { fromStreaming?: boolean }) => Promise<void>;
       hideWindow: () => Promise<void>;
       showDictationPanel: () => Promise<void>;
-      onToggleDictation: (callback: () => void) => () => void;
-      onStartDictation?: (callback: () => void) => () => void;
-      onStopDictation?: (callback: () => void) => () => void;
+      onToggleDictation: (callback: (payload?: DictationHotkeyPayload) => void) => () => void;
+      onStartDictation?: (callback: (payload?: DictationHotkeyPayload) => void) => () => void;
+      onStopDictation?: (callback: (payload?: DictationHotkeyPayload) => void) => () => void;
 
       // Database operations
       saveTranscription: (text: string) => Promise<{ id: number; success: boolean }>;
@@ -397,6 +402,7 @@ declare global {
 
       // Hotkey management
       updateHotkey: (key: string) => Promise<{ success: boolean; message: string }>;
+      updateSecondaryHotkey?: (key: string) => Promise<{ success: boolean; message: string }>;
       setHotkeyListeningMode?: (
         enabled: boolean,
         newHotkey?: string | null
@@ -486,7 +492,7 @@ declare global {
 
       // Windows Push-to-Talk notifications
       notifyActivationModeChanged?: (mode: "tap" | "push") => void;
-      notifyHotkeyChanged?: (hotkey: string) => void;
+      notifyHotkeyChanged?: (hotkey: string, profileId?: DictationProfileId) => void;
       notifyFloatingIconAutoHideChanged?: (enabled: boolean) => void;
       onFloatingIconAutoHideChanged?: (callback: (enabled: boolean) => void) => () => void;
 

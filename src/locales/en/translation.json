@@ -1157,6 +1157,8 @@
       "cloudBackup": "Cloud backup",
       "cloudBackupDescription": "Save your transcriptions to the cloud so you never lose them.",
       "description": "Control what data leaves your device. Everything is off by default.",
+      "transcriptionHistory": "Save transcription history",
+      "transcriptionHistoryDescription": "When disabled, AriaKey will still transcribe and paste, but won't save new history entries.",
       "title": "Privacy",
       "usageAnalytics": "Usage analytics",
       "usageAnalyticsDescription": "Help us improve AriaKey by sharing anonymous performance metrics. We never send transcription content — only timing and error data."

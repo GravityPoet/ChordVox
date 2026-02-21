@@ -90,6 +90,22 @@ const UI_LANGUAGE_OPTIONS: import("./ui/LanguageSelector").LanguageOption[] = [
   { value: "zh-TW", label: "繁體中文", flag: "🇹🇼" },
 ];
 
+const MODIFIER_PARTS = new Set([
+  "control",
+  "ctrl",
+  "alt",
+  "option",
+  "shift",
+  "super",
+  "meta",
+  "win",
+  "command",
+  "cmd",
+  "commandorcontrol",
+  "cmdorctrl",
+  "fn",
+]);
+
 function SettingsPanel({
   children,
   className = "",
@@ -671,6 +687,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     groqApiKey,
     mistralApiKey,
     dictationKey,
+    dictationKeySecondary,
+    secondaryHotkeyProfile,
     activationMode,
     setActivationMode,
     preferBuiltInMic,
@@ -702,6 +720,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     customReasoningApiKey,
     setCustomReasoningApiKey,
     setDictationKey,
+    setDictationKeySecondary,
+    captureSecondaryHotkeyProfileFromCurrent,
     updateTranscriptionSettings,
     updateReasoningSettings,
     cloudTranscriptionMode,
@@ -716,6 +736,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     setCloudBackupEnabled,
     telemetryEnabled,
     setTelemetryEnabled,
+    transcriptionHistoryEnabled,
+    setTranscriptionHistoryEnabled,
   } = useSettings();
 
   const { t, i18n } = useTranslation();
@@ -899,6 +921,114 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     (hotkey: string) => getValidationMessage(hotkey, getPlatform()),
     []
   );
+
+  const validateSecondaryHotkeyForInput = useCallback(
+    (hotkey: string) => {
+      const baseValidation = getValidationMessage(hotkey, getPlatform());
+      if (baseValidation) return baseValidation;
+
+      const normalized = hotkey?.trim() || "";
+      if (!normalized) return null;
+
+      if (normalized === "GLOBE") {
+        return "副快捷键暂不支持 Globe/Fn 键。";
+      }
+
+      if (
+        /^Right(Control|Ctrl|Alt|Option|Shift|Super|Win|Meta|Command|Cmd)$/i.test(normalized)
+      ) {
+        return "副快捷键暂不支持右侧单修饰键。";
+      }
+
+      if (
+        normalized.includes("+") &&
+        normalized
+          .split("+")
+          .map((part) => part.trim().toLowerCase())
+          .every((part) => MODIFIER_PARTS.has(part))
+      ) {
+        return "副快捷键暂不支持纯修饰键组合。";
+      }
+
+      return null;
+    },
+    []
+  );
+
+  const [isSecondaryHotkeyRegistering, setIsSecondaryHotkeyRegistering] = useState(false);
+
+  const registerSecondaryHotkey = useCallback(
+    async (hotkey: string) => {
+      if (!hotkey || !hotkey.trim()) {
+        try {
+          setIsSecondaryHotkeyRegistering(true);
+          await window.electronAPI?.updateSecondaryHotkey?.("");
+          setDictationKeySecondary("");
+          return true;
+        } finally {
+          setIsSecondaryHotkeyRegistering(false);
+        }
+      }
+
+      const validationError = validateSecondaryHotkeyForInput(hotkey);
+      if (validationError) {
+        showAlertDialog({
+          title: t("hooks.hotkeyRegistration.titles.invalidHotkey"),
+          description: validationError,
+        });
+        return false;
+      }
+
+      if (!window.electronAPI?.updateSecondaryHotkey) {
+        setDictationKeySecondary(hotkey);
+        return true;
+      }
+
+      try {
+        setIsSecondaryHotkeyRegistering(true);
+        const result = await window.electronAPI.updateSecondaryHotkey(hotkey);
+        if (!result?.success) {
+          showAlertDialog({
+            title: t("hooks.hotkeyRegistration.titles.notRegistered"),
+            description: result?.message || "副快捷键注册失败，请更换一个快捷键。",
+          });
+          return false;
+        }
+
+        setDictationKeySecondary(hotkey);
+        toast({
+          title: "副快捷键已保存",
+          description: "方案 2 的快捷键已更新。",
+          variant: "success",
+        });
+        return true;
+      } catch (error) {
+        showAlertDialog({
+          title: t("hooks.hotkeyRegistration.titles.error"),
+          description: error instanceof Error ? error.message : "副快捷键注册失败，请重试。",
+        });
+        return false;
+      } finally {
+        setIsSecondaryHotkeyRegistering(false);
+      }
+    },
+    [
+      setDictationKeySecondary,
+      showAlertDialog,
+      t,
+      toast,
+      validateSecondaryHotkeyForInput,
+    ]
+  );
+
+  const saveCurrentAsSecondaryProfile = useCallback(() => {
+    captureSecondaryHotkeyProfileFromCurrent();
+    toast({
+      title: "方案 2 已保存",
+      description: "当前转写与 AI 润色配置已保存到副快捷键方案。",
+      variant: "success",
+    });
+  }, [captureSecondaryHotkeyProfileFromCurrent, toast]);
 
   const [isUsingGnomeHotkeys, setIsUsingGnomeHotkeys] = useState(false);
 
@@ -1876,6 +2006,37 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                   />
                 </SettingsPanelRow>
 
+                <SettingsPanelRow>
+                  <div className="space-y-2">
+                    <p className="text-[11px] font-medium text-muted-foreground/80">
+                      方案 2 快捷键（独立模型/润色）
+                    </p>
+                    <HotkeyInput
+                      value={dictationKeySecondary}
+                      onChange={async (newHotkey) => {
+                        await registerSecondaryHotkey(newHotkey);
+                      }}
+                      disabled={isSecondaryHotkeyRegistering}
+                      validate={validateSecondaryHotkeyForInput}
+                    />
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[11px] text-muted-foreground/80">
+                        {secondaryHotkeyProfile
+                          ? "已保存方案 2 配置"
+                          : "未保存方案 2 配置（先调好模型，再点右侧按钮）"}
+                      </p>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={saveCurrentAsSecondaryProfile}
+                        className="h-7 px-2 text-[11px]"
+                      >
+                        保存当前为方案 2
+                      </Button>
+                    </div>
+                  </div>
+                </SettingsPanelRow>
+
                 {!isUsingGnomeHotkeys && (
                   <SettingsPanelRow>
                     <p className="text-[11px] font-medium text-muted-foreground/80 mb-2">
@@ -2295,6 +2456,17 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
             )}
 
             <SettingsPanel>
+              <SettingsPanelRow>
+                <SettingsRow
+                  label={t("settingsPage.privacy.transcriptionHistory")}
+                  description={t("settingsPage.privacy.transcriptionHistoryDescription")}
+                >
+                  <Toggle
+                    checked={transcriptionHistoryEnabled}
+                    onChange={setTranscriptionHistoryEnabled}
+                  />
+                </SettingsRow>
+              </SettingsPanelRow>
               <SettingsPanelRow>
                 <SettingsRow
                   label={t("settingsPage.privacy.usageAnalytics")}
