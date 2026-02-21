@@ -24,6 +24,86 @@ type CloudModelOption = {
   invertInDark?: boolean;
 };
 
+type UnknownRecord = Record<string, unknown>;
+
+const isRecord = (value: unknown): value is UnknownRecord =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const pickFirstString = (...candidates: unknown[]): string | undefined => {
+  for (const candidate of candidates) {
+    if (typeof candidate === "string" && candidate.trim() !== "") return candidate;
+  }
+  return undefined;
+};
+
+const extractModelEntries = (payload: unknown): unknown[] => {
+  if (!isRecord(payload)) return [];
+
+  const directCandidates = [
+    payload.data,
+    payload.models,
+    payload.items,
+    payload.results,
+    payload.model_list,
+    isRecord(payload.result) ? payload.result.data : undefined,
+    isRecord(payload.result) ? payload.result.models : undefined,
+    isRecord(payload.response) ? payload.response.data : undefined,
+    isRecord(payload.response) ? payload.response.models : undefined,
+    isRecord(payload.output) ? payload.output.models : undefined,
+    isRecord(payload.data) ? payload.data.models : undefined,
+    isRecord(payload.data) ? payload.data.items : undefined,
+    isRecord(payload.models) ? payload.models.data : undefined,
+  ];
+
+  for (const candidate of directCandidates) {
+    if (Array.isArray(candidate)) return candidate;
+  }
+
+  const objectCandidates = [
+    payload.models,
+    isRecord(payload.data) ? payload.data.models : undefined,
+    payload.model_list,
+  ];
+
+  for (const candidate of objectCandidates) {
+    if (!isRecord(candidate)) continue;
+    return Object.entries(candidate).map(([key, value]) => {
+      if (typeof value === "string") {
+        return { id: key, name: value };
+      }
+      if (isRecord(value)) {
+        return {
+          ...value,
+          id: pickFirstString(
+            value.id,
+            value.name,
+            value.model,
+            value.model_id,
+            value.slug,
+            value.value,
+            key
+          ),
+          name: pickFirstString(value.name, value.id, value.model, value.slug, key),
+        };
+      }
+      return { id: key, name: key };
+    });
+  }
+
+  return [];
+};
+
+const extractPayloadError = (payload: unknown): string | undefined => {
+  if (!isRecord(payload)) return undefined;
+  return pickFirstString(
+    payload.error,
+    isRecord(payload.error) ? payload.error.message : undefined,
+    payload.message,
+    payload.detail,
+    payload.reason
+  );
+};
+
 const OWNED_BY_ICON_RULES: Array<{ match: RegExp; provider: string }> = [
   { match: /(openai|system|default|gpt|davinci)/, provider: "openai" },
   { match: /(azure)/, provider: "openai" },
@@ -195,23 +275,60 @@ export default function ReasoningModelSelector({
         }
 
         const payload = await response.json().catch(() => ({}));
-        const rawModels = Array.isArray(payload?.data)
-          ? payload.data
-          : Array.isArray(payload?.models)
-            ? payload.models
-            : [];
+        const payloadError = extractPayloadError(payload);
+        if (payloadError) {
+          throw new Error(payloadError);
+        }
 
-        const mappedModels = (rawModels as Array<Record<string, unknown>>)
+        const rawModels = extractModelEntries(payload);
+
+        const mappedModels = rawModels
           .map((item) => {
-            const value = (item?.id || item?.name) as string | undefined;
+            if (typeof item === "string") {
+              return {
+                value: item,
+                label: item,
+                description: undefined,
+                icon: undefined,
+                ownedBy: undefined,
+                invertInDark: false,
+              } as CloudModelOption;
+            }
+
+            if (!isRecord(item)) return null;
+
+            const value = pickFirstString(
+              item.id,
+              item.name,
+              item.model,
+              item.model_id,
+              item.slug,
+              item.value,
+              item.identifier,
+              item.modelName
+            );
             if (!value) return null;
-            const ownedBy = typeof item?.owned_by === "string" ? item.owned_by : undefined;
+            const ownedBy = pickFirstString(
+              item.owned_by,
+              item.ownedBy,
+              item.provider,
+              item.vendor,
+              item.organization
+            );
             const { icon, invertInDark } = resolveOwnedByIcon(ownedBy);
             return {
               value,
-              label: (item?.id || item?.name || value) as string,
+              label: pickFirstString(
+                item.name,
+                item.id,
+                item.model,
+                item.model_id,
+                item.slug,
+                item.value,
+                value
+              ) as string,
               description:
-                (item?.description as string) ||
+                pickFirstString(item.description, item.summary, item.details) ||
                 (ownedBy ? t("reasoning.custom.ownerLabel", { owner: ownedBy }) : undefined),
               icon,
               ownedBy,
