@@ -277,7 +277,7 @@ jobs:
 
           echo "APPLE_API_KEY=$API_KEY_PATH" >> "$GITHUB_ENV"
 
-      - name: Build and publish macOS release (${{ matrix.arch }})
+      - name: Build macOS release artifacts (${{ matrix.arch }})
         shell: bash
         run: |
           set -euo pipefail
@@ -286,12 +286,8 @@ jobs:
             # Use ad-hoc signing for unsigned distribution, avoids broken app bundles.
             EXTRA_ARGS="--config.mac.identity=- --config.mac.notarize=false --config.mac.hardenedRuntime=false"
           fi
-          npm run build:mac -- --${{ matrix.arch }} --publish always \
+          npm run build:mac -- --${{ matrix.arch }} --publish never \
             --config.extraMetadata.version=${{ steps.release_meta.outputs.version }} \
-            --config.publish.owner=${{ github.repository_owner }} \
-            --config.publish.repo=${{ github.event.repository.name }} \
-            --config.publish.releaseType=release \
-            --config.publish.private=false \
             $EXTRA_ARGS
         env:
           TARGET_ARCH: ${{ matrix.arch }}
@@ -304,6 +300,39 @@ jobs:
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Ensure GitHub release exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="v${{ steps.release_meta.outputs.version }}"
+          gh release view "$TAG" -R "${GITHUB_REPOSITORY}" >/dev/null 2>&1 || \
+            gh release create "$TAG" -R "${GITHUB_REPOSITORY}" \
+              --title "AriaKey v${{ steps.release_meta.outputs.version }}" \
+              --notes "Automated release asset upload."
+
+      - name: Upload macOS assets (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="v${{ steps.release_meta.outputs.version }}"
+
+          ASSETS=()
+          while IFS= read -r file; do
+            ASSETS+=("$file")
+          done < <(find dist -maxdepth 1 -type f \
+            \( -name "*.zip" -o -name "*.dmg" -o -name "*.blockmap" \) | sort)
+
+          if [ "${{ matrix.arch }}" = "arm64" ] && [ -f "dist/latest-mac.yml" ]; then
+            ASSETS+=("dist/latest-mac.yml")
+          fi
+
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No macOS release assets found in dist/"
+            exit 1
+          fi
+
+          gh release upload "$TAG" "${ASSETS[@]}" -R "${GITHUB_REPOSITORY}" --clobber
 
       - name: Cleanup Certificates
         if: always() && steps.signing.outputs.enabled == 'true'
