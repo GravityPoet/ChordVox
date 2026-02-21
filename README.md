@@ -129,7 +129,17 @@ npm run pack
 # or dist/linux-unpacked/open-whispr (Linux)
 ```
 
-**Note**: On macOS, you may see a security warning when first opening the unsigned app. Right-click and select "Open" to bypass this.
+**Note (macOS unsigned builds)**: You may see a Gatekeeper warning on first launch.
+
+- First try: right-click the app and choose **Open**
+- If macOS shows "AriaKey.app is damaged and can't be opened", run:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/AriaKey.app
+open /Applications/AriaKey.app
+```
+
+This only needs to be done once per install.
 
 #### Windows
 
