@@ -316,19 +316,18 @@ export default function ReasoningModelSelector({
               item.organization
             );
             const { icon, invertInDark } = resolveOwnedByIcon(ownedBy);
+            const humanName = pickFirstString(item.name, item.display_name, item.title);
+            const summary = pickFirstString(item.description, item.summary, item.details);
+            const descriptionParts = [
+              ...(humanName && humanName !== value ? [humanName] : []),
+              ...(summary && summary !== humanName ? [summary] : []),
+            ];
             return {
               value,
-              label: pickFirstString(
-                item.name,
-                item.id,
-                item.model,
-                item.model_id,
-                item.slug,
-                item.value,
-                value
-              ) as string,
+              // For custom endpoints, always surface raw model ID as the primary text.
+              label: value,
               description:
-                pickFirstString(item.description, item.summary, item.details) ||
+                descriptionParts.join(" · ") ||
                 (ownedBy ? t("reasoning.custom.ownerLabel", { owner: ownedBy }) : undefined),
               icon,
               ownedBy,
