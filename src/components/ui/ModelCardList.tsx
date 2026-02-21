@@ -125,7 +125,7 @@ export default function ModelCardList({
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-primary via-primary to-primary/80 rounded-l-md" />
             )}
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 min-w-0">
               {/* Status dot with LED glow */}
               <div
                 className={`w-1.5 h-1.5 rounded-full shrink-0 ${getStatusDotClass()} ${
@@ -149,15 +149,23 @@ export default function ModelCardList({
                 <Globe className="w-3.5 h-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
               )}
 
-              {/* Model info - inline */}
-              <span className="text-sm font-semibold text-foreground truncate tracking-tight">
-                {model.label}
-              </span>
-              {model.description && (
-                <span className="text-[11px] text-muted-foreground/50 tabular-nums shrink-0">
-                  {model.description}
+              {/* Model info - keep primary label visible; truncate description first */}
+              <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                <span
+                  title={model.label}
+                  className="text-sm font-semibold text-foreground tracking-tight truncate min-w-[8rem] max-w-[60%]"
+                >
+                  {model.label}
                 </span>
-              )}
+                {model.description && (
+                  <span
+                    title={model.description}
+                    className="text-[11px] text-muted-foreground/50 tabular-nums min-w-0 flex-1 truncate"
+                  >
+                    {model.description}
+                  </span>
+                )}
+              </div>
 
               {/* Recommended badge */}
               {model.recommended && (
