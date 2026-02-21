@@ -777,11 +777,9 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
   const { theme, setTheme } = useTheme();
   const [licenseStatus, setLicenseStatus] = useState<LicenseStatusResult | null>(null);
   const [licenseKeyInput, setLicenseKeyInput] = useState("");
-  const [licenseApiBaseUrlInput, setLicenseApiBaseUrlInput] = useState("");
   const [licenseBusyAction, setLicenseBusyAction] = useState<
     "activate" | "validate" | "clear" | null
   >(null);
-  const [licenseApiBusy, setLicenseApiBusy] = useState(false);
   const [showLicenseKeyInput, setShowLicenseKeyInput] = useState(false);
   const usage = useUsage();
   const hasShownApproachingToast = useRef(false);
@@ -809,20 +807,9 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     }
   }, []);
 
-  const loadLicenseApiBaseUrl = useCallback(async () => {
-    if (!window.electronAPI?.getLicenseApiBaseUrl) return;
-    try {
-      const value = await window.electronAPI.getLicenseApiBaseUrl();
-      setLicenseApiBaseUrlInput(value || "");
-    } catch (error) {
-      logger.error("Failed to load license API base URL", error, "license");
-    }
-  }, []);
-
   useEffect(() => {
     refreshLicenseStatus();
-    loadLicenseApiBaseUrl();
-  }, [loadLicenseApiBaseUrl, refreshLicenseStatus]);
+  }, [refreshLicenseStatus]);
 
   useEffect(() => {
     if (licenseStatus?.isActive && licenseStatus?.keyPresent) {
@@ -857,9 +844,14 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
           variant: "success",
         });
       } else {
+        const userFacingErrorMessage =
+          result.error === "LICENSE_SERVER_NOT_CONFIGURED"
+            ? t("settingsPage.account.desktopLicense.toasts.serverNotReadyDescription")
+            : null;
         toast({
           title: t("settingsPage.account.desktopLicense.toasts.activationFailedTitle"),
           description:
+            userFacingErrorMessage ||
             result.message ||
             result.error ||
             t("settingsPage.account.desktopLicense.toasts.activationFailedDescription"),
@@ -906,41 +898,6 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
       setLicenseBusyAction(null);
     }
   }, [t, toast]);
-
-  const handleSaveLicenseApiBaseUrl = useCallback(async () => {
-    if (!window.electronAPI?.saveLicenseApiBaseUrl) return;
-    setLicenseApiBusy(true);
-    try {
-      const result = await window.electronAPI.saveLicenseApiBaseUrl(licenseApiBaseUrlInput);
-      if (!result?.success) {
-        toast({
-          title: t("settingsPage.account.desktopLicense.toasts.licenseApiSaveFailedTitle"),
-          description: t(
-            "settingsPage.account.desktopLicense.toasts.licenseApiSaveFailedDescription"
-          ),
-          variant: "destructive",
-        });
-        return;
-      }
-
-      setLicenseApiBaseUrlInput(result.value || "");
-      await refreshLicenseStatus();
-      toast({
-        title: t("settingsPage.account.desktopLicense.toasts.licenseApiSavedTitle"),
-        description: t("settingsPage.account.desktopLicense.toasts.licenseApiSavedDescription"),
-        variant: "success",
-      });
-    } catch (error) {
-      logger.error("Failed to save license API base URL", error, "license");
-      toast({
-        title: t("settingsPage.account.desktopLicense.toasts.licenseApiSaveFailedTitle"),
-        description: t("settingsPage.account.desktopLicense.toasts.licenseApiSaveFailedDescription"),
-        variant: "destructive",
-      });
-    } finally {
-      setLicenseApiBusy(false);
-    }
-  }, [licenseApiBaseUrlInput, refreshLicenseStatus, t, toast]);
 
   const handleClearLicense = useCallback(() => {
     if (!window.electronAPI?.licenseClear) return;
@@ -1319,6 +1276,10 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     const hintDescription = licenseStatus?.configured
       ? t("settingsPage.account.desktopLicense.descriptionConfigured")
       : t("settingsPage.account.desktopLicense.descriptionNotConfigured");
+    const currentStatusDescription =
+      licenseStatus?.error === "LICENSE_SERVER_NOT_CONFIGURED"
+        ? t("settingsPage.account.desktopLicense.currentStatusNotConfigured")
+        : licenseStatus?.message || t("settingsPage.account.desktopLicense.currentStatusDescription");
 
     return (
       <div className="space-y-3">
@@ -1327,48 +1288,13 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
           <SettingsPanelRow>
             <SettingsRow
               label={t("settingsPage.account.desktopLicense.currentStatusLabel")}
-              description={
-                licenseStatus?.message ||
-                t("settingsPage.account.desktopLicense.currentStatusDescription")
-              }
+              description={currentStatusDescription}
             >
               <Badge variant={licenseBadgeVariant}>{getLicenseStatusLabel(status, t)}</Badge>
             </SettingsRow>
           </SettingsPanelRow>
           <SettingsPanelRow>
             <div className="space-y-3">
-              <div className="space-y-2">
-                <p className="text-[11px] font-medium text-foreground">
-                  {t("settingsPage.account.desktopLicense.licenseApiUrlLabel")}
-                </p>
-                <Input
-                  value={licenseApiBaseUrlInput}
-                  onChange={(event) => setLicenseApiBaseUrlInput(event.target.value)}
-                  placeholder={t("settingsPage.account.desktopLicense.licenseApiUrlPlaceholder")}
-                  className="h-8 text-sm"
-                />
-                <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleSaveLicenseApiBaseUrl}
-                    disabled={licenseApiBusy}
-                  >
-                    {licenseApiBusy ? (
-                      <>
-                        <Loader2 size={14} className="animate-spin" />
-                        {t("settingsPage.account.desktopLicense.actions.saving")}
-                      </>
-                    ) : (
-                      t("settingsPage.account.desktopLicense.actions.save")
-                    )}
-                  </Button>
-                </div>
-                <p className="text-[11px] text-muted-foreground">
-                  {t("settingsPage.account.desktopLicense.licenseApiUrlDescription")}
-                </p>
-              </div>
-
               {showKeyInput ? (
                 <Input
                   value={licenseKeyInput}

@@ -547,6 +547,7 @@
       "label": "Debug 模式"
     },
     "description": "捕获详细日志以帮助诊断问题",
+    "localOnlyNotice": "日志仅保存在本机，不会自动上传。",
     "openLogsFolder": "打开日志文件夹",
     "performanceNote": {
       "description": "Debug 日志会持续写入磁盘，可能略微影响性能。不排查问题时请关闭。",
@@ -956,9 +957,10 @@
       "desktopLicense": {
         "title": "桌面授权",
         "descriptionConfigured": "当前构建会通过你的授权 API 校验桌面授权密钥。",
-        "descriptionNotConfigured": "尚未配置授权 API。请先在下方填写授权 API 地址后再进行正式激活。",
+        "descriptionNotConfigured": "授权服务尚未就绪，请联系技术支持。",
         "currentStatusLabel": "当前状态",
         "currentStatusDescription": "输入付费授权密钥即可在本机解锁商业使用。",
+        "currentStatusNotConfigured": "当前版本尚未连接授权服务，请联系技术支持。",
         "licenseApiUrlLabel": "授权 API 地址",
         "licenseApiUrlPlaceholder": "https://license.your-domain.com",
         "licenseApiUrlDescription": "这里配置一次后，用户只需输入授权码即可在应用内激活。",
@@ -998,6 +1000,7 @@
           "activatedDescription": "这台设备已完成激活。",
           "activationFailedTitle": "激活失败",
           "activationFailedDescription": "该授权密钥无法激活。",
+          "serverNotReadyDescription": "授权服务尚未就绪，请联系技术支持。",
           "activationUnexpectedError": "激活授权时发生未知错误。",
           "validatedTitle": "授权校验通过",
           "validateFailedTitle": "授权校验失败",

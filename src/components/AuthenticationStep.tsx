@@ -334,12 +334,6 @@ export default function AuthenticationStep({
           </p>
         </div>
 
-        <div className="bg-warning/5 p-2.5 rounded border border-warning/20">
-          <p className="text-[10px] text-warning text-center leading-snug">
-            {t("auth.cloudNotConfigured")}
-          </p>
-        </div>
-
         <Button onClick={onContinueWithoutAccount} className="w-full h-9">
           <span className="text-sm font-medium">{t("auth.getStarted")}</span>
           <ArrowRight className="w-3.5 h-3.5" />
