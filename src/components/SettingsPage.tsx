@@ -768,6 +768,11 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
 
   const isUpdateAvailable =
     !updateStatus.isDevelopment && (updateStatus.updateAvailable || updateStatus.updateDownloaded);
+  const manualUpdateUrl =
+    updateInfo && updateInfo.manualOnly && updateInfo.manualDownloadUrl
+      ? updateInfo.manualDownloadUrl
+      : "";
+  const isManualUpdate = Boolean(manualUpdateUrl);
 
   const whisperHook = useWhisper();
   const permissionsHook = usePermissions(showAlertDialog);
@@ -1750,15 +1755,48 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                         try {
                           const result = await checkForUpdates();
                           if (result?.updateAvailable) {
+                            if (result.manualOnly && result.manualDownloadUrl) {
+                              showConfirmDialog({
+                                title: t(
+                                  "settingsPage.general.updates.dialogs.manualUpdateAvailable.title"
+                                ),
+                                description: t(
+                                  "settingsPage.general.updates.dialogs.manualUpdateAvailable.description",
+                                  {
+                                    version:
+                                      result.version ||
+                                      t("settingsPage.general.updates.newVersion"),
+                                  }
+                                ),
+                                confirmText: t(
+                                  "settingsPage.general.updates.dialogs.manualUpdateAvailable.confirmText"
+                                ),
+                                onConfirm: async () => {
+                                  await window.electronAPI.openExternal(result.manualDownloadUrl);
+                                },
+                              });
+                            } else {
+                              showAlertDialog({
+                                title: t(
+                                  "settingsPage.general.updates.dialogs.updateAvailable.title"
+                                ),
+                                description: t(
+                                  "settingsPage.general.updates.dialogs.updateAvailable.description",
+                                  {
+                                    version:
+                                      result.version ||
+                                      t("settingsPage.general.updates.newVersion"),
+                                  }
+                                ),
+                              });
+                            }
+                          } else if (result?.error) {
                             showAlertDialog({
-                              title: t(
-                                "settingsPage.general.updates.dialogs.updateAvailable.title"
-                              ),
+                              title: t("settingsPage.general.updates.dialogs.checkFailed.title"),
                               description: t(
-                                "settingsPage.general.updates.dialogs.updateAvailable.description",
+                                "settingsPage.general.updates.dialogs.checkFailed.description",
                                 {
-                                  version:
-                                    result.version || t("settingsPage.general.updates.newVersion"),
+                                  message: result.error,
                                 }
                               ),
                             });
@@ -1796,7 +1834,11 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                         <Button
                           onClick={async () => {
                             try {
-                              await downloadUpdate();
+                              if (isManualUpdate && manualUpdateUrl) {
+                                await window.electronAPI.openExternal(manualUpdateUrl);
+                              } else {
+                                await downloadUpdate();
+                              }
                             } catch (error: any) {
                               showAlertDialog({
                                 title: t(
@@ -1817,7 +1859,9 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                             size={13}
                             className={`mr-1.5 ${downloadingUpdate ? "animate-pulse" : ""}`}
                           />
-                          {downloadingUpdate
+                          {isManualUpdate
+                            ? t("settingsPage.general.updates.openReleasePage")
+                            : downloadingUpdate
                             ? t("settingsPage.general.updates.downloading", {
                                 progress: Math.round(updateDownloadProgress),
                               })

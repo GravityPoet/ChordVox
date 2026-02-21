@@ -65,7 +65,10 @@ export interface UpdateCheckResult {
   releaseDate?: string;
   files?: any[];
   releaseNotes?: string;
+  manualDownloadUrl?: string | null;
+  manualOnly?: boolean;
   message?: string;
+  error?: string;
 }
 
 export interface UpdateStatusResult {
@@ -79,11 +82,15 @@ export interface UpdateInfoResult {
   releaseDate?: string;
   releaseNotes?: string | null;
   files?: any[];
+  manualDownloadUrl?: string | null;
+  manualOnly?: boolean;
 }
 
 export interface UpdateResult {
   success: boolean;
   message: string;
+  manual?: boolean;
+  url?: string;
 }
 
 export interface AppVersionResult {
