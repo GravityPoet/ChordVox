@@ -15,12 +15,17 @@ export const useAudioRecording = (toast, options = {}) => {
   const startLockRef = useRef(false);
   const stopLockRef = useRef(false);
   const { onToggle } = options;
+  const resolveProfileId = useCallback(
+    (payload) => (payload?.profileId === "secondary" ? "secondary" : "primary"),
+    []
+  );
 
-  const performStartRecording = useCallback(async () => {
+  const performStartRecording = useCallback(async (profileId = "primary") => {
     if (startLockRef.current) return false;
     startLockRef.current = true;
     try {
       if (!audioManagerRef.current) return false;
+      audioManagerRef.current.setActiveHotkeyProfile?.(profileId);
 
       const currentState = audioManagerRef.current.getState();
       if (currentState.isRecording || currentState.isProcessing) return false;
@@ -118,7 +123,10 @@ export const useAudioRecording = (toast, options = {}) => {
             "streaming"
           );
 
-          audioManagerRef.current.saveTranscription(result.text);
+          const saveHistory = localStorage.getItem("transcriptionHistoryEnabled") !== "false";
+          if (saveHistory) {
+            audioManagerRef.current.saveTranscription(result.text);
+          }
 
           if (result.source === "openai" && localStorage.getItem("useLocalWhisper") === "true") {
             toast({
@@ -147,36 +155,39 @@ export const useAudioRecording = (toast, options = {}) => {
 
     audioManagerRef.current.warmupStreamingConnection();
 
-    const handleToggle = async () => {
+    const handleToggle = async (payload) => {
       if (!audioManagerRef.current) return;
+      const profileId = resolveProfileId(payload);
       const currentState = audioManagerRef.current.getState();
 
       if (!currentState.isRecording && !currentState.isProcessing) {
-        await performStartRecording();
+        audioManagerRef.current.setActiveHotkeyProfile?.(profileId);
+        await performStartRecording(profileId);
       } else if (currentState.isRecording) {
         await performStopRecording();
       }
     };
 
-    const handleStart = async () => {
-      await performStartRecording();
+    const handleStart = async (payload) => {
+      const profileId = resolveProfileId(payload);
+      await performStartRecording(profileId);
     };
 
     const handleStop = async () => {
       await performStopRecording();
     };
 
-    const disposeToggle = window.electronAPI.onToggleDictation(() => {
-      handleToggle();
+    const disposeToggle = window.electronAPI.onToggleDictation((payload) => {
+      handleToggle(payload);
       onToggle?.();
     });
 
-    const disposeStart = window.electronAPI.onStartDictation?.(() => {
-      handleStart();
+    const disposeStart = window.electronAPI.onStartDictation?.((payload) => {
+      handleStart(payload);
       onToggle?.();
     });
 
-    const disposeStop = window.electronAPI.onStopDictation?.(() => {
+    const disposeStop = window.electronAPI.onStopDictation?.((_payload) => {
       handleStop();
       onToggle?.();
     });
@@ -201,7 +212,7 @@ export const useAudioRecording = (toast, options = {}) => {
         audioManagerRef.current.cleanup();
       }
     };
-  }, [toast, onToggle, performStartRecording, performStopRecording, t]);
+  }, [toast, onToggle, performStartRecording, performStopRecording, resolveProfileId, t]);
 
   const startRecording = async () => {
     return performStartRecording();

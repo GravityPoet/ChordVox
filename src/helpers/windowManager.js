@@ -1,5 +1,6 @@
-const { app, screen, BrowserWindow, shell, dialog } = require("electron");
+const { app, screen, BrowserWindow, shell, dialog, globalShortcut } = require("electron");
 const HotkeyManager = require("./hotkeyManager");
+const { isModifierOnlyHotkey, isRightSideModifier } = require("./hotkeyManager");
 const DragManager = require("./dragManager");
 const MenuManager = require("./menuManager");
 const DevServerManager = require("./devServerManager");
@@ -24,6 +25,8 @@ class WindowManager {
     this.loadErrorShown = false;
     this.macCompoundPushState = null;
     this.winPushState = null;
+    this.secondaryHotkey = "";
+    this.secondaryHotkeyAccelerator = null;
     this._cachedActivationMode = "tap";
     this._floatingIconAutoHide = false;
 
@@ -80,6 +83,7 @@ class WindowManager {
 
     await this.loadMainWindow();
     await this.initializeHotkey();
+    await this.initializeSecondaryHotkey();
     this.dragManager.setTargetWindow(this.mainWindow);
     MenuManager.setupMainMenu();
   }
@@ -152,7 +156,7 @@ class WindowManager {
     await this.loadWindowContent(this.mainWindow, false);
   }
 
-  createHotkeyCallback() {
+  createHotkeyCallback(profileId = "primary") {
     let lastToggleTime = 0;
     const DEBOUNCE_MS = 150;
 
@@ -162,7 +166,10 @@ class WindowManager {
       }
 
       const activationMode = this.getActivationMode();
-      const currentHotkey = this.hotkeyManager.getCurrentHotkey?.();
+      const currentHotkey =
+        profileId === "secondary"
+          ? this.secondaryHotkey
+          : this.hotkeyManager.getCurrentHotkey?.();
 
       if (
         process.platform === "darwin" &&
@@ -171,12 +178,17 @@ class WindowManager {
         currentHotkey !== "GLOBE" &&
         currentHotkey.includes("+")
       ) {
-        this.startMacCompoundPushToTalk(currentHotkey);
+        this.startMacCompoundPushToTalk(currentHotkey, profileId);
         return;
       }
 
       // Windows push mode: always defer to native listener (globalShortcut can't detect key-up)
       if (process.platform === "win32" && activationMode === "push") {
+        if (profileId === "secondary") {
+          // Secondary profile uses global shortcuts only, so keep it usable in push mode.
+          this.showDictationPanel();
+          this.mainWindow.webContents.send("toggle-dictation", { profileId });
+        }
         return;
       }
 
@@ -187,11 +199,11 @@ class WindowManager {
       lastToggleTime = now;
 
       this.showDictationPanel();
-      this.mainWindow.webContents.send("toggle-dictation");
+      this.mainWindow.webContents.send("toggle-dictation", { profileId });
     };
   }
 
-  startMacCompoundPushToTalk(hotkey) {
+  startMacCompoundPushToTalk(hotkey, profileId = "primary") {
     if (this.macCompoundPushState?.active) {
       return;
     }
@@ -216,6 +228,7 @@ class WindowManager {
 
     this.macCompoundPushState = {
       active: true,
+      profileId,
       downTime,
       isRecording: false,
       requiredModifiers,
@@ -229,7 +242,7 @@ class WindowManager {
 
       if (!this.macCompoundPushState.isRecording) {
         this.macCompoundPushState.isRecording = true;
-        this.sendStartDictation();
+        this.sendStartDictation(this.macCompoundPushState.profileId || "primary");
       }
     }, MIN_HOLD_DURATION_MS);
   }
@@ -248,10 +261,11 @@ class WindowManager {
     }
 
     const wasRecording = this.macCompoundPushState.isRecording;
+    const profileId = this.macCompoundPushState.profileId || "primary";
     this.macCompoundPushState = null;
 
     if (wasRecording) {
-      this.sendStopDictation();
+      this.sendStopDictation(profileId);
     } else {
       this.hideDictationPanel();
     }
@@ -267,10 +281,11 @@ class WindowManager {
     }
 
     const wasRecording = this.macCompoundPushState.isRecording;
+    const profileId = this.macCompoundPushState.profileId || "primary";
     this.macCompoundPushState = null;
 
     if (wasRecording) {
-      this.sendStopDictation();
+      this.sendStopDictation(profileId);
     }
     this.hideDictationPanel();
 
@@ -314,7 +329,7 @@ class WindowManager {
     return required;
   }
 
-  startWindowsPushToTalk() {
+  startWindowsPushToTalk(profileId = "primary") {
     if (this.winPushState?.active) {
       return;
     }
@@ -326,6 +341,7 @@ class WindowManager {
 
     this.winPushState = {
       active: true,
+      profileId,
       downTime,
       isRecording: false,
     };
@@ -337,7 +353,7 @@ class WindowManager {
 
       if (!this.winPushState.isRecording) {
         this.winPushState.isRecording = true;
-        this.sendStartDictation();
+        this.sendStartDictation(this.winPushState.profileId || "primary");
       }
     }, MIN_HOLD_DURATION_MS);
   }
@@ -348,10 +364,11 @@ class WindowManager {
     }
 
     const wasRecording = this.winPushState.isRecording;
+    const profileId = this.winPushState.profileId || "primary";
     this.winPushState = null;
 
     if (wasRecording) {
-      this.sendStopDictation();
+      this.sendStopDictation(profileId);
     } else {
       this.hideDictationPanel();
     }
@@ -361,22 +378,22 @@ class WindowManager {
     this.winPushState = null;
   }
 
-  sendStartDictation() {
+  sendStartDictation(profileId = "primary") {
     if (this.hotkeyManager.isInListeningMode()) {
       return;
     }
     if (this.mainWindow && !this.mainWindow.isDestroyed()) {
       this.showDictationPanel();
-      this.mainWindow.webContents.send("start-dictation");
+      this.mainWindow.webContents.send("start-dictation", { profileId });
     }
   }
 
-  sendStopDictation() {
+  sendStopDictation(profileId = "primary") {
     if (this.hotkeyManager.isInListeningMode()) {
       return;
     }
     if (this.mainWindow && !this.mainWindow.isDestroyed()) {
-      this.mainWindow.webContents.send("stop-dictation");
+      this.mainWindow.webContents.send("stop-dictation", { profileId });
     }
   }
 
@@ -396,12 +413,102 @@ class WindowManager {
     this.hotkeyManager.setListeningMode(enabled);
   }
 
+  isSecondaryHotkeySupported(hotkey) {
+    if (!hotkey || hotkey === "GLOBE") return false;
+    if (isRightSideModifier(hotkey)) return false;
+    if (isModifierOnlyHotkey(hotkey)) return false;
+    return true;
+  }
+
+  async initializeSecondaryHotkey() {
+    if (!this.mainWindow || this.mainWindow.isDestroyed()) return;
+
+    try {
+      const secondaryHotkey = await this.mainWindow.webContents.executeJavaScript(
+        `localStorage.getItem("dictationKeySecondary") || ""`
+      );
+      if (!secondaryHotkey || !secondaryHotkey.trim()) return;
+      await this.updateSecondaryHotkey(secondaryHotkey.trim());
+    } catch (error) {
+      // Non-fatal: app should still work with primary hotkey.
+      console.warn("[WindowManager] Failed to initialize secondary hotkey:", error.message);
+    }
+  }
+
+  async unregisterSecondaryHotkey() {
+    if (this.secondaryHotkeyAccelerator) {
+      try {
+        globalShortcut.unregister(this.secondaryHotkeyAccelerator);
+      } catch (_error) {
+        // ignore
+      }
+    }
+    this.secondaryHotkey = "";
+    this.secondaryHotkeyAccelerator = null;
+  }
+
+  async updateSecondaryHotkey(hotkey) {
+    const normalizedHotkey = typeof hotkey === "string" ? hotkey.trim() : "";
+    const previousHotkey = this.secondaryHotkey;
+    const previousAccelerator = this.secondaryHotkeyAccelerator;
+
+    if (!normalizedHotkey) {
+      await this.unregisterSecondaryHotkey();
+      return { success: true, message: "Secondary hotkey cleared" };
+    }
+
+    if (!this.isSecondaryHotkeySupported(normalizedHotkey)) {
+      return {
+        success: false,
+        message: "Secondary hotkey cannot be Globe, right-side modifier, or modifier-only.",
+      };
+    }
+
+    const accelerator = normalizedHotkey.startsWith("Fn+")
+      ? normalizedHotkey.slice(3)
+      : normalizedHotkey;
+
+    if (previousHotkey && previousHotkey === normalizedHotkey && previousAccelerator) {
+      return { success: true, message: `Secondary hotkey updated to: ${normalizedHotkey}` };
+    }
+
+    const primaryHotkey = this.hotkeyManager.getCurrentHotkey?.() || "";
+    const primaryAccelerator = primaryHotkey.startsWith("Fn+") ? primaryHotkey.slice(3) : primaryHotkey;
+    if (primaryAccelerator && primaryAccelerator === accelerator) {
+      return { success: false, message: "Secondary hotkey must be different from primary hotkey." };
+    }
+
+    await this.unregisterSecondaryHotkey();
+
+    const callback = this.createHotkeyCallback("secondary");
+    const registered = globalShortcut.register(accelerator, callback);
+    if (!registered) {
+      if (previousHotkey && previousAccelerator) {
+        const previousCallback = this.createHotkeyCallback("secondary");
+        const restored = globalShortcut.register(previousAccelerator, previousCallback);
+        if (restored) {
+          this.secondaryHotkey = previousHotkey;
+          this.secondaryHotkeyAccelerator = previousAccelerator;
+        }
+      }
+      return { success: false, message: `Failed to register secondary hotkey: ${normalizedHotkey}` };
+    }
+
+    this.secondaryHotkey = normalizedHotkey;
+    this.secondaryHotkeyAccelerator = accelerator;
+    return { success: true, message: `Secondary hotkey updated to: ${normalizedHotkey}` };
+  }
+
   async initializeHotkey() {
     await this.hotkeyManager.initializeHotkey(this.mainWindow, this.createHotkeyCallback());
   }
 
   async updateHotkey(hotkey) {
-    return await this.hotkeyManager.updateHotkey(hotkey, this.createHotkeyCallback());
+    const result = await this.hotkeyManager.updateHotkey(hotkey, this.createHotkeyCallback());
+    if (result?.success && this.secondaryHotkey) {
+      await this.updateSecondaryHotkey(this.secondaryHotkey);
+    }
+    return result;
   }
 
   isUsingGnomeHotkeys() {
