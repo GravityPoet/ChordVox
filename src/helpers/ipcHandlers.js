@@ -1812,6 +1812,37 @@ class IPCHandlers {
       }
     });
 
+    ipcMain.handle("get-call-trace-sessions", async (_event, limit = 20) => {
+      try {
+        return { success: true, sessions: debugLogger.getCallTraceSessions(limit) };
+      } catch (error) {
+        debugLogger.error("Failed to load call trace sessions:", error);
+        return { success: false, sessions: [], error: error.message };
+      }
+    });
+
+    ipcMain.handle("get-call-trace-events", async (_event, runId, limit = 80) => {
+      try {
+        return {
+          success: true,
+          events: debugLogger.getCallTraceEvents(runId, limit),
+        };
+      } catch (error) {
+        debugLogger.error("Failed to load call trace events:", error);
+        return { success: false, events: [], error: error.message };
+      }
+    });
+
+    ipcMain.handle("clear-call-traces", async () => {
+      try {
+        debugLogger.clearRecentEntries("call-trace");
+        return { success: true };
+      } catch (error) {
+        debugLogger.error("Failed to clear call traces:", error);
+        return { success: false, error: error.message };
+      }
+    });
+
     // Update handlers
     ipcMain.handle("check-for-updates", async () => {
       return this.updateManager.checkForUpdates();

@@ -40,6 +40,8 @@ class DebugLogger {
     this.logStream = null;
     this.fileLoggingEnabled = false;
     this.fileLoggingPending = this.debugMode; // Track if we need to initialize file logging later
+    this.recentEntries = [];
+    this.maxRecentEntries = 2000;
 
     // IMPORTANT: Do NOT call initializeFileLogging() here!
     // It uses app.getPath() which is unsafe before app.whenReady().
@@ -177,6 +179,20 @@ class DebugLogger {
     const baseLine = `[${timestamp}] ${levelTag}${scopeTag}${sourceTag} ${message}`;
     const metaText = this.formatMeta(meta);
     const logLine = metaText ? `${baseLine} ${metaText}\n` : `${baseLine}\n`;
+    const entry = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      timestamp,
+      level: normalized,
+      message: String(message),
+      scope: scope || null,
+      source: source || null,
+      meta: meta === undefined ? null : meta,
+    };
+
+    this.recentEntries.push(entry);
+    if (this.recentEntries.length > this.maxRecentEntries) {
+      this.recentEntries.splice(0, this.recentEntries.length - this.maxRecentEntries);
+    }
 
     const consoleFn =
       normalized === "error" || normalized === "fatal"
@@ -394,6 +410,119 @@ class DebugLogger {
 
   isEnabled() {
     return this.isDebugEnabled();
+  }
+
+  getRecentEntries(options = {}) {
+    const limit = Math.max(1, Math.min(Number(options.limit) || 200, 1000));
+    const scope = options.scope ? String(options.scope) : null;
+    const runId = options.runId ? String(options.runId) : null;
+
+    let entries = this.recentEntries;
+    if (scope) {
+      entries = entries.filter((entry) => entry.scope === scope);
+    }
+    if (runId) {
+      entries = entries.filter(
+        (entry) => entry?.meta && typeof entry.meta === "object" && entry.meta.runId === runId
+      );
+    }
+
+    if (entries.length <= limit) {
+      return entries.slice();
+    }
+    return entries.slice(entries.length - limit);
+  }
+
+  clearRecentEntries(scope = null) {
+    if (!scope) {
+      this.recentEntries = [];
+      return;
+    }
+    this.recentEntries = this.recentEntries.filter((entry) => entry.scope !== scope);
+  }
+
+  getCallTraceSessions(limit = 20) {
+    const entries = this.getRecentEntries({ scope: "call-trace", limit: 1000 });
+    const sessions = new Map();
+
+    const ensureSession = (runId) => {
+      if (!sessions.has(runId)) {
+        sessions.set(runId, {
+          runId,
+          profileId: "primary",
+          startedAt: null,
+          updatedAt: null,
+          sessionStatus: "unknown",
+          transcriptionStatus: "unknown",
+          reasoningStatus: "unknown",
+          pasteStatus: "unknown",
+          transcriptionModel: null,
+          transcriptionProvider: null,
+          reasoningModel: null,
+          reasoningProvider: null,
+          source: null,
+          error: null,
+          eventsCount: 0,
+        });
+      }
+      return sessions.get(runId);
+    };
+
+    for (const entry of entries) {
+      const meta = entry?.meta;
+      if (!meta || typeof meta !== "object") continue;
+      const runId = meta.runId ? String(meta.runId) : null;
+      if (!runId) continue;
+
+      const session = ensureSession(runId);
+      session.eventsCount += 1;
+      session.profileId = meta.profileId || session.profileId || "primary";
+      session.updatedAt = entry.timestamp;
+      if (!session.startedAt) {
+        session.startedAt = entry.timestamp;
+      }
+
+      const phase = meta.phase ? String(meta.phase) : "";
+      const status = meta.status ? String(meta.status) : "";
+
+      if (phase === "session" && status) {
+        session.sessionStatus = status;
+      }
+      if (phase === "transcription" && status) {
+        session.transcriptionStatus = status;
+      }
+      if (phase === "reasoning" && status) {
+        session.reasoningStatus = status;
+      }
+      if (phase === "paste" && status) {
+        session.pasteStatus = status;
+      }
+
+      if (meta.source) session.source = String(meta.source);
+      if (meta.transcriptionModel) session.transcriptionModel = String(meta.transcriptionModel);
+      if (meta.transcriptionProvider)
+        session.transcriptionProvider = String(meta.transcriptionProvider);
+      if (meta.reasoningModel) session.reasoningModel = String(meta.reasoningModel);
+      if (meta.reasoningProvider) session.reasoningProvider = String(meta.reasoningProvider);
+      if (meta.error) session.error = String(meta.error);
+    }
+
+    return Array.from(sessions.values())
+      .sort((a, b) => {
+        const at = a.updatedAt ? Date.parse(a.updatedAt) : 0;
+        const bt = b.updatedAt ? Date.parse(b.updatedAt) : 0;
+        return bt - at;
+      })
+      .slice(0, Math.max(1, Math.min(Number(limit) || 20, 200)));
+  }
+
+  getCallTraceEvents(runId, limit = 80) {
+    if (!runId) return [];
+    return this.getRecentEntries({
+      scope: "call-trace",
+      runId: String(runId),
+      limit: Math.max(1, Math.min(Number(limit) || 80, 300)),
+    });
   }
 
   close() {

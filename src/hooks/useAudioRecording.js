@@ -111,7 +111,9 @@ export const useAudioRecording = (toast, options = {}) => {
           const pasteStart = performance.now();
           await audioManagerRef.current.safePaste(
             result.text,
-            isStreaming ? { fromStreaming: true } : {}
+            isStreaming
+              ? { fromStreaming: true, traceId: result.traceId, source: result.source }
+              : { traceId: result.traceId, source: result.source }
           );
           logger.info(
             "Paste timing",
