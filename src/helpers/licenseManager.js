@@ -26,15 +26,31 @@ function toIso(dateLike) {
 class LicenseManager {
   constructor() {
     this.statePath = path.join(app.getPath("userData"), "license-state.json");
+    this.machineId = this._computeMachineId();
+    this._refreshConfig();
+  }
+
+  _refreshConfig() {
     this.apiBaseUrl = (process.env.LICENSE_API_BASE_URL || "").trim().replace(/\/+$/, "");
-    this.productId = (process.env.LICENSE_PRODUCT_ID || "openwhispr-pro").trim();
+    this.productId = (process.env.LICENSE_PRODUCT_ID || "ariakey-pro").trim();
     this.apiToken = (process.env.LICENSE_API_TOKEN || "").trim();
     this.timeoutMs = parsePositiveInt(process.env.LICENSE_API_TIMEOUT_MS, DEFAULT_TIMEOUT_MS);
     this.offlineGraceHours = parsePositiveInt(
       process.env.LICENSE_OFFLINE_GRACE_HOURS,
       DEFAULT_OFFLINE_GRACE_HOURS
     );
-    this.machineId = this._computeMachineId();
+    this.allowDevKeys =
+      process.env.LICENSE_ALLOW_DEV_KEYS === "true" || process.env.NODE_ENV === "development";
+  }
+
+  refreshConfig() {
+    this._refreshConfig();
+    return {
+      success: true,
+      configured: this._isServerConfigured(),
+      apiBaseUrl: this.apiBaseUrl,
+      productId: this.productId,
+    };
   }
 
   _isServerConfigured() {
@@ -181,11 +197,13 @@ class LicenseManager {
   }
 
   async getStatus() {
+    this._refreshConfig();
     const current = await this._readState();
     return this._serialize(current);
   }
 
   async activateLicense(rawLicenseKey) {
+    this._refreshConfig();
     const licenseKey = String(rawLicenseKey || "").trim();
     if (!licenseKey) {
       return {
@@ -200,7 +218,7 @@ class LicenseManager {
     }
 
     if (!this._isServerConfigured()) {
-      if (!licenseKey.startsWith("DEV-")) {
+      if (!this.allowDevKeys || !licenseKey.startsWith("DEV-")) {
         return {
           success: false,
           configured: false,
@@ -208,7 +226,8 @@ class LicenseManager {
           isActive: false,
           keyPresent: true,
           error: "LICENSE_SERVER_NOT_CONFIGURED",
-          message: "Set LICENSE_API_BASE_URL (and optionally LICENSE_API_TOKEN) before activation.",
+          message:
+            "Set LICENSE_API_BASE_URL before activation. DEV- keys are only accepted when LICENSE_ALLOW_DEV_KEYS=true.",
         };
       }
 
@@ -274,6 +293,7 @@ class LicenseManager {
   }
 
   async validateLicense() {
+    this._refreshConfig();
     const state = await this._readState();
     if (!state.licenseKey) {
       return {
@@ -354,6 +374,7 @@ class LicenseManager {
   }
 
   async clearLicense() {
+    this._refreshConfig();
     try {
       await fs.rm(this.statePath, { force: true });
     } catch {}

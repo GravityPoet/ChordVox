@@ -17,6 +17,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Commercial Builds
 
 If you are preparing a paid desktop distribution, see [`docs/COMMERCIAL_RELEASE.md`](docs/COMMERCIAL_RELEASE.md) for release automation and license validation setup.
+For end-to-end sales flow (payment -> issue key -> customer activation), see [`docs/LICENSE_SALES_FLOW.md`](docs/LICENSE_SALES_FLOW.md) and [`services/license-server/README.md`](services/license-server/README.md).
 
 ## Attribution and License Compliance
 

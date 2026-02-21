@@ -311,3 +311,7 @@ ehthumbs.db
 Thumbs.db 
 .macos-globe-listener.hash
 .linux-fast-paste.hash
+
+# Local license server runtime files
+services/license-server/.env
+services/license-server/data/

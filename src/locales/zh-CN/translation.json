@@ -953,6 +953,67 @@
         "description": "无限转录、优先处理等更多功能。",
         "title": "免费试用 Pro 版 7 天"
       },
+      "desktopLicense": {
+        "title": "桌面授权",
+        "descriptionConfigured": "当前构建会通过你的授权 API 校验桌面授权密钥。",
+        "descriptionNotConfigured": "尚未配置授权 API。请先在下方填写授权 API 地址后再进行正式激活。",
+        "currentStatusLabel": "当前状态",
+        "currentStatusDescription": "输入付费授权密钥即可在本机解锁商业使用。",
+        "licenseApiUrlLabel": "授权 API 地址",
+        "licenseApiUrlPlaceholder": "https://license.your-domain.com",
+        "licenseApiUrlDescription": "这里配置一次后，用户只需输入授权码即可在应用内激活。",
+        "inputPlaceholder": "输入授权密钥",
+        "activatedHint": "当前设备已激活。仅在需要更换授权码时点击“更换授权码”。",
+        "actions": {
+          "activate": "激活",
+          "activating": "激活中",
+          "validate": "校验",
+          "checking": "检查中",
+          "clear": "清除",
+          "changeKey": "更换授权码",
+          "save": "保存",
+          "saving": "保存中"
+        },
+        "statusLabels": {
+          "active": "已激活",
+          "offlineGrace": "离线宽限",
+          "expired": "已过期",
+          "invalid": "无效",
+          "notActivated": "未激活"
+        },
+        "meta": {
+          "plan": "计划：{{plan}}",
+          "expires": "到期时间：{{date}}",
+          "lastCheck": "上次检查：{{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "移除已保存的授权？",
+          "removeDescription": "移除后本机会回到未授权状态，直到你再次激活。",
+          "removeConfirm": "移除"
+        },
+        "toasts": {
+          "keyRequiredTitle": "需要授权密钥",
+          "keyRequiredDescription": "请先输入授权密钥再激活。",
+          "activatedTitle": "授权已激活",
+          "activatedDescription": "这台设备已完成激活。",
+          "activationFailedTitle": "激活失败",
+          "activationFailedDescription": "该授权密钥无法激活。",
+          "activationUnexpectedError": "激活授权时发生未知错误。",
+          "validatedTitle": "授权校验通过",
+          "validateFailedTitle": "授权校验失败",
+          "validatedDescription": "授权有效。",
+          "invalidDescription": "授权无效。",
+          "validateUnexpectedError": "检查授权状态时发生未知错误。",
+          "removedTitle": "授权已移除",
+          "removedDescription": "已清除本机保存的授权状态。",
+          "removeFailedTitle": "无法移除授权",
+          "removeFailedDescription": "移除本机授权时发生未知错误。",
+          "licenseApiSavedTitle": "授权 API 已保存",
+          "licenseApiSavedDescription": "后续授权激活将使用新的 API 地址。",
+          "licenseApiSaveFailedTitle": "无法保存授权 API",
+          "licenseApiSaveFailedDescription": "请检查地址后重试。"
+        }
+      },
       "user": "用户",
       "wordsRemaining": "剩余 {{remaining}} 个词"
     },
