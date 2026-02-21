@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
-import { FolderOpen, Copy, Check } from "lucide-react";
+import { FolderOpen, Copy, Check, RefreshCw, Trash2 } from "lucide-react";
 import { useToast } from "./ui/Toast";
 import { Toggle } from "./ui/toggle";
+import type { CallTraceEvent, CallTraceSession } from "../types/electron";
 
 export default function DeveloperSection() {
   const { t } = useTranslation();
@@ -12,11 +13,24 @@ export default function DeveloperSection() {
   const [isLoading, setIsLoading] = useState(true);
   const [isToggling, setIsToggling] = useState(false);
   const [copiedPath, setCopiedPath] = useState(false);
+  const [isLoadingTrace, setIsLoadingTrace] = useState(false);
+  const [isClearingTrace, setIsClearingTrace] = useState(false);
+  const [traceSessions, setTraceSessions] = useState<CallTraceSession[]>([]);
+  const [traceEvents, setTraceEvents] = useState<CallTraceEvent[]>([]);
+  const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     loadDebugState();
+    loadTraceSessions();
   }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      loadTraceSessions(true);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [selectedRunId]);
 
   const loadDebugState = async () => {
     try {
@@ -107,6 +121,130 @@ export default function DeveloperSection() {
       });
     }
   };
+
+  const loadTraceEvents = async (runId: string, silent = false) => {
+    try {
+      if (!silent) {
+        setIsLoadingTrace(true);
+      }
+      const result = await window.electronAPI.getCallTraceEvents(runId, 120);
+      if (result.success) {
+        setTraceEvents(result.events || []);
+      }
+    } catch (error) {
+      if (!silent) {
+        toast({
+          title: t("developerSection.trace.toasts.loadFailed.title"),
+          description: t("developerSection.trace.toasts.loadFailed.description"),
+          variant: "destructive",
+        });
+      }
+    } finally {
+      if (!silent) {
+        setIsLoadingTrace(false);
+      }
+    }
+  };
+
+  const loadTraceSessions = async (silent = false) => {
+    try {
+      if (!silent) {
+        setIsLoadingTrace(true);
+      }
+      const result = await window.electronAPI.getCallTraceSessions(30);
+      if (!result.success) {
+        throw new Error(result.error || "Failed to load call trace sessions");
+      }
+
+      const sessions = result.sessions || [];
+      setTraceSessions(sessions);
+
+      const activeRunId =
+        selectedRunId && sessions.find((session) => session.runId === selectedRunId)
+          ? selectedRunId
+          : sessions[0]?.runId || null;
+
+      setSelectedRunId(activeRunId);
+      if (activeRunId) {
+        await loadTraceEvents(activeRunId, true);
+      } else {
+        setTraceEvents([]);
+      }
+    } catch (error) {
+      if (!silent) {
+        toast({
+          title: t("developerSection.trace.toasts.loadFailed.title"),
+          description: t("developerSection.trace.toasts.loadFailed.description"),
+          variant: "destructive",
+        });
+      }
+    } finally {
+      if (!silent) {
+        setIsLoadingTrace(false);
+      }
+    }
+  };
+
+  const handleSelectSession = async (runId: string) => {
+    setSelectedRunId(runId);
+    await loadTraceEvents(runId);
+  };
+
+  const handleClearTrace = async () => {
+    try {
+      setIsClearingTrace(true);
+      const result = await window.electronAPI.clearCallTraces();
+      if (!result.success) {
+        throw new Error(result.error || "Failed to clear call traces");
+      }
+      setTraceSessions([]);
+      setTraceEvents([]);
+      setSelectedRunId(null);
+      toast({
+        title: t("developerSection.trace.toasts.cleared.title"),
+        description: t("developerSection.trace.toasts.cleared.description"),
+        variant: "success",
+      });
+    } catch (error) {
+      toast({
+        title: t("developerSection.trace.toasts.clearFailed.title"),
+        description: t("developerSection.trace.toasts.clearFailed.description"),
+        variant: "destructive",
+      });
+    } finally {
+      setIsClearingTrace(false);
+    }
+  };
+
+  const getStatusChip = (status?: string) => {
+    if (status === "success") return "bg-success/15 text-success border-success/30";
+    if (status === "error") return "bg-destructive/10 text-destructive border-destructive/30";
+    if (status === "start") return "bg-primary/10 text-primary border-primary/30";
+    if (status === "cancelled") return "bg-warning/15 text-warning border-warning/30";
+    if (status === "skipped") return "bg-muted text-muted-foreground border-border/40";
+    return "bg-muted text-muted-foreground border-border/40";
+  };
+
+  const getStatusLabel = (status?: string) => {
+    const normalized = status || "unknown";
+    return t(`developerSection.trace.status.${normalized}`);
+  };
+
+  const getPhaseLabel = (phase?: string) => {
+    const normalized = phase || "session";
+    return t(`developerSection.trace.phases.${normalized}`);
+  };
+
+  const formatDateTime = (value: string | null) => {
+    if (!value) return "--";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString();
+  };
+
+  const selectedSession = selectedRunId
+    ? traceSessions.find((session) => session.runId === selectedRunId) || null
+    : null;
 
   return (
     <div className="space-y-8">
@@ -213,6 +351,196 @@ export default function DeveloperSection() {
                   <span className="text-[12px] text-muted-foreground">{item}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Call trace diagnostics */}
+      <div>
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <div>
+            <h3 className="text-[15px] font-semibold text-foreground tracking-tight">
+              {t("developerSection.trace.title")}
+            </h3>
+            <p className="text-[12px] text-muted-foreground mt-1 leading-relaxed">
+              {t("developerSection.trace.description")}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => loadTraceSessions()}
+              variant="outline"
+              size="sm"
+              disabled={isLoadingTrace}
+              className="h-8"
+            >
+              <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
+              {t("developerSection.trace.refresh")}
+            </Button>
+            <Button
+              onClick={handleClearTrace}
+              variant="destructive"
+              size="sm"
+              disabled={isClearingTrace}
+              className="h-8"
+            >
+              <Trash2 className="mr-1.5 h-3.5 w-3.5" />
+              {t("developerSection.trace.clear")}
+            </Button>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-border/60 dark:border-border-subtle bg-card dark:bg-surface-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="border-b lg:border-b-0 lg:border-r border-border/40 dark:border-border-subtle">
+              <div className="px-5 py-3 border-b border-border/30 dark:border-border-subtle/80">
+                <p className="text-[12px] font-medium text-foreground">
+                  {t("developerSection.trace.sessionLabel")}
+                </p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  {t("developerSection.trace.showingLatest", { count: 30 })}
+                </p>
+              </div>
+              <div className="max-h-[360px] overflow-y-auto">
+                {traceSessions.length === 0 ? (
+                  <div className="px-5 py-6 text-[12px] text-muted-foreground">
+                    {t("developerSection.trace.emptySessions")}
+                  </div>
+                ) : (
+                  traceSessions.map((session) => {
+                    const selected = selectedRunId === session.runId;
+                    return (
+                      <button
+                        key={session.runId}
+                        onClick={() => handleSelectSession(session.runId)}
+                        className={`w-full text-left px-5 py-3 border-b last:border-b-0 border-border/20 transition-colors ${
+                          selected ? "bg-primary/5" : "hover:bg-muted/20"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-[12px] font-medium text-foreground truncate">
+                              {t("developerSection.trace.runId")}{" "}
+                              <span className="font-mono">{session.runId}</span>
+                            </p>
+                            <p className="text-[11px] text-muted-foreground mt-1 truncate">
+                              {t("developerSection.trace.startedAt")}:{" "}
+                              {formatDateTime(session.startedAt)}
+                            </p>
+                            <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                              {t("developerSection.trace.updatedAt")}:{" "}
+                              {formatDateTime(session.updatedAt)}
+                            </p>
+                            <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                              {t("developerSection.trace.models.transcription")}:{" "}
+                              {session.transcriptionProvider || "--"} /{" "}
+                              {session.transcriptionModel || "--"}
+                            </p>
+                            <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                              {t("developerSection.trace.models.reasoning")}:{" "}
+                              {session.reasoningProvider || "--"} / {session.reasoningModel || "--"}
+                            </p>
+                            {session.error && (
+                              <p className="text-[11px] text-destructive mt-1 leading-relaxed">
+                                {t("developerSection.trace.errorPrefix")}: {session.error}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded-full border ${getStatusChip(session.transcriptionStatus)}`}
+                          >
+                            {getPhaseLabel("transcription")}:{" "}
+                            {getStatusLabel(session.transcriptionStatus)}
+                          </span>
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded-full border ${getStatusChip(session.reasoningStatus)}`}
+                          >
+                            {getPhaseLabel("reasoning")}: {getStatusLabel(session.reasoningStatus)}
+                          </span>
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded-full border ${getStatusChip(session.pasteStatus)}`}
+                          >
+                            {getPhaseLabel("paste")}: {getStatusLabel(session.pasteStatus)}
+                          </span>
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded-full border ${getStatusChip(session.sessionStatus)}`}
+                          >
+                            {getPhaseLabel("session")}: {getStatusLabel(session.sessionStatus)}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+
+            <div>
+              <div className="px-5 py-3 border-b border-border/30 dark:border-border-subtle/80">
+                <p className="text-[12px] font-medium text-foreground">
+                  {t("developerSection.trace.eventLabel")}
+                </p>
+                {selectedSession ? (
+                  <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                    {t("developerSection.trace.runId")}{" "}
+                    <span className="font-mono">{selectedSession.runId}</span>
+                  </p>
+                ) : (
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    {t("developerSection.trace.emptyEvents")}
+                  </p>
+                )}
+              </div>
+              <div className="max-h-[360px] overflow-y-auto">
+                {traceEvents.length === 0 ? (
+                  <div className="px-5 py-6 text-[12px] text-muted-foreground">
+                    {t("developerSection.trace.emptyEvents")}
+                  </div>
+                ) : (
+                  traceEvents
+                    .slice()
+                    .reverse()
+                    .map((event) => {
+                      const phase = event.meta?.phase || "session";
+                      const status = event.meta?.status || "unknown";
+                      const errorMessage =
+                        typeof event.meta?.error === "string" ? event.meta.error : null;
+                      return (
+                        <div
+                          key={event.id}
+                          className="px-5 py-3 border-b last:border-b-0 border-border/20"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="text-[12px] font-medium text-foreground">
+                              {getPhaseLabel(phase)}
+                            </p>
+                            <span
+                              className={`text-[10px] px-2 py-0.5 rounded-full border ${getStatusChip(status)}`}
+                            >
+                              {getStatusLabel(status)}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-muted-foreground mt-0.5">
+                            {formatDateTime(event.timestamp)}
+                          </p>
+                          {errorMessage && (
+                            <p className="text-[11px] text-destructive mt-1 leading-relaxed">
+                              {t("developerSection.trace.errorPrefix")}: {errorMessage}
+                            </p>
+                          )}
+                          {!errorMessage && event.meta && (
+                            <p className="text-[11px] text-muted-foreground mt-1 leading-relaxed break-all">
+                              {JSON.stringify(event.meta)}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })
+                )}
+              </div>
             </div>
           </div>
         </div>

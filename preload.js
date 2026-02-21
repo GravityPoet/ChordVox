@@ -244,6 +244,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getDebugState: () => ipcRenderer.invoke("get-debug-state"),
   setDebugLogging: (enabled) => ipcRenderer.invoke("set-debug-logging", enabled),
   openLogsFolder: () => ipcRenderer.invoke("open-logs-folder"),
+  getCallTraceSessions: (limit) => ipcRenderer.invoke("get-call-trace-sessions", limit),
+  getCallTraceEvents: (runId, limit) => ipcRenderer.invoke("get-call-trace-events", runId, limit),
+  clearCallTraces: () => ipcRenderer.invoke("clear-call-traces"),
 
   // System settings helpers for microphone/audio permissions
   requestMicrophoneAccess: () => ipcRenderer.invoke("request-microphone-access"),

@@ -553,6 +553,54 @@
       "description": "Debug 日志会持续写入磁盘，可能略微影响性能。不排查问题时请关闭。",
       "label": "注意"
     },
+    "trace": {
+      "clear": "清空",
+      "description": "查看每次快捷键触发后，转录/润色/粘贴是否成功以及具体错误。",
+      "emptyEvents": "选择左侧一条记录查看详细事件",
+      "emptySessions": "暂无调用记录",
+      "errorPrefix": "错误",
+      "eventLabel": "事件详情",
+      "models": {
+        "reasoning": "润色模型",
+        "transcription": "转录模型"
+      },
+      "phases": {
+        "paste": "粘贴",
+        "reasoning": "润色",
+        "recording": "录音",
+        "session": "会话",
+        "transcription": "转录"
+      },
+      "refresh": "刷新",
+      "runId": "运行ID",
+      "sessionLabel": "调用记录",
+      "showingLatest": "最多显示最近 {{count}} 条记录",
+      "startedAt": "开始时间",
+      "status": {
+        "cancelled": "已取消",
+        "error": "失败",
+        "skipped": "已跳过",
+        "start": "进行中",
+        "success": "成功",
+        "unknown": "未知"
+      },
+      "title": "调用诊断",
+      "toasts": {
+        "clearFailed": {
+          "description": "调用记录清空失败，请重试。",
+          "title": "清空失败"
+        },
+        "cleared": {
+          "description": "调用记录已从本地内存清除。",
+          "title": "已清空调用记录"
+        },
+        "loadFailed": {
+          "description": "请稍后重试。",
+          "title": "无法加载调用记录"
+        }
+      },
+      "updatedAt": "最近更新时间"
+    },
     "sharing": {
       "footer": "日志不包含 API Key 或敏感数据",
       "steps": {

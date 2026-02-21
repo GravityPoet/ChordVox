@@ -553,6 +553,54 @@
       "description": "Debug logging writes to disk continuously and may slightly affect performance. Disable when not troubleshooting.",
       "label": "Note"
     },
+    "trace": {
+      "clear": "Clear",
+      "description": "Check whether transcription, AI refinement, and paste succeeded for each hotkey run, and see exact errors.",
+      "emptyEvents": "Select a run on the left to view detailed events",
+      "emptySessions": "No call traces yet",
+      "errorPrefix": "Error",
+      "eventLabel": "Event details",
+      "models": {
+        "reasoning": "Refinement model",
+        "transcription": "Transcription model"
+      },
+      "phases": {
+        "paste": "Paste",
+        "reasoning": "Refinement",
+        "recording": "Recording",
+        "session": "Session",
+        "transcription": "Transcription"
+      },
+      "refresh": "Refresh",
+      "runId": "Run ID",
+      "sessionLabel": "Call traces",
+      "showingLatest": "Showing up to {{count}} recent runs",
+      "startedAt": "Started",
+      "status": {
+        "cancelled": "Cancelled",
+        "error": "Failed",
+        "skipped": "Skipped",
+        "start": "In progress",
+        "success": "Success",
+        "unknown": "Unknown"
+      },
+      "title": "Call Diagnostics",
+      "toasts": {
+        "clearFailed": {
+          "description": "Failed to clear call traces. Please try again.",
+          "title": "Clear failed"
+        },
+        "cleared": {
+          "description": "Call traces were cleared from local memory.",
+          "title": "Call traces cleared"
+        },
+        "loadFailed": {
+          "description": "Please try again in a moment.",
+          "title": "Couldn't load call traces"
+        }
+      },
+      "updatedAt": "Last updated"
+    },
     "sharing": {
       "footer": "Logs do not contain API keys or sensitive data",
       "steps": {

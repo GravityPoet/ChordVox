@@ -188,6 +188,46 @@ export interface FilePickResult {
   error?: string;
 }
 
+export interface CallTraceSession {
+  runId: string;
+  profileId: DictationProfileId;
+  startedAt: string | null;
+  updatedAt: string | null;
+  sessionStatus: "unknown" | "start" | "success" | "error" | "cancelled";
+  transcriptionStatus: "unknown" | "start" | "success" | "error" | "skipped";
+  reasoningStatus: "unknown" | "start" | "success" | "error" | "skipped";
+  pasteStatus: "unknown" | "start" | "success" | "error" | "skipped";
+  transcriptionModel: string | null;
+  transcriptionProvider: string | null;
+  reasoningModel: string | null;
+  reasoningProvider: string | null;
+  source: string | null;
+  error: string | null;
+  eventsCount: number;
+}
+
+export interface CallTraceEvent {
+  id: string;
+  timestamp: string;
+  level: string;
+  message: string;
+  scope: string | null;
+  source: string | null;
+  meta: {
+    runId?: string;
+    profileId?: DictationProfileId;
+    phase?: "session" | "recording" | "transcription" | "reasoning" | "paste";
+    status?: "start" | "success" | "error" | "cancelled" | "skipped";
+    source?: string;
+    transcriptionProvider?: string;
+    transcriptionModel?: string;
+    reasoningProvider?: string;
+    reasoningModel?: string;
+    error?: string;
+    [key: string]: any;
+  } | null;
+}
+
 export interface LicenseStatusResult {
   success: boolean;
   configured: boolean;
@@ -480,6 +520,14 @@ declare global {
         error?: string;
       }>;
       openLogsFolder: () => Promise<{ success: boolean; error?: string }>;
+      getCallTraceSessions: (
+        limit?: number
+      ) => Promise<{ success: boolean; sessions: CallTraceSession[]; error?: string }>;
+      getCallTraceEvents: (
+        runId: string,
+        limit?: number
+      ) => Promise<{ success: boolean; events: CallTraceEvent[]; error?: string }>;
+      clearCallTraces: () => Promise<{ success: boolean; error?: string }>;
 
       // FFmpeg availability
       checkFFmpegAvailability: () => Promise<FFmpegAvailabilityResult>;

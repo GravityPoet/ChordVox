@@ -66,6 +66,8 @@ class AudioManager {
     this.streamingFallbackRecorder = null;
     this.streamingFallbackChunks = [];
     this.activeHotkeyProfileId = "primary";
+    this.currentTraceId = null;
+    this.currentTraceStartedAt = null;
   }
 
   getWorkletBlobUrl() {
@@ -178,6 +180,47 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     return typeof value === "string" ? value : String(value);
   }
 
+  ensureTraceContext() {
+    if (this.currentTraceId) {
+      return { runId: this.currentTraceId, created: false };
+    }
+    const runId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    this.currentTraceId = runId;
+    this.currentTraceStartedAt = Date.now();
+    return { runId, created: true };
+  }
+
+  emitCallTrace(phase, status, details = {}, options = {}) {
+    const runId = options.runId || this.currentTraceId || this.ensureTraceContext().runId;
+    const payload = {
+      runId,
+      profileId: this.activeHotkeyProfileId,
+      phase,
+      status,
+      ...details,
+    };
+
+    if (status === "error") {
+      logger.error("CALL_TRACE", payload, "call-trace");
+    } else {
+      logger.info("CALL_TRACE", payload, "call-trace");
+    }
+
+    return runId;
+  }
+
+  clearTraceContext() {
+    this.currentTraceId = null;
+    this.currentTraceStartedAt = null;
+  }
+
+  finalizeTrace(status, details = {}) {
+    if (!this.currentTraceId) return;
+    const durationMs = this.currentTraceStartedAt ? Date.now() - this.currentTraceStartedAt : null;
+    this.emitCallTrace("session", status, { durationMs, ...details }, { runId: this.currentTraceId });
+    this.clearTraceContext();
+  }
+
   async getAudioConstraints() {
     const preferBuiltIn = localStorage.getItem("preferBuiltInMic") !== "false";
     const selectedDeviceId = localStorage.getItem("selectedMicDeviceId") || "";
@@ -256,6 +299,12 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         return false;
       }
 
+      const trace = this.ensureTraceContext();
+      if (trace.created) {
+        this.emitCallTrace("session", "start", { mode: "batch" }, { runId: trace.runId });
+      }
+      this.emitCallTrace("recording", "start", { mode: "batch" }, { runId: trace.runId });
+
       const constraints = await this.getAudioConstraints();
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
@@ -315,6 +364,9 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
       return true;
     } catch (error) {
+      this.emitCallTrace("recording", "error", { mode: "batch", error: error.message });
+      this.finalizeTrace("error", { error: error.message });
+
       let errorTitle = "Recording Error";
       let errorDescription = `Failed to access microphone: ${error.message}`;
 
@@ -349,6 +401,9 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
   cancelRecording() {
     if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
+      this.emitCallTrace("recording", "cancelled", { mode: "batch" });
+      this.finalizeTrace("cancelled", { reason: "user_cancelled" });
+
       this.mediaRecorder.onstop = () => {
         this.isRecording = false;
         this.isProcessing = false;
@@ -370,6 +425,8 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
   cancelProcessing() {
     if (this.isProcessing) {
+      this.emitCallTrace("session", "cancelled", { reason: "processing_cancelled" });
+      this.clearTraceContext();
       this.isProcessing = false;
       this.onStateChange?.({ isRecording: false, isProcessing: false });
       return true;
@@ -381,6 +438,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     const pipelineStart = performance.now();
 
     try {
+      const trace = this.ensureTraceContext();
+      if (trace.created) {
+        this.emitCallTrace("session", "start", { mode: "batch" }, { runId: trace.runId });
+      }
+
       const useLocalWhisper = this.getBooleanSetting("useLocalWhisper", false);
       const localProvider = this.getStringSetting("localTranscriptionProvider", "whisper");
       const whisperModel = this.getStringSetting("whisperModel", "base");
@@ -404,12 +466,22 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
       let result;
       let activeModel;
+      let transcriptionProvider;
       if (useLocalWhisper) {
+        transcriptionProvider = localProvider;
         if (localProvider === "nvidia") {
           activeModel = parakeetModel;
+          this.emitCallTrace("transcription", "start", {
+            transcriptionProvider,
+            transcriptionModel: activeModel,
+          });
           result = await this.processWithLocalParakeet(audioBlob, parakeetModel, metadata);
         } else if (localProvider === "sensevoice") {
           activeModel = senseVoiceModelPath || "sensevoice";
+          this.emitCallTrace("transcription", "start", {
+            transcriptionProvider,
+            transcriptionModel: activeModel,
+          });
           result = await this.processWithLocalSenseVoice(
             audioBlob,
             {
@@ -420,9 +492,14 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
           );
         } else {
           activeModel = whisperModel;
+          this.emitCallTrace("transcription", "start", {
+            transcriptionProvider,
+            transcriptionModel: activeModel,
+          });
           result = await this.processWithLocalWhisper(audioBlob, whisperModel, metadata);
         }
       } else if (isOpenWhisprCloudMode) {
+        transcriptionProvider = "openwhispr-cloud";
         if (!isSignedIn) {
           const err = new Error(
             "AriaKey Cloud requires sign-in. Please sign in again or switch to BYOK mode."
@@ -431,14 +508,42 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
           throw err;
         }
         activeModel = "openwhispr-cloud";
+        this.emitCallTrace("transcription", "start", {
+          transcriptionProvider,
+          transcriptionModel: activeModel,
+        });
         result = await this.processWithOpenWhisprCloud(audioBlob, metadata);
       } else {
+        transcriptionProvider = this.getStringSetting("cloudTranscriptionProvider", "openai");
         activeModel = this.getTranscriptionModel();
+        this.emitCallTrace("transcription", "start", {
+          transcriptionProvider,
+          transcriptionModel: activeModel,
+        });
         result = await this.processWithOpenAIAPI(audioBlob, metadata);
       }
 
+      this.emitCallTrace(
+        "transcription",
+        "success",
+        {
+          transcriptionProvider,
+          transcriptionModel: activeModel,
+          source: result?.source || null,
+          transcriptionProcessingDurationMs: result?.timings?.transcriptionProcessingDurationMs ?? null,
+          reasoningProcessingDurationMs: result?.timings?.reasoningProcessingDurationMs ?? null,
+        },
+        { runId: trace.runId }
+      );
+
       if (!this.isProcessing) {
+        this.finalizeTrace("cancelled", { reason: "processing_cancelled" });
         return;
+      }
+
+      if (result && typeof result === "object") {
+        result.traceId = trace.runId;
+        result.profileId = this.activeHotkeyProfileId;
       }
 
       this.onTranscriptionComplete?.(result);
@@ -467,6 +572,12 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       logger.info("Pipeline timing", timingData, "performance");
     } catch (error) {
       const errorAtMs = Math.round(performance.now() - pipelineStart);
+
+      this.emitCallTrace("transcription", "error", {
+        error: error.message,
+        errorAtMs,
+      });
+      this.finalizeTrace("error", { error: error.message, errorAtMs });
 
       logger.error(
         "Pipeline failed",
@@ -1013,6 +1124,9 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       logger.logReasoning("REASONING_SKIPPED", {
         reason: "No reasoning model selected",
       });
+      this.emitCallTrace("reasoning", "skipped", {
+        reason: "No reasoning model selected",
+      });
       return normalizedText;
     }
 
@@ -1027,6 +1141,10 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
     if (useReasoning) {
       try {
+        this.emitCallTrace("reasoning", "start", {
+          reasoningProvider,
+          reasoningModel,
+        });
         logger.logReasoning("SENDING_TO_REASONING", {
           preparedTextLength: normalizedText.length,
           model: reasoningModel,
@@ -1045,6 +1163,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
           processingTime: new Date().toISOString(),
         });
 
+        this.emitCallTrace("reasoning", "success", {
+          reasoningProvider,
+          reasoningModel,
+        });
+
         return result;
       } catch (error) {
         logger.logReasoning("REASONING_FAILED", {
@@ -1052,8 +1175,19 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
           stack: error.stack,
           fallbackToCleanup: true,
         });
+        this.emitCallTrace("reasoning", "error", {
+          reasoningProvider,
+          reasoningModel,
+          error: error.message,
+        });
         console.error(`Reasoning failed (${source}):`, error.message);
       }
+    }
+
+    if (!useReasoning) {
+      this.emitCallTrace("reasoning", "skipped", {
+        reason: "Reasoning not enabled or unavailable",
+      });
     }
 
     logger.logReasoning("USING_STANDARD_CLEANUP", {
@@ -1255,41 +1389,75 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       const reasoningStart = performance.now();
       const agentName = localStorage.getItem("agentName") || "";
       const cloudReasoningMode = this.getStringSetting("cloudReasoningMode", "openwhispr");
+      const reasoningModel =
+        cloudReasoningMode === "openwhispr"
+          ? "openwhispr-cloud"
+          : this.getStringSetting("reasoningModel", "");
+      const reasoningProvider =
+        cloudReasoningMode === "openwhispr"
+          ? "openwhispr-cloud"
+          : this.getStringSetting("reasoningProvider", "auto");
 
-      if (cloudReasoningMode === "openwhispr") {
-        const reasonResult = await withSessionRefresh(async () => {
-          const res = await window.electronAPI.cloudReason(processedText, {
-            agentName,
-            customDictionary: this.getCustomDictionaryArray(),
-            customPrompt: this.getCustomPrompt(),
-            language: this.getStringSetting("preferredLanguage", "auto"),
-            locale: localStorage.getItem("uiLanguage") || "en",
+      this.emitCallTrace("reasoning", "start", {
+        reasoningProvider,
+        reasoningModel,
+      });
+
+      try {
+        if (cloudReasoningMode === "openwhispr") {
+          const reasonResult = await withSessionRefresh(async () => {
+            const res = await window.electronAPI.cloudReason(processedText, {
+              agentName,
+              customDictionary: this.getCustomDictionaryArray(),
+              customPrompt: this.getCustomPrompt(),
+              language: this.getStringSetting("preferredLanguage", "auto"),
+              locale: localStorage.getItem("uiLanguage") || "en",
+            });
+            if (!res.success) {
+              const err = new Error(res.error || "Cloud reasoning failed");
+              err.code = res.code;
+              throw err;
+            }
+            return res;
           });
-          if (!res.success) {
-            const err = new Error(res.error || "Cloud reasoning failed");
-            err.code = res.code;
-            throw err;
-          }
-          return res;
-        });
 
-        if (reasonResult.success) {
-          processedText = reasonResult.text;
-        }
-      } else {
-        const reasoningModel = this.getStringSetting("reasoningModel", "");
-        if (reasoningModel) {
-          const result = await this.processWithReasoningModel(
-            processedText,
-            reasoningModel,
-            agentName
-          );
-          if (result) {
-            processedText = result;
+          if (reasonResult.success) {
+            processedText = reasonResult.text;
+          }
+
+          this.emitCallTrace("reasoning", "success", {
+            reasoningProvider,
+            reasoningModel: reasonResult.model || reasoningModel,
+          });
+        } else {
+          if (reasoningModel) {
+            const result = await this.processWithReasoningModel(
+              processedText,
+              reasoningModel,
+              agentName
+            );
+            if (result) {
+              processedText = result;
+            }
+            this.emitCallTrace("reasoning", "success", {
+              reasoningProvider,
+              reasoningModel,
+            });
           }
         }
+        timings.reasoningProcessingDurationMs = Math.round(performance.now() - reasoningStart);
+      } catch (error) {
+        this.emitCallTrace("reasoning", "error", {
+          reasoningProvider,
+          reasoningModel,
+          error: error.message,
+        });
+        throw error;
       }
-      timings.reasoningProcessingDurationMs = Math.round(performance.now() - reasoningStart);
+    } else {
+      this.emitCallTrace("reasoning", "skipped", {
+        reason: useReasoningModel ? "No text for reasoning" : "Reasoning disabled",
+      });
     }
 
     return {
@@ -1842,10 +2010,46 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
   }
 
   async safePaste(text, options = {}) {
+    const { traceId, source, ...pasteOptions } = options || {};
+    const runId = traceId || this.currentTraceId || null;
+
     try {
-      await window.electronAPI.pasteText(text, options);
+      this.emitCallTrace(
+        "paste",
+        "start",
+        { textLength: text?.length || 0, source: source || null },
+        runId ? { runId } : {}
+      );
+
+      await window.electronAPI.pasteText(text, pasteOptions);
+
+      this.emitCallTrace(
+        "paste",
+        "success",
+        { textLength: text?.length || 0, source: source || null },
+        runId ? { runId } : {}
+      );
+      this.finalizeTrace("success", { source: source || null });
       return true;
     } catch (error) {
+      this.emitCallTrace(
+        "paste",
+        "error",
+        {
+          source: source || null,
+          error:
+            error?.message ??
+            (typeof error?.toString === "function" ? error.toString() : String(error)),
+        },
+        runId ? { runId } : {}
+      );
+      this.finalizeTrace("error", {
+        source: source || null,
+        error:
+          error?.message ??
+          (typeof error?.toString === "function" ? error.toString() : String(error)),
+      });
+
       const message =
         error?.message ??
         (typeof error?.toString === "function" ? error.toString() : String(error));
@@ -1996,6 +2200,12 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         this.streamingStartInProgress = false;
         return false;
       }
+
+      const trace = this.ensureTraceContext();
+      if (trace.created) {
+        this.emitCallTrace("session", "start", { mode: "streaming" }, { runId: trace.runId });
+      }
+      this.emitCallTrace("recording", "start", { mode: "streaming" }, { runId: trace.runId });
 
       this.stopRequestedDuringStreamingStart = false;
 
@@ -2167,6 +2377,8 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     } catch (error) {
       this.streamingStartInProgress = false;
       this.stopRequestedDuringStreamingStart = false;
+      this.emitCallTrace("recording", "error", { mode: "streaming", error: error.message });
+      this.finalizeTrace("error", { mode: "streaming", error: error.message });
       logger.error("Failed to start streaming recording", { error: error.message }, "streaming");
 
       let errorTitle = "Streaming Error";
@@ -2311,6 +2523,19 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       const reasoningStart = performance.now();
       const agentName = localStorage.getItem("agentName") || "";
       const cloudReasoningMode = this.getStringSetting("cloudReasoningMode", "openwhispr");
+      const reasoningModel =
+        cloudReasoningMode === "openwhispr"
+          ? "openwhispr-cloud"
+          : this.getStringSetting("reasoningModel", "");
+      const reasoningProvider =
+        cloudReasoningMode === "openwhispr"
+          ? "openwhispr-cloud"
+          : this.getStringSetting("reasoningProvider", "auto");
+
+      this.emitCallTrace("reasoning", "start", {
+        reasoningProvider,
+        reasoningModel,
+      });
 
       try {
         if (cloudReasoningMode === "openwhispr") {
@@ -2342,8 +2567,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
             },
             "streaming"
           );
+          this.emitCallTrace("reasoning", "success", {
+            reasoningProvider,
+            reasoningModel: reasonResult.model || reasoningModel,
+          });
         } else {
-          const reasoningModel = this.getStringSetting("reasoningModel", "");
           if (reasoningModel) {
             const result = await this.processWithReasoningModel(
               finalText,
@@ -2358,15 +2586,28 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
               { reasoningDurationMs: Math.round(performance.now() - reasoningStart) },
               "streaming"
             );
+            this.emitCallTrace("reasoning", "success", {
+              reasoningProvider,
+              reasoningModel,
+            });
           }
         }
       } catch (reasonError) {
+        this.emitCallTrace("reasoning", "error", {
+          reasoningProvider,
+          reasoningModel,
+          error: reasonError.message,
+        });
         logger.error(
           "Streaming reasoning failed, using raw text",
           { error: reasonError.message },
           "streaming"
         );
       }
+    } else {
+      this.emitCallTrace("reasoning", "skipped", {
+        reason: useReasoningModel ? "No text for reasoning" : "Reasoning disabled",
+      });
     }
 
     // If streaming produced no text, fall back to batch transcription
@@ -2391,10 +2632,17 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
     if (finalText) {
       const tBeforePaste = performance.now();
+      this.emitCallTrace("transcription", "success", {
+        source: "deepgram-streaming",
+        transcriptionProvider: "deepgram-streaming",
+        transcriptionModel: "deepgram-streaming",
+      });
       this.onTranscriptionComplete?.({
         success: true,
         text: finalText,
         source: "deepgram-streaming",
+        traceId: this.currentTraceId,
+        profileId: this.activeHotkeyProfileId,
       });
 
       logger.info(
@@ -2405,6 +2653,15 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         },
         "streaming"
       );
+    } else {
+      this.emitCallTrace("transcription", "error", {
+        source: "deepgram-streaming",
+        error: "No text transcribed from streaming session",
+      });
+      this.finalizeTrace("error", {
+        source: "deepgram-streaming",
+        error: "No text transcribed from streaming session",
+      });
     }
 
     this.isProcessing = false;
