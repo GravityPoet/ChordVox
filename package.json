@@ -1,6 +1,6 @@
 {
   "name": "ariakey",
-  "version": "1.5.13",
+  "version": "1.5.14",
   "description": "AriaKey - AI Voice Keyboard. Dictate & AI Refine Offline.",
   "main": "main.js",
   "private": true,
