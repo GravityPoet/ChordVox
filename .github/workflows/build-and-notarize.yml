@@ -239,7 +239,8 @@ jobs:
           set -euo pipefail
           EXTRA_ARGS=""
           if [ "${{ steps.signing.outputs.enabled }}" != "true" ]; then
-            EXTRA_ARGS="--config.mac.identity=null --config.mac.notarize=false --config.mac.hardenedRuntime=false"
+            # Use ad-hoc signing for unsigned distribution, avoids broken app bundles.
+            EXTRA_ARGS="--config.mac.identity=- --config.mac.notarize=false --config.mac.hardenedRuntime=false"
           fi
           npm run build:mac -- --${{ matrix.arch }} --publish never $EXTRA_ARGS
         env:
