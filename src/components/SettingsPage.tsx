@@ -6,6 +6,7 @@ import { Badge } from "./ui/badge";
 import {
   RefreshCw,
   Download,
+  Upload,
   Command,
   Mic,
   Shield,
@@ -1243,6 +1244,208 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
       },
     });
   }, [isRemovingModels, cachePathHint, showConfirmDialog, showAlertDialog, t]);
+
+  const collectSettingsSnapshot = useCallback(async () => {
+    const localStorageData: Record<string, string> = {};
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+      const value = localStorage.getItem(key);
+      if (value !== null) {
+        localStorageData[key] = value;
+      }
+    }
+
+    const dictionary =
+      (await window.electronAPI?.getDictionary?.().catch(() => [])) ||
+      [];
+    const dictationKey = await window.electronAPI?.getDictationKey?.().catch(() => null);
+    const activationMode = await window.electronAPI?.getActivationMode?.().catch(() => null);
+    const licenseApiBaseUrl = await window.electronAPI
+      ?.getLicenseApiBaseUrl?.()
+      .catch(() => null);
+
+    return {
+      schemaVersion: 1,
+      app: "AriaKey",
+      exportedAt: new Date().toISOString(),
+      appVersion: currentVersion || (await getAppVersion()) || null,
+      localStorage: localStorageData,
+      dictionary: Array.isArray(dictionary) ? dictionary : [],
+      runtime: {
+        dictationKey,
+        activationMode,
+        licenseApiBaseUrl,
+      },
+    };
+  }, [currentVersion, getAppVersion]);
+
+  const handleExportSettings = useCallback(async () => {
+    if (!window.electronAPI?.exportSettingsFile) return;
+    try {
+      const snapshot = await collectSettingsSnapshot();
+      const result = await window.electronAPI.exportSettingsFile(snapshot);
+      if (!result.success) {
+        throw new Error(result.error || "Failed to export settings");
+      }
+      if (result.cancelled) {
+        return;
+      }
+      showAlertDialog({
+        title: t("settingsPage.developer.settingsTransfer.exportSuccessTitle"),
+        description: t("settingsPage.developer.settingsTransfer.exportSuccessDescription", {
+          path: result.filePath || "",
+        }),
+      });
+    } catch (error) {
+      showAlertDialog({
+        title: t("settingsPage.developer.settingsTransfer.exportFailedTitle"),
+        description: t("settingsPage.developer.settingsTransfer.exportFailedDescription"),
+      });
+    }
+  }, [collectSettingsSnapshot, showAlertDialog, t]);
+
+  const applyImportedSettings = useCallback(
+    async (data: any) => {
+      if (!data || typeof data !== "object") {
+        throw new Error("Invalid settings payload");
+      }
+
+      const localStorageData =
+        data.localStorage && typeof data.localStorage === "object" ? data.localStorage : data;
+
+      if (!localStorageData || typeof localStorageData !== "object") {
+        throw new Error("Invalid localStorage data");
+      }
+
+      localStorage.clear();
+      Object.entries(localStorageData).forEach(([key, value]) => {
+        localStorage.setItem(key, String(value ?? ""));
+      });
+
+      const parsedDictionary = (() => {
+        if (Array.isArray(data.dictionary)) return data.dictionary;
+        const raw = localStorageData.customDictionary;
+        if (Array.isArray(raw)) return raw;
+        if (typeof raw === "string") {
+          try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : null;
+          } catch {
+            return null;
+          }
+        }
+        return null;
+      })();
+
+      if (parsedDictionary && window.electronAPI?.setDictionary) {
+        await window.electronAPI.setDictionary(
+          parsedDictionary
+            .filter((word: any) => typeof word === "string")
+            .map((word: string) => word.trim())
+            .filter(Boolean)
+        );
+      }
+
+      const dictationKey = data?.runtime?.dictationKey || localStorageData.dictationKey;
+      if (typeof dictationKey === "string" && window.electronAPI?.saveDictationKey) {
+        await window.electronAPI.saveDictationKey(dictationKey);
+      }
+
+      const activationMode = data?.runtime?.activationMode || localStorageData.activationMode;
+      if (
+        (activationMode === "tap" || activationMode === "push") &&
+        window.electronAPI?.saveActivationMode
+      ) {
+        await window.electronAPI.saveActivationMode(activationMode);
+      }
+
+      const licenseApiBaseUrl =
+        data?.runtime?.licenseApiBaseUrl || localStorageData.licenseApiBaseUrl;
+      if (typeof licenseApiBaseUrl === "string" && window.electronAPI?.saveLicenseApiBaseUrl) {
+        await window.electronAPI.saveLicenseApiBaseUrl(licenseApiBaseUrl);
+      }
+
+      if (window.electronAPI?.saveAllKeysToEnv) {
+        await window.electronAPI.saveAllKeysToEnv();
+      }
+
+      if (window.electronAPI?.syncStartupPreferences) {
+        const localProviderRaw = String(localStorageData.localTranscriptionProvider || "whisper");
+        const localProvider: LocalTranscriptionProvider =
+          localProviderRaw === "nvidia" || localProviderRaw === "sensevoice"
+            ? localProviderRaw
+            : "whisper";
+        const useLocalWhisperValue = String(localStorageData.useLocalWhisper || "false") === "true";
+        const reasoningProviderValue = String(localStorageData.reasoningProvider || "openai");
+
+        let model = String(localStorageData.whisperModel || "base");
+        if (localProvider === "nvidia") {
+          model = String(localStorageData.parakeetModel || "");
+        } else if (localProvider === "sensevoice") {
+          model = String(localStorageData.senseVoiceModelPath || "");
+        }
+
+        await window.electronAPI.syncStartupPreferences({
+          useLocalWhisper: useLocalWhisperValue,
+          localTranscriptionProvider: localProvider,
+          model: model || undefined,
+          senseVoiceBinaryPath:
+            localProvider === "sensevoice" && localStorageData.senseVoiceBinaryPath
+              ? String(localStorageData.senseVoiceBinaryPath)
+              : undefined,
+          reasoningProvider: reasoningProviderValue,
+          reasoningModel:
+            reasoningProviderValue === "local" && localStorageData.reasoningModel
+              ? String(localStorageData.reasoningModel)
+              : undefined,
+        });
+      }
+    },
+    []
+  );
+
+  const handleImportSettings = useCallback(async () => {
+    if (!window.electronAPI?.importSettingsFile) return;
+    try {
+      const result = await window.electronAPI.importSettingsFile();
+      if (!result.success) {
+        throw new Error(result.error || "Failed to import settings");
+      }
+      if (result.cancelled) {
+        return;
+      }
+      const importedData = result.data;
+      showConfirmDialog({
+        title: t("settingsPage.developer.settingsTransfer.importConfirmTitle"),
+        description: t("settingsPage.developer.settingsTransfer.importConfirmDescription"),
+        confirmText: t("settingsPage.developer.settingsTransfer.importConfirmButton"),
+        onConfirm: async () => {
+          try {
+            await applyImportedSettings(importedData);
+            showAlertDialog({
+              title: t("settingsPage.developer.settingsTransfer.importSuccessTitle"),
+              description: t("settingsPage.developer.settingsTransfer.importSuccessDescription"),
+            });
+            setTimeout(() => {
+              window.location.reload();
+            }, 800);
+          } catch (error) {
+            showAlertDialog({
+              title: t("settingsPage.developer.settingsTransfer.importFailedTitle"),
+              description: t("settingsPage.developer.settingsTransfer.importFailedDescription"),
+            });
+          }
+        },
+        variant: "destructive",
+      });
+    } catch (error) {
+      showAlertDialog({
+        title: t("settingsPage.developer.settingsTransfer.importFailedTitle"),
+        description: t("settingsPage.developer.settingsTransfer.importFailedDescription"),
+      });
+    }
+  }, [applyImportedSettings, showAlertDialog, showConfirmDialog, t]);
 
   const { isSignedIn, isLoaded, user } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -2679,6 +2882,26 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                           {isRemovingModels
                             ? t("settingsPage.developer.removing")
                             : t("settingsPage.developer.clearCache")}
+                        </Button>
+                      </div>
+                    </SettingsRow>
+                  </SettingsPanelRow>
+                </SettingsPanel>
+
+                <SettingsPanel>
+                  <SettingsPanelRow>
+                    <SettingsRow
+                      label={t("settingsPage.developer.settingsTransfer.title")}
+                      description={t("settingsPage.developer.settingsTransfer.description")}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" onClick={handleExportSettings}>
+                          <Download className="mr-1.5 h-3.5 w-3.5" />
+                          {t("settingsPage.developer.settingsTransfer.export")}
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={handleImportSettings}>
+                          <Upload className="mr-1.5 h-3.5 w-3.5" />
+                          {t("settingsPage.developer.settingsTransfer.import")}
                         </Button>
                       </div>
                     </SettingsRow>

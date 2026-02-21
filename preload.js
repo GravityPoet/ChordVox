@@ -217,6 +217,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   saveAllKeysToEnv: () => ipcRenderer.invoke("save-all-keys-to-env"),
   syncStartupPreferences: (prefs) => ipcRenderer.invoke("sync-startup-preferences", prefs),
+  exportSettingsFile: (payload) => ipcRenderer.invoke("export-settings-file", payload),
+  importSettingsFile: () => ipcRenderer.invoke("import-settings-file"),
 
   // Local reasoning
   processLocalReasoning: (text, modelId, agentName, config) =>
