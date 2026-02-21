@@ -218,7 +218,7 @@ const VALID_CLOUD_PROVIDER_IDS = CLOUD_PROVIDER_TABS.map((p) => p.id);
 const LOCAL_PROVIDER_TABS: Array<{ id: string; name: string; disabled?: boolean }> = [
   { id: "whisper", name: "OpenAI Whisper" },
   { id: "nvidia", name: "NVIDIA Parakeet" },
-  { id: "sensevoice", name: "SenseVoice (External)" },
+  { id: "sensevoice", name: "SenseVoice" },
 ];
 
 interface ModeToggleProps {
