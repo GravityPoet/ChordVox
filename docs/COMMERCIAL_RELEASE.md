@@ -1,4 +1,11 @@
-# Commercial Release Checklist
+# Commercial Release Checklist (Internal Only)
+
+> [!WARNING]
+> Internal use only.  
+> Do not publish this document to customers, public website pages, release notes, or marketing materials.
+>
+> 仅供内部使用。  
+> 本文档不得对外公开，不作为客户运营说明或公开售卖说明。
 
 ## 1) GitHub Releases automation
 
