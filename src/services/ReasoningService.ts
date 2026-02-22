@@ -1111,8 +1111,9 @@ class ReasoningService extends BaseReasoningService {
       const endpoint = `${bedrockBase}/model/${model}/converse`;
 
       const requestBody = JSON.stringify({
+        system: [{ text: systemPrompt }],
         messages: [
-          { role: "user", content: [{ text: `${systemPrompt}\n\n${userPrompt}` }] },
+          { role: "user", content: [{ text: userPrompt }] },
         ],
         inferenceConfig: {
           temperature: config.temperature ?? 0.3,

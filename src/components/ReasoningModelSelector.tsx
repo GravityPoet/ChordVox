@@ -273,6 +273,9 @@ export default function ReasoningModelSelector({
           icon: getProviderIcon("bedrock"),
         }));
 
+      // Sort bedrock models descending by ID, so newer versions (v2, 20241022) appear first.
+      models.sort((a: any, b: any) => b.value.localeCompare(a.value));
+
       if (models.length > 0) {
         setProviderModelsCache((prev) => ({ ...prev, bedrock: models }));
         providerFetchState.current.bedrock = "done";
@@ -435,6 +438,10 @@ export default function ReasoningModelSelector({
               ...(humanName && humanName !== value ? [humanName] : []),
               ...(summary && summary !== humanName ? [summary] : []),
             ];
+
+            // Extract creation timestamp for sorting (OpenAI returns 'created' as unix seconds)
+            const created = typeof item.created === "number" ? item.created : 0;
+
             return {
               value,
               // For custom endpoints, always surface raw model ID as the primary text.
@@ -445,9 +452,18 @@ export default function ReasoningModelSelector({
               icon,
               ownedBy,
               invertInDark,
-            } as CloudModelOption;
+              _created: created,
+            } as CloudModelOption & { _created: number };
           })
-          .filter(Boolean) as CloudModelOption[];
+          .filter(Boolean) as (CloudModelOption & { _created: number })[];
+
+        // Sort custom endpoint models by creation time, newest first. If no timestamp exists, fallback to reverse alphabetical.
+        mappedModels.sort((a, b) => {
+          if (a._created > 0 || b._created > 0) {
+            return b._created - a._created;
+          }
+          return b.value.localeCompare(a.value);
+        });
 
         if (isMountedRef.current && latestReasoningBaseRef.current === normalizedBase) {
           setCustomModelOptions(mappedModels);
@@ -613,8 +629,16 @@ export default function ReasoningModelSelector({
         })
         .filter(Boolean) as (CloudModelOption & { _created: number })[];
 
-      // Sort by creation time, newest first
-      mappedModels.sort((a, b) => b._created - a._created);
+      // Sort strategy:
+      // 1. If APIs return a 'created' timestamp (OpenAI/Groq), sort chronologically (newest first).
+      // 2. If no timestamp exists (Gemini/Anthropic), fallback to reverse alphabetical sorting
+      //    so newer version numbers (e.g., 2.5 vs 1.5 or 3.5 vs 3) naturally float to the top.
+      mappedModels.sort((a, b) => {
+        if (a._created > 0 || b._created > 0) {
+          return b._created - a._created;
+        }
+        return b.value.localeCompare(a.value);
+      });
 
       if (mappedModels.length > 0) {
         if (isMountedRef.current) {
