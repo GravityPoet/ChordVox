@@ -529,7 +529,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         transcriptionProvider = "openwhispr-cloud";
         if (!isSignedIn) {
           const err = new Error(
-            "AriaKey Cloud requires sign-in. Please sign in again or switch to BYOK mode."
+            "ChordVox Cloud requires sign-in. Please sign in again or switch to BYOK mode."
           );
           err.code = "AUTH_REQUIRED";
           throw err;
@@ -2442,7 +2442,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       } else if (error.code === "AUTH_EXPIRED" || error.code === "AUTH_REQUIRED") {
         errorTitle = "Sign-in Required";
         errorDescription =
-          "Your AriaKey Cloud session is unavailable. Please sign in again from Settings.";
+          "Your ChordVox Cloud session is unavailable. Please sign in again from Settings.";
       }
 
       this.onError?.({

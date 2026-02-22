@@ -32,7 +32,7 @@ class LicenseManager {
 
   _refreshConfig() {
     this.apiBaseUrl = (process.env.LICENSE_API_BASE_URL || "").trim().replace(/\/+$/, "");
-    this.productId = (process.env.LICENSE_PRODUCT_ID || "ariakey-pro").trim();
+    this.productId = (process.env.LICENSE_PRODUCT_ID || "chordvox-pro").trim();
     this.apiToken = (process.env.LICENSE_API_TOKEN || "").trim();
     this.timeoutMs = parsePositiveInt(process.env.LICENSE_API_TIMEOUT_MS, DEFAULT_TIMEOUT_MS);
     this.offlineGraceHours = parsePositiveInt(

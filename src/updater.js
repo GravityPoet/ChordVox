@@ -19,7 +19,7 @@ class UpdateManager {
 
   getUpdateRepo() {
     const owner = (process.env.OPENWHISPR_UPDATE_OWNER || "GravityPoet").trim();
-    const repo = (process.env.OPENWHISPR_UPDATE_REPO || "AriaKey").trim();
+    const repo = (process.env.OPENWHISPR_UPDATE_REPO || "ChordVox").trim();
     return { owner, repo };
   }
 
@@ -56,7 +56,7 @@ class UpdateManager {
         url,
         {
           headers: {
-            "User-Agent": `AriaKey-Updater/${app.getVersion()}`,
+            "User-Agent": `ChordVox-Updater/${app.getVersion()}`,
             Accept: "application/vnd.github+json",
           },
           timeout: 8000,

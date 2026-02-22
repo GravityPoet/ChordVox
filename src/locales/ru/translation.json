@@ -1,9 +1,9 @@
 {
   "app": {
-    "name": "AriaKey",
-    "loading": "Загрузка AriaKey...",
+    "name": "ChordVox",
+    "loading": "Загрузка ChordVox...",
     "oauth": {
-      "redirectTitle": "Перенаправление в AriaKey",
+      "redirectTitle": "Перенаправление в ChordVox",
       "closeTab": "Можете закрыть эту вкладку"
     },
     "buttons": {
@@ -36,7 +36,7 @@
       "sectionTitle": "Язык",
       "sectionDescription": "Настройте язык интерфейса и транскрипции независимо друг от друга",
       "uiLabel": "Язык интерфейса",
-      "uiDescription": "Выберите язык интерфейса AriaKey",
+      "uiDescription": "Выберите язык интерфейса ChordVox",
       "transcriptionLabel": "Язык транскрипции",
       "transcriptionDescription": "Выберите язык, на котором вы говорите, для более точной транскрипции",
       "uiOption": {
@@ -59,12 +59,12 @@
       "hide": "Скрыть панель диктовки"
     },
     "openControlPanel": "Открыть панель управления",
-    "quit": "Закрыть AriaKey",
-    "tooltip": "AriaKey — голосовая диктовка"
+    "quit": "Закрыть ChordVox",
+    "tooltip": "ChordVox — голосовая диктовка"
   },
   "menu": {
-    "appLabel": "AriaKey",
-    "quit": "Закрыть AriaKey",
+    "appLabel": "ChordVox",
+    "quit": "Закрыть ChordVox",
     "speech": "Речь",
     "help": "Справка",
     "learnMore": "Узнать больше",
@@ -81,8 +81,8 @@
       "message": "Не удалось открыть ссылку в браузере:\n{{url}}\n\nОшибка: {{error}}"
     },
     "loadFailure": {
-      "title": "AriaKey не удалось загрузить",
-      "message": "AriaKey не смог загрузить интерфейс.",
+      "title": "ChordVox не удалось загрузить",
+      "message": "ChordVox не смог загрузить интерфейс.",
       "detail": {
         "window": "Окно: {{windowName}}",
         "error": "Ошибка {{errorCode}}: {{errorDescription}}",
@@ -93,17 +93,17 @@
   },
   "startup": {
     "error": {
-      "title": "Ошибка запуска AriaKey",
+      "title": "Ошибка запуска ChordVox",
       "message": "Не удалось запустить приложение:\n\n{{error}}\n\nПожалуйста, сообщите об этой проблеме."
     },
     "globeHotkey": {
       "title": "Клавиша Globe недоступна",
-      "message": "AriaKey не смог активировать горячую клавишу Globe.",
+      "message": "ChordVox не смог активировать горячую клавишу Globe.",
       "details": {
         "unknown": "Неизвестная ошибка при запуске слушателя клавиши Globe.",
         "fallback": "Сочетание с клавишей Globe будет отключено; остальные горячие клавиши продолжат работать.",
         "devHint": "Выполните `npm run compile:globe` и пересоберите приложение для генерации бинарного файла слушателя.",
-        "reinstallHint": "Попробуйте переустановить AriaKey или обратитесь в поддержку, если проблема сохраняется."
+        "reinstallHint": "Попробуйте переустановить ChordVox или обратитесь в поддержку, если проблема сохраняется."
       }
     }
   },
@@ -123,9 +123,9 @@
     "accessibility": "Настройки универсального доступа недоступны на этой платформе."
   },
   "titleBar": {
-    "quitTitle": "Закрыть AriaKey",
-    "quitConfirmTitle": "Закрыть AriaKey?",
-    "quitConfirmDescription": "Это закроет AriaKey и остановит фоновые процессы.",
+    "quitTitle": "Закрыть ChordVox",
+    "quitConfirmTitle": "Закрыть ChordVox?",
+    "quitConfirmDescription": "Это закроет ChordVox и остановит фоновые процессы.",
     "quit": "Закрыть",
     "cancel": "Отмена"
   },
@@ -201,7 +201,7 @@
       "accessibilityTitle": "Универсальный доступ",
       "accessibilityDescription": "Для вставки текста в приложения",
       "testAndGrant": "Проверить и предоставить",
-      "requiredForApp": "Необходимо для работы AriaKey",
+      "requiredForApp": "Необходимо для работы ChordVox",
       "microphoneRequired": "Требуется доступ к микрофону"
     },
     "transcription": {
@@ -229,7 +229,7 @@
       "problemTitle": "Проблема с обновлением",
       "problemDescription": "Не удалось завершить обновление. Попробуйте позже.",
       "installTitle": "Установить обновление",
-      "installDescription": "AriaKey перезапустится для применения обновления. Текущая работа будет сохранена.",
+      "installDescription": "ChordVox перезапустится для применения обновления. Текущая работа будет сохранена.",
       "couldNotInstallTitle": "Не удалось установить обновление",
       "couldNotInstallDescription": "Что-то пошло не так. Попробуйте ещё раз.",
       "couldNotDownloadTitle": "Не удалось скачать обновление",
@@ -275,8 +275,8 @@
       "toStart": "чтобы начать"
     },
     "cloudMigration": {
-      "title": "Добро пожаловать в AriaKey Pro",
-      "description": "Ваш 7-дневный бесплатный пробный период активирован! Мы переключили транскрипцию на AriaKey Cloud для более быстрых и точных результатов. Ваши предыдущие настройки сохранены — вы можете вернуться к ним в любой момент в настройках.",
+      "title": "Добро пожаловать в ChordVox Pro",
+      "description": "Ваш 7-дневный бесплатный пробный период активирован! Мы переключили транскрипцию на ChordVox Cloud для более быстрых и точных результатов. Ваши предыдущие настройки сохранены — вы можете вернуться к ним в любой момент в настройках.",
       "viewSettings": "Открыть настройки"
     },
     "aiCta": {
@@ -424,7 +424,7 @@
       "micErrors": {
         "accessFailed": "Не удалось получить доступ к микрофону. Попробуйте ещё раз.",
         "noMicrophones": "Микрофоны не обнаружены. Подключите микрофон или выберите его в {{settingsPath}}.",
-        "permissionDenied": "Разрешение отклонено. Откройте {{privacyPath}} и разрешите доступ для AriaKey.",
+        "permissionDenied": "Разрешение отклонено. Откройте {{privacyPath}} и разрешите доступ для ChordVox.",
         "couldNotStart": "Не удалось запустить выбранный микрофон. Выберите устройство ввода в {{settingsPath}} и повторите тест.",
         "noActiveInput": "Активное устройство ввода звука не найдено. Выберите микрофон в {{settingsPath}}.",
         "unknown": "Ошибка доступа к микрофону: {{error}}. Выберите другое устройство ввода и попробуйте снова.",
@@ -453,8 +453,8 @@
         "accessibilityNeeded": "Предоставьте разрешения универсального доступа в системных настройках для автоматической вставки текста.",
         "windowsReady": "Windows не требует специальных разрешений для автоматической вставки. Всё готово!",
         "linuxReadyWithMethod": "Автоматическая вставка доступна через {{method}}. Всё готово!",
-        "waylandClipboardMode": "Автоматическая вставка недоступна в этой сессии Wayland. AriaKey скопирует текст в буфер обмена, и вы сможете вставить его с помощью Ctrl+V.",
-        "optionalPasteTool": "Для автоматической вставки установите {{tool}}:\n\n{{installCmd}}{{waylandNote}}\n\nБез этого инструмента AriaKey будет копировать текст в буфер обмена, и вы сможете вставить его с помощью Ctrl+V."
+        "waylandClipboardMode": "Автоматическая вставка недоступна в этой сессии Wayland. ChordVox скопирует текст в буфер обмена, и вы сможете вставить его с помощью Ctrl+V.",
+        "optionalPasteTool": "Для автоматической вставки установите {{tool}}:\n\n{{installCmd}}{{waylandNote}}\n\nБез этого инструмента ChordVox будет копировать текст в буфер обмена, и вы сможете вставить его с помощью Ctrl+V."
       },
       "alerts": {
         "accessibilityNeeded": "Требуются разрешения универсального доступа! Предоставьте их в системных настройках."
@@ -467,7 +467,7 @@
         "defaultPasteTool": "xdotool",
         "xdotoolXwayland": "xdotool (приложения XWayland)"
       },
-      "accessibilityTestText": "Тест универсального доступа AriaKey",
+      "accessibilityTestText": "Тест универсального доступа ChordVox",
       "warning": {
         "messages": {
           "macos": "Проверьте настройки звука, чтобы выбрать устройство ввода",
@@ -537,7 +537,7 @@
       "continueWithGoogle": "Продолжить с Google"
     },
     "welcomeSubtitle": "Диктуйте где угодно голосом",
-    "welcomeTitle": "Добро пожаловать в AriaKey"
+    "welcomeTitle": "Добро пожаловать в ChordVox"
   },
   "cleanupPrompt": "Очистка",
   "developerSection": {
@@ -742,10 +742,10 @@
     "recheckChecking": "Проверка...",
     "title": "Автоматическая вставка",
     "usingMethodPrefix": "Используется",
-    "waylandClipboardDescription": "Автоматическая вставка недоступна в этой сессии Wayland. AriaKey скопирует текст в буфер обмена, и вы сможете вставить его вручную с помощью Ctrl+V.",
+    "waylandClipboardDescription": "Автоматическая вставка недоступна в этой сессии Wayland. ChordVox скопирует текст в буфер обмена, и вы сможете вставить его вручную с помощью Ctrl+V.",
     "waylandClipboardTitle": "Режим буфера обмена в Wayland",
     "windowsReady": "Windows поддерживает автоматическую вставку из коробки. Настройка не требуется!",
-    "withoutToolPrefix": "Без этого инструмента AriaKey скопирует текст в буфер обмена. Вы сможете вставить его вручную с помощью Ctrl+V.",
+    "withoutToolPrefix": "Без этого инструмента ChordVox скопирует текст в буфер обмена. Вы сможете вставить его вручную с помощью Ctrl+V.",
     "xwaylandAppsOnly": "автоматическая вставка работает только для приложений XWayland"
   },
   "promptStudio": {
@@ -795,7 +795,7 @@
       "none": "Нет",
       "outputLabel": "Результат",
       "processing": "Обработка...",
-      "openwhisprCloud": "AriaKey Cloud",
+      "openwhisprCloud": "ChordVox Cloud",
       "providerLabel": "Провайдер",
       "run": "Запустить тест"
     },
@@ -981,13 +981,13 @@
       "description": "Очищайте транскрипции, обрабатывайте команды и исправляйте ошибки, сохраняя вашу манеру речи.",
       "enableTextCleanup": "Включить очистку текста",
       "enableTextCleanupDescription": "ИИ улучшает качество транскрипции",
-      "openwhisprCloud": "AriaKey Cloud",
+      "openwhisprCloud": "ChordVox Cloud",
       "openwhisprCloudDescription": "Просто работает. Настройка не требуется.",
       "title": "ИИ-улучшение текста",
       "toasts": {
         "switchedCloud": {
-          "description": "Улучшение текста будет использовать облачный сервис AriaKey.",
-          "title": "Переключено на AriaKey Cloud"
+          "description": "Улучшение текста будет использовать облачный сервис ChordVox.",
+          "title": "Переключено на ChordVox Cloud"
         },
         "switchedCustom": {
           "description": "Настройте собственного провайдера и API-ключ.",
@@ -1035,7 +1035,7 @@
       "howItWorksDescription": "Добавленные слова включаются в промпт ИИ, чтобы модель распознавала и сохраняла эти термины при очистке транскрипции.",
       "howItWorksTitle": "Как это работает",
       "noWords": "Слова ещё не добавлены",
-      "placeholder": "например, AriaKey, Kubernetes, Др. Мартинез...",
+      "placeholder": "например, ChordVox, Kubernetes, Др. Мартинез...",
       "pressEnterToAdd": "Нажмите Enter для добавления",
       "removeWord": "Удалить слово",
       "tipDescription": "Добавляйте имена собственные, технические термины или любые слова, которые могут быть распознаны неправильно.",
@@ -1048,7 +1048,7 @@
       "appearance": {
         "auto": "Авто",
         "dark": "Тёмная",
-        "description": "Управляйте внешним видом AriaKey",
+        "description": "Управляйте внешним видом ChordVox",
         "light": "Светлая",
         "theme": "Тема",
         "themeDescription": "Выберите светлую, тёмную тему или следуйте системным настройкам",
@@ -1076,7 +1076,7 @@
       },
       "startup": {
         "launchAtLogin": "Запускать при входе",
-        "launchAtLoginDescription": "Автоматически запускать AriaKey при входе в систему",
+        "launchAtLoginDescription": "Автоматически запускать ChordVox при входе в систему",
         "title": "Автозапуск"
       },
       "updates": {
@@ -1108,7 +1108,7 @@
           },
           "installUpdate": {
             "confirmText": "Установить и перезапустить",
-            "description": "AriaKey перезапустится для применения обновления.",
+            "description": "ChordVox перезапустится для применения обновления.",
             "title": "Установить обновление"
           },
           "noUpdates": {
@@ -1139,13 +1139,13 @@
     "permissions": {
       "accessibilityDescription": "Необходимо для автоматической вставки после транскрипции",
       "accessibilityTitle": "Универсальный доступ",
-      "description": "Проверяйте и управляйте системными разрешениями, необходимыми для работы AriaKey",
+      "description": "Проверяйте и управляйте системными разрешениями, необходимыми для работы ChordVox",
       "microphoneDescription": "Необходимо для записи голоса и диктовки",
       "microphoneTitle": "Микрофон",
       "resetAccessibility": {
-        "description": "AriaKey будет удалён из разрешений универсального доступа. Вам потребуется повторно предоставить доступ в Системные настройки > Конфиденциальность и безопасность > Универсальный доступ.",
+        "description": "ChordVox будет удалён из разрешений универсального доступа. Вам потребуется повторно предоставить доступ в Системные настройки > Конфиденциальность и безопасность > Универсальный доступ.",
         "label": "Сбросить разрешения универсального доступа",
-        "rowDescription": "Исправьте проблемы после переустановки или пересборки приложения, удалив и повторно добавив AriaKey в системных настройках",
+        "rowDescription": "Исправьте проблемы после переустановки или пересборки приложения, удалив и повторно добавив ChordVox в системных настройках",
         "title": "Сбросить разрешения универсального доступа"
       },
       "test": "Тест",
@@ -1160,7 +1160,7 @@
       "description": "Контролируйте, какие данные покидают ваше устройство. По умолчанию всё отключено.",
       "title": "Конфиденциальность",
       "usageAnalytics": "Аналитика использования",
-      "usageAnalyticsDescription": "Помогите нам улучшить AriaKey, делясь анонимными метриками производительности. Мы никогда не отправляем содержимое транскрипций — только данные о времени и ошибках."
+      "usageAnalyticsDescription": "Помогите нам улучшить ChordVox, делясь анонимными метриками производительности. Мы никогда не отправляем содержимое транскрипций — только данные о времени и ошибках."
     },
     "prompts": {
       "description": "Просматривайте, настраивайте и тестируйте единый системный промпт, который управляет очисткой текста и обнаружением инструкций",
@@ -1169,14 +1169,14 @@
     "transcription": {
       "customSetup": "Пользовательская настройка",
       "customSetupDescription": "Используйте собственного провайдера и API-ключ.",
-      "description": "Выберите, как AriaKey будет транскрибировать вашу речь",
-      "openwhisprCloud": "AriaKey Cloud",
+      "description": "Выберите, как ChordVox будет транскрибировать вашу речь",
+      "openwhisprCloud": "ChordVox Cloud",
       "openwhisprCloudDescription": "Просто работает. Настройка не требуется.",
       "title": "Распознавание речи",
       "toasts": {
         "switchedCloud": {
-          "description": "Транскрипция будет использовать облачный сервис AriaKey.",
-          "title": "Переключено на AriaKey Cloud"
+          "description": "Транскрипция будет использовать облачный сервис ChordVox.",
+          "title": "Переключено на ChordVox Cloud"
         },
         "switchedCustom": {
           "description": "Настройте собственного провайдера и API-ключ.",

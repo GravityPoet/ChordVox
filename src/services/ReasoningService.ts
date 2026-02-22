@@ -1249,7 +1249,7 @@ class ReasoningService extends BaseReasoningService {
         });
 
         if (!res.success) {
-          const err: any = new Error(res.error || "AriaKey cloud reasoning failed");
+          const err: any = new Error(res.error || "ChordVox cloud reasoning failed");
           err.code = res.code;
           throw err;
         }

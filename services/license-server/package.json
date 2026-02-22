@@ -1,8 +1,8 @@
 {
-  "name": "ariakey-license-server",
+  "name": "chordvox-license-server",
   "version": "1.0.0",
   "private": true,
-  "description": "AriaKey desktop license activation and validation service",
+  "description": "ChordVox desktop license activation and validation service",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

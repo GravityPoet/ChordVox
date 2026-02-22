@@ -191,7 +191,7 @@ class EnvironmentManager {
   async createProductionEnvFile(apiKey) {
     const envPath = path.join(app.getPath("userData"), ".env");
 
-    const envContent = `# AriaKey Environment Variables
+    const envContent = `# ChordVox Environment Variables
 # This file was created automatically for production use
 OPENAI_API_KEY=${apiKey}
 `;
@@ -237,7 +237,7 @@ OPENAI_API_KEY=${apiKey}
       }
     }
 
-    const lines = ["# AriaKey Environment Variables"];
+    const lines = ["# ChordVox Environment Variables"];
     for (const key of orderedKeys) {
       if (!existingMap.has(key)) continue;
       lines.push(`${key}=${existingMap.get(key)}`);

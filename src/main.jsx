@@ -23,9 +23,9 @@ let root = null;
 
 const VALID_CHANNELS = new Set(["development", "staging", "production"]);
 const DEFAULT_OAUTH_PROTOCOL_BY_CHANNEL = {
-  development: "ariakey-dev",
-  staging: "ariakey-staging",
-  production: "ariakey",
+  development: "chordvox-dev",
+  staging: "chordvox-staging",
+  production: "chordvox",
 };
 const inferredChannel = import.meta.env.DEV ? "development" : "production";
 const configuredChannel = (import.meta.env.VITE_OPENWHISPR_CHANNEL || inferredChannel)
@@ -240,7 +240,7 @@ function isOAuthBrowserRedirect() {
       <div id="oauth-container" role="status" aria-live="polite">
         <div class="auth-card">
           <div class="logo-wrapper">
-            <svg class="logo" viewBox="0 0 1024 1024" width="64" height="64" aria-label="AriaKey">
+            <svg class="logo" viewBox="0 0 1024 1024" width="64" height="64" aria-label="ChordVox">
               <rect width="1024" height="1024" rx="241" fill="#2056DF"/>
               <circle cx="512" cy="512" r="314" fill="#2056DF" stroke="white" stroke-width="74"/>
               <path d="M512 383V641" stroke="white" stroke-width="74" stroke-linecap="round"/>
@@ -397,7 +397,7 @@ function LoadingFallback({ message }) {
         <svg
           viewBox="0 0 1024 1024"
           className="w-12 h-12 drop-shadow-[0_2px_8px_rgba(37,99,235,0.18)] dark:drop-shadow-[0_2px_12px_rgba(100,149,237,0.25)]"
-          aria-label="AriaKey"
+          aria-label="ChordVox"
         >
           <rect width="1024" height="1024" rx="241" fill="#2056DF" />
           <circle cx="512" cy="512" r="314" fill="#2056DF" stroke="white" strokeWidth="74" />

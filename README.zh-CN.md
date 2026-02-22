@@ -1,12 +1,12 @@
-<h1 align="center">AriaKey</h1>
+<h1 align="center">ChordVox IME</h1>
 
 <p align="center">
   <strong>开口即输入，AI 润色，光标处落字。</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/AriaKey/releases/latest"><img src="https://img.shields.io/github/v/release/GravityPoet/AriaKey?label=release&color=6366f1" alt="Latest Release" /></a>
-  <a href="https://github.com/GravityPoet/AriaKey/releases"><img src="https://img.shields.io/github/downloads/GravityPoet/AriaKey/total?style=flat&color=06b6d4" alt="Downloads" /></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases/latest"><img src="https://img.shields.io/github/v/release/GravityPoet/ChordVox?label=release&color=6366f1" alt="Latest Release" /></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="https://img.shields.io/github/downloads/GravityPoet/ChordVox/total?style=flat&color=06b6d4" alt="Downloads" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e" alt="License" /></a>
   <a href="#"><img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-a78bfa" alt="Platform" /></a>
 </p>
@@ -39,7 +39,7 @@
 
 ### 应用场景 / 痛点解决
 
-| 痛点 | AriaKey 方案 |
+| 痛点 | ChordVox 方案 |
 |---|---|
 | 打字太慢，思维跑在手指前面 | 自然说话 → 2 秒内获得精修文本 |
 | 云端语音工具将录音发往未知服务器 | 本地 STT，音频不出机器 |
@@ -68,11 +68,11 @@
 
 ### 下载
 
-当前稳定版：[`v1.5.18`](https://github.com/GravityPoet/AriaKey/releases/tag/v1.5.18)
+当前稳定版：[`v1.5.18`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.18)
 
 | 系统 | 芯片 | 格式 | 下载 |
 |---|---|---|---|
-| macOS | Apple Silicon | dmg | [⬇ 下载](https://github.com/GravityPoet/AriaKey/releases/download/v1.5.18/AriaKey-1.5.18-arm64.dmg) |
+| macOS | Apple Silicon | dmg | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.18/ChordVox-1.5.18-arm64.dmg) |
 | macOS | Intel | dmg | 即将上线 |
 | Windows | x64 | exe | 即将上线 |
 | Linux | x64 | AppImage / deb | 即将上线 |
@@ -82,15 +82,15 @@
 未公证版本可能被 Gatekeeper 拦截，执行以下命令解除：
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/AriaKey.app
-open /Applications/AriaKey.app
+xattr -dr com.apple.quarantine /Applications/ChordVox.app
+open /Applications/ChordVox.app
 ```
 
 ---
 
 ### 快速链接
 
-- 📦 [所有版本](https://github.com/GravityPoet/AriaKey/releases)
+- 📦 [所有版本](https://github.com/GravityPoet/ChordVox/releases)
 - 📖 [完整技术文档](docs/README_LEGACY.md)
 - 📬 联系方式：`gravitypoet@icloud.com`
 

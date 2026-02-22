@@ -81,7 +81,7 @@ export default function EmailVerificationStep({ email, onVerified }: EmailVerifi
         <div className="text-center mb-4">
           <img
             src={logoIcon}
-            alt="AriaKey"
+            alt="ChordVox"
             className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
           />
           <div className="w-8 h-8 mx-auto bg-success/10 rounded-full flex items-center justify-center mb-2">
@@ -103,7 +103,7 @@ export default function EmailVerificationStep({ email, onVerified }: EmailVerifi
       <div className="text-center mb-4">
         <img
           src={logoIcon}
-          alt="AriaKey"
+          alt="ChordVox"
           className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
         />
         <div className="w-8 h-8 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-3">

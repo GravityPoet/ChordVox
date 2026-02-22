@@ -5,7 +5,7 @@ const { LicenseStore } = require("../src/license-store");
 
 function usage() {
   console.log(`
-AriaKey License Admin CLI
+ChordVox License Admin CLI
 
 Usage:
   node scripts/license-admin.js issue [options]

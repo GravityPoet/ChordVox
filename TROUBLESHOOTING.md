@@ -44,20 +44,20 @@
 2. Ensure the correct input device is selected
 3. Linux doesn't have app-level microphone permissions like macOS/Windows
 
-### macOS says "AriaKey.app is damaged and can't be opened"
+### macOS says "ChordVox.app is damaged and can't be opened"
 
 **Symptoms:** Finder blocks launch and asks to move the app to Trash.
 
 **Cause:** This happens with unsigned / not notarized builds downloaded from the internet (Gatekeeper quarantine).
 
 **Fix:**
-1. Move `AriaKey.app` to `/Applications`
+1. Move `ChordVox.app` to `/Applications`
 2. Try right-click → **Open** first
 3. If still blocked, run:
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/AriaKey.app
-open /Applications/AriaKey.app
+xattr -dr com.apple.quarantine /Applications/ChordVox.app
+open /Applications/ChordVox.app
 ```
 
 Usually this is needed only once per installation.
