@@ -14,8 +14,6 @@ Speak naturally, let AI do the rest. AriaKey is a privacy-first desktop voice ke
 
 - Releases: https://github.com/GravityPoet/AriaKey/releases
 - Latest: https://github.com/GravityPoet/AriaKey/releases/latest
-- Commercial release guide: [`docs/COMMERCIAL_RELEASE.md`](docs/COMMERCIAL_RELEASE.md)
-- License sales flow: [`docs/LICENSE_SALES_FLOW.md`](docs/LICENSE_SALES_FLOW.md)
 - Legacy full technical README: [`docs/README_LEGACY.md`](docs/README_LEGACY.md)
 - Contact: `moonlitpoet@proton.me`
 
@@ -93,15 +91,7 @@ xattr -dr com.apple.quarantine /Applications/AriaKey.app
 open /Applications/AriaKey.app
 ```
 
-### 5) 商业化与授权
-
-- 授权服务目录：`services/license-server`
-- 卖家流程文档：[`docs/LICENSE_SALES_FLOW.md`](docs/LICENSE_SALES_FLOW.md)
-- 商业发版文档：[`docs/COMMERCIAL_RELEASE.md`](docs/COMMERCIAL_RELEASE.md)
-
-如果你要卖软件，推荐流程：支付成功 -> 自动发码 -> 客户输入授权码激活 -> 周期性校验。
-
-### 6) 合规与版权
+### 5) 合规与版权
 
 本项目基于上游 MIT 项目二次开发，已保留必要声明：
 
@@ -158,15 +148,7 @@ xattr -dr com.apple.quarantine /Applications/AriaKey.app
 open /Applications/AriaKey.app
 ```
 
-### 5) Commercial & Licensing
-
-- License service: `services/license-server`
-- Seller flow: [`docs/LICENSE_SALES_FLOW.md`](docs/LICENSE_SALES_FLOW.md)
-- Commercial release guide: [`docs/COMMERCIAL_RELEASE.md`](docs/COMMERCIAL_RELEASE.md)
-
-Recommended sales flow: payment success -> issue key -> customer activation -> periodic validation.
-
-### 6) Legal & Compliance
+### 5) Legal & Compliance
 
 This project is derived from an MIT-licensed upstream and keeps required notices:
 
@@ -180,8 +162,7 @@ Commercial use is allowed under MIT terms, with attribution retained.
 
 ## Repository Navigation
 
-- Product/commercial docs: [`docs/`](docs)
+- Documentation: [`docs/`](docs)
 - Legal compliance: [`docs/legal/`](docs/legal)
 - Marketing copy: [`docs/marketing/`](docs/marketing)
 - Legacy deep technical guide: [`docs/README_LEGACY.md`](docs/README_LEGACY.md)
-
