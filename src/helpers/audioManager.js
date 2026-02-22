@@ -1068,7 +1068,8 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     }
 
     try {
-      const isAvailable = await ReasoningService.isAvailable();
+      const reasoningProvider = this.getStringSetting("reasoningProvider", "auto");
+      const isAvailable = await ReasoningService.isAvailable(reasoningProvider);
 
       logger.logReasoning("REASONING_AVAILABILITY", {
         isAvailable,
@@ -1186,7 +1187,8 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
     if (!useReasoning) {
       this.emitCallTrace("reasoning", "skipped", {
-        reason: "Reasoning not enabled or unavailable",
+        reason: `Reasoning not enabled or unavailable (provider=${reasoningProvider})`,
+        reasoningProvider,
       });
     }
 
