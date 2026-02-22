@@ -93,13 +93,7 @@ open /Applications/AriaKey.app
 
 ### 5) 合规与版权
 
-本项目基于上游 MIT 项目二次开发，已保留必要声明：
-
-- `LICENSE`
-- `NOTICE`
-- `resources/legal/OPEN_SOURCE_NOTICES.txt`
-
-可商用，但必须保留原 MIT 版权与许可声明。
+本项目基于上游 MIT 项目二次开发。
 
 ---
 
@@ -150,13 +144,7 @@ open /Applications/AriaKey.app
 
 ### 5) Legal & Compliance
 
-This project is derived from an MIT-licensed upstream and keeps required notices:
-
-- `LICENSE`
-- `NOTICE`
-- `resources/legal/OPEN_SOURCE_NOTICES.txt`
-
-Commercial use is allowed under MIT terms, with attribution retained.
+This project is derived from an MIT-licensed upstream.
 
 ---
 
