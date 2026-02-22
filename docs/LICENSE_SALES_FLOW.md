@@ -1,4 +1,11 @@
-# AriaKey 授权销售流程（网站售卖）
+# AriaKey 授权销售流程（内部使用，不对外运营说明）
+
+> [!WARNING]
+> 本文档仅供 AriaKey 内部运营与技术团队使用。  
+> 不得直接提供给客户，不用于公开页面、公开售卖说明或 Release 宣传文案。
+>
+> Internal use only.  
+> Do not expose this document as customer-facing operating guidance.
 
 本文是卖家视角的最小可落地流程：客户付款 -> 自动发码 -> 客户在桌面端激活。
 
