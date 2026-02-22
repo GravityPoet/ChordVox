@@ -6,6 +6,18 @@ An open source desktop dictation application that converts speech to text using 
 
 App listing copy (ZH/EN): [`docs/marketing/APP_STORE_COPY.md`](docs/marketing/APP_STORE_COPY.md)
 
+## Download Matrix
+
+Current stable release: [v1.5.18](https://github.com/GravityPoet/AriaKey/releases/tag/v1.5.18)
+
+| 系统 System | 芯片 Chip | 格式 Format | 下载链接 Download link |
+| --- | --- | --- | --- |
+| Windows | x64 | exe | 暂未上传 |
+| Mac | Apple Silicon | dmg | [mac-arm64](https://github.com/GravityPoet/AriaKey/releases/download/v1.5.18/AriaKey-1.5.18-arm64.dmg) |
+| Mac | Intel | dmg | 暂未上传 |
+| Linux | x64 | deb | 暂未上传 |
+| Linux | x64 | AppImage | 暂未上传 |
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=GravityPoet/AriaKey&type=date&legend=top-left)](https://www.star-history.com/#GravityPoet/AriaKey&type=date&legend=top-left)
