@@ -92,11 +92,19 @@ class IPCHandlers {
     });
 
     ipcMain.handle("hide-window", () => {
-      if (process.platform === "darwin") {
-        this.windowManager.hideDictationPanel();
-        if (app.dock) app.dock.show();
-      } else {
-        this.windowManager.hideDictationPanel();
+      this.windowManager.hideDictationPanel();
+
+      if (process.platform === "darwin" && app.dock) {
+        const controlPanelWindow = this.windowManager?.controlPanelWindow;
+        const isControlPanelVisible =
+          controlPanelWindow &&
+          !controlPanelWindow.isDestroyed() &&
+          controlPanelWindow.isVisible();
+
+        // Keep Dock hidden for background dictation-only mode.
+        if (!isControlPanelVisible) {
+          app.dock.hide();
+        }
       }
     });
 
