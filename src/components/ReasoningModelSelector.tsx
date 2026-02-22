@@ -270,7 +270,7 @@ export default function ReasoningModelSelector({
           value: m.modelId,
           label: m.modelId,
           description: m.modelName || m.providerName || undefined,
-          icon: "/icons/aws.svg",
+          icon: getProviderIcon("bedrock"),
         }));
 
       if (models.length > 0) {

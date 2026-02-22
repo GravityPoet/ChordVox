@@ -260,6 +260,16 @@ export function getModelProvider(modelId: string): string {
     }
   }
 
+  // If the user explicitly selected "bedrock" as their provider, trust that selection.
+  // Bedrock hosts many third-party models (e.g. moonshotai.kimi-k2.5, nvidia.nemotron-*)
+  // whose IDs don't match any hardcoded pattern.
+  if (typeof localStorage !== "undefined") {
+    const explicitProvider = localStorage.getItem("reasoningProvider");
+    if (explicitProvider === "bedrock") {
+      return "bedrock";
+    }
+  }
+
   const model = getAllReasoningModels().find((m) => m.value === modelId);
 
   if (!model) {
