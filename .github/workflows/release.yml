@@ -308,7 +308,7 @@ jobs:
           TAG="v${{ steps.release_meta.outputs.version }}"
           gh release view "$TAG" -R "${GITHUB_REPOSITORY}" >/dev/null 2>&1 || \
             gh release create "$TAG" -R "${GITHUB_REPOSITORY}" \
-              --title "AriaKey v${{ steps.release_meta.outputs.version }}" \
+              --title "ChordVox v${{ steps.release_meta.outputs.version }}" \
               --notes "Automated release asset upload."
 
       - name: Upload macOS assets (${{ matrix.arch }})

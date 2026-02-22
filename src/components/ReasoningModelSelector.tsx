@@ -105,6 +105,125 @@ const extractPayloadError = (payload: unknown): string | undefined => {
   );
 };
 
+const parseTimestampCandidate = (candidate: unknown): number => {
+  if (typeof candidate === "number" && Number.isFinite(candidate) && candidate > 0) {
+    // Normalize to epoch milliseconds.
+    return candidate > 1e11 ? Math.floor(candidate) : Math.floor(candidate * 1000);
+  }
+
+  if (typeof candidate === "string") {
+    const trimmed = candidate.trim();
+    if (!trimmed) return 0;
+
+    if (/^\d+$/.test(trimmed)) {
+      const numeric = Number(trimmed);
+      if (Number.isFinite(numeric) && numeric > 0) {
+        return numeric > 1e11 ? Math.floor(numeric) : Math.floor(numeric * 1000);
+      }
+    }
+
+    const parsed = Date.parse(trimmed);
+    if (!Number.isNaN(parsed) && parsed > 0) return parsed;
+  }
+
+  return 0;
+};
+
+const extractReleaseTimestamp = (record: UnknownRecord): number => {
+  const lifecycle = isRecord(record.lifecycle) ? record.lifecycle : undefined;
+  const metadata = isRecord(record.metadata) ? record.metadata : undefined;
+
+  const candidates = [
+    // Common model APIs
+    record.created,
+    record.created_at,
+    record.createdAt,
+    record.published,
+    record.published_at,
+    record.publishedAt,
+    record.release_date,
+    record.releaseDate,
+    record.released_at,
+    record.releasedAt,
+    record.release_timestamp,
+    record.releaseTimestamp,
+    // Fallback temporal metadata
+    record.updated_at,
+    record.updatedAt,
+    record.modified_at,
+    record.modifiedAt,
+    record.last_updated,
+    record.lastUpdated,
+    // Nested lifecycle/metadata objects
+    lifecycle?.created_at,
+    lifecycle?.createdAt,
+    lifecycle?.release_date,
+    lifecycle?.releaseDate,
+    lifecycle?.released_at,
+    lifecycle?.releasedAt,
+    metadata?.created_at,
+    metadata?.createdAt,
+    metadata?.published_at,
+    metadata?.publishedAt,
+    metadata?.release_date,
+    metadata?.releaseDate,
+    metadata?.released_at,
+    metadata?.releasedAt,
+  ];
+
+  for (const candidate of candidates) {
+    const ts = parseTimestampCandidate(candidate);
+    if (ts > 0) return ts;
+  }
+
+  return 0;
+};
+
+const extractVersionScore = (modelId: string): number => {
+  const normalized = modelId.toLowerCase();
+
+  // "latest" tags should naturally float to the top.
+  if (/\blatest\b/.test(normalized)) return Number.MAX_SAFE_INTEGER - 1;
+
+  // Prefer sortable date tokens inside IDs (e.g. 20241022 / 2024-10-22).
+  const dateToken = normalized.match(
+    /((?:19|20)\d{2})[-_.]?((?:0[1-9]|1[0-2]))[-_.]?((?:0[1-9]|[12]\d|3[01]))/
+  );
+  if (dateToken) {
+    const year = Number(dateToken[1]);
+    const month = Number(dateToken[2]);
+    const day = Number(dateToken[3]);
+    const dateMs = Date.UTC(year, month - 1, day);
+    if (Number.isFinite(dateMs) && dateMs > 0) return dateMs;
+  }
+
+  // Fallback: semantic-ish numeric score from first numeric groups (e.g. 5.2 > 4.1).
+  const numericChunks = normalized.match(/\d+/g);
+  if (!numericChunks || numericChunks.length === 0) return 0;
+
+  const major = Number(numericChunks[0] ?? "0");
+  const minor = Number(numericChunks[1] ?? "0");
+  const patch = Number(numericChunks[2] ?? "0");
+  if (![major, minor, patch].every((n) => Number.isFinite(n) && n >= 0)) return 0;
+
+  return major * 1_000_000 + minor * 1_000 + patch;
+};
+
+const compareModelsByRecency = (
+  a: { value: string; _created?: number },
+  b: { value: string; _created?: number }
+): number => {
+  const aCreated = a._created ?? 0;
+  const bCreated = b._created ?? 0;
+  if (aCreated !== bCreated) return bCreated - aCreated;
+
+  const aVersionScore = extractVersionScore(a.value);
+  const bVersionScore = extractVersionScore(b.value);
+  if (aVersionScore !== bVersionScore) return bVersionScore - aVersionScore;
+
+  return b.value.localeCompare(a.value, undefined, { numeric: true, sensitivity: "base" });
+};
+
 const OWNED_BY_ICON_RULES: Array<{ match: RegExp; provider: string }> = [
   { match: /(openai|system|default|gpt|davinci)/, provider: "openai" },
   { match: /(azure)/, provider: "openai" },
@@ -271,10 +390,11 @@ export default function ReasoningModelSelector({
           label: m.modelId,
           description: m.modelName || m.providerName || undefined,
           icon: getProviderIcon("bedrock"),
+          _created: isRecord(m) ? extractReleaseTimestamp(m) : 0,
         }));
 
-      // Sort bedrock models descending by ID, so newer versions (v2, 20241022) appear first.
-      models.sort((a: any, b: any) => b.value.localeCompare(a.value));
+      // Newest release first when timestamps are available; fallback to version-aware ID sorting.
+      models.sort(compareModelsByRecency);
 
       if (models.length > 0) {
         setProviderModelsCache((prev) => ({ ...prev, bedrock: models }));
@@ -439,8 +559,8 @@ export default function ReasoningModelSelector({
               ...(summary && summary !== humanName ? [summary] : []),
             ];
 
-            // Extract creation timestamp for sorting (OpenAI returns 'created' as unix seconds)
-            const created = typeof item.created === "number" ? item.created : 0;
+            // Prefer provider-published timestamps when available.
+            const created = extractReleaseTimestamp(item);
 
             return {
               value,
@@ -457,13 +577,8 @@ export default function ReasoningModelSelector({
           })
           .filter(Boolean) as (CloudModelOption & { _created: number })[];
 
-        // Sort custom endpoint models by creation time, newest first. If no timestamp exists, fallback to reverse alphabetical.
-        mappedModels.sort((a, b) => {
-          if (a._created > 0 || b._created > 0) {
-            return b._created - a._created;
-          }
-          return b.value.localeCompare(a.value);
-        });
+        // Newest release first, with robust fallbacks for providers that don't expose timestamps.
+        mappedModels.sort(compareModelsByRecency);
 
         if (isMountedRef.current && latestReasoningBaseRef.current === normalizedBase) {
           setCustomModelOptions(mappedModels);
@@ -615,8 +730,8 @@ export default function ReasoningModelSelector({
             ...(summary && summary !== humanName ? [summary] : []),
           ];
 
-          // Extract creation timestamp for sorting (OpenAI returns 'created' as unix seconds)
-          const created = typeof item.created === "number" ? item.created : 0;
+          // Prefer provider-published timestamps when available.
+          const created = extractReleaseTimestamp(item);
 
           return {
             value: displayValue,
@@ -629,16 +744,8 @@ export default function ReasoningModelSelector({
         })
         .filter(Boolean) as (CloudModelOption & { _created: number })[];
 
-      // Sort strategy:
-      // 1. If APIs return a 'created' timestamp (OpenAI/Groq), sort chronologically (newest first).
-      // 2. If no timestamp exists (Gemini/Anthropic), fallback to reverse alphabetical sorting
-      //    so newer version numbers (e.g., 2.5 vs 1.5 or 3.5 vs 3) naturally float to the top.
-      mappedModels.sort((a, b) => {
-        if (a._created > 0 || b._created > 0) {
-          return b._created - a._created;
-        }
-        return b.value.localeCompare(a.value);
-      });
+      // Newest release first, with version/date token fallback for providers without explicit timestamps.
+      mappedModels.sort(compareModelsByRecency);
 
       if (mappedModels.length > 0) {
         if (isMountedRef.current) {
