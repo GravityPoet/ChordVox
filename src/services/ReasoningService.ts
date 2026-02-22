@@ -1149,14 +1149,11 @@ class ReasoningService extends BaseReasoningService {
 
       const response = await withRetry(async () => {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 60000);
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
         try {
           const res = await fetch(signed.url, {
             method: "POST",
-            headers: {
-              ...signed.headers,
-              "Content-Type": "application/json",
-            },
+            headers: signed.headers,
             body: requestBody,
             signal: controller.signal,
           });

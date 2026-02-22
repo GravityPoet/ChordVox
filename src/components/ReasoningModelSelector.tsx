@@ -572,7 +572,7 @@ export default function ReasoningModelSelector({
 
       const mappedModels = rawModels
         .map((item) => {
-          if (typeof item === "string") return { value: item, label: item, icon: iconUrl, invertInDark } as CloudModelOption;
+          if (typeof item === "string") return { value: item, label: item, icon: iconUrl, invertInDark, _created: 0 } as CloudModelOption & { _created: number };
           if (!isRecord(item)) return null;
 
           const value = pickFirstString(
@@ -599,15 +599,22 @@ export default function ReasoningModelSelector({
             ...(summary && summary !== humanName ? [summary] : []),
           ];
 
+          // Extract creation timestamp for sorting (OpenAI returns 'created' as unix seconds)
+          const created = typeof item.created === "number" ? item.created : 0;
+
           return {
             value: displayValue,
             label: displayValue,
             description: descriptionParts.join(" · ") || undefined,
             icon: iconUrl,
             invertInDark,
-          } as CloudModelOption;
+            _created: created,
+          } as CloudModelOption & { _created: number };
         })
-        .filter(Boolean) as CloudModelOption[];
+        .filter(Boolean) as (CloudModelOption & { _created: number })[];
+
+      // Sort by creation time, newest first
+      mappedModels.sort((a, b) => b._created - a._created);
 
       if (mappedModels.length > 0) {
         if (isMountedRef.current) {

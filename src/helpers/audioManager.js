@@ -1040,9 +1040,20 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     });
 
     const startTime = Date.now();
+    const REASONING_TIMEOUT_MS = 30000; // 30 seconds
 
     try {
-      const result = await ReasoningService.processText(text, model, agentName);
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(
+          () => reject(new Error("AI reasoning timed out after 30s")),
+          REASONING_TIMEOUT_MS
+        );
+      });
+
+      const result = await Promise.race([
+        ReasoningService.processText(text, model, agentName),
+        timeoutPromise,
+      ]);
 
       const processingTime = Date.now() - startTime;
 
@@ -1062,6 +1073,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         processingTimeMs: processingTime,
         error: error.message,
         stack: error.stack,
+        timedOut: error.message.includes("timed out"),
       });
 
       throw error;
