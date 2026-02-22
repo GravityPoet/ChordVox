@@ -179,6 +179,40 @@ export default function ReasoningModelSelector({
   const [customModelsError, setCustomModelsError] = useState<string | null>(null);
   const [providerModelsCache, setProviderModelsCache] = useState<Record<string, CloudModelOption[]>>({});
   const providerFetchState = useRef<Record<string, boolean | "done">>({});
+  const [providerLoading, setProviderLoading] = useState<Record<string, boolean>>({});
+  const [providerError, setProviderError] = useState<Record<string, string | null>>({});
+
+  const DEFAULT_PROVIDER_ENDPOINTS: Record<string, string> = useMemo(() => ({
+    openai: "https://api.openai.com/v1",
+    anthropic: "https://api.anthropic.com/v1",
+    gemini: "https://generativelanguage.googleapis.com/v1beta",
+    groq: "https://api.groq.com/openai/v1",
+  }), []);
+
+  const [providerEndpoints, setProviderEndpoints] = useState<Record<string, string>>(() => {
+    try {
+      const saved = localStorage.getItem("providerEndpoints");
+      if (saved) return { ...DEFAULT_PROVIDER_ENDPOINTS, ...JSON.parse(saved) };
+    } catch { /* ignore */ }
+    return { ...DEFAULT_PROVIDER_ENDPOINTS };
+  });
+
+  const [providerEndpointInputs, setProviderEndpointInputs] = useState<Record<string, string>>(() => ({
+    ...DEFAULT_PROVIDER_ENDPOINTS,
+    ...providerEndpoints,
+  }));
+
+  const updateProviderEndpoint = useCallback((providerId: string, value: string) => {
+    const normalized = normalizeBaseUrl(value) || value.trim();
+    setProviderEndpoints((prev) => {
+      const next = { ...prev, [providerId]: normalized };
+      try { localStorage.setItem("providerEndpoints", JSON.stringify(next)); } catch { /* ignore */ }
+      return next;
+    });
+    setProviderEndpointInputs((prev) => ({ ...prev, [providerId]: normalized }));
+    // Reset fetch state so next refresh uses new endpoint
+    providerFetchState.current[providerId] = false;
+  }, []);
   const [customBaseInput, setCustomBaseInput] = useState(cloudReasoningBaseUrl);
   const lastLoadedBaseRef = useRef<string | null>(null);
   const pendingBaseRef = useRef<string | null>(null);
@@ -406,33 +440,48 @@ export default function ReasoningModelSelector({
     }));
   }, []);
 
-  const loadBuiltInProviderModels = useCallback(async (providerId: string, apiKey: string) => {
+  const getProviderModelsUrl = useCallback((providerId: string, apiKey?: string): string => {
+    const base = providerEndpoints[providerId] || DEFAULT_PROVIDER_ENDPOINTS[providerId] || "";
+    if (!base) return "";
+    if (providerId === "gemini") {
+      return `${base}/models${apiKey ? `?key=${apiKey}` : ""}`;
+    }
+    return `${base}/models`;
+  }, [providerEndpoints, DEFAULT_PROVIDER_ENDPOINTS]);
+
+  const loadBuiltInProviderModels = useCallback(async (providerId: string, apiKey: string, force = false) => {
     if (!apiKey || providerId === "custom") return;
 
-    if (providerFetchState.current[providerId]) return;
+    if (!force && providerFetchState.current[providerId]) return;
     providerFetchState.current[providerId] = true;
 
-    try {
-      let endpoint = "";
-      let headers: Record<string, string> = {};
+    if (isMountedRef.current) {
+      setProviderLoading((prev) => ({ ...prev, [providerId]: true }));
+      setProviderError((prev) => ({ ...prev, [providerId]: null }));
+    }
 
-      if (providerId === "openai") {
-        endpoint = "https://api.openai.com/v1/models";
-        headers = { Authorization: `Bearer ${apiKey}` };
-      } else if (providerId === "anthropic") {
-        endpoint = "https://api.anthropic.com/v1/models";
-        headers = { "x-api-key": apiKey, "anthropic-version": "2023-06-01" };
-      } else if (providerId === "gemini") {
-        endpoint = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
-      } else if (providerId === "groq") {
-        endpoint = "https://api.groq.com/openai/v1/models";
-        headers = { Authorization: `Bearer ${apiKey}` };
+    try {
+      const endpoint = getProviderModelsUrl(providerId, apiKey);
+      const headers: Record<string, string> = {};
+
+      if (providerId === "anthropic") {
+        headers["x-api-key"] = apiKey;
+        headers["anthropic-version"] = "2023-06-01";
+      } else if (providerId !== "gemini") {
+        // OpenAI, Groq, and other Bearer-token providers
+        headers.Authorization = `Bearer ${apiKey}`;
       }
 
       if (!endpoint) return;
 
       const response = await fetch(endpoint, { headers });
-      if (!response.ok) throw new Error("Failed to fetch");
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => "");
+        const summary = errorText
+          ? `${response.status} ${errorText.slice(0, 200)}`
+          : `${response.status} ${response.statusText}`;
+        throw new Error(summary.trim());
+      }
 
       const payload = await response.json().catch(() => ({}));
       const rawModels = extractModelEntries(payload);
@@ -483,14 +532,43 @@ export default function ReasoningModelSelector({
         if (isMountedRef.current) {
           setProviderModelsCache((prev) => ({ ...prev, [providerId]: mappedModels }));
           providerFetchState.current[providerId] = "done";
+          setProviderError((prev) => ({ ...prev, [providerId]: null }));
         }
       } else {
         providerFetchState.current[providerId] = false;
       }
-    } catch {
+    } catch (error) {
       providerFetchState.current[providerId] = false;
+      if (isMountedRef.current) {
+        const message = (error as Error).message || t("reasoning.custom.unableToLoadModels");
+        setProviderError((prev) => ({ ...prev, [providerId]: message }));
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setProviderLoading((prev) => ({ ...prev, [providerId]: false }));
+      }
     }
-  }, []);
+  }, [t]);
+
+  const handleRefreshProviderModels = useCallback((providerId: string) => {
+    const keys: Record<string, string> = {
+      openai: openaiApiKey,
+      anthropic: anthropicApiKey,
+      gemini: geminiApiKey,
+      groq: groqApiKey,
+    };
+    const key = keys[providerId] || "";
+    if (!key) return;
+    loadBuiltInProviderModels(providerId, key, true);
+  }, [openaiApiKey, anthropicApiKey, geminiApiKey, groqApiKey, loadBuiltInProviderModels]);
+
+  const handleProviderEndpointBlur = useCallback((providerId: string) => {
+    const input = (providerEndpointInputs[providerId] || "").trim();
+    const current = providerEndpoints[providerId] || "";
+    if (input && input !== current) {
+      updateProviderEndpoint(providerId, input);
+    }
+  }, [providerEndpointInputs, providerEndpoints, updateProviderEndpoint]);
 
   useEffect(() => {
     if (selectedMode === "cloud" && selectedCloudProvider !== "custom") {
@@ -577,13 +655,7 @@ export default function ReasoningModelSelector({
     }
   }, [customBaseInput, cloudReasoningBaseUrl, handleApplyCustomBase]);
 
-  const handleResetCustomBase = useCallback(() => {
-    const defaultBase = API_ENDPOINTS.OPENAI_BASE;
-    setCustomBaseInput(defaultBase);
-    setCloudReasoningBaseUrl(defaultBase);
-    lastLoadedBaseRef.current = null;
-    loadRemoteModels(defaultBase, true);
-  }, [setCloudReasoningBaseUrl, loadRemoteModels]);
+
 
   const handleRefreshCustomModels = useCallback(() => {
     if (isCustomBaseDirty) {
@@ -827,33 +899,22 @@ export default function ReasoningModelSelector({
                           <h4 className="text-sm font-medium text-foreground">
                             {t("reasoning.availableModels")}
                           </h4>
-                          <div className="flex gap-2">
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              onClick={handleResetCustomBase}
-                              className="text-xs"
-                            >
-                              {t("common.reset")}
-                            </Button>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              onClick={handleRefreshCustomModels}
-                              disabled={
-                                customModelsLoading || (!trimmedCustomBase && !hasSavedCustomBase)
-                              }
-                              className="text-xs"
-                            >
-                              {customModelsLoading
-                                ? t("common.loading")
-                                : isCustomBaseDirty
-                                  ? t("reasoning.custom.applyAndRefresh")
-                                  : t("common.refresh")}
-                            </Button>
-                          </div>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={handleRefreshCustomModels}
+                            disabled={
+                              customModelsLoading || (!trimmedCustomBase && !hasSavedCustomBase)
+                            }
+                            className="text-xs"
+                          >
+                            {customModelsLoading
+                              ? t("common.loading")
+                              : isCustomBaseDirty
+                                ? t("reasoning.custom.applyAndRefresh")
+                                : t("common.refresh")}
+                          </Button>
                         </div>
                         <p className="text-xs text-muted-foreground">
                           {t("reasoning.custom.queryPrefix")}{" "}
@@ -1004,11 +1065,62 @@ export default function ReasoningModelSelector({
                         </div>
                       )}
 
-                      {/* 2. Model Selection - BOTTOM */}
+                      {/* 2. Endpoint URL */}
                       <div className="pt-3 space-y-2">
                         <h4 className="text-sm font-medium text-foreground">
-                          {t("reasoning.selectModel")}
+                          {t("reasoning.custom.endpointTitle")}
                         </h4>
+                        <Input
+                          value={providerEndpointInputs[selectedCloudProvider] || ""}
+                          onChange={(e) => setProviderEndpointInputs((prev) => ({ ...prev, [selectedCloudProvider]: e.target.value }))}
+                          onBlur={() => handleProviderEndpointBlur(selectedCloudProvider)}
+                          placeholder={DEFAULT_PROVIDER_ENDPOINTS[selectedCloudProvider] || ""}
+                          className="text-sm"
+                        />
+                      </div>
+
+                      {/* 3. Model Selection - BOTTOM */}
+                      <div className="pt-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium text-foreground">
+                            {t("reasoning.availableModels")}
+                          </h4>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleRefreshProviderModels(selectedCloudProvider)}
+                            disabled={
+                              providerLoading[selectedCloudProvider] ||
+                              !{
+                                openai: openaiApiKey,
+                                anthropic: anthropicApiKey,
+                                gemini: geminiApiKey,
+                                groq: groqApiKey,
+                              }[selectedCloudProvider]
+                            }
+                            className="text-xs"
+                          >
+                            {providerLoading[selectedCloudProvider]
+                              ? t("common.loading")
+                              : t("common.refresh")}
+                          </Button>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {t("reasoning.custom.queryPrefix")}{" "}
+                          <code>{getProviderModelsUrl(selectedCloudProvider)}</code>{" "}
+                          {t("reasoning.custom.querySuffix")}
+                        </p>
+                        {providerLoading[selectedCloudProvider] && (
+                          <p className="text-xs text-primary">
+                            {t("reasoning.custom.fetchingModels")}
+                          </p>
+                        )}
+                        {providerError[selectedCloudProvider] && (
+                          <p className="text-xs text-destructive">
+                            {providerError[selectedCloudProvider]}
+                          </p>
+                        )}
                         <ModelCardList
                           models={selectedCloudModels}
                           selectedModel={reasoningModel}
