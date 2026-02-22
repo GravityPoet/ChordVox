@@ -177,6 +177,8 @@ export default function ReasoningModelSelector({
   const [customModelOptions, setCustomModelOptions] = useState<CloudModelOption[]>([]);
   const [customModelsLoading, setCustomModelsLoading] = useState(false);
   const [customModelsError, setCustomModelsError] = useState<string | null>(null);
+  const [providerModelsCache, setProviderModelsCache] = useState<Record<string, CloudModelOption[]>>({});
+  const providerFetchState = useRef<Record<string, boolean | "done">>({});
   const [customBaseInput, setCustomBaseInput] = useState(cloudReasoningBaseUrl);
   const lastLoadedBaseRef = useRef<string | null>(null);
   const pendingBaseRef = useRef<string | null>(null);
@@ -404,36 +406,157 @@ export default function ReasoningModelSelector({
     }));
   }, []);
 
-  const openaiModelOptions = useMemo<CloudModelOption[]>(() => {
-    const iconUrl = getProviderIcon("openai");
-    return REASONING_PROVIDERS.openai.models.map((model) => ({
-      ...model,
-      description: model.descriptionKey
-        ? t(model.descriptionKey, { defaultValue: model.description })
-        : model.description,
-      icon: iconUrl,
-      invertInDark: true,
-    }));
-  }, [t]);
+  const loadBuiltInProviderModels = useCallback(async (providerId: string, apiKey: string) => {
+    if (!apiKey || providerId === "custom") return;
+
+    if (providerFetchState.current[providerId]) return;
+    providerFetchState.current[providerId] = true;
+
+    try {
+      let endpoint = "";
+      let headers: Record<string, string> = {};
+
+      if (providerId === "openai") {
+        endpoint = "https://api.openai.com/v1/models";
+        headers = { Authorization: `Bearer ${apiKey}` };
+      } else if (providerId === "anthropic") {
+        endpoint = "https://api.anthropic.com/v1/models";
+        headers = { "x-api-key": apiKey, "anthropic-version": "2023-06-01" };
+      } else if (providerId === "gemini") {
+        endpoint = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+      } else if (providerId === "groq") {
+        endpoint = "https://api.groq.com/openai/v1/models";
+        headers = { Authorization: `Bearer ${apiKey}` };
+      }
+
+      if (!endpoint) return;
+
+      const response = await fetch(endpoint, { headers });
+      if (!response.ok) throw new Error("Failed to fetch");
+
+      const payload = await response.json().catch(() => ({}));
+      const rawModels = extractModelEntries(payload);
+
+      const iconUrl = getProviderIcon(providerId);
+      const invertInDark = isMonochromeProvider(providerId);
+
+      const mappedModels = rawModels
+        .map((item) => {
+          if (typeof item === "string") return { value: item, label: item, icon: iconUrl, invertInDark } as CloudModelOption;
+          if (!isRecord(item)) return null;
+
+          const value = pickFirstString(
+            item.id,
+            item.name,
+            item.model,
+            item.model_id,
+            item.slug,
+            item.value,
+            item.identifier,
+            item.modelName
+          );
+          if (!value) return null;
+
+          let displayValue = value;
+          if (providerId === "gemini" && displayValue.startsWith("models/")) {
+            displayValue = displayValue.replace("models/", "");
+          }
+
+          const humanName = pickFirstString(item.name, item.display_name, item.title, item.displayName);
+          const summary = pickFirstString(item.description, item.summary, item.details);
+          const descriptionParts = [
+            ...(humanName && humanName !== displayValue ? [humanName] : []),
+            ...(summary && summary !== humanName ? [summary] : []),
+          ];
+
+          return {
+            value: displayValue,
+            label: displayValue,
+            description: descriptionParts.join(" · ") || undefined,
+            icon: iconUrl,
+            invertInDark,
+          } as CloudModelOption;
+        })
+        .filter(Boolean) as CloudModelOption[];
+
+      if (mappedModels.length > 0) {
+        if (isMountedRef.current) {
+          setProviderModelsCache((prev) => ({ ...prev, [providerId]: mappedModels }));
+          providerFetchState.current[providerId] = "done";
+        }
+      } else {
+        providerFetchState.current[providerId] = false;
+      }
+    } catch {
+      providerFetchState.current[providerId] = false;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedMode === "cloud" && selectedCloudProvider !== "custom") {
+      const keys: Record<string, string> = {
+        openai: openaiApiKey,
+        anthropic: anthropicApiKey,
+        gemini: geminiApiKey,
+        groq: groqApiKey,
+      };
+      const key = keys[selectedCloudProvider] || "";
+      if (key) {
+        loadBuiltInProviderModels(selectedCloudProvider, key);
+      }
+    }
+  }, [selectedMode, selectedCloudProvider, openaiApiKey, anthropicApiKey, geminiApiKey, groqApiKey, loadBuiltInProviderModels]);
 
   const selectedCloudModels = useMemo<CloudModelOption[]>(() => {
-    if (selectedCloudProvider === "openai") return openaiModelOptions;
     if (selectedCloudProvider === "custom") return displayedCustomModels;
 
-    const provider = REASONING_PROVIDERS[selectedCloudProvider as keyof typeof REASONING_PROVIDERS];
-    if (!provider?.models) return [];
-
+    const dynamicModels = providerModelsCache[selectedCloudProvider];
+    const hardcodedProvider = REASONING_PROVIDERS[selectedCloudProvider as keyof typeof REASONING_PROVIDERS];
     const iconUrl = getProviderIcon(selectedCloudProvider);
     const invertInDark = isMonochromeProvider(selectedCloudProvider);
-    return provider.models.map((model) => ({
-      ...model,
-      description: model.descriptionKey
-        ? t(model.descriptionKey, { defaultValue: model.description })
-        : model.description,
-      icon: iconUrl,
-      invertInDark,
-    }));
-  }, [selectedCloudProvider, openaiModelOptions, displayedCustomModels, t]);
+
+    let baseModels: CloudModelOption[] = [];
+    if (dynamicModels && dynamicModels.length > 0) {
+      baseModels = [...dynamicModels];
+    } else if (hardcodedProvider?.models) {
+      baseModels = hardcodedProvider.models.map((model) => ({
+        ...model,
+        description: model.descriptionKey
+          ? t(model.descriptionKey, { defaultValue: model.description })
+          : model.description,
+        icon: iconUrl,
+        invertInDark,
+      }));
+    } else {
+      return [];
+    }
+
+    if (dynamicModels && dynamicModels.length > 0 && hardcodedProvider?.models) {
+      baseModels = baseModels.map((m) => {
+        const hardcoded = hardcodedProvider.models.find(hm => hm.value === m.value);
+        if (hardcoded && !m.description) {
+          return {
+            ...m,
+            description: hardcoded.descriptionKey ? t(hardcoded.descriptionKey, { defaultValue: hardcoded.description }) : hardcoded.description
+          };
+        }
+        return m;
+      });
+    }
+
+    // Always ensure the currently selected model is included so it doesn't break UI if missing
+    if (reasoningModel && !baseModels.some(m => m.value === reasoningModel)) {
+      baseModels.unshift({
+        value: reasoningModel,
+        label: reasoningModel,
+        description: t("reasoning.custom.ownerLabel", { owner: selectedCloudProvider }),
+        icon: iconUrl,
+        invertInDark
+      });
+    }
+
+    return baseModels;
+  }, [selectedCloudProvider, displayedCustomModels, providerModelsCache, reasoningModel, t]);
 
   const handleApplyCustomBase = useCallback(() => {
     const trimmedBase = customBaseInput.trim();
@@ -624,14 +747,12 @@ export default function ReasoningModelSelector({
         </div>
         <button
           onClick={() => setUseReasoningModel(!useReasoningModel)}
-          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ${
-            useReasoningModel ? "bg-primary" : "bg-muted-foreground/25"
-          }`}
+          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ${useReasoningModel ? "bg-primary" : "bg-muted-foreground/25"
+            }`}
         >
           <span
-            className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 ${
-              useReasoningModel ? "translate-x-4.5" : "translate-x-0.75"
-            }`}
+            className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 ${useReasoningModel ? "translate-x-4.5" : "translate-x-0.75"
+              }`}
           />
         </button>
       </div>
@@ -694,7 +815,7 @@ export default function ReasoningModelSelector({
                         </h4>
                         <ApiKeyInput
                           apiKey={customReasoningApiKey}
-                          setApiKey={setCustomReasoningApiKey || (() => {})}
+                          setApiKey={setCustomReasoningApiKey || (() => { })}
                           label=""
                           helpText={t("reasoning.custom.apiKeyHelp")}
                         />
