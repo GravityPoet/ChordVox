@@ -23,6 +23,20 @@ class ReasoningService extends BaseReasoningService {
     }
   }
 
+  private getProviderEndpointOverride(providerId: string): string | null {
+    if (typeof window === "undefined" || !window.localStorage) return null;
+    try {
+      const raw = window.localStorage.getItem("providerEndpoints");
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      const value = parsed?.[providerId];
+      if (typeof value === "string" && value.trim()) {
+        return normalizeBaseUrl(value.trim()) || null;
+      }
+    } catch { /* ignore */ }
+    return null;
+  }
+
   private getConfiguredOpenAIBase(): string {
     if (typeof window === "undefined" || !window.localStorage) {
       return API_ENDPOINTS.OPENAI_BASE;
@@ -32,7 +46,18 @@ class ReasoningService extends BaseReasoningService {
       const provider = window.localStorage.getItem("reasoningProvider") || "";
       const isCustomProvider = provider === "custom";
 
+      // Check per-provider endpoint override (from UI endpoint editor)
       if (!isCustomProvider) {
+        const override = this.getProviderEndpointOverride("openai");
+        if (override && override !== API_ENDPOINTS.OPENAI_BASE) {
+          logger.logReasoning("CUSTOM_REASONING_ENDPOINT_CHECK", {
+            hasCustomUrl: true,
+            provider,
+            reason: "Using per-provider endpoint override",
+            overrideEndpoint: override,
+          });
+          return override;
+        }
         logger.logReasoning("CUSTOM_REASONING_ENDPOINT_CHECK", {
           hasCustomUrl: false,
           provider,
@@ -173,7 +198,7 @@ class ReasoningService extends BaseReasoningService {
         ReasoningService.OPENAI_ENDPOINT_PREF_STORAGE_KEY,
         JSON.stringify(data)
       );
-    } catch {}
+    } catch { }
   }
 
   private async getApiKey(
@@ -852,8 +877,9 @@ class ReasoningService extends BaseReasoningService {
       let response: any;
       try {
         response = await withRetry(async () => {
+          const geminiBase = this.getProviderEndpointOverride("gemini") || API_ENDPOINTS.GEMINI;
           logger.logReasoning("GEMINI_REQUEST", {
-            endpoint: `${API_ENDPOINTS.GEMINI}/models/${model}:generateContent`,
+            endpoint: `${geminiBase}/models/${model}:generateContent`,
             model,
             hasApiKey: !!apiKey,
             requestBody: JSON.stringify(requestBody).substring(0, 200),
@@ -862,7 +888,7 @@ class ReasoningService extends BaseReasoningService {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 30000);
           try {
-            const res = await fetch(`${API_ENDPOINTS.GEMINI}/models/${model}:generateContent`, {
+            const res = await fetch(`${geminiBase}/models/${model}:generateContent`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -992,7 +1018,8 @@ class ReasoningService extends BaseReasoningService {
     this.isProcessing = true;
 
     try {
-      const endpoint = buildApiUrl(API_ENDPOINTS.GROQ_BASE, "/chat/completions");
+      const groqBase = this.getProviderEndpointOverride("groq") || API_ENDPOINTS.GROQ_BASE;
+      const endpoint = buildApiUrl(groqBase, "/chat/completions");
       return await this.callChatCompletionsApi(
         endpoint,
         apiKey,
@@ -1095,11 +1122,25 @@ class ReasoningService extends BaseReasoningService {
 
   async isAvailable(provider?: string): Promise<boolean> {
     try {
-      const openaiKey = await window.electronAPI?.getOpenAIKey?.();
-      const anthropicKey = await window.electronAPI?.getAnthropicKey?.();
-      const geminiKey = await window.electronAPI?.getGeminiKey?.();
-      const groqKey = await window.electronAPI?.getGroqKey?.();
-      const customReasoningKey = await window.electronAPI?.getCustomReasoningKey?.();
+      const getKeyWithFallback = async (
+        ipcGetter: (() => Promise<string | null | undefined>) | undefined,
+        localStorageKey: string
+      ): Promise<string> => {
+        let key = "";
+        try {
+          key = (await ipcGetter?.()) || "";
+        } catch { /* ignore IPC errors */ }
+        if (!key && typeof window !== "undefined" && window.localStorage) {
+          key = window.localStorage.getItem(localStorageKey) || "";
+        }
+        return key.trim();
+      };
+
+      const openaiKey = await getKeyWithFallback(window.electronAPI?.getOpenAIKey, "openaiApiKey");
+      const anthropicKey = await getKeyWithFallback(window.electronAPI?.getAnthropicKey, "anthropicApiKey");
+      const geminiKey = await getKeyWithFallback(window.electronAPI?.getGeminiKey, "geminiApiKey");
+      const groqKey = await getKeyWithFallback(window.electronAPI?.getGroqKey, "groqApiKey");
+      const customReasoningKey = await getKeyWithFallback(window.electronAPI?.getCustomReasoningKey, "customReasoningApiKey");
       const localAvailable = await window.electronAPI?.checkLocalReasoningAvailable?.();
       const configuredProvider = String(
         provider || window.localStorage?.getItem("reasoningProvider") || "auto"
