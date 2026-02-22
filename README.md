@@ -4,9 +4,9 @@
 [![Downloads](https://img.shields.io/github/downloads/GravityPoet/AriaKey/total?style=flat&color=blue)](https://github.com/GravityPoet/AriaKey/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
-自然开口，剩下的交给 AI。AriaKey 是隐私优先的桌面语音输入法，支持本地转录、AI 润色、光标处自动粘贴与商业授权激活。
+自然开口，剩下的交给 AI。AriaKey 是隐私优先的桌面语音输入法，支持本地转录、AI 润色、光标处自动粘贴。
 
-Speak naturally, let AI do the rest. AriaKey is a privacy-first desktop voice keyboard with local transcription, AI refinement, cursor-level paste, and commercial license activation.
+Speak naturally, let AI do the rest. AriaKey is a privacy-first desktop voice keyboard with local transcription, AI refinement, cursor-level paste.
 
 ---
 
