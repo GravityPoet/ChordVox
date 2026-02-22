@@ -1,13 +1,13 @@
 
-<h1 align="center">AriaKey</h1>
+<h1 align="center">ChordVox IME</h1>
 
 <p align="center">
   <strong>Your voice, refined by AI, pasted where you need it.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/AriaKey/releases/latest"><img src="https://img.shields.io/github/v/release/GravityPoet/AriaKey?label=release&color=6366f1" alt="Latest Release" /></a>
-  <a href="https://github.com/GravityPoet/AriaKey/releases"><img src="https://img.shields.io/github/downloads/GravityPoet/AriaKey/total?style=flat&color=06b6d4" alt="Downloads" /></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases/latest"><img src="https://img.shields.io/github/v/release/GravityPoet/ChordVox?label=release&color=6366f1" alt="Latest Release" /></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="https://img.shields.io/github/downloads/GravityPoet/ChordVox/total?style=flat&color=06b6d4" alt="Downloads" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e" alt="License" /></a>
   <a href="#"><img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-a78bfa" alt="Platform" /></a>
 </p>
@@ -40,7 +40,7 @@
 
 ### Use Cases / Problems Solved
 
-| Pain Point | AriaKey Solution |
+| Pain Point | ChordVox Solution |
 |---|---|
 | Typing is slow; you think faster than you type | Speak naturally → get polished text in < 2 seconds |
 | Cloud voice tools send audio to unknown servers | Local STT means audio stays on-device |
@@ -69,11 +69,11 @@
 
 ### Download
 
-Current stable: [`v1.5.18`](https://github.com/GravityPoet/AriaKey/releases/tag/v1.5.18)
+Current stable: [`v1.5.18`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.18)
 
 | System | Chip | Format | Link |
 |---|---|---|---|
-| macOS | Apple Silicon | dmg | [⬇ Download](https://github.com/GravityPoet/AriaKey/releases/download/v1.5.18/AriaKey-1.5.18-arm64.dmg) |
+| macOS | Apple Silicon | dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.18/ChordVox-1.5.18-arm64.dmg) |
 | macOS | Intel | dmg | Coming soon |
 | Windows | x64 | exe | Coming soon |
 | Linux | x64 | AppImage / deb | Coming soon |
@@ -83,15 +83,15 @@ Current stable: [`v1.5.18`](https://github.com/GravityPoet/AriaKey/releases/tag/
 Unsigned builds may trigger Gatekeeper. Fix with:
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/AriaKey.app
-open /Applications/AriaKey.app
+xattr -dr com.apple.quarantine /Applications/ChordVox.app
+open /Applications/ChordVox.app
 ```
 
 ---
 
 ### Quick Links
 
-- 📦 [All Releases](https://github.com/GravityPoet/AriaKey/releases)
+- 📦 [All Releases](https://github.com/GravityPoet/ChordVox/releases)
 - 📖 [Legacy Technical README](docs/README_LEGACY.md)
 - 📬 Contact: `moonlitpoet@proton.me`
 

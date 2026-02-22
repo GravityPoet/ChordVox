@@ -110,7 +110,7 @@ function createServer() {
       if (req.method === "GET" && pathname === "/health") {
         jsonResponse(res, 200, {
           ok: true,
-          service: "ariakey-license-server",
+          service: "chordvox-license-server",
           productId: config.defaultProductId,
           timestamp: new Date().toISOString(),
         });

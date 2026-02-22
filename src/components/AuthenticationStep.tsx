@@ -323,7 +323,7 @@ export default function AuthenticationStep({
         <div className="text-center mb-4">
           <img
             src={logoIcon}
-            alt="AriaKey"
+            alt="ChordVox"
             className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
           />
           <p className="text-lg font-semibold text-foreground tracking-tight leading-tight">
@@ -349,7 +349,7 @@ export default function AuthenticationStep({
         <div className="text-center mb-4">
           <img
             src={logoIcon}
-            alt="AriaKey"
+            alt="ChordVox"
             className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
           />
           <div className="w-5 h-5 mx-auto bg-success/10 rounded-full flex items-center justify-center mb-2">
@@ -516,7 +516,7 @@ export default function AuthenticationStep({
       <div className="text-center mb-4">
         <img
           src={logoIcon}
-          alt="AriaKey"
+          alt="ChordVox"
           className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
         />
         <p className="text-lg font-semibold text-foreground tracking-tight leading-tight">
@@ -611,7 +611,7 @@ export default function AuthenticationStep({
       <p className="text-[10px] text-muted-foreground/80 leading-tight text-center">
         {t("auth.legal.prefix")}{" "}
         <a
-          href="https://github.com/GravityPoet/AriaKey/blob/main/docs/legal/TERMS.md"
+          href="https://github.com/GravityPoet/ChordVox/blob/main/docs/legal/TERMS.md"
           target="_blank"
           rel="noopener noreferrer"
           className="text-link underline decoration-link/30 hover:decoration-link/60 transition-colors"
@@ -620,7 +620,7 @@ export default function AuthenticationStep({
         </a>{" "}
         {t("auth.legal.and")}{" "}
         <a
-          href="https://github.com/GravityPoet/AriaKey/blob/main/docs/legal/PRIVACY.md"
+          href="https://github.com/GravityPoet/ChordVox/blob/main/docs/legal/PRIVACY.md"
           target="_blank"
           rel="noopener noreferrer"
           className="text-link underline decoration-link/30 hover:decoration-link/60 transition-colors"

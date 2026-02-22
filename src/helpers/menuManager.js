@@ -94,7 +94,7 @@ class MenuManager {
               label: i18nMain.t("menu.learnMore"),
               click: async () => {
                 const { shell } = require("electron");
-                await shell.openExternal("https://github.com/GravityPoet/AriaKey");
+                await shell.openExternal("https://github.com/GravityPoet/ChordVox");
               },
             },
           ],

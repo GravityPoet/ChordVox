@@ -15,7 +15,7 @@ const config = {
   port: readInt(process.env.PORT, 8787),
   dbPath: path.resolve(SERVICE_ROOT, process.env.LICENSE_DB_PATH || "./data/licenses.db"),
   keyPepper: (process.env.LICENSE_KEY_PEPPER || "").trim(),
-  defaultProductId: (process.env.LICENSE_DEFAULT_PRODUCT_ID || "ariakey-pro").trim(),
+  defaultProductId: (process.env.LICENSE_DEFAULT_PRODUCT_ID || "chordvox-pro").trim(),
   defaultOfflineGraceHours: readInt(process.env.LICENSE_DEFAULT_OFFLINE_GRACE_HOURS, 168),
   adminToken: (process.env.LICENSE_SERVER_ADMIN_TOKEN || "").trim(),
 };

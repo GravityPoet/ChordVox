@@ -1,16 +1,16 @@
-# AriaKey App Store Listing Copy
+# ChordVox App Store Listing Copy
 
 ## 简体中文（China Mainland）
 
-- 名称（17/30）：`AriaKey - AI 语音输入法`
+- 名称（17/30）：`ChordVox - AI 语音输入法`
 - 副标题（12/30）：`离线隐私听写 & AI智能润色`
 - 宣传文本（Promo）：
   `自然开口，剩下的交给 AI。主打隐私安全的离线语音输入法，在光标处为你自动润色文本。`
 - 描述（Description）：
 
-AriaKey 是你的终极 AI 语音输入法。它不仅仅是将你的语音转成文字，更能在本地实时理解、净化并打磨你的用词。
+ChordVox 是你的终极 AI 语音输入法。它不仅仅是将你的语音转成文字，更能在本地实时理解、净化并打磨你的用词。
 
-彻底告别令人尴尬的错别字和糟糕的听写错误。AriaKey 完全离线运行，意味着你的语音数据永远不会离开你的设备，绝对保护你的隐私。
+彻底告别令人尴尬的错别字和糟糕的听写错误。ChordVox 完全离线运行，意味着你的语音数据永远不会离开你的设备，绝对保护你的隐私。
 
 核心特性：
 - 100% 离线听写：零网络依赖，极速语音转文字。
@@ -20,15 +20,15 @@ AriaKey 是你的终极 AI 语音输入法。它不仅仅是将你的语音转�
 
 ## English (US)
 
-- Name (27/30): `AriaKey - AI Voice Keyboard`
+- Name (27/30): `ChordVox - AI Voice Keyboard`
 - Subtitle (27/30): `Dictate & AI Refine Offline`
 - Promo Text:
   `Speak naturally, let AI do the rest. Privacy-first, offline voice typing that auto-refines your text right at the cursor.`
 - Description:
 
-AriaKey is your ultimate AI voice keyboard. It doesn't just transcribe your speech; it understands, cleans, and polishes your words in real-time.
+ChordVox is your ultimate AI voice keyboard. It doesn't just transcribe your speech; it understands, cleans, and polishes your words in real-time.
 
-Say goodbye to embarrassing typos and awkward dictation errors. AriaKey runs entirely offline, meaning your voice data never leaves your device, ensuring absolute privacy.
+Say goodbye to embarrassing typos and awkward dictation errors. ChordVox runs entirely offline, meaning your voice data never leaves your device, ensuring absolute privacy.
 
 Key Features:
 - 100% Offline Dictation: Lightning-fast voice-to-text with zero internet required.

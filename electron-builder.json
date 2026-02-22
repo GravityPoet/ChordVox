@@ -1,9 +1,9 @@
 {
-  "appId": "com.gravitypoet.ariakey",
-  "productName": "AriaKey",
+  "appId": "com.gravitypoet.chordvox",
+  "productName": "ChordVox",
   "protocols": {
-    "name": "AriaKey Protocol",
-    "schemes": ["ariakey"]
+    "name": "ChordVox Protocol",
+    "schemes": ["chordvox"]
   },
   "directories": {
     "output": "dist"
@@ -117,8 +117,8 @@
     "notarize": true,
     "extendInfo": {
       "LSUIElement": false,
-      "NSMicrophoneUsageDescription": "AriaKey needs microphone access for speech-to-text transcription.",
-      "NSAccessibilityUsageDescription": "AriaKey needs accessibility permissions to paste transcribed text into other applications."
+      "NSMicrophoneUsageDescription": "ChordVox needs microphone access for speech-to-text transcription.",
+      "NSAccessibilityUsageDescription": "ChordVox needs accessibility permissions to paste transcribed text into other applications."
     }
   },
   "win": {
@@ -185,8 +185,9 @@
     "include": "resources/nsis/cleanup-models.nsh"
   },
   "dmg": {
-    "title": "AriaKey",
+    "title": "ChordVox",
     "icon": "src/assets/icon.icns",
+    "background": "src/assets/dmg-background.png",
     "window": {
       "width": 540,
       "height": 380
@@ -195,7 +196,7 @@
   "publish": {
     "provider": "github",
     "owner": "GravityPoet",
-    "repo": "AriaKey",
+    "repo": "ChordVox",
     "private": false,
     "releaseType": "release"
   }

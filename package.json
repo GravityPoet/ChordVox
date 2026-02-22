@@ -1,7 +1,7 @@
 {
-  "name": "ariakey",
+  "name": "chordvox",
   "version": "1.5.25",
-  "description": "AriaKey - AI Voice Keyboard. Dictate & AI Refine Offline.",
+  "description": "AI IME (Input Method) for macOS & Windows",
   "main": "main.js",
   "private": true,
   "scripts": {
@@ -58,7 +58,7 @@
     "desktop-app"
   ],
   "author": {
-    "name": "AriaKey Team",
+    "name": "ChordVox Team",
     "email": "moonlitpoet@proton.me"
   },
   "license": "MIT",

@@ -32,18 +32,18 @@ If Apple secrets are not configured, the workflow still builds unsigned macOS ar
 ### Customer-facing macOS unblock steps (use in release notes/support replies)
 
 For unsigned/notarized-later macOS builds, customers may see Gatekeeper dialogs like:
-- "`AriaKey.app` is damaged and can't be opened"
-- "Apple cannot verify `AriaKey.app`..."
+- "`ChordVox.app` is damaged and can't be opened"
+- "Apple cannot verify `ChordVox.app`..."
 
 Use this exact 3-step guidance:
 
-1. Move `AriaKey.app` into `/Applications`.
-2. Right-click `AriaKey.app` -> **Open** once.
+1. Move `ChordVox.app` into `/Applications`.
+2. Right-click `ChordVox.app` -> **Open** once.
 3. If still blocked, run:
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/AriaKey.app
-open /Applications/AriaKey.app
+xattr -dr com.apple.quarantine /Applications/ChordVox.app
+open /Applications/ChordVox.app
 ```
 
 ## 2) Desktop license validation skeleton
@@ -63,7 +63,7 @@ Main-process license manager:
 
 ```bash
 LICENSE_API_BASE_URL=
-LICENSE_PRODUCT_ID=ariakey-pro
+LICENSE_PRODUCT_ID=chordvox-pro
 LICENSE_API_TOKEN=
 LICENSE_API_TIMEOUT_MS=8000
 LICENSE_OFFLINE_GRACE_HOURS=168
@@ -80,7 +80,7 @@ Request body:
 ```json
 {
   "licenseKey": "XXXX-XXXX-XXXX",
-  "productId": "ariakey-pro",
+  "productId": "chordvox-pro",
   "machineId": "stable-machine-fingerprint",
   "appVersion": "1.5.0",
   "platform": "darwin",

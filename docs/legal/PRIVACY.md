@@ -1,8 +1,8 @@
-# AriaKey Privacy Policy (Draft)
+# ChordVox Privacy Policy (Draft)
 
 Last updated: 2026-02-21
 
-This is a draft privacy policy for AriaKey and should be reviewed by legal counsel before commercial launch.
+This is a draft privacy policy for ChordVox and should be reviewed by legal counsel before commercial launch.
 
 ## 1. Data Processing Modes
 
@@ -31,7 +31,7 @@ When using external AI providers or payment platforms, their privacy policies al
 
 ## 7. Open Source Attribution
 
-AriaKey includes software under open source licenses. See:
+ChordVox includes software under open source licenses. See:
 
 - `LICENSE`
 - `NOTICE`
@@ -41,4 +41,4 @@ AriaKey includes software under open source licenses. See:
 ## 8. Contact
 
 For privacy questions, open an issue in the project repository:
-[https://github.com/GravityPoet/AriaKey/issues](https://github.com/GravityPoet/AriaKey/issues)
+[https://github.com/GravityPoet/ChordVox/issues](https://github.com/GravityPoet/ChordVox/issues)

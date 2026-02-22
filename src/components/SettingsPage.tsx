@@ -751,8 +751,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
   const [isRemovingModels, setIsRemovingModels] = useState(false);
   const cachePathHint =
     typeof navigator !== "undefined" && /Windows/i.test(navigator.userAgent)
-      ? "%USERPROFILE%\\.cache\\ariakey"
-      : "~/.cache/ariakey";
+      ? "%USERPROFILE%\\.cache\\chordvox"
+      : "~/.cache/chordvox";
 
   const {
     status: updateStatus,
@@ -1267,7 +1267,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
 
     return {
       schemaVersion: 1,
-      app: "AriaKey",
+      app: "ChordVox",
       exportedAt: new Date().toISOString(),
       appVersion: currentVersion || (await getAppVersion()) || null,
       localStorage: localStorageData,

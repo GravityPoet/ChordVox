@@ -52,7 +52,7 @@ export default function SupportDropdown({ className }: SupportDropdownProps) {
           Contact Support
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => openExternal("https://github.com/GravityPoet/AriaKey/issues")}
+          onClick={() => openExternal("https://github.com/GravityPoet/ChordVox/issues")}
         >
           <Bug className="mr-2 h-4 w-4" />
           Submit Bug

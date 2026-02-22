@@ -1,6 +1,6 @@
-# AriaKey License Server
+# ChordVox License Server
 
-`AriaKey` desktop app already calls:
+`ChordVox` desktop app already calls:
 
 - `POST /v1/licenses/activate`
 - `POST /v1/licenses/validate`
@@ -50,13 +50,13 @@ Revoke:
 npm run admin -- revoke --key AK-7M3Q-A9K2-H8TR-W4NP --reason "Refunded"
 ```
 
-## 3. Wire AriaKey app to this server
+## 3. Wire ChordVox app to this server
 
 Set desktop app env (`.env` in app userData or packaged env):
 
 ```bash
 LICENSE_API_BASE_URL=https://license.your-domain.com
-LICENSE_PRODUCT_ID=ariakey-pro
+LICENSE_PRODUCT_ID=chordvox-pro
 LICENSE_OFFLINE_GRACE_HOURS=168
 ```
 
@@ -71,7 +71,7 @@ curl -X POST http://127.0.0.1:8787/v1/licenses/activate \
   -H "Content-Type: application/json" \
   -d '{
     "licenseKey":"AK-7M3Q-A9K2-H8TR-W4NP",
-    "productId":"ariakey-pro",
+    "productId":"chordvox-pro",
     "machineId":"abc123-machine-fingerprint",
     "appVersion":"1.5.11",
     "platform":"darwin",
@@ -86,7 +86,7 @@ curl -X POST http://127.0.0.1:8787/v1/licenses/validate \
   -H "Content-Type: application/json" \
   -d '{
     "licenseKey":"AK-7M3Q-A9K2-H8TR-W4NP",
-    "productId":"ariakey-pro",
+    "productId":"chordvox-pro",
     "machineId":"abc123-machine-fingerprint",
     "appVersion":"1.5.11",
     "platform":"darwin",

@@ -1,6 +1,6 @@
 # Assets Directory
 
-This directory contains app icons and other assets for AriaKey.
+This directory contains app icons and other assets for ChordVox.
 
 ## Required Icons
 

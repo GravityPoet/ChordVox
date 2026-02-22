@@ -875,12 +875,16 @@ export default function ReasoningModelSelector({
     setSelectedCloudProvider(provider);
     setLocalReasoningProvider(provider);
 
+    const lastModel = localStorage.getItem(`chordvox_last_model_${provider}`);
+
     if (provider === "custom") {
       setCustomBaseInput(cloudReasoningBaseUrl);
       lastLoadedBaseRef.current = null;
       pendingBaseRef.current = null;
 
-      if (customModelOptions.length > 0) {
+      if (lastModel) {
+        setReasoningModel(lastModel);
+      } else if (customModelOptions.length > 0) {
         setReasoningModel(customModelOptions[0].value);
       } else if (hasCustomBase) {
         loadRemoteModels();
@@ -890,7 +894,9 @@ export default function ReasoningModelSelector({
 
     if (provider === "bedrock") {
       const cachedModels = providerModelsCache.bedrock;
-      if (cachedModels?.length > 0) {
+      if (lastModel) {
+        setReasoningModel(lastModel);
+      } else if (cachedModels?.length > 0) {
         setReasoningModel(cachedModels[0].value);
       } else if (bedrockAccessKeyId && bedrockSecretAccessKey) {
         loadBedrockModels();
@@ -898,8 +904,16 @@ export default function ReasoningModelSelector({
       return;
     }
 
+    if (lastModel) {
+      setReasoningModel(lastModel);
+      return;
+    }
+
     const providerData = REASONING_PROVIDERS[provider as keyof typeof REASONING_PROVIDERS];
-    if (providerData?.models?.length > 0) {
+    const cachedModels = providerModelsCache[provider];
+    if (cachedModels?.length > 0) {
+      setReasoningModel(cachedModels[0].value);
+    } else if (providerData?.models?.length > 0) {
       setReasoningModel(providerData.models[0].value);
     }
   };
@@ -907,18 +921,38 @@ export default function ReasoningModelSelector({
   const handleLocalProviderChange = async (providerId: string) => {
     setSelectedLocalProvider(providerId);
     setLocalReasoningProvider(providerId);
+
     const downloaded = await loadDownloadedModels();
     const provider = localProviders.find((p) => p.id === providerId);
     const models = provider?.models ?? [];
+
+    const lastModel = localStorage.getItem(`chordvox_last_model_local_${providerId}`);
+
     if (models.length > 0) {
-      const firstDownloaded = models.find((m) => downloaded.has(m.id));
-      if (firstDownloaded) {
-        setReasoningModel(firstDownloaded.id);
+      if (lastModel && models.some(m => m.id === lastModel && downloaded.has(m.id))) {
+        setReasoningModel(lastModel);
       } else {
-        setReasoningModel("");
+        const firstDownloaded = models.find((m) => downloaded.has(m.id));
+        if (firstDownloaded) {
+          setReasoningModel(firstDownloaded.id);
+        } else {
+          setReasoningModel("");
+        }
       }
     }
   };
+
+  const handleModelSelect = useCallback(
+    (modelId: string) => {
+      setReasoningModel(modelId);
+      if (selectedMode === "cloud") {
+        localStorage.setItem(`chordvox_last_model_${selectedCloudProvider}`, modelId);
+      } else {
+        localStorage.setItem(`chordvox_last_model_local_${selectedLocalProvider}`, modelId);
+      }
+    },
+    [setReasoningModel, selectedMode, selectedCloudProvider, selectedLocalProvider]
+  );
 
   const MODE_TABS = [
     { id: "cloud", name: t("reasoning.mode.cloud") },
@@ -1079,7 +1113,7 @@ export default function ReasoningModelSelector({
                         <ModelCardList
                           models={selectedCloudModels}
                           selectedModel={reasoningModel}
-                          onModelSelect={setReasoningModel}
+                          onModelSelect={handleModelSelect}
                         />
                       </div>
                     </>
@@ -1172,7 +1206,7 @@ export default function ReasoningModelSelector({
                         <ModelCardList
                           models={selectedCloudModels}
                           selectedModel={reasoningModel}
-                          onModelSelect={setReasoningModel}
+                          onModelSelect={handleModelSelect}
                         />
                       </div>
                     </>
@@ -1339,7 +1373,7 @@ export default function ReasoningModelSelector({
                         <ModelCardList
                           models={selectedCloudModels}
                           selectedModel={reasoningModel}
-                          onModelSelect={setReasoningModel}
+                          onModelSelect={handleModelSelect}
                         />
                       </div>
                     </>
@@ -1352,7 +1386,7 @@ export default function ReasoningModelSelector({
               providers={localProviders}
               selectedModel={reasoningModel}
               selectedProvider={selectedLocalProvider}
-              onModelSelect={setReasoningModel}
+              onModelSelect={handleModelSelect}
               onProviderSelect={handleLocalProviderChange}
               modelType="llm"
               colorScheme="purple"

@@ -5,11 +5,11 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 const VALID_CHANNELS = new Set(["development", "staging", "production"]);
 const DEFAULT_OAUTH_PROTOCOL_BY_CHANNEL = {
-  development: "ariakey-dev",
-  staging: "ariakey-staging",
-  production: "ariakey",
+  development: "chordvox-dev",
+  staging: "chordvox-staging",
+  production: "chordvox",
 };
-const BASE_WINDOWS_APP_ID = "com.gravitypoet.ariakey";
+const BASE_WINDOWS_APP_ID = "com.gravitypoet.chordvox";
 const DEFAULT_AUTH_BRIDGE_PORT = 5199;
 
 function isElectronBinaryExec() {
@@ -48,7 +48,7 @@ function configureChannelUserDataPath() {
     return;
   }
 
-  const isolatedPath = path.join(app.getPath("appData"), `AriaKey-${APP_CHANNEL}`);
+  const isolatedPath = path.join(app.getPath("appData"), `ChordVox-${APP_CHANNEL}`);
   app.setPath("userData", isolatedPath);
 }
 
@@ -102,7 +102,7 @@ function shouldRegisterProtocolWithAppArg() {
 // Register custom protocol for OAuth callbacks.
 // In development, always include the app path argument so macOS/Windows/Linux
 // can launch the project app instead of opening bare Electron.
-function registerAriaKeyProtocol() {
+function registerChordVoxProtocol() {
   const protocol = OAUTH_PROTOCOL;
 
   if (shouldRegisterProtocolWithAppArg()) {
@@ -113,7 +113,7 @@ function registerAriaKeyProtocol() {
   return app.setAsDefaultProtocolClient(protocol);
 }
 
-const protocolRegistered = registerAriaKeyProtocol();
+const protocolRegistered = registerChordVoxProtocol();
 if (!protocolRegistered) {
   console.warn(`[Auth] Failed to register ${OAUTH_PROTOCOL}:// protocol handler`);
 }
@@ -127,8 +127,8 @@ if (!gotSingleInstanceLock) {
 const isLiveWindow = (window) => window && !window.isDestroyed();
 
 // Ensure macOS menus use the proper casing for the app name
-if (process.platform === "darwin" && app.getName() !== "AriaKey") {
-  app.setName("AriaKey");
+if (process.platform === "darwin" && app.getName() !== "ChordVox") {
+  app.setName("ChordVox");
 }
 
 // Add global error handling for uncaught exceptions
@@ -415,7 +415,7 @@ function startAuthBridgeServer() {
 
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
     res.end(
-      "<html><body><h3>AriaKey sign-in complete.</h3><p>You can close this tab.</p></body></html>"
+      "<html><body><h3>ChordVox sign-in complete.</h3><p>You can close this tab.</p></body></html>"
     );
   });
 
