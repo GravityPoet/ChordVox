@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="resources/icon.png" width="120" alt="AriaKey Logo" />
-</p>
-
 <h1 align="center">AriaKey</h1>
 
 <p align="center">
