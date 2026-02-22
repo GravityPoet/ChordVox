@@ -8,6 +8,7 @@ import ModelCardList from "./ui/ModelCardList";
 import LocalModelPicker, { type LocalProvider } from "./LocalModelPicker";
 import { ProviderTabs } from "./ui/ProviderTabs";
 import { API_ENDPOINTS, buildApiUrl, normalizeBaseUrl } from "../config/constants";
+import { signRequest } from "../utils/awsSigV4";
 import { REASONING_PROVIDERS } from "../models/ModelRegistry";
 import { modelRegistry } from "../models/ModelRegistry";
 import { getProviderIcon, isMonochromeProvider } from "../utils/providerIcons";
@@ -187,6 +188,7 @@ export default function ReasoningModelSelector({
     anthropic: "https://api.anthropic.com/v1",
     gemini: "https://generativelanguage.googleapis.com/v1beta",
     groq: "https://api.groq.com/openai/v1",
+    bedrock: "https://bedrock-runtime.us-east-1.amazonaws.com",
   }), []);
 
   const [providerEndpoints, setProviderEndpoints] = useState<Record<string, string>>(() => {
@@ -213,6 +215,81 @@ export default function ReasoningModelSelector({
     // Reset fetch state so next refresh uses new endpoint
     providerFetchState.current[providerId] = false;
   }, []);
+
+  // Bedrock-specific state
+  const [bedrockAccessKeyId, setBedrockAccessKeyId] = useState(() =>
+    localStorage.getItem("bedrockAccessKeyId") || ""
+  );
+  const [bedrockSecretAccessKey, setBedrockSecretAccessKey] = useState(() =>
+    localStorage.getItem("bedrockSecretAccessKey") || ""
+  );
+  const [bedrockRegion, setBedrockRegion] = useState(() =>
+    localStorage.getItem("bedrockRegion") || "us-east-1"
+  );
+
+  const saveBedrockCredential = useCallback((key: string, value: string) => {
+    localStorage.setItem(key, value);
+  }, []);
+
+  const loadBedrockModels = useCallback(async (force = false) => {
+    if (!bedrockAccessKeyId || !bedrockSecretAccessKey) return;
+    if (!force && providerFetchState.current.bedrock) return;
+    providerFetchState.current.bedrock = true;
+
+    setProviderLoading((prev) => ({ ...prev, bedrock: true }));
+    setProviderError((prev) => ({ ...prev, bedrock: null }));
+
+    try {
+      // Use Bedrock control plane to list foundation models
+      const bedrockRegionValue = bedrockRegion || "us-east-1";
+      const endpoint = `https://bedrock.${bedrockRegionValue}.amazonaws.com/foundation-models`;
+
+      const signed = await signRequest({
+        method: "GET",
+        url: endpoint,
+        region: bedrockRegionValue,
+        service: "bedrock",
+        accessKeyId: bedrockAccessKeyId,
+        secretAccessKey: bedrockSecretAccessKey,
+      });
+
+      const response = await fetch(signed.url, {
+        method: "GET",
+        headers: signed.headers,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => "");
+        throw new Error(`${response.status} ${errorText.slice(0, 200)}`);
+      }
+
+      const payload = await response.json();
+      const models = (payload.modelSummaries || [])
+        .filter((m: any) => m.inferenceTypesSupported?.includes("ON_DEMAND"))
+        .map((m: any) => ({
+          value: m.modelId,
+          label: m.modelId,
+          description: m.modelName || m.providerName || undefined,
+          icon: "/icons/aws.svg",
+        }));
+
+      if (models.length > 0) {
+        setProviderModelsCache((prev) => ({ ...prev, bedrock: models }));
+        providerFetchState.current.bedrock = "done";
+      } else {
+        providerFetchState.current.bedrock = false;
+      }
+    } catch (error) {
+      providerFetchState.current.bedrock = false;
+      setProviderError((prev) => ({
+        ...prev,
+        bedrock: (error as Error).message || "Failed to load Bedrock models",
+      }));
+    } finally {
+      setProviderLoading((prev) => ({ ...prev, bedrock: false }));
+    }
+  }, [bedrockAccessKeyId, bedrockSecretAccessKey, bedrockRegion]);
+
   const [customBaseInput, setCustomBaseInput] = useState(cloudReasoningBaseUrl);
   const lastLoadedBaseRef = useRef<string | null>(null);
   const pendingBaseRef = useRef<string | null>(null);
@@ -416,13 +493,15 @@ export default function ReasoningModelSelector({
     return customModelOptions;
   }, [isCustomBaseDirty, customModelOptions]);
 
-  const cloudProviderIds = ["openai", "anthropic", "gemini", "groq", "custom"];
+  const cloudProviderIds = ["openai", "anthropic", "gemini", "groq", "bedrock", "custom"];
   const cloudProviders = cloudProviderIds.map((id) => ({
     id,
     name:
       id === "custom"
         ? t("reasoning.custom.providerName")
-        : REASONING_PROVIDERS[id as keyof typeof REASONING_PROVIDERS]?.name || id,
+        : id === "bedrock"
+          ? "AWS Bedrock"
+          : REASONING_PROVIDERS[id as keyof typeof REASONING_PROVIDERS]?.name || id,
   }));
 
   const localProviders = useMemo<LocalProvider[]>(() => {
@@ -451,6 +530,8 @@ export default function ReasoningModelSelector({
 
   const loadBuiltInProviderModels = useCallback(async (providerId: string, apiKey: string, force = false) => {
     if (!apiKey || providerId === "custom") return;
+    // Bedrock uses its own model loading path
+    if (providerId === "bedrock") return;
 
     if (!force && providerFetchState.current[providerId]) return;
     providerFetchState.current[providerId] = true;
@@ -776,6 +857,16 @@ export default function ReasoningModelSelector({
       return;
     }
 
+    if (provider === "bedrock") {
+      const cachedModels = providerModelsCache.bedrock;
+      if (cachedModels?.length > 0) {
+        setReasoningModel(cachedModels[0].value);
+      } else if (bedrockAccessKeyId && bedrockSecretAccessKey) {
+        loadBedrockModels();
+      }
+      return;
+    }
+
     const providerData = REASONING_PROVIDERS[provider as keyof typeof REASONING_PROVIDERS];
     if (providerData?.models?.length > 0) {
       setReasoningModel(providerData.models[0].value);
@@ -953,6 +1044,99 @@ export default function ReasoningModelSelector({
                                 </p>
                               )}
                           </>
+                        )}
+                        <ModelCardList
+                          models={selectedCloudModels}
+                          selectedModel={reasoningModel}
+                          onModelSelect={setReasoningModel}
+                        />
+                      </div>
+                    </>
+                  ) : selectedCloudProvider === "bedrock" ? (
+                    <>
+                      {/* Bedrock: Access Key ID */}
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium text-foreground">Access Key ID</h4>
+                        <Input
+                          type="password"
+                          value={bedrockAccessKeyId}
+                          onChange={(e) => {
+                            setBedrockAccessKeyId(e.target.value);
+                            saveBedrockCredential("bedrockAccessKeyId", e.target.value);
+                          }}
+                          placeholder="AKIA..."
+                          className="text-sm"
+                        />
+                      </div>
+
+                      {/* Bedrock: Secret Access Key */}
+                      <div className="space-y-2 pt-2">
+                        <h4 className="text-sm font-medium text-foreground">Secret Access Key</h4>
+                        <Input
+                          type="password"
+                          value={bedrockSecretAccessKey}
+                          onChange={(e) => {
+                            setBedrockSecretAccessKey(e.target.value);
+                            saveBedrockCredential("bedrockSecretAccessKey", e.target.value);
+                          }}
+                          placeholder="wJalr..."
+                          className="text-sm"
+                        />
+                      </div>
+
+                      {/* Bedrock: Region */}
+                      <div className="space-y-2 pt-2">
+                        <h4 className="text-sm font-medium text-foreground">Region</h4>
+                        <Input
+                          value={bedrockRegion}
+                          onChange={(e) => {
+                            setBedrockRegion(e.target.value);
+                            saveBedrockCredential("bedrockRegion", e.target.value);
+                          }}
+                          placeholder="us-east-1"
+                          className="text-sm"
+                        />
+                      </div>
+
+                      {/* Bedrock: Endpoint URL */}
+                      <div className="pt-3 space-y-2">
+                        <h4 className="text-sm font-medium text-foreground">
+                          {t("reasoning.custom.endpointTitle")}
+                        </h4>
+                        <Input
+                          value={providerEndpointInputs.bedrock || ""}
+                          onChange={(e) => setProviderEndpointInputs((prev) => ({ ...prev, bedrock: e.target.value }))}
+                          onBlur={() => handleProviderEndpointBlur("bedrock")}
+                          placeholder={`https://bedrock-runtime.${bedrockRegion || "us-east-1"}.amazonaws.com`}
+                          className="text-sm"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          默认根据 Region 自动生成，自定义端点可用于 VPC Endpoint 等场景
+                        </p>
+                      </div>
+
+                      {/* Bedrock: Model Selection */}
+                      <div className="pt-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium text-foreground">
+                            {t("reasoning.availableModels")}
+                          </h4>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => loadBedrockModels(true)}
+                            disabled={providerLoading.bedrock || !bedrockAccessKeyId || !bedrockSecretAccessKey}
+                            className="text-xs"
+                          >
+                            {providerLoading.bedrock ? t("common.loading") : t("common.refresh")}
+                          </Button>
+                        </div>
+                        {providerLoading.bedrock && (
+                          <p className="text-xs text-primary">{t("reasoning.custom.fetchingModels")}</p>
+                        )}
+                        {providerError.bedrock && (
+                          <p className="text-xs text-destructive">{providerError.bedrock}</p>
                         )}
                         <ModelCardList
                           models={selectedCloudModels}

@@ -6,6 +6,7 @@ import { API_ENDPOINTS, TOKEN_LIMITS, buildApiUrl, normalizeBaseUrl } from "../c
 import logger from "../utils/logger";
 import { isSecureEndpoint } from "../utils/urlUtils";
 import { withSessionRefresh } from "../lib/neonAuth";
+import { signRequest } from "../utils/awsSigV4";
 
 class ReasoningService extends BaseReasoningService {
   private apiKeyCache: SecureCache<string>;
@@ -202,7 +203,7 @@ class ReasoningService extends BaseReasoningService {
   }
 
   private async getApiKey(
-    provider: "openai" | "anthropic" | "gemini" | "groq" | "custom"
+    provider: "openai" | "anthropic" | "gemini" | "groq" | "bedrock" | "custom"
   ): Promise<string> {
     if (provider === "custom") {
       let customKey = "";
@@ -224,6 +225,17 @@ class ReasoningService extends BaseReasoningService {
       });
 
       return trimmedKey;
+    }
+
+    // Bedrock uses access key + secret key, not a single API key
+    if (provider === "bedrock") {
+      const accessKey = window.localStorage?.getItem("bedrockAccessKeyId") || "";
+      const secretKey = window.localStorage?.getItem("bedrockSecretAccessKey") || "";
+      if (!accessKey.trim() || !secretKey.trim()) {
+        throw new Error("AWS Bedrock credentials not configured");
+      }
+      // Return access key as the "api key" – processWithBedrock reads both separately
+      return accessKey.trim();
     }
 
     let apiKey = this.apiKeyCache.get(provider);
@@ -260,6 +272,29 @@ class ReasoningService extends BaseReasoningService {
           error: (error as Error).message,
           stack: (error as Error).stack,
         });
+      }
+    }
+
+    // Fallback to localStorage if IPC returned empty
+    if (!apiKey && typeof window !== "undefined" && window.localStorage) {
+      const localStorageKeys: Record<string, string> = {
+        openai: "openaiApiKey",
+        anthropic: "anthropicApiKey",
+        gemini: "geminiApiKey",
+        groq: "groqApiKey",
+      };
+      const lsKey = localStorageKeys[provider];
+      if (lsKey) {
+        const lsValue = (window.localStorage.getItem(lsKey) || "").trim();
+        if (lsValue) {
+          logger.logReasoning(`${provider.toUpperCase()}_KEY_LOCALSTORAGE_FALLBACK`, {
+            provider,
+            hasKey: true,
+            keyLength: lsValue.length,
+          });
+          apiKey = lsValue;
+          this.apiKeyCache.set(provider, apiKey);
+        }
       }
     }
 
@@ -464,6 +499,9 @@ class ReasoningService extends BaseReasoningService {
           break;
         case "openwhispr":
           result = await this.processWithOpenWhispr(text, model, agentName, config);
+          break;
+        case "bedrock":
+          result = await this.processWithBedrock(text, trimmedModel, agentName, config);
           break;
         default:
           throw new Error(`Unsupported reasoning provider: ${provider}`);
@@ -1041,6 +1079,147 @@ class ReasoningService extends BaseReasoningService {
     }
   }
 
+  private async processWithBedrock(
+    text: string,
+    model: string,
+    agentName: string | null = null,
+    config: ReasoningConfig = {}
+  ): Promise<string> {
+    logger.logReasoning("BEDROCK_START", { model, agentName });
+
+    if (this.isProcessing) {
+      throw new Error("Already processing a request");
+    }
+
+    const accessKeyId = (window.localStorage?.getItem("bedrockAccessKeyId") || "").trim();
+    const secretAccessKey = (window.localStorage?.getItem("bedrockSecretAccessKey") || "").trim();
+    const region = (window.localStorage?.getItem("bedrockRegion") || "us-east-1").trim();
+    const sessionToken = (window.localStorage?.getItem("bedrockSessionToken") || "").trim() || undefined;
+
+    if (!accessKeyId || !secretAccessKey) {
+      throw new Error("AWS Bedrock credentials not configured");
+    }
+
+    this.isProcessing = true;
+
+    try {
+      const systemPrompt = this.getSystemPrompt(agentName, text);
+      const userPrompt = text;
+
+      const bedrockBase = this.getProviderEndpointOverride("bedrock") ||
+        `https://bedrock-runtime.${region}.amazonaws.com`;
+      const endpoint = `${bedrockBase}/model/${model}/converse`;
+
+      const requestBody = JSON.stringify({
+        messages: [
+          { role: "user", content: [{ text: `${systemPrompt}\n\n${userPrompt}` }] },
+        ],
+        inferenceConfig: {
+          temperature: config.temperature ?? 0.3,
+          maxTokens: config.maxTokens || Math.max(
+            4096,
+            this.calculateMaxTokens(
+              text.length,
+              TOKEN_LIMITS.MIN_TOKENS,
+              TOKEN_LIMITS.MAX_TOKENS,
+              TOKEN_LIMITS.TOKEN_MULTIPLIER
+            )
+          ),
+        },
+      });
+
+      logger.logReasoning("BEDROCK_REQUEST", {
+        endpoint,
+        model,
+        region,
+        requestPreview: requestBody.substring(0, 200),
+      });
+
+      const signed = await signRequest({
+        method: "POST",
+        url: endpoint,
+        region,
+        service: "bedrock",
+        accessKeyId,
+        secretAccessKey,
+        sessionToken,
+        body: requestBody,
+        headers: { "content-type": "application/json" },
+      });
+
+      const response = await withRetry(async () => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
+        try {
+          const res = await fetch(signed.url, {
+            method: "POST",
+            headers: {
+              ...signed.headers,
+              "Content-Type": "application/json",
+            },
+            body: requestBody,
+            signal: controller.signal,
+          });
+
+          if (!res.ok) {
+            const errorText = await res.text();
+            let errorData: any = { error: res.statusText };
+            try { errorData = JSON.parse(errorText); } catch { errorData = { error: errorText || res.statusText }; }
+            const errorMessage = errorData.message || errorData.error?.message || errorData.error || `Bedrock API error: ${res.status}`;
+            throw new Error(errorMessage);
+          }
+
+          return await res.json();
+        } catch (error) {
+          if ((error as Error).name === "AbortError") {
+            throw new Error("Bedrock request timed out after 60s");
+          }
+          throw error;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      }, createApiRetryStrategy());
+
+      // Bedrock Converse API response format
+      let responseText = "";
+      if (response?.output?.message?.content) {
+        for (const block of response.output.message.content) {
+          if (block.text) {
+            responseText += block.text;
+          }
+        }
+      }
+      // Fallback: OpenAI-compatible response format
+      if (!responseText && response?.choices?.[0]?.message?.content) {
+        responseText = response.choices[0].message.content;
+      }
+
+      responseText = responseText.trim();
+
+      logger.logReasoning("BEDROCK_RESPONSE", {
+        model,
+        responseLength: responseText.length,
+        usage: response.usage,
+        success: !!responseText,
+      });
+
+      if (!responseText) {
+        throw new Error("Bedrock returned empty response");
+      }
+
+      return responseText;
+    } catch (error) {
+      logger.logReasoning("BEDROCK_ERROR", {
+        model,
+        error: (error as Error).message,
+        errorType: (error as Error).name,
+      });
+      throw error;
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
   private async processWithOpenWhispr(
     text: string,
     model: string,
@@ -1141,6 +1320,8 @@ class ReasoningService extends BaseReasoningService {
       const geminiKey = await getKeyWithFallback(window.electronAPI?.getGeminiKey, "geminiApiKey");
       const groqKey = await getKeyWithFallback(window.electronAPI?.getGroqKey, "groqApiKey");
       const customReasoningKey = await getKeyWithFallback(window.electronAPI?.getCustomReasoningKey, "customReasoningApiKey");
+      const bedrockAccessKey = (window.localStorage?.getItem("bedrockAccessKeyId") || "").trim();
+      const bedrockSecretKey = (window.localStorage?.getItem("bedrockSecretAccessKey") || "").trim();
       const localAvailable = await window.electronAPI?.checkLocalReasoningAvailable?.();
       const configuredProvider = String(
         provider || window.localStorage?.getItem("reasoningProvider") || "auto"
@@ -1157,6 +1338,7 @@ class ReasoningService extends BaseReasoningService {
         hasGroq: !!groqKey,
         hasCustomReasoningKey: !!customReasoningKey,
         hasCustomEndpoint: !!customEndpoint,
+        hasBedrock: !!(bedrockAccessKey && bedrockSecretKey),
         hasLocal: !!localAvailable,
       });
 
@@ -1169,6 +1351,8 @@ class ReasoningService extends BaseReasoningService {
           return !!geminiKey;
         case "groq":
           return !!groqKey;
+        case "bedrock":
+          return !!(bedrockAccessKey && bedrockSecretKey);
         case "local":
           return !!localAvailable;
         case "custom":

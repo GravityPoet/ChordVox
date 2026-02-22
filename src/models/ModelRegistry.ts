@@ -267,6 +267,17 @@ export function getModelProvider(modelId: string): string {
     if (modelId.includes("gemini") && !modelId.includes("gemma")) return "gemini";
     if ((modelId.includes("gpt-4") || modelId.includes("gpt-5")) && !modelId.includes("gpt-oss"))
       return "openai";
+    // Bedrock model IDs: us.anthropic.claude-*, amazon.nova-*, us.meta.llama-*, etc.
+    if (
+      modelId.includes("amazon.") ||
+      modelId.includes("us.anthropic.") ||
+      modelId.includes("us.meta.") ||
+      modelId.includes("us.amazon.") ||
+      modelId.includes("cohere.") ||
+      modelId.includes("ai21.") ||
+      modelId.includes("stability.")
+    )
+      return "bedrock";
     if (
       modelId.includes("qwen/") ||
       modelId.includes("openai/") ||
