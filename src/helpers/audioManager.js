@@ -9,7 +9,22 @@ import { hasStoredByokKey } from "../utils/byokDetection";
 
 const SHORT_CLIP_DURATION_SECONDS = 2.5;
 const REASONING_CACHE_TTL = 30000; // 30 seconds
+const TRANSCRIPTION_TIMEOUT_MS = 60_000; // 60 seconds — abort if transcription + reasoning exceeds this
 const SECONDARY_HOTKEY_PROFILE_KEY = "secondaryHotkeyProfile";
+
+function withTimeout(promise, ms, label = "Operation") {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => {
+      const err = new Error(
+        `${label} timed out after ${Math.round(ms / 1000)}s. Check your network connection or try a smaller audio clip.`
+      );
+      err.code = "TIMEOUT";
+      reject(err);
+    }, ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
 
 const PLACEHOLDER_KEYS = {
   openai: "your_openai_api_key_here",
@@ -475,20 +490,28 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
             transcriptionProvider,
             transcriptionModel: activeModel,
           });
-          result = await this.processWithLocalParakeet(audioBlob, parakeetModel, metadata);
+          result = await withTimeout(
+            this.processWithLocalParakeet(audioBlob, parakeetModel, metadata),
+            TRANSCRIPTION_TIMEOUT_MS,
+            "Transcription"
+          );
         } else if (localProvider === "sensevoice") {
           activeModel = senseVoiceModelPath || "sensevoice";
           this.emitCallTrace("transcription", "start", {
             transcriptionProvider,
             transcriptionModel: activeModel,
           });
-          result = await this.processWithLocalSenseVoice(
-            audioBlob,
-            {
-              modelPath: senseVoiceModelPath,
-              binaryPath: senseVoiceBinaryPath,
-            },
-            metadata
+          result = await withTimeout(
+            this.processWithLocalSenseVoice(
+              audioBlob,
+              {
+                modelPath: senseVoiceModelPath,
+                binaryPath: senseVoiceBinaryPath,
+              },
+              metadata
+            ),
+            TRANSCRIPTION_TIMEOUT_MS,
+            "Transcription"
           );
         } else {
           activeModel = whisperModel;
@@ -496,7 +519,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
             transcriptionProvider,
             transcriptionModel: activeModel,
           });
-          result = await this.processWithLocalWhisper(audioBlob, whisperModel, metadata);
+          result = await withTimeout(
+            this.processWithLocalWhisper(audioBlob, whisperModel, metadata),
+            TRANSCRIPTION_TIMEOUT_MS,
+            "Transcription"
+          );
         }
       } else if (isOpenWhisprCloudMode) {
         transcriptionProvider = "openwhispr-cloud";
@@ -512,7 +539,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
           transcriptionProvider,
           transcriptionModel: activeModel,
         });
-        result = await this.processWithOpenWhisprCloud(audioBlob, metadata);
+        result = await withTimeout(
+          this.processWithOpenWhisprCloud(audioBlob, metadata),
+          TRANSCRIPTION_TIMEOUT_MS,
+          "Transcription"
+        );
       } else {
         transcriptionProvider = this.getStringSetting("cloudTranscriptionProvider", "openai");
         activeModel = this.getTranscriptionModel();
@@ -520,7 +551,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
           transcriptionProvider,
           transcriptionModel: activeModel,
         });
-        result = await this.processWithOpenAIAPI(audioBlob, metadata);
+        result = await withTimeout(
+          this.processWithOpenAIAPI(audioBlob, metadata),
+          TRANSCRIPTION_TIMEOUT_MS,
+          "Transcription"
+        );
       }
 
       this.emitCallTrace(
@@ -1670,10 +1705,12 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         "transcription"
       );
 
+      const abortController = new AbortController();
       const response = await fetch(endpoint, {
         method: "POST",
         headers,
         body: formData,
+        signal: abortController.signal,
       });
 
       const responseContentType = response.headers.get("content-type") || "";
@@ -2682,7 +2719,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     if (this.streamingFallbackRecorder?.state === "recording") {
       try {
         this.streamingFallbackRecorder.stop();
-      } catch {}
+      } catch { }
     }
     this.streamingFallbackRecorder = null;
     this.streamingFallbackChunks = [];
@@ -2745,7 +2782,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       this.stopRecording();
     }
     if (this.persistentAudioContext && this.persistentAudioContext.state !== "closed") {
-      this.persistentAudioContext.close().catch(() => {});
+      this.persistentAudioContext.close().catch(() => { });
       this.persistentAudioContext = null;
       this.workletModuleLoaded = false;
     }
