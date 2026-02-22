@@ -1093,23 +1093,53 @@ class ReasoningService extends BaseReasoningService {
     }
   }
 
-  async isAvailable(): Promise<boolean> {
+  async isAvailable(provider?: string): Promise<boolean> {
     try {
       const openaiKey = await window.electronAPI?.getOpenAIKey?.();
       const anthropicKey = await window.electronAPI?.getAnthropicKey?.();
       const geminiKey = await window.electronAPI?.getGeminiKey?.();
       const groqKey = await window.electronAPI?.getGroqKey?.();
+      const customReasoningKey = await window.electronAPI?.getCustomReasoningKey?.();
       const localAvailable = await window.electronAPI?.checkLocalReasoningAvailable?.();
+      const configuredProvider = String(
+        provider || window.localStorage?.getItem("reasoningProvider") || "auto"
+      )
+        .trim()
+        .toLowerCase();
+      const customEndpoint = (window.localStorage?.getItem("cloudReasoningBaseUrl") || "").trim();
 
       logger.logReasoning("API_KEY_CHECK", {
+        provider: configuredProvider,
         hasOpenAI: !!openaiKey,
         hasAnthropic: !!anthropicKey,
         hasGemini: !!geminiKey,
         hasGroq: !!groqKey,
+        hasCustomReasoningKey: !!customReasoningKey,
+        hasCustomEndpoint: !!customEndpoint,
         hasLocal: !!localAvailable,
       });
 
-      return !!(openaiKey || anthropicKey || geminiKey || groqKey || localAvailable);
+      switch (configuredProvider) {
+        case "openai":
+          return !!openaiKey;
+        case "anthropic":
+          return !!anthropicKey;
+        case "gemini":
+          return !!geminiKey;
+        case "groq":
+          return !!groqKey;
+        case "local":
+          return !!localAvailable;
+        case "custom":
+          // Custom endpoint can be keyless; endpoint URL is the minimum requirement.
+          return !!customEndpoint;
+        case "openwhispr":
+          // OpenWhispr cloud path handles auth errors at call-time.
+          return true;
+        case "auto":
+        default:
+          return !!(openaiKey || anthropicKey || geminiKey || groqKey || localAvailable || customEndpoint);
+      }
     } catch (error) {
       logger.logReasoning("API_KEY_CHECK_ERROR", {
         error: (error as Error).message,
