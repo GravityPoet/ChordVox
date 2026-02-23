@@ -79,11 +79,11 @@
 
 ### Download
 
-Current stable: [`v1.5.18`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.18)
+Current stable: [`v1.5.27`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.27)
 
 | System | Chip | Format | Link |
 |---|---|---|---|
-| macOS | Apple Silicon | dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.18/ChordVox-1.5.18-arm64.dmg) |
+| macOS | Apple Silicon | dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.27/ChordVox-1.5.27-arm64.dmg) |
 | macOS | Intel | dmg | Coming soon |
 | Windows | x64 | exe | Coming soon |
 | Linux | x64 | AppImage / deb | Coming soon |
