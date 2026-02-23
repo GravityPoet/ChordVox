@@ -20,7 +20,7 @@
 
 ### One-liner
 
-> **Desktop voice keyboard that transcribes locally, refines with AI, and pastes directly at your cursor — no cloud account required.**
+> **AI voice input method, completely revolutionizing your typing experience. An amazing AI voice input experience with high-privacy local transcription, AI polishing, and direct pasting at the cursor—no cloud account required.**
 
 ---
 
