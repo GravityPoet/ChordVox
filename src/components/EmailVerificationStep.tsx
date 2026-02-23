@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { OPENWHISPR_API_URL } from "../config/constants";
+import { CHORDVOX_API_URL } from "../config/constants";
 import { Button } from "./ui/button";
 import { Mail, Loader2, Check, RefreshCw } from "lucide-react";
 import logoIcon from "../assets/icon.png";
@@ -25,9 +25,9 @@ export default function EmailVerificationStep({ email, onVerified }: EmailVerifi
   }, [resendCooldown]);
 
   useEffect(() => {
-    if (!OPENWHISPR_API_URL || verified) return;
+    if (!CHORDVOX_API_URL || verified) return;
 
-    const url = `${OPENWHISPR_API_URL}/api/auth/verification-status?email=${encodeURIComponent(email)}`;
+    const url = `${CHORDVOX_API_URL}/api/auth/verification-status?email=${encodeURIComponent(email)}`;
 
     pollRef.current = setInterval(async () => {
       try {
@@ -54,11 +54,11 @@ export default function EmailVerificationStep({ email, onVerified }: EmailVerifi
   }, [email, verified, onVerified]);
 
   const handleResend = useCallback(async () => {
-    if (resendCooldown > 0 || isResending || !OPENWHISPR_API_URL) return;
+    if (resendCooldown > 0 || isResending || !CHORDVOX_API_URL) return;
     setIsResending(true);
     setError(null);
     try {
-      const res = await fetch(`${OPENWHISPR_API_URL}/api/auth/send-verification-email`, {
+      const res = await fetch(`${CHORDVOX_API_URL}/api/auth/send-verification-email`, {
         method: "POST",
         credentials: "include",
       });
@@ -81,7 +81,7 @@ export default function EmailVerificationStep({ email, onVerified }: EmailVerifi
         <div className="text-center mb-4">
           <img
             src={logoIcon}
-            alt="OpenWhispr"
+            alt="ChordVox"
             className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
           />
           <div className="w-8 h-8 mx-auto bg-success/10 rounded-full flex items-center justify-center mb-2">
@@ -103,7 +103,7 @@ export default function EmailVerificationStep({ email, onVerified }: EmailVerifi
       <div className="text-center mb-4">
         <img
           src={logoIcon}
-          alt="OpenWhispr"
+          alt="ChordVox"
           className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
         />
         <div className="w-8 h-8 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-3">

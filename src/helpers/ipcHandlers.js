@@ -1124,7 +1124,7 @@ class IPCHandlers {
       }
     });
 
-    // --- OpenWhispr Cloud API handlers ---
+    // --- ChordVox Cloud API handlers ---
 
     // In production, VITE_* env vars aren't available in the main process because
     // Vite only inlines them into the renderer bundle at build time. Load the
@@ -1139,9 +1139,9 @@ class IPCHandlers {
     })();
 
     const getApiUrl = () =>
-      process.env.OPENWHISPR_API_URL ||
-      process.env.VITE_OPENWHISPR_API_URL ||
-      runtimeEnv.VITE_OPENWHISPR_API_URL ||
+      process.env.CHORDVOX_API_URL ||
+      process.env.VITE_CHORDVOX_API_URL ||
+      runtimeEnv.VITE_CHORDVOX_API_URL ||
       "";
 
     const getAuthUrl = () =>
@@ -1205,13 +1205,13 @@ class IPCHandlers {
     ipcMain.handle("cloud-transcribe", async (event, audioBuffer, opts = {}) => {
       try {
         const apiUrl = getApiUrl();
-        if (!apiUrl) throw new Error("OpenWhispr API URL not configured");
+        if (!apiUrl) throw new Error("ChordVox API URL not configured");
 
         const cookieHeader = await getSessionCookies(event);
         if (!cookieHeader) throw new Error("No session cookies available");
 
         const audioData = Buffer.from(audioBuffer);
-        const boundary = `----OpenWhispr${Date.now()}`;
+        const boundary = `----ChordVox${Date.now()}`;
         const parts = [];
 
         parts.push(
@@ -1341,7 +1341,7 @@ class IPCHandlers {
     ipcMain.handle("cloud-reason", async (event, text, opts = {}) => {
       try {
         const apiUrl = getApiUrl();
-        if (!apiUrl) throw new Error("OpenWhispr API URL not configured");
+        if (!apiUrl) throw new Error("ChordVox API URL not configured");
 
         console.log("[cloud-reason] ⬇ IPC called", {
           apiUrl,
@@ -1416,7 +1416,7 @@ class IPCHandlers {
     ipcMain.handle("cloud-usage", async (event) => {
       try {
         const apiUrl = getApiUrl();
-        if (!apiUrl) throw new Error("OpenWhispr API URL not configured");
+        if (!apiUrl) throw new Error("ChordVox API URL not configured");
 
         const cookieHeader = await getSessionCookies(event);
         if (!cookieHeader) throw new Error("No session cookies available");
@@ -1443,7 +1443,7 @@ class IPCHandlers {
     const fetchStripeUrl = async (event, endpoint, errorPrefix) => {
       try {
         const apiUrl = getApiUrl();
-        if (!apiUrl) throw new Error("OpenWhispr API URL not configured");
+        if (!apiUrl) throw new Error("ChordVox API URL not configured");
 
         const cookieHeader = await getSessionCookies(event);
         if (!cookieHeader) throw new Error("No session cookies available");
@@ -1517,25 +1517,25 @@ class IPCHandlers {
         // Parse lines
         const lines = envContent.split("\n");
         const logLevelIndex = lines.findIndex((line) =>
-          line.trim().startsWith("OPENWHISPR_LOG_LEVEL=")
+          line.trim().startsWith("CHORDVOX_LOG_LEVEL=")
         );
 
         if (enabled) {
           // Set to debug
           if (logLevelIndex !== -1) {
-            lines[logLevelIndex] = "OPENWHISPR_LOG_LEVEL=debug";
+            lines[logLevelIndex] = "CHORDVOX_LOG_LEVEL=debug";
           } else {
             // Add new line
             if (lines.length > 0 && lines[lines.length - 1] !== "") {
               lines.push("");
             }
             lines.push("# Debug logging setting");
-            lines.push("OPENWHISPR_LOG_LEVEL=debug");
+            lines.push("CHORDVOX_LOG_LEVEL=debug");
           }
         } else {
           // Remove or set to info
           if (logLevelIndex !== -1) {
-            lines[logLevelIndex] = "OPENWHISPR_LOG_LEVEL=info";
+            lines[logLevelIndex] = "CHORDVOX_LOG_LEVEL=info";
           }
         }
 
@@ -1543,7 +1543,7 @@ class IPCHandlers {
         fs.writeFileSync(envPath, lines.join("\n"), "utf8");
 
         // Update environment variable
-        process.env.OPENWHISPR_LOG_LEVEL = enabled ? "debug" : "info";
+        process.env.CHORDVOX_LOG_LEVEL = enabled ? "debug" : "info";
 
         // Refresh logger state
         debugLogger.refreshLogLevel();
@@ -1601,7 +1601,7 @@ class IPCHandlers {
     const fetchStreamingToken = async (event) => {
       const apiUrl = getApiUrl();
       if (!apiUrl) {
-        throw new Error("OpenWhispr API URL not configured");
+        throw new Error("ChordVox API URL not configured");
       }
 
       const cookieHeader = await getSessionCookies(event);
@@ -1804,7 +1804,7 @@ class IPCHandlers {
 
     const fetchDeepgramStreamingTokenFromWindow = async (windowId) => {
       const apiUrl = getApiUrl();
-      if (!apiUrl) throw new Error("OpenWhispr API URL not configured");
+      if (!apiUrl) throw new Error("ChordVox API URL not configured");
 
       const win = BrowserWindow.fromId(windowId);
       if (!win || win.isDestroyed()) throw new Error("Window not available for token refresh");
@@ -1834,7 +1834,7 @@ class IPCHandlers {
     const fetchDeepgramStreamingToken = async (event) => {
       const apiUrl = getApiUrl();
       if (!apiUrl) {
-        throw new Error("OpenWhispr API URL not configured");
+        throw new Error("ChordVox API URL not configured");
       }
 
       const cookieHeader = await getSessionCookies(event);

@@ -236,7 +236,7 @@ function useSettingsInternal() {
 
   const [cloudTranscriptionMode, setCloudTranscriptionMode] = useLocalStorage(
     "cloudTranscriptionMode",
-    hasStoredByokKey() ? "byok" : "openwhispr",
+    hasStoredByokKey() ? "byok" : "chordvox",
     {
       serialize: String,
       deserialize: String,
@@ -245,7 +245,7 @@ function useSettingsInternal() {
 
   const [cloudReasoningMode, setCloudReasoningMode] = useLocalStorage(
     "cloudReasoningMode",
-    "openwhispr",
+    "chordvox",
     {
       serialize: String,
       deserialize: String,

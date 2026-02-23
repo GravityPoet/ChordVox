@@ -193,7 +193,7 @@ function TranscriptionSection({
 }: TranscriptionSectionProps) {
   const { t, i18n } = useTranslation();
   const isCustomMode = cloudTranscriptionMode === "byok" || useLocalWhisper;
-  const isCloudMode = isSignedIn && cloudTranscriptionMode === "openwhispr" && !useLocalWhisper;
+  const isCloudMode = isSignedIn && cloudTranscriptionMode === "chordvox" && !useLocalWhisper;
 
   return (
     <div className="space-y-4">
@@ -209,7 +209,7 @@ function TranscriptionSection({
             <button
               onClick={() => {
                 if (!isCloudMode) {
-                  setCloudTranscriptionMode("openwhispr");
+                  setCloudTranscriptionMode("chordvox");
                   setUseLocalWhisper(false);
                   updateTranscriptionSettings({ useLocalWhisper: false });
                   toast({
@@ -238,7 +238,7 @@ function TranscriptionSection({
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-[12px] font-medium text-foreground">
-                    {t("settingsPage.transcription.openwhisprCloud")}
+                    {t("settingsPage.transcription.chordvoxCloud")}
                   </span>
                   {isCloudMode && (
                     <span className="text-[10px] font-medium text-primary bg-primary/10 dark:bg-primary/15 px-1.5 py-px rounded-sm">
@@ -247,7 +247,7 @@ function TranscriptionSection({
                   )}
                 </div>
                 <p className="text-[11px] text-muted-foreground/80 mt-0.5">
-                  {t("settingsPage.transcription.openwhisprCloudDescription")}
+                  {t("settingsPage.transcription.chordvoxCloudDescription")}
                 </p>
               </div>
               <div
@@ -430,7 +430,7 @@ function AiModelsSection({
 }: AiModelsSectionProps) {
   const { t, i18n } = useTranslation();
   const isCustomMode = cloudReasoningMode === "byok";
-  const isCloudMode = isSignedIn && cloudReasoningMode === "openwhispr";
+  const isCloudMode = isSignedIn && cloudReasoningMode === "chordvox";
 
   return (
     <div className="space-y-4">
@@ -460,7 +460,7 @@ function AiModelsSection({
                 <button
                   onClick={() => {
                     if (!isCloudMode) {
-                      setCloudReasoningMode("openwhispr");
+                      setCloudReasoningMode("chordvox");
                       toast({
                         title: t("settingsPage.aiModels.toasts.switchedCloud.title"),
                         description: t("settingsPage.aiModels.toasts.switchedCloud.description"),
@@ -487,7 +487,7 @@ function AiModelsSection({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-[12px] font-medium text-foreground">
-                        {t("settingsPage.aiModels.openwhisprCloud")}
+                        {t("settingsPage.aiModels.chordvoxCloud")}
                       </span>
                       {isCloudMode && (
                         <span className="text-[10px] font-medium text-primary bg-primary/10 dark:bg-primary/15 px-1.5 py-px rounded-sm">
@@ -496,7 +496,7 @@ function AiModelsSection({
                       )}
                     </div>
                     <p className="text-[11px] text-muted-foreground/80 mt-0.5">
-                      {t("settingsPage.aiModels.openwhisprCloudDescription")}
+                      {t("settingsPage.aiModels.chordvoxCloudDescription")}
                     </p>
                   </div>
                   <div
@@ -688,8 +688,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
   const [isRemovingModels, setIsRemovingModels] = useState(false);
   const cachePathHint =
     typeof navigator !== "undefined" && /Windows/i.test(navigator.userAgent)
-      ? "%USERPROFILE%\\.cache\\openwhispr"
-      : "~/.cache/openwhispr";
+      ? "%USERPROFILE%\\.cache\\chordvox"
+      : "~/.cache/chordvox";
 
   const {
     status: updateStatus,
@@ -919,7 +919,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
               description: t("settingsPage.developer.removeModels.failedDescription"),
             });
           } else {
-            window.dispatchEvent(new Event("openwhispr-models-cleared"));
+            window.dispatchEvent(new Event("chordvox-models-cleared"));
             showAlertDialog({
               title: t("settingsPage.developer.removeModels.successTitle"),
               description: t("settingsPage.developer.removeModels.successDescription"),
@@ -1974,15 +1974,15 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                   <div className="space-y-2.5">
                     {[
                       {
-                        input: `Hey ${agentName}, write a formal email about the budget`,
+                        input: `Hi ${agentName}, write a formal email about the budget`,
                         mode: t("settingsPage.agentConfig.instructionMode"),
                       },
                       {
-                        input: `Hey ${agentName}, make this more professional`,
+                        input: `Hi ${agentName}, make this more professional`,
                         mode: t("settingsPage.agentConfig.instructionMode"),
                       },
                       {
-                        input: `Hey ${agentName}, convert this to bullet points`,
+                        input: `Hi ${agentName}, convert this to bullet points`,
                         mode: t("settingsPage.agentConfig.instructionMode"),
                       },
                       {

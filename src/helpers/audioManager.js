@@ -339,11 +339,11 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
 
       const cloudTranscriptionMode =
         localStorage.getItem("cloudTranscriptionMode") ||
-        (hasStoredByokKey() ? "byok" : "openwhispr");
+        (hasStoredByokKey() ? "byok" : "chordvox");
       const isSignedIn = localStorage.getItem("isSignedIn") === "true";
 
-      const isOpenWhisprCloudMode = !useLocalWhisper && cloudTranscriptionMode === "openwhispr";
-      const useCloud = isOpenWhisprCloudMode && isSignedIn;
+      const isChordVoxCloudMode = !useLocalWhisper && cloudTranscriptionMode === "chordvox";
+      const useCloud = isChordVoxCloudMode && isSignedIn;
       logger.debug(
         "Transcription routing",
         { useLocalWhisper, useCloud, isSignedIn, cloudTranscriptionMode },
@@ -360,16 +360,16 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
           activeModel = whisperModel;
           result = await this.processWithLocalWhisper(audioBlob, whisperModel, metadata);
         }
-      } else if (isOpenWhisprCloudMode) {
+      } else if (isChordVoxCloudMode) {
         if (!isSignedIn) {
           const err = new Error(
-            "OpenWhispr Cloud requires sign-in. Please sign in again or switch to BYOK mode."
+            "ChordVox Cloud requires sign-in. Please sign in again or switch to BYOK mode."
           );
           err.code = "AUTH_REQUIRED";
           throw err;
         }
-        activeModel = "openwhispr-cloud";
-        result = await this.processWithOpenWhisprCloud(audioBlob, metadata);
+        activeModel = "chordvox-cloud";
+        result = await this.processWithChordVoxCloud(audioBlob, metadata);
       } else {
         activeModel = this.getTranscriptionModel();
         result = await this.processWithOpenAIAPI(audioBlob, metadata);
@@ -1073,7 +1073,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     return result;
   }
 
-  async processWithOpenWhisprCloud(audioBlob, metadata = {}) {
+  async processWithChordVoxCloud(audioBlob, metadata = {}) {
     if (!navigator.onLine) {
       const err = new Error("You're offline. Cloud transcription requires an internet connection.");
       err.code = "OFFLINE";
@@ -1109,9 +1109,9 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     if (useReasoningModel && processedText) {
       const reasoningStart = performance.now();
       const agentName = localStorage.getItem("agentName") || "";
-      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "openwhispr";
+      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "chordvox";
 
-      if (cloudReasoningMode === "openwhispr") {
+      if (cloudReasoningMode === "chordvox") {
         const reasonResult = await withSessionRefresh(async () => {
           const res = await window.electronAPI.cloudReason(processedText, {
             agentName,
@@ -1150,7 +1150,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     return {
       success: true,
       text: processedText,
-      source: "openwhispr",
+      source: "chordvox",
       timings,
       limitReached: result.limitReached,
       wordsUsed: result.wordsUsed,
@@ -1733,14 +1733,14 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
   shouldUseStreaming(isSignedInOverride) {
     const cloudTranscriptionMode =
       localStorage.getItem("cloudTranscriptionMode") ||
-      (hasStoredByokKey() ? "byok" : "openwhispr");
+      (hasStoredByokKey() ? "byok" : "chordvox");
     const isSignedIn = isSignedInOverride ?? localStorage.getItem("isSignedIn") === "true";
     const useLocalWhisper = localStorage.getItem("useLocalWhisper") === "true";
     const streamingDisabled = localStorage.getItem("deepgramStreaming") === "false";
 
     return (
       !useLocalWhisper &&
-      cloudTranscriptionMode === "openwhispr" &&
+      cloudTranscriptionMode === "chordvox" &&
       isSignedIn &&
       !streamingDisabled
     );
@@ -2033,7 +2033,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
       } else if (error.code === "AUTH_EXPIRED" || error.code === "AUTH_REQUIRED") {
         errorTitle = "Sign-in Required";
         errorDescription =
-          "Your OpenWhispr Cloud session is unavailable. Please sign in again from Settings.";
+          "Your ChordVox Cloud session is unavailable. Please sign in again from Settings.";
       }
 
       this.onError?.({
@@ -2164,10 +2164,10 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
     if (useReasoningModel && finalText) {
       const reasoningStart = performance.now();
       const agentName = localStorage.getItem("agentName") || "";
-      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "openwhispr";
+      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "chordvox";
 
       try {
-        if (cloudReasoningMode === "openwhispr") {
+        if (cloudReasoningMode === "chordvox") {
           const reasonResult = await withSessionRefresh(async () => {
             const res = await window.electronAPI.cloudReason(finalText, {
               agentName,
@@ -2231,7 +2231,7 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         "streaming"
       );
       try {
-        const batchResult = await this.processWithOpenWhisprCloud(fallbackBlob, {
+        const batchResult = await this.processWithChordVoxCloud(fallbackBlob, {
           durationSeconds,
         });
         if (batchResult?.text) {

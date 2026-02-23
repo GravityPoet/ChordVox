@@ -61,8 +61,8 @@
     "desktop-app"
   ],
   "author": {
-    "name": "OpenWhispr Team",
-    "email": "support@openwhispr.com"
+    "name": "ChordVox Team",
+    "email": "support@chordvox.com"
   },
   "license": "MIT",
   "devDependencies": {

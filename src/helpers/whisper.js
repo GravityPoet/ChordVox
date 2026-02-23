@@ -171,7 +171,7 @@ class WhisperManager {
       }
     }
 
-    debugLogger.info("OpenWhispr dependency check", status);
+    debugLogger.info("ChordVox dependency check", status);
 
     // Log a summary for easy scanning
     const serverStatus = status.whisperServer.available

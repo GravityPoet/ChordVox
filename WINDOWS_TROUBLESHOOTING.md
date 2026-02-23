@@ -4,12 +4,12 @@
 
 ### No Window Appears
 
-**Symptoms:** OpenWhispr runs in Task Manager but no window shows
+**Symptoms:** ChordVox runs in Task Manager but no window shows
 
 **Solutions:**
-1. Check system tray (click ^ caret) for OpenWhispr icon
-2. Run with debug: `OpenWhispr.exe --log-level=debug`
-3. Try disabling GPU: `OpenWhispr.exe --disable-gpu`
+1. Check system tray (click ^ caret) for ChordVox icon
+2. Run with debug: `ChordVox.exe --log-level=debug`
+3. Try disabling GPU: `ChordVox.exe --disable-gpu`
 
 ### No Transcriptions
 
@@ -28,7 +28,7 @@
 1. whisper.cpp is bundled with the app - try reinstalling
 2. If running from source, run `npm run download:whisper-cpp` and confirm `resources\\bin\\whisper-cpp-win32-x64.exe` exists
 3. Check antivirus isn't blocking the whisper-cpp executable
-4. Clear model cache: delete `%USERPROFILE%\.cache\openwhispr\whisper-models`
+4. Clear model cache: delete `%USERPROFILE%\.cache\chordvox\whisper-models`
 5. Try cloud mode as fallback
 
 ### FFmpeg Issues
@@ -36,7 +36,7 @@
 **Symptoms:** Transcription fails silently
 
 **Solutions:**
-1. Reinstall OpenWhispr (FFmpeg is bundled)
+1. Reinstall ChordVox (FFmpeg is bundled)
 2. Check antivirus isn't quarantining FFmpeg
 3. Install system FFmpeg and add to PATH if needed
 
@@ -44,13 +44,13 @@
 
 ```batch
 # Run with debug logging
-OpenWhispr.exe --log-level=debug
+ChordVox.exe --log-level=debug
 
-# Or set in .env file at %APPDATA%\OpenWhispr\.env
-OPENWHISPR_LOG_LEVEL=debug
+# Or set in .env file at %APPDATA%\ChordVox\.env
+CHORDVOX_LOG_LEVEL=debug
 ```
 
-Logs saved to: `%APPDATA%\OpenWhispr\logs\`
+Logs saved to: `%APPDATA%\ChordVox\logs\`
 
 ## Common Errors
 
@@ -64,11 +64,11 @@ Logs saved to: `%APPDATA%\OpenWhispr\logs\`
 ## Windows-Specific Tips
 
 ### Windows Defender
-Add OpenWhispr to exclusions if blocked:
+Add ChordVox to exclusions if blocked:
 Settings → Virus & threat protection → Exclusions
 
 ### Firewall (Cloud Mode)
-Allow OpenWhispr through firewall for cloud transcription
+Allow ChordVox through firewall for cloud transcription
 
 ### Permission Errors
 Right-click → Run as administrator (or set in Properties → Compatibility)
@@ -76,17 +76,17 @@ Right-click → Run as administrator (or set in Properties → Compatibility)
 ## Complete Reset
 
 ```batch
-# Uninstall OpenWhispr first, then:
-rd /s /q "%APPDATA%\OpenWhispr"
-rd /s /q "%LOCALAPPDATA%\OpenWhispr"
+# Uninstall ChordVox first, then:
+rd /s /q "%APPDATA%\ChordVox"
+rd /s /q "%LOCALAPPDATA%\ChordVox"
 ```
 
 Then reinstall.
 
 ## Getting Help
 
-Report issues at https://github.com/OpenWhispr/openwhispr/issues with:
+Report issues at https://github.com/ChordVox/chordvox/issues with:
 - Windows version (`winver`)
-- OpenWhispr version
+- ChordVox version
 - Debug log contents
 - Steps to reproduce

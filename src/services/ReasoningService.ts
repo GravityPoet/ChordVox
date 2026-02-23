@@ -437,8 +437,8 @@ class ReasoningService extends BaseReasoningService {
         case "groq":
           result = await this.processWithGroq(text, model, agentName, config);
           break;
-        case "openwhispr":
-          result = await this.processWithOpenWhispr(text, model, agentName, config);
+        case "chordvox":
+          result = await this.processWithChordVox(text, model, agentName, config);
           break;
         default:
           throw new Error(`Unsupported reasoning provider: ${provider}`);
@@ -1014,13 +1014,13 @@ class ReasoningService extends BaseReasoningService {
     }
   }
 
-  private async processWithOpenWhispr(
+  private async processWithChordVox(
     text: string,
     model: string,
     agentName: string | null = null,
     config: ReasoningConfig = {}
   ): Promise<string> {
-    logger.logReasoning("OPENWHISPR_START", { model, agentName });
+    logger.logReasoning("CHORDVOX_START", { model, agentName });
 
     if (this.isProcessing) {
       throw new Error("Already processing a request");
@@ -1045,7 +1045,7 @@ class ReasoningService extends BaseReasoningService {
         });
 
         if (!res.success) {
-          const err: any = new Error(res.error || "OpenWhispr cloud reasoning failed");
+          const err: any = new Error(res.error || "ChordVox cloud reasoning failed");
           err.code = res.code;
           throw err;
         }
@@ -1053,7 +1053,7 @@ class ReasoningService extends BaseReasoningService {
         return res;
       });
 
-      logger.logReasoning("OPENWHISPR_SUCCESS", {
+      logger.logReasoning("CHORDVOX_SUCCESS", {
         model: result.model,
         provider: result.provider,
         resultLength: result.text.length,
@@ -1061,7 +1061,7 @@ class ReasoningService extends BaseReasoningService {
 
       return result.text;
     } catch (error) {
-      logger.logReasoning("OPENWHISPR_ERROR", {
+      logger.logReasoning("CHORDVOX_ERROR", {
         model,
         error: (error as Error).message,
       });

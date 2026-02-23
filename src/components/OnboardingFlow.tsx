@@ -94,7 +94,7 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   } = useSettings();
 
   const [hotkey, setHotkey] = useState(dictationKey || getDefaultHotkey());
-  const [agentName, setAgentName] = useState("OpenWhispr");
+  const [agentName, setAgentName] = useState("ChordVox");
   const [skipAuth, setSkipAuth] = useState(false);
   const [pendingVerificationEmail, setPendingVerificationEmail] = useState<string | null>(null);
   const [isModelDownloaded, setIsModelDownloaded] = useState(false);

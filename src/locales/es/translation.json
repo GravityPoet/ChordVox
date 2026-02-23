@@ -1,9 +1,9 @@
 {
   "app": {
-    "name": "OpenWhispr",
-    "loading": "Cargando OpenWhispr...",
+    "name": "ChordVox",
+    "loading": "Cargando ChordVox...",
     "oauth": {
-      "redirectTitle": "Redirigiendo a OpenWhispr",
+      "redirectTitle": "Redirigiendo a ChordVox",
       "closeTab": "Puedes cerrar esta pestaña"
     },
     "buttons": {
@@ -36,7 +36,7 @@
       "sectionTitle": "Idioma",
       "sectionDescription": "Configura por separado el idioma de la interfaz y de la transcripción",
       "uiLabel": "Idioma de la interfaz",
-      "uiDescription": "Elige el idioma usado en la interfaz de OpenWhispr",
+      "uiDescription": "Elige el idioma usado en la interfaz de ChordVox",
       "transcriptionLabel": "Idioma de transcripción",
       "transcriptionDescription": "Elige el idioma que hablas para mejorar la precisión",
       "uiOption": {
@@ -59,12 +59,12 @@
       "hide": "Ocultar panel de dictado"
     },
     "openControlPanel": "Abrir panel de control",
-    "quit": "Salir de OpenWhispr",
-    "tooltip": "OpenWhispr - Dictado por voz"
+    "quit": "Salir de ChordVox",
+    "tooltip": "ChordVox - Dictado por voz"
   },
   "menu": {
-    "appLabel": "OpenWhispr",
-    "quit": "Salir de OpenWhispr",
+    "appLabel": "ChordVox",
+    "quit": "Salir de ChordVox",
     "speech": "Voz",
     "help": "Ayuda",
     "learnMore": "Más información",
@@ -81,8 +81,8 @@
       "message": "No se pudo abrir el enlace en tu navegador:\n{{url}}\n\nError: {{error}}"
     },
     "loadFailure": {
-      "title": "OpenWhispr no pudo cargarse",
-      "message": "OpenWhispr no pudo cargar su interfaz.",
+      "title": "ChordVox no pudo cargarse",
+      "message": "ChordVox no pudo cargar su interfaz.",
       "detail": {
         "window": "Ventana: {{windowName}}",
         "error": "Error {{errorCode}}: {{errorDescription}}",
@@ -93,17 +93,17 @@
   },
   "startup": {
     "error": {
-      "title": "Error de inicio de OpenWhispr",
+      "title": "Error de inicio de ChordVox",
       "message": "No se pudo iniciar la aplicación:\n\n{{error}}\n\nPor favor, reporta este problema."
     },
     "globeHotkey": {
       "title": "Atajo Globe no disponible",
-      "message": "OpenWhispr no pudo activar el atajo de la tecla Globe.",
+      "message": "ChordVox no pudo activar el atajo de la tecla Globe.",
       "details": {
         "unknown": "Ocurrió un error desconocido al iniciar el proceso de escucha de Globe.",
         "fallback": "El atajo Globe permanecerá deshabilitado; los atajos actuales seguirán funcionando.",
         "devHint": "Ejecuta `npm run compile:globe` y recompila la app para regenerar el binario.",
-        "reinstallHint": "Reinstala OpenWhispr o contacta soporte si el problema persiste."
+        "reinstallHint": "Reinstala ChordVox o contacta soporte si el problema persiste."
       }
     }
   },
@@ -123,9 +123,9 @@
     "accessibility": "La configuración de accesibilidad no está disponible en esta plataforma."
   },
   "titleBar": {
-    "quitTitle": "Salir de OpenWhispr",
-    "quitConfirmTitle": "¿Salir de OpenWhispr?",
-    "quitConfirmDescription": "Esto cerrará OpenWhispr y detendrá los procesos en segundo plano.",
+    "quitTitle": "Salir de ChordVox",
+    "quitConfirmTitle": "¿Salir de ChordVox?",
+    "quitConfirmDescription": "Esto cerrará ChordVox y detendrá los procesos en segundo plano.",
     "quit": "Salir",
     "cancel": "Cancelar"
   },
@@ -201,7 +201,7 @@
       "accessibilityTitle": "Accesibilidad",
       "accessibilityDescription": "Para pegar texto en apps",
       "testAndGrant": "Probar y conceder",
-      "requiredForApp": "Necesario para que OpenWhispr funcione",
+      "requiredForApp": "Necesario para que ChordVox funcione",
       "microphoneRequired": "Se requiere acceso al micrófono"
     },
     "transcription": {
@@ -229,7 +229,7 @@
       "problemTitle": "Hubo un problema con la actualización",
       "problemDescription": "No pudimos completar la actualización. Inténtalo más tarde.",
       "installTitle": "Instalar actualización",
-      "installDescription": "OpenWhispr se reiniciará para aplicar la actualización. Se guardará el trabajo en curso.",
+      "installDescription": "ChordVox se reiniciará para aplicar la actualización. Se guardará el trabajo en curso.",
       "couldNotInstallTitle": "No se pudo instalar la actualización",
       "couldNotInstallDescription": "Algo salió mal. Inténtalo de nuevo.",
       "couldNotDownloadTitle": "No se pudo descargar la actualización",
@@ -274,8 +274,8 @@
       "toStart": "para empezar"
     },
     "cloudMigration": {
-      "title": "Bienvenido a OpenWhispr Pro",
-      "description": "Tu prueba gratuita de 7 días está activa. Cambiamos tu transcripción a OpenWhispr Cloud para resultados más rápidos y precisos. Tu configuración anterior se guardó: puedes volver cuando quieras en Ajustes.",
+      "title": "Bienvenido a ChordVox Pro",
+      "description": "Tu prueba gratuita de 7 días está activa. Cambiamos tu transcripción a ChordVox Cloud para resultados más rápidos y precisos. Tu configuración anterior se guardó: puedes volver cuando quieras en Ajustes.",
       "viewSettings": "Ver ajustes"
     },
     "aiCta": {
@@ -423,7 +423,7 @@
       "micErrors": {
         "accessFailed": "Falló el acceso al micrófono. Inténtalo de nuevo.",
         "noMicrophones": "No se detectaron micrófonos. Conecta o selecciona un micrófono en {{settingsPath}}.",
-        "permissionDenied": "Permiso denegado. Abre {{privacyPath}} y permite OpenWhispr.",
+        "permissionDenied": "Permiso denegado. Abre {{privacyPath}} y permite ChordVox.",
         "couldNotStart": "No se pudo iniciar el micrófono seleccionado. Elige un dispositivo en {{settingsPath}} y vuelve a probar.",
         "noActiveInput": "No se encontró una entrada de audio activa. Elige un micrófono en {{settingsPath}}.",
         "unknown": "Falló el acceso al micrófono: {{error}}. Selecciona otro dispositivo e inténtalo de nuevo.",
@@ -452,8 +452,8 @@
         "accessibilityNeeded": "Concede permisos de accesibilidad en la configuración del sistema para habilitar el pegado automático.",
         "windowsReady": "Windows no requiere permisos especiales para pegado automático. ¡Todo listo!",
         "linuxReadyWithMethod": "El pegado automático está disponible usando {{method}}. ¡Todo listo!",
-        "waylandClipboardMode": "El pegado automático no está disponible en esta sesión Wayland. OpenWhispr copiará el texto al portapapeles y podrás pegar con Ctrl+V.",
-        "optionalPasteTool": "Para pegado automático, instala {{tool}}:\n\n{{installCmd}}{{waylandNote}}\n\nSin esto, aún puedes usar OpenWhispr: el texto se copiará al portapapeles y podrás pegar con Ctrl+V."
+        "waylandClipboardMode": "El pegado automático no está disponible en esta sesión Wayland. ChordVox copiará el texto al portapapeles y podrás pegar con Ctrl+V.",
+        "optionalPasteTool": "Para pegado automático, instala {{tool}}:\n\n{{installCmd}}{{waylandNote}}\n\nSin esto, aún puedes usar ChordVox: el texto se copiará al portapapeles y podrás pegar con Ctrl+V."
       },
       "alerts": {
         "accessibilityNeeded": "Se requieren permisos de accesibilidad. Concédelos en la configuración del sistema."
@@ -466,7 +466,7 @@
         "defaultPasteTool": "xdotool",
         "xdotoolXwayland": "xdotool (apps XWayland)"
       },
-      "accessibilityTestText": "Prueba de accesibilidad de OpenWhispr",
+      "accessibilityTestText": "Prueba de accesibilidad de ChordVox",
       "warning": {
         "messages": {
           "macos": "Revisa la configuración de Sonido para seleccionar tu dispositivo de entrada",
@@ -536,7 +536,7 @@
       "continueWithGoogle": "Continuar con Google"
     },
     "welcomeSubtitle": "Dicta en cualquier lugar usando tu voz",
-    "welcomeTitle": "Bienvenido a OpenWhispr"
+    "welcomeTitle": "Bienvenido a ChordVox"
   },
   "cleanupPrompt": "Corrección",
   "developerSection": {
@@ -741,10 +741,10 @@
     "recheckChecking": "Verificando...",
     "title": "Pegado automático",
     "usingMethodPrefix": "Usando",
-    "waylandClipboardDescription": "El pegado automático no está disponible en esta sesión Wayland. OpenWhispr copiará el texto al portapapeles para que puedas pegarlo manualmente con Ctrl+V.",
+    "waylandClipboardDescription": "El pegado automático no está disponible en esta sesión Wayland. ChordVox copiará el texto al portapapeles para que puedas pegarlo manualmente con Ctrl+V.",
     "waylandClipboardTitle": "Modo portapapeles en Wayland",
     "windowsReady": "Windows es compatible con el pegado automático de forma nativa. ¡No se requiere configuración!",
-    "withoutToolPrefix": "Sin esta herramienta, OpenWhispr copiará el texto al portapapeles. Luego puedes pegarlo manualmente con Ctrl+V.",
+    "withoutToolPrefix": "Sin esta herramienta, ChordVox copiará el texto al portapapeles. Luego puedes pegarlo manualmente con Ctrl+V.",
     "xwaylandAppsOnly": "el pegado automático funciona solo en apps XWayland"
   },
   "promptStudio": {
@@ -794,7 +794,7 @@
       "none": "Ninguno",
       "outputLabel": "Salida",
       "processing": "Procesando...",
-      "openwhisprCloud": "OpenWhispr Cloud",
+      "chordvoxCloud": "ChordVox Cloud",
       "providerLabel": "Proveedor",
       "run": "Ejecutar prueba"
     },
@@ -962,12 +962,12 @@
       "cleanupMode": "Modo corrección",
       "description": "Nombra a tu asistente de IA para que puedas dirigirte a él directamente durante el dictado",
       "dialogs": {
-        "updatedDescription": "Tu agente ahora se llama \"{{name}}\". Dirígete a él diciendo \"Hey {{name}}\" seguido de tus instrucciones.",
+        "updatedDescription": "Tu agente ahora se llama \"{{name}}\". Dirígete a él diciendo \"Hi {{name}}\" seguido de tus instrucciones.",
         "updatedTitle": "Nombre del agente actualizado"
       },
       "examplesTitle": "Ejemplos",
       "helper": "Elige algo corto y natural para decir en voz alta",
-      "howItWorksDescription": "Cuando dices \"Hey {{agentName}}\" seguido de una instrucción, la IA cambia del modo corrección al modo instrucción. Sin la frase de activación, simplemente corrige tu dictado.",
+      "howItWorksDescription": "Cuando dices \"Hi {{agentName}}\" seguido de una instrucción, la IA cambia del modo corrección al modo instrucción. Sin la frase de activación, simplemente corrige tu dictado.",
       "howItWorksTitle": "Cómo funciona",
       "instructionMode": "Instrucción",
       "placeholder": "p. ej. Jarvis, Nova, Atlas...",
@@ -980,13 +980,13 @@
       "description": "Corrige transcripciones, gestiona comandos y soluciona errores preservando tu tono.",
       "enableTextCleanup": "Activar corrección de texto",
       "enableTextCleanupDescription": "La IA mejora la calidad de transcripción",
-      "openwhisprCloud": "OpenWhispr Cloud",
-      "openwhisprCloudDescription": "Funciona de inmediato. Sin configuración necesaria.",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "Funciona de inmediato. Sin configuración necesaria.",
       "title": "Mejora de texto con IA",
       "toasts": {
         "switchedCloud": {
-          "description": "La mejora de texto usará el servicio en la nube de OpenWhispr.",
-          "title": "Cambiado a OpenWhispr Cloud"
+          "description": "La mejora de texto usará el servicio en la nube de ChordVox.",
+          "title": "Cambiado a ChordVox Cloud"
         },
         "switchedCustom": {
           "description": "Configura tu propio proveedor y clave API.",
@@ -1034,7 +1034,7 @@
       "howItWorksDescription": "Las palabras que agregas se incluyen en el prompt de IA para que el modelo las reconozca y preserve durante la corrección de transcripción.",
       "howItWorksTitle": "Cómo funciona",
       "noWords": "Aún no se han agregado palabras",
-      "placeholder": "p. ej. OpenWhispr, Kubernetes, Dr. Martínez...",
+      "placeholder": "p. ej. ChordVox, Kubernetes, Dr. Martínez...",
       "pressEnterToAdd": "Pulsa Enter para agregar",
       "removeWord": "Eliminar palabra",
       "tipDescription": "Agrega nombres propios, términos técnicos o cualquier palabra que pueda transcribirse incorrectamente.",
@@ -1047,7 +1047,7 @@
       "appearance": {
         "auto": "Auto",
         "dark": "Oscuro",
-        "description": "Controla el aspecto de OpenWhispr",
+        "description": "Controla el aspecto de ChordVox",
         "light": "Claro",
         "theme": "Tema",
         "themeDescription": "Elige claro, oscuro o según tu sistema",
@@ -1075,7 +1075,7 @@
       },
       "startup": {
         "launchAtLogin": "Abrir al iniciar sesión",
-        "launchAtLoginDescription": "Inicia OpenWhispr automáticamente al iniciar sesión",
+        "launchAtLoginDescription": "Inicia ChordVox automáticamente al iniciar sesión",
         "title": "Inicio"
       },
       "updates": {
@@ -1107,7 +1107,7 @@
           },
           "installUpdate": {
             "confirmText": "Instalar y reiniciar",
-            "description": "OpenWhispr se reiniciará para aplicar la actualización.",
+            "description": "ChordVox se reiniciará para aplicar la actualización.",
             "title": "Instalar actualización"
           },
           "noUpdates": {
@@ -1138,13 +1138,13 @@
     "permissions": {
       "accessibilityDescription": "Necesario para que el pegado automático funcione tras la transcripción",
       "accessibilityTitle": "Accesibilidad",
-      "description": "Prueba y administra los permisos del sistema necesarios para que OpenWhispr funcione correctamente",
+      "description": "Prueba y administra los permisos del sistema necesarios para que ChordVox funcione correctamente",
       "microphoneDescription": "Necesario para la grabación de voz y el dictado",
       "microphoneTitle": "Micrófono",
       "resetAccessibility": {
-        "description": "Esto eliminará a OpenWhispr de los permisos de accesibilidad. Tendrás que volver a conceder acceso en Configuración del sistema > Privacidad y seguridad > Accesibilidad.",
+        "description": "Esto eliminará a ChordVox de los permisos de accesibilidad. Tendrás que volver a conceder acceso en Configuración del sistema > Privacidad y seguridad > Accesibilidad.",
         "label": "Restablecer permisos de accesibilidad",
-        "rowDescription": "Soluciona problemas tras reinstalar o recompilar la app eliminando y volviendo a agregar OpenWhispr en Configuración del sistema",
+        "rowDescription": "Soluciona problemas tras reinstalar o recompilar la app eliminando y volviendo a agregar ChordVox en Configuración del sistema",
         "title": "Restablecer permisos de accesibilidad"
       },
       "test": "Probar",
@@ -1159,7 +1159,7 @@
       "description": "Controla qué datos salen de tu dispositivo. Todo está desactivado por defecto.",
       "title": "Privacidad",
       "usageAnalytics": "Analíticas de uso",
-      "usageAnalyticsDescription": "Ayúdanos a mejorar OpenWhispr compartiendo métricas de rendimiento anónimas. Nunca enviamos contenido de transcripciones, solo datos de tiempo y errores."
+      "usageAnalyticsDescription": "Ayúdanos a mejorar ChordVox compartiendo métricas de rendimiento anónimas. Nunca enviamos contenido de transcripciones, solo datos de tiempo y errores."
     },
     "prompts": {
       "description": "Visualiza, personaliza y prueba el prompt de sistema unificado que impulsa la corrección de texto y la detección de instrucciones",
@@ -1168,14 +1168,14 @@
     "transcription": {
       "customSetup": "Configuración personalizada",
       "customSetupDescription": "Usa tu propio proveedor y clave API.",
-      "description": "Elige cómo OpenWhispr transcribe tu voz",
-      "openwhisprCloud": "OpenWhispr Cloud",
-      "openwhisprCloudDescription": "Funciona de inmediato. Sin configuración necesaria.",
+      "description": "Elige cómo ChordVox transcribe tu voz",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "Funciona de inmediato. Sin configuración necesaria.",
       "title": "Voz a texto",
       "toasts": {
         "switchedCloud": {
-          "description": "La transcripción usará el servicio en la nube de OpenWhispr.",
-          "title": "Cambiado a OpenWhispr Cloud"
+          "description": "La transcripción usará el servicio en la nube de ChordVox.",
+          "title": "Cambiado a ChordVox Cloud"
         },
         "switchedCustom": {
           "description": "Configura tu propio proveedor y clave API.",

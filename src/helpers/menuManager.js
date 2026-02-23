@@ -94,7 +94,7 @@ class MenuManager {
               label: i18nMain.t("menu.learnMore"),
               click: async () => {
                 const { shell } = require("electron");
-                await shell.openExternal("https://github.com/OpenWhispr/openwhispr");
+                await shell.openExternal("https://github.com/ChordVox/chordvox");
               },
             },
           ],
