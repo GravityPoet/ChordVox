@@ -36,7 +36,7 @@ const PROVIDER_CONFIG: Record<string, ProviderConfig> = {
   anthropic: { label: "Anthropic", apiKeyStorageKey: "anthropicApiKey" },
   gemini: { label: "Gemini", apiKeyStorageKey: "geminiApiKey" },
   groq: { label: "Groq", apiKeyStorageKey: "groqApiKey" },
-  openwhispr: { label: "OpenWhispr Cloud" },
+  chordvox: { label: "ChordVox Cloud" },
   custom: {
     label: "Custom endpoint",
     apiKeyStorageKey: "openaiApiKey",
@@ -124,13 +124,13 @@ export default function PromptStudio({ className = "" }: PromptStudioProps) {
 
     try {
       const useReasoningModel = localStorage.getItem("useReasoningModel") === "true";
-      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "openwhispr";
+      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "chordvox";
       const isSignedIn = localStorage.getItem("isSignedIn") === "true";
-      const isCloudMode = isSignedIn && cloudReasoningMode === "openwhispr";
+      const isCloudMode = isSignedIn && cloudReasoningMode === "chordvox";
 
       const reasoningModel = localStorage.getItem("reasoningModel") || "";
       const reasoningProvider = isCloudMode
-        ? "openwhispr"
+        ? "chordvox"
         : reasoningModel
           ? getModelProvider(reasoningModel)
           : "openai";
@@ -360,13 +360,13 @@ export default function PromptStudio({ className = "" }: PromptStudioProps) {
         {activeTab === "test" &&
           (() => {
             const useReasoningModel = localStorage.getItem("useReasoningModel") === "true";
-            const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "openwhispr";
+            const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "chordvox";
             const isSignedIn = localStorage.getItem("isSignedIn") === "true";
-            const isCloudMode = isSignedIn && cloudReasoningMode === "openwhispr";
+            const isCloudMode = isSignedIn && cloudReasoningMode === "chordvox";
 
             const reasoningModel = localStorage.getItem("reasoningModel") || "";
             const reasoningProvider = isCloudMode
-              ? "openwhispr"
+              ? "chordvox"
               : reasoningModel
                 ? getModelProvider(reasoningModel)
                 : "openai";
@@ -375,7 +375,7 @@ export default function PromptStudio({ className = "" }: PromptStudioProps) {
             };
 
             const displayModel = isCloudMode
-              ? t("promptStudio.test.openwhisprCloud")
+              ? t("promptStudio.test.chordvoxCloud")
               : reasoningModel || t("promptStudio.test.none");
             const displayProvider = providerConfig.label;
 

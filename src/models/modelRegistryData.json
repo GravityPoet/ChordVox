@@ -538,7 +538,7 @@
       ]
     }
   ],
-  "openwhisprCloudModels": {
+  "chordvoxCloudModels": {
     "tiers": [
       {
         "id": "fast",

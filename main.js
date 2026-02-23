@@ -5,9 +5,9 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 const VALID_CHANNELS = new Set(["development", "staging", "production"]);
 const DEFAULT_OAUTH_PROTOCOL_BY_CHANNEL = {
-  development: "openwhispr-dev",
-  staging: "openwhispr-staging",
-  production: "openwhispr",
+  development: "chordvox-dev",
+  staging: "chordvox-staging",
+  production: "chordvox",
 };
 const BASE_WINDOWS_APP_ID = "com.herotools.openwispr";
 const DEFAULT_AUTH_BRIDGE_PORT = 5199;
@@ -29,7 +29,7 @@ function inferDefaultChannel() {
 }
 
 function resolveAppChannel() {
-  const rawChannel = (process.env.OPENWHISPR_CHANNEL || process.env.VITE_OPENWHISPR_CHANNEL || "")
+  const rawChannel = (process.env.CHORDVOX_CHANNEL || process.env.VITE_CHORDVOX_CHANNEL || "")
     .trim()
     .toLowerCase();
 
@@ -41,14 +41,14 @@ function resolveAppChannel() {
 }
 
 const APP_CHANNEL = resolveAppChannel();
-process.env.OPENWHISPR_CHANNEL = APP_CHANNEL;
+process.env.CHORDVOX_CHANNEL = APP_CHANNEL;
 
 function configureChannelUserDataPath() {
   if (APP_CHANNEL === "production") {
     return;
   }
 
-  const isolatedPath = path.join(app.getPath("appData"), `OpenWhispr-${APP_CHANNEL}`);
+  const isolatedPath = path.join(app.getPath("appData"), `ChordVox-${APP_CHANNEL}`);
   app.setPath("userData", isolatedPath);
 }
 
@@ -81,7 +81,7 @@ if (process.platform === "win32") {
 }
 
 function getOAuthProtocol() {
-  const fromEnv = (process.env.VITE_OPENWHISPR_PROTOCOL || process.env.OPENWHISPR_PROTOCOL || "")
+  const fromEnv = (process.env.VITE_CHORDVOX_PROTOCOL || process.env.CHORDVOX_PROTOCOL || "")
     .trim()
     .toLowerCase();
 
@@ -103,7 +103,7 @@ function shouldRegisterProtocolWithAppArg() {
 // Register custom protocol for OAuth callbacks.
 // In development, always include the app path argument so macOS/Windows/Linux
 // can launch the project app instead of opening bare Electron.
-function registerOpenWhisprProtocol() {
+function registerChordVoxProtocol() {
   const protocol = OAUTH_PROTOCOL;
 
   if (shouldRegisterProtocolWithAppArg()) {
@@ -114,7 +114,7 @@ function registerOpenWhisprProtocol() {
   return app.setAsDefaultProtocolClient(protocol);
 }
 
-const protocolRegistered = registerOpenWhisprProtocol();
+const protocolRegistered = registerChordVoxProtocol();
 if (!protocolRegistered) {
   console.warn(`[Auth] Failed to register ${OAUTH_PROTOCOL}:// protocol handler`);
 }
@@ -128,8 +128,8 @@ if (!gotSingleInstanceLock) {
 const isLiveWindow = (window) => window && !window.isDestroyed();
 
 // Ensure macOS menus use the proper casing for the app name
-if (process.platform === "darwin" && app.getName() !== "OpenWhispr") {
-  app.setName("OpenWhispr");
+if (process.platform === "darwin" && app.getName() !== "ChordVox") {
+  app.setName("ChordVox");
 }
 
 // Add global error handling for uncaught exceptions
@@ -179,7 +179,7 @@ let globeKeyAlertShown = false;
 let authBridgeServer = null;
 
 function parseAuthBridgePort() {
-  const raw = (process.env.OPENWHISPR_AUTH_BRIDGE_PORT || "").trim();
+  const raw = (process.env.CHORDVOX_AUTH_BRIDGE_PORT || "").trim();
   if (!raw) return DEFAULT_AUTH_BRIDGE_PORT;
 
   const parsed = Number(raw);
@@ -408,7 +408,7 @@ function startAuthBridgeServer() {
 
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
     res.end(
-      "<html><body><h3>OpenWhispr sign-in complete.</h3><p>You can close this tab.</p></body></html>"
+      "<html><body><h3>ChordVox sign-in complete.</h3><p>You can close this tab.</p></body></html>"
     );
   });
 

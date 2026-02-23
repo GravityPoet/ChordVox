@@ -1,6 +1,6 @@
 # Neon Auth Setup Guide
 
-OpenWhispr supports optional authentication using Neon Auth (managed, Better Auth-based). When enabled, users can sync settings across devices and access account features.
+ChordVox supports optional authentication using Neon Auth (managed, Better Auth-based). When enabled, users can sync settings across devices and access account features.
 
 ## 1. Create a Neon Project and Enable Neon Auth
 1. In the Neon console, create or open your project.

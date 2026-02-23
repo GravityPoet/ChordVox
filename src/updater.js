@@ -29,8 +29,8 @@ class UpdateManager {
     // Configure auto-updater for GitHub releases
     autoUpdater.setFeedURL({
       provider: "github",
-      owner: "OpenWhispr",
-      repo: "openwhispr",
+      owner: "ChordVox",
+      repo: "chordvox",
       private: false,
     });
 

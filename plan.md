@@ -2,14 +2,14 @@
 
 ## Overview
 
-Transform OpenWhispr into a "just works" experience for signed-in users. The app sends audio to an OpenWhispr API (Vercel), which handles both transcription and reasoning server-side — no user configuration needed. Free tier: 2000 words/day. Pro subscription via Stripe for unlimited. Power users can switch to BYOK (bring your own key) for unlimited free usage. Local mode unchanged.
+Transform ChordVox into a "just works" experience for signed-in users. The app sends audio to an ChordVox API (Vercel), which handles both transcription and reasoning server-side — no user configuration needed. Free tier: 2000 words/day. Pro subscription via Stripe for unlimited. Power users can switch to BYOK (bring your own key) for unlimited free usage. Local mode unchanged.
 
 The server-side API is **provider-agnostic** — transcription and reasoning are routed through a unified provider interface. Initial providers: Groq (transcription + fast reasoning), OpenRouter (model variety). Future providers (Baseten, Deepgram, OpenAI Whisper, etc.) slot in without API changes.
 
 ## Architecture
 
 ```
-Electron App  →  IPC (main process)  →  openwhispr-api (Vercel)  →  Provider (transcription)
+Electron App  →  IPC (main process)  →  chordvox-api (Vercel)  →  Provider (transcription)
                    (attaches session cookies)     ↕                →  Provider (reasoning)
                                              Neon Postgres              ↕
                                                   ↕                Stripe Webhooks
@@ -20,7 +20,7 @@ All API calls route through Electron's main process via IPC — same proven patt
 **Three transcription modes:**
 | Mode | Who | Limit | Transcription | Reasoning |
 |------|-----|-------|---------------|-----------|
-| OpenWhispr Cloud (default) | Signed-in users | 2000 words/day free, unlimited Pro | Vercel API → provider | Vercel API → provider |
+| ChordVox Cloud (default) | Signed-in users | 2000 words/day free, unlimited Pro | Vercel API → provider | Vercel API → provider |
 | BYOK | Advanced users with own keys | Unlimited | Direct to provider (existing) | Direct to provider (existing) |
 | Local | Privacy users / offline | Unlimited | whisper.cpp / Parakeet | Own keys or local LLM |
 
@@ -34,12 +34,12 @@ Merge before starting feature work:
 
 ---
 
-## Step 1: Create `openwhispr-api` Repo
+## Step 1: Create `chordvox-api` Repo
 
-Location: `~/Projects/OpenWhispr/openwhispr-api/`
+Location: `~/Projects/ChordVox/chordvox-api/`
 
 ```
-openwhispr-api/
+chordvox-api/
   package.json            # @neondatabase/serverless, stripe, openai (provider-compatible), typescript
   tsconfig.json
   vercel.json             # maxDuration: 30s for transcribe, 60s for reason
@@ -288,7 +288,7 @@ cloudPortal: () => ipcRenderer.invoke('cloud-portal'),
 ### New Setting: `cloudTranscriptionMode`
 
 Add to `src/hooks/useSettings.ts`:
-- `cloudTranscriptionMode`: `"openwhispr"` | `"byok"` (default: `"openwhispr"`)
+- `cloudTranscriptionMode`: `"chordvox"` | `"byok"` (default: `"chordvox"`)
 - When signed in + `useLocalWhisper === false`: determines cloud routing
 - When not signed in: ignored, falls through to BYOK
 
@@ -314,39 +314,39 @@ Add to `src/hooks/useSettings.ts`:
 ### Modified Files
 
 **`src/helpers/audioManager.js`** — Core routing change
-- Add `processWithOpenWhisprCloud(audioBlob, metadata)` method:
+- Add `processWithChordVoxCloud(audioBlob, metadata)` method:
   - Calls `window.electronAPI.cloudTranscribe(audioArrayBuffer, { language, prompt })`
   - Handles `limitReached` flag (emits event for UI to show UpgradePrompt)
-  - Returns same `{ success, text, source: "openwhispr", timings }` shape as other methods
+  - Returns same `{ success, text, source: "chordvox", timings }` shape as other methods
   - ~10 lines — all heavy lifting in the IPC handler
 - Modify `processAudio()` routing (~line 219):
   ```
   if (useLocalWhisper) → processWithLocalWhisper/Parakeet (unchanged)
-  else if (cloudTranscriptionMode === "openwhispr" && isSignedIn) → processWithOpenWhisprCloud (NEW)
+  else if (cloudTranscriptionMode === "chordvox" && isSignedIn) → processWithChordVoxCloud (NEW)
   else → processWithOpenAIAPI (existing BYOK flow, unchanged)
   ```
 
-**`src/services/ReasoningService.ts`** — Add `"openwhispr"` provider
-- Add `processWithOpenWhispr()` method alongside existing `processWithOpenAI()`, `processWithAnthropic()`, etc.
+**`src/services/ReasoningService.ts`** — Add `"chordvox"` provider
+- Add `processWithChordVox()` method alongside existing `processWithOpenAI()`, `processWithAnthropic()`, etc.
 - Calls `window.electronAPI.cloudReason(text, { model, agentName, customDictionary })`
-- When `cloudTranscriptionMode === "openwhispr"` && signed in, `reasoningProvider` is `"openwhispr"`
+- When `cloudTranscriptionMode === "chordvox"` && signed in, `reasoningProvider` is `"chordvox"`
 - Single routing point — no changes needed in `audioManager.js` for reasoning
 
 **`src/hooks/useSettings.ts`**
 - Add `cloudTranscriptionMode` setting with `useLocalStorage` hook
 
 **`src/components/OnboardingFlow.tsx`** — Simplified step 1
-- When signed in: default to OpenWhispr Cloud — show language picker + reasoning model selector (curated list from `modelRegistryData.json`, smart default pre-selected)
+- When signed in: default to ChordVox Cloud — show language picker + reasoning model selector (curated list from `modelRegistryData.json`, smart default pre-selected)
 - Collapsible "Advanced: Use your own API key" section reveals existing TranscriptionModelPicker + ReasoningModelSelector
 - When not signed in: show existing local/cloud picker (unchanged)
 
 **`src/components/SettingsPage.tsx`**
-- **Transcription section**: Mode toggle — "OpenWhispr Cloud" (simple) vs "Use your own API key" (shows existing provider/model/key pickers)
+- **Transcription section**: Mode toggle — "ChordVox Cloud" (simple) vs "Use your own API key" (shows existing provider/model/key pickers)
 - **AI Models section**: When cloud mode, show curated model picker (from `modelRegistryData.json` cloud models section). When BYOK, show existing ReasoningModelSelector (unchanged)
 - **Account section**: Add usage display (words today / limit), plan badge, upgrade/manage button
 
 **`src/models/modelRegistryData.json`** — Add cloud model tiers
-- Add `"openwhisprCloudModels"` section with curated tiers:
+- Add `"chordvoxCloudModels"` section with curated tiers:
   - **Fast** (Groq): `llama-3.3-70b-versatile`, `llama-3.1-8b-instant`
   - **Balanced** (OpenRouter): `anthropic/claude-sonnet-4`, `google/gemini-2.5-flash`
   - **Quality** (OpenRouter): `anthropic/claude-opus-4`, `openai/gpt-4.1`
@@ -354,7 +354,7 @@ Add to `src/hooks/useSettings.ts`:
 - Future: `/api/models` endpoint can refresh this list periodically (cached in localStorage, daily check)
 
 **`src/config/constants.ts`**
-- Add `OPENWHISPR_API_URL` constant (from `VITE_API_URL` env var, used by main process IPC handlers)
+- Add `CHORDVOX_API_URL` constant (from `VITE_API_URL` env var, used by main process IPC handlers)
 
 **`.env.example`**
 - Add `VITE_API_URL=`
@@ -536,7 +536,7 @@ Update the benefits card content to emphasize the "zero config" value prop:
 │        └──────┘                                      │
 │     You're ready to go                               │  ← text-2xl font-semibold
 │                                                      │
-│  OpenWhispr handles transcription and AI             │  ← text-neutral-600
+│  ChordVox handles transcription and AI             │  ← text-neutral-600
 │  processing for you. No setup needed.                │
 │                                                      │
 │  ┌───────────────────────────────────────────────┐   │
@@ -665,7 +665,7 @@ Current: gradient card with avatar + name + email + sign-out.
 
 ```
 ┌─────────────────────────────────────────────────┐
-│  ☁  OpenWhispr Cloud                    ● ──┐   │  ← selected: border-indigo-500/30, bg-indigo-50/30
+│  ☁  ChordVox Cloud                    ● ──┐   │  ← selected: border-indigo-500/30, bg-indigo-50/30
 │  Just works. No configuration needed.    │   │   │
 │                                          │   │   │  ← radio-style, only one active
 │  🔑  Bring Your Own Key                 ○ ──┘   │  ← unselected: border-neutral-200, bg-white
@@ -674,7 +674,7 @@ Current: gradient card with avatar + name + email + sign-out.
 ```
 
 - Same card-selection pattern as `ProcessingModeSelector` (indigo border + tinted bg for active)
-- **Cloud selected**: Everything below is hidden. Clean empty state — maybe a single line: "Transcription is handled by OpenWhispr's servers. Change your language in General settings."
+- **Cloud selected**: Everything below is hidden. Clean empty state — maybe a single line: "Transcription is handled by ChordVox's servers. Change your language in General settings."
 - **BYOK selected**: Existing `TranscriptionModelPicker` appears below (unchanged)
 - Smooth height transition when switching (existing CSS pattern: `transition-all duration-200`)
 
@@ -684,7 +684,7 @@ Current: gradient card with avatar + name + email + sign-out.
 
 ### 5e. Settings Page — AI Models Section (Cloud Mode)
 
-When `cloudTranscriptionMode === "openwhispr"`, replace `ReasoningModelSelector` with a simplified cloud model picker:
+When `cloudTranscriptionMode === "chordvox"`, replace `ReasoningModelSelector` with a simplified cloud model picker:
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -701,7 +701,7 @@ When `cloudTranscriptionMode === "openwhispr"`, replace `ReasoningModelSelector`
 │  │  Llama 3.1 8B        Fastest              │   │
 │  └───────────────────────────────────────────┘   │
 │                                                  │
-│  No API key needed. Powered by OpenWhispr.       │  ← text-xs text-neutral-400
+│  No API key needed. Powered by ChordVox.       │  ← text-xs text-neutral-400
 │                                                  │
 └─────────────────────────────────────────────────┘
 ```
@@ -709,7 +709,7 @@ When `cloudTranscriptionMode === "openwhispr"`, replace `ReasoningModelSelector`
 - `ProviderTabs` reused with tier labels: "Fast" (Groq), "Balanced" (OpenRouter), "Quality" (OpenRouter)
 - Each tier has a simple `Select` dropdown (not full ModelCardList — keep it minimal)
 - "Recommended" badge on the default model per tier
-- Model data from `modelRegistryData.json` `openwhisprCloudModels` section (ships with app, works offline)
+- Model data from `modelRegistryData.json` `chordvoxCloudModels` section (ships with app, works offline)
 
 **When BYOK mode:** Show existing `ReasoningModelSelector` unchanged.
 
@@ -861,7 +861,7 @@ Minor addition to `ControlPanel.tsx`:
 3. ✅ Merge to main
 
 ### Phase 2: API Foundation ✅ COMPLETE
-4. ✅ `git init` new repo at `~/Projects/OpenWhispr/openwhispr-api/`
+4. ✅ `git init` new repo at `~/Projects/ChordVox/chordvox-api/`
 5. ✅ Set up Vercel project, TypeScript, dependencies
 6. ✅ Create Neon Postgres schema (run SQL in console)
 7. ✅ Implement `lib/auth.ts`, `lib/db.ts`, `lib/usage.ts`, `lib/providers.ts`
@@ -874,9 +874,9 @@ Minor addition to `ControlPanel.tsx`:
 12. ✅ Add IPC handlers for `cloud-transcribe`, `cloud-reason`, `cloud-usage` to `ipcHandlers.js`
 13. ✅ Add IPC channels to `preload.js`
 14. ✅ Add `cloudTranscriptionMode` to `useSettings.ts`
-15. ✅ Add `processWithOpenWhisprCloud()` to `audioManager.js`
+15. ✅ Add `processWithChordVoxCloud()` to `audioManager.js`
 16. ✅ Wire transcription routing in `processAudio()`
-17. ✅ Add `"openwhispr"` provider to `ReasoningService.ts`
+17. ✅ Add `"chordvox"` provider to `ReasoningService.ts`
 18. ⏳ Test: sign in → dictate → transcription + reasoning via API
 
 ### Phase 4: Usage Tracking & UI ✅ COMPLETE

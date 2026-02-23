@@ -1,9 +1,9 @@
 {
   "appId": "com.herotools.openwispr",
-  "productName": "OpenWhispr",
+  "productName": "ChordVox",
   "protocols": {
-    "name": "OpenWhispr Protocol",
-    "schemes": ["openwhispr"]
+    "name": "ChordVox Protocol",
+    "schemes": ["chordvox"]
   },
   "directories": {
     "output": "dist"
@@ -107,7 +107,7 @@
   "mac": {
     "category": "public.app-category.productivity",
     "target": ["dmg", "zip"],
-    "icon": "src/assets/icon.icns",
+    "icon": "src/assets/icon.png",
     "gatekeeperAssess": false,
     "hardenedRuntime": true,
     "entitlements": "resources/mac/entitlements.mac.plist",
@@ -116,13 +116,13 @@
     "notarize": true,
     "extendInfo": {
       "LSUIElement": false,
-      "NSMicrophoneUsageDescription": "OpenWhispr needs microphone access for speech-to-text transcription.",
-      "NSAccessibilityUsageDescription": "OpenWhispr needs accessibility permissions to paste transcribed text into other applications."
+      "NSMicrophoneUsageDescription": "ChordVox needs microphone access for speech-to-text transcription.",
+      "NSAccessibilityUsageDescription": "ChordVox needs accessibility permissions to paste transcribed text into other applications."
     }
   },
   "win": {
     "target": ["nsis", "portable"],
-    "icon": "src/assets/icon.ico",
+    "icon": "src/assets/icon.png",
     "extraResources": [
       {
         "from": "resources/bin/nircmd.exe",
@@ -184,8 +184,8 @@
     "include": "resources/nsis/cleanup-models.nsh"
   },
   "dmg": {
-    "title": "OpenWhispr",
-    "icon": "src/assets/icon.icns",
+    "title": "ChordVox",
+    "icon": "src/assets/icon.png",
     "window": {
       "width": 540,
       "height": 380
@@ -193,8 +193,8 @@
   },
   "publish": {
     "provider": "github",
-    "owner": "OpenWhispr",
-    "repo": "openwhispr",
+    "owner": "ChordVox",
+    "repo": "chordvox",
     "private": false,
     "releaseType": "draft"
   }

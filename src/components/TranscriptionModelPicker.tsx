@@ -432,8 +432,8 @@ export default function TranscriptionModelPicker({
       loadLocalModels();
       loadParakeetModels();
     };
-    window.addEventListener("openwhispr-models-cleared", handleModelsCleared);
-    return () => window.removeEventListener("openwhispr-models-cleared", handleModelsCleared);
+    window.addEventListener("chordvox-models-cleared", handleModelsCleared);
+    return () => window.removeEventListener("chordvox-models-cleared", handleModelsCleared);
   }, [loadLocalModels, loadParakeetModels]);
 
   const {

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* OpenWhispr Theme — registers color tokens with Tailwind v4.
+  /* ChordVox Theme — registers color tokens with Tailwind v4.
      These are the light-mode defaults; .dark overrides them below. */
   --color-primary: #2563eb;
   --color-primary-foreground: #ffffff;
@@ -173,7 +173,7 @@
   }
 }
 
-/* OpenWhispr Brand Typography */
+/* ChordVox Brand Typography */
 .brand-heading {
   font-family: var(--font-family-sans);
   font-weight: 600;

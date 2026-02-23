@@ -1,9 +1,9 @@
 {
   "app": {
-    "name": "OpenWhispr",
-    "loading": "正在載入 OpenWhispr...",
+    "name": "ChordVox",
+    "loading": "正在載入 ChordVox...",
     "oauth": {
-      "redirectTitle": "正在導向 OpenWhispr",
+      "redirectTitle": "正在導向 ChordVox",
       "closeTab": "你可以關閉此分頁"
     },
     "buttons": {
@@ -36,7 +36,7 @@
       "sectionTitle": "語言",
       "sectionDescription": "分別設定介面語言和轉錄語言",
       "uiLabel": "介面語言",
-      "uiDescription": "選擇 OpenWhispr 介面使用的語言",
+      "uiDescription": "選擇 ChordVox 介面使用的語言",
       "transcriptionLabel": "轉錄語言",
       "transcriptionDescription": "選擇你說話的語言，以提高轉錄準確度",
       "uiOption": {
@@ -59,12 +59,12 @@
       "hide": "隱藏語音輸入面板"
     },
     "openControlPanel": "開啟控制面板",
-    "quit": "結束 OpenWhispr",
-    "tooltip": "OpenWhispr - 語音輸入"
+    "quit": "結束 ChordVox",
+    "tooltip": "ChordVox - 語音輸入"
   },
   "menu": {
-    "appLabel": "OpenWhispr",
-    "quit": "結束 OpenWhispr",
+    "appLabel": "ChordVox",
+    "quit": "結束 ChordVox",
     "speech": "語音",
     "help": "說明",
     "learnMore": "瞭解更多",
@@ -81,8 +81,8 @@
       "message": "無法在瀏覽器中開啟連結：\n{{url}}\n\n錯誤：{{error}}"
     },
     "loadFailure": {
-      "title": "OpenWhispr 載入失敗",
-      "message": "OpenWhispr 無法載入介面。",
+      "title": "ChordVox 載入失敗",
+      "message": "ChordVox 無法載入介面。",
       "detail": {
         "window": "視窗：{{windowName}}",
         "error": "錯誤 {{errorCode}}：{{errorDescription}}",
@@ -93,17 +93,17 @@
   },
   "startup": {
     "error": {
-      "title": "OpenWhispr 啟動錯誤",
+      "title": "ChordVox 啟動錯誤",
       "message": "應用程式啟動失敗：\n\n{{error}}\n\n請回報此問題。"
     },
     "globeHotkey": {
       "title": "Globe 快捷鍵無法使用",
-      "message": "OpenWhispr 無法啟用 Globe 鍵快捷鍵。",
+      "message": "ChordVox 無法啟用 Globe 鍵快捷鍵。",
       "details": {
         "unknown": "啟動 Globe 監聽程式時發生未知錯誤。",
         "fallback": "Globe 鍵快捷鍵將維持停用狀態；現有的鍵盤快捷鍵仍可正常使用。",
         "devHint": "執行 `npm run compile:globe` 並重新建置應用程式以重新產生監聽程式。",
-        "reinstallHint": "請嘗試重新安裝 OpenWhispr，或聯絡客服。"
+        "reinstallHint": "請嘗試重新安裝 ChordVox，或聯絡客服。"
       }
     }
   },
@@ -123,9 +123,9 @@
     "accessibility": "此平台不支援輔助使用設定。"
   },
   "titleBar": {
-    "quitTitle": "結束 OpenWhispr",
-    "quitConfirmTitle": "確定要結束 OpenWhispr？",
-    "quitConfirmDescription": "這將關閉 OpenWhispr 並停止背景程序。",
+    "quitTitle": "結束 ChordVox",
+    "quitConfirmTitle": "確定要結束 ChordVox？",
+    "quitConfirmDescription": "這將關閉 ChordVox 並停止背景程序。",
     "quit": "結束",
     "cancel": "取消"
   },
@@ -201,7 +201,7 @@
       "accessibilityTitle": "輔助使用",
       "accessibilityDescription": "用於將文字貼入應用程式",
       "testAndGrant": "測試並授權",
-      "requiredForApp": "OpenWhispr 運作所需",
+      "requiredForApp": "ChordVox 運作所需",
       "microphoneRequired": "需要麥克風存取權限"
     },
     "transcription": {
@@ -229,7 +229,7 @@
       "problemTitle": "更新遇到問題",
       "problemDescription": "無法完成更新。請稍後再試。",
       "installTitle": "安裝更新",
-      "installDescription": "OpenWhispr 將重新啟動以套用更新。進行中的工作會自動儲存。",
+      "installDescription": "ChordVox 將重新啟動以套用更新。進行中的工作會自動儲存。",
       "couldNotInstallTitle": "無法安裝更新",
       "couldNotInstallDescription": "發生錯誤，請再試一次。",
       "couldNotDownloadTitle": "無法下載更新",
@@ -274,8 +274,8 @@
       "toStart": "開始"
     },
     "cloudMigration": {
-      "title": "歡迎使用 OpenWhispr Pro",
-      "description": "你的 7 天免費試用已啟用！我們已將轉錄切換至 OpenWhispr Cloud，提供更快、更準確的結果。你之前的設定已儲存，隨時可在設定中切換回來。",
+      "title": "歡迎使用 ChordVox Pro",
+      "description": "你的 7 天免費試用已啟用！我們已將轉錄切換至 ChordVox Cloud，提供更快、更準確的結果。你之前的設定已儲存，隨時可在設定中切換回來。",
       "viewSettings": "查看設定"
     },
     "aiCta": {
@@ -423,7 +423,7 @@
       "micErrors": {
         "accessFailed": "麥克風存取失敗。請再試一次。",
         "noMicrophones": "未偵測到麥克風。請在 {{settingsPath}} 中連接或選擇麥克風。",
-        "permissionDenied": "權限被拒絕。請開啟 {{privacyPath}} 並允許 OpenWhispr。",
+        "permissionDenied": "權限被拒絕。請開啟 {{privacyPath}} 並允許 ChordVox。",
         "couldNotStart": "無法啟動所選的麥克風。請在 {{settingsPath}} 中選擇輸入裝置後重新測試。",
         "noActiveInput": "找不到有效的音訊輸入。請在 {{settingsPath}} 中選擇麥克風。",
         "unknown": "麥克風存取失敗：{{error}}。請選擇其他輸入裝置後再試。",
@@ -452,8 +452,8 @@
         "accessibilityNeeded": "請在系統設定中授予輔助使用權限，以啟用自動貼上功能。",
         "windowsReady": "Windows 不需要特殊權限即可自動貼上。一切就緒！",
         "linuxReadyWithMethod": "已使用 {{method}} 啟用自動貼上。一切就緒！",
-        "waylandClipboardMode": "此 Wayland 工作階段不支援自動貼上。OpenWhispr 會將文字複製到剪貼簿，你可以使用 Ctrl+V 貼上。",
-        "optionalPasteTool": "如需自動貼上，請安裝 {{tool}}：\n\n{{installCmd}}{{waylandNote}}\n\n沒有安裝也可以使用 OpenWhispr，文字會複製到剪貼簿，你可以使用 Ctrl+V 貼上。"
+        "waylandClipboardMode": "此 Wayland 工作階段不支援自動貼上。ChordVox 會將文字複製到剪貼簿，你可以使用 Ctrl+V 貼上。",
+        "optionalPasteTool": "如需自動貼上，請安裝 {{tool}}：\n\n{{installCmd}}{{waylandNote}}\n\n沒有安裝也可以使用 ChordVox，文字會複製到剪貼簿，你可以使用 Ctrl+V 貼上。"
       },
       "alerts": {
         "accessibilityNeeded": "需要輔助使用權限！請在系統設定中授權。"
@@ -466,7 +466,7 @@
         "defaultPasteTool": "xdotool",
         "xdotoolXwayland": "xdotool（XWayland 應用程式）"
       },
-      "accessibilityTestText": "OpenWhispr 輔助使用測試",
+      "accessibilityTestText": "ChordVox 輔助使用測試",
       "warning": {
         "messages": {
           "macos": "請檢查聲音設定以選擇輸入裝置",
@@ -536,7 +536,7 @@
       "continueWithGoogle": "使用 Google 繼續"
     },
     "welcomeSubtitle": "隨時隨地用語音輸入文字",
-    "welcomeTitle": "歡迎使用 OpenWhispr"
+    "welcomeTitle": "歡迎使用 ChordVox"
   },
   "cleanupPrompt": "文字整理",
   "developerSection": {
@@ -741,10 +741,10 @@
     "recheckChecking": "檢查中...",
     "title": "自動貼上",
     "usingMethodPrefix": "使用",
-    "waylandClipboardDescription": "此 Wayland 工作階段不支援自動貼上。OpenWhispr 會將文字複製到剪貼簿，你可以使用 Ctrl+V 手動貼上。",
+    "waylandClipboardDescription": "此 Wayland 工作階段不支援自動貼上。ChordVox 會將文字複製到剪貼簿，你可以使用 Ctrl+V 手動貼上。",
     "waylandClipboardTitle": "Wayland 剪貼簿模式",
     "windowsReady": "Windows 內建支援自動貼上。不需要額外設定！",
-    "withoutToolPrefix": "若未安裝此工具，OpenWhispr 會將文字複製到剪貼簿。你可以使用 Ctrl+V 手動貼上。",
+    "withoutToolPrefix": "若未安裝此工具，ChordVox 會將文字複製到剪貼簿。你可以使用 Ctrl+V 手動貼上。",
     "xwaylandAppsOnly": "自動貼上僅適用於 XWayland 應用程式"
   },
   "promptStudio": {
@@ -794,7 +794,7 @@
       "none": "無",
       "outputLabel": "輸出",
       "processing": "處理中...",
-      "openwhisprCloud": "OpenWhispr Cloud",
+      "chordvoxCloud": "ChordVox Cloud",
       "providerLabel": "供應商",
       "run": "執行測試"
     },
@@ -962,12 +962,12 @@
       "cleanupMode": "文字整理模式",
       "description": "為你的 AI 助理取個名字，這樣你可以在語音輸入時直接呼叫它",
       "dialogs": {
-        "updatedDescription": "你的助理現在叫做「{{name}}」。說「Hey {{name}}」加上你的指令即可使用。",
+        "updatedDescription": "你的助理現在叫做「{{name}}」。說「Hi {{name}}」加上你的指令即可使用。",
         "updatedTitle": "助理名稱已更新"
       },
       "examplesTitle": "範例",
       "helper": "選個簡短、自然、好說的名字",
-      "howItWorksDescription": "當你說「Hey {{agentName}}」加上一個指令時，AI 會從文字整理模式切換到指令模式。沒有觸發語的時候，它只會整理你的語音輸入。",
+      "howItWorksDescription": "當你說「Hi {{agentName}}」加上一個指令時，AI 會從文字整理模式切換到指令模式。沒有觸發語的時候，它只會整理你的語音輸入。",
       "howItWorksTitle": "運作方式",
       "instructionMode": "指令",
       "placeholder": "例如 Jarvis、Nova、Atlas...",
@@ -980,13 +980,13 @@
       "description": "整理轉錄文字、處理指令、修正錯誤，同時保留你的語調。",
       "enableTextCleanup": "啟用文字整理",
       "enableTextCleanupDescription": "AI 自動提升轉錄品質",
-      "openwhisprCloud": "OpenWhispr Cloud",
-      "openwhisprCloudDescription": "即開即用，無需設定。",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "即開即用，無需設定。",
       "title": "AI 文字增強",
       "toasts": {
         "switchedCloud": {
-          "description": "文字增強將使用 OpenWhispr 雲端服務。",
-          "title": "已切換至 OpenWhispr Cloud"
+          "description": "文字增強將使用 ChordVox 雲端服務。",
+          "title": "已切換至 ChordVox Cloud"
         },
         "switchedCustom": {
           "description": "設定你自己的供應商和 API Key。",
@@ -1034,7 +1034,7 @@
       "howItWorksDescription": "你新增的詞彙會包含在 AI 提示詞中，讓模型在轉錄整理時能辨識並保留這些詞彙。",
       "howItWorksTitle": "運作方式",
       "noWords": "尚未新增任何詞彙",
-      "placeholder": "例如 OpenWhispr、Kubernetes、Dr. Martinez...",
+      "placeholder": "例如 ChordVox、Kubernetes、Dr. Martinez...",
       "pressEnterToAdd": "按 Enter 新增",
       "removeWord": "移除詞彙",
       "tipDescription": "新增專有名詞、專業術語，或任何可能被轉錄錯誤的詞彙。",
@@ -1047,7 +1047,7 @@
       "appearance": {
         "auto": "自動",
         "dark": "深色",
-        "description": "控制 OpenWhispr 的外觀",
+        "description": "控制 ChordVox 的外觀",
         "light": "淺色",
         "theme": "主題",
         "themeDescription": "選擇淺色、深色或跟隨系統",
@@ -1075,7 +1075,7 @@
       },
       "startup": {
         "launchAtLogin": "登入時啟動",
-        "launchAtLoginDescription": "登入時自動啟動 OpenWhispr",
+        "launchAtLoginDescription": "登入時自動啟動 ChordVox",
         "title": "啟動"
       },
       "updates": {
@@ -1107,7 +1107,7 @@
           },
           "installUpdate": {
             "confirmText": "安裝並重新啟動",
-            "description": "OpenWhispr 將重新啟動以套用更新。",
+            "description": "ChordVox 將重新啟動以套用更新。",
             "title": "安裝更新"
           },
           "noUpdates": {
@@ -1138,13 +1138,13 @@
     "permissions": {
       "accessibilityDescription": "轉錄後自動貼上文字所需的權限",
       "accessibilityTitle": "輔助使用",
-      "description": "測試和管理 OpenWhispr 正常運作所需的系統權限",
+      "description": "測試和管理 ChordVox 正常運作所需的系統權限",
       "microphoneDescription": "錄音和語音輸入所需的權限",
       "microphoneTitle": "麥克風",
       "resetAccessibility": {
-        "description": "這將從輔助使用權限中移除 OpenWhispr。你需要在「系統設定 > 隱私權與安全性 > 輔助使用」中重新授權。",
+        "description": "這將從輔助使用權限中移除 ChordVox。你需要在「系統設定 > 隱私權與安全性 > 輔助使用」中重新授權。",
         "label": "重設輔助使用權限",
-        "rowDescription": "重新安裝或重新建置應用程式後，透過在系統設定中移除並重新加入 OpenWhispr 來修復問題",
+        "rowDescription": "重新安裝或重新建置應用程式後，透過在系統設定中移除並重新加入 ChordVox 來修復問題",
         "title": "重設輔助使用權限"
       },
       "test": "測試",
@@ -1159,7 +1159,7 @@
       "description": "控制哪些資料會離開你的裝置。預設全部關閉。",
       "title": "隱私權",
       "usageAnalytics": "使用分析",
-      "usageAnalyticsDescription": "分享匿名的效能指標，協助我們改善 OpenWhispr。我們絕不會傳送轉錄內容——只有計時和錯誤資料。"
+      "usageAnalyticsDescription": "分享匿名的效能指標，協助我們改善 ChordVox。我們絕不會傳送轉錄內容——只有計時和錯誤資料。"
     },
     "prompts": {
       "description": "檢視、自訂和測試用於文字整理和指令偵測的統一系統提示詞",
@@ -1168,14 +1168,14 @@
     "transcription": {
       "customSetup": "自訂設定",
       "customSetupDescription": "使用你自己的供應商和 API Key。",
-      "description": "選擇 OpenWhispr 轉錄語音的方式",
-      "openwhisprCloud": "OpenWhispr Cloud",
-      "openwhisprCloudDescription": "即開即用，無需設定。",
+      "description": "選擇 ChordVox 轉錄語音的方式",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "即開即用，無需設定。",
       "title": "語音轉文字",
       "toasts": {
         "switchedCloud": {
-          "description": "轉錄將使用 OpenWhispr 雲端服務。",
-          "title": "已切換至 OpenWhispr Cloud"
+          "description": "轉錄將使用 ChordVox 雲端服務。",
+          "title": "已切換至 ChordVox Cloud"
         },
         "switchedCustom": {
           "description": "設定你自己的供應商和 API Key。",

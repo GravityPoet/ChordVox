@@ -1,6 +1,6 @@
 import { createAuthClient } from "@neondatabase/auth";
 import { BetterAuthReactAdapter } from "@neondatabase/auth/react";
-import { OPENWHISPR_API_URL } from "../config/constants";
+import { CHORDVOX_API_URL } from "../config/constants";
 import { openExternalLink } from "../utils/externalLinks";
 import logger from "../utils/logger";
 
@@ -11,7 +11,7 @@ export const authClient = NEON_AUTH_URL
 
 export type SocialProvider = "google";
 
-const LAST_SIGN_IN_STORAGE_KEY = "openwhispr:lastSignInTime";
+const LAST_SIGN_IN_STORAGE_KEY = "chordvox:lastSignInTime";
 const GRACE_PERIOD_MS = 60_000;
 const GRACE_RETRY_COUNT = 6;
 const INITIAL_GRACE_RETRY_DELAY_MS = 500;
@@ -165,7 +165,7 @@ export async function withSessionRefresh<T>(operation: () => Promise<T>): Promis
 }
 
 function getElectronOAuthCallbackURL(): string {
-  const configuredUrl = (import.meta.env.VITE_OPENWHISPR_OAUTH_CALLBACK_URL || "").trim();
+  const configuredUrl = (import.meta.env.VITE_CHORDVOX_OAUTH_CALLBACK_URL || "").trim();
   if (configuredUrl) return configuredUrl;
 
   if (window.location.protocol !== "file:") return `${window.location.origin}/?panel=true`;
@@ -227,8 +227,8 @@ export async function requestPasswordReset(email: string): Promise<{ error?: Err
   }
 
   try {
-    if (OPENWHISPR_API_URL) {
-      const res = await fetch(`${OPENWHISPR_API_URL}/api/auth/forgot-password`, {
+    if (CHORDVOX_API_URL) {
+      const res = await fetch(`${CHORDVOX_API_URL}/api/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),

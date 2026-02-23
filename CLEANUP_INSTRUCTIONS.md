@@ -1,4 +1,4 @@
-# OpenWhispr Complete Cleanup Instructions
+# ChordVox Complete Cleanup Instructions
 
 ## The Problem
 
@@ -26,7 +26,7 @@ bash scripts/complete-uninstall.sh
 ```
 
 This script will:
-- Stop all OpenWhispr processes
+- Stop all ChordVox processes
 - Remove the production app
 - Delete all application data
 - Clear caches and logs
@@ -58,11 +58,11 @@ npm run dev
 
 ## Manual Cleanup (if script doesn't work)
 
-### 1. Stop all OpenWhispr processes
+### 1. Stop all ChordVox processes
 
 ```bash
 # Kill production app
-pkill -f "OpenWhispr"
+pkill -f "ChordVox"
 
 # Kill dev processes
 pkill -f "open-whispr"
@@ -72,38 +72,38 @@ pkill -f "electron"
 ### 2. Remove the Application
 
 ```bash
-rm -rf /Applications/OpenWhispr.app
+rm -rf /Applications/ChordVox.app
 ```
 
 ### 3. Remove Application Data
 
 **Application Support** (contains databases, settings, logs):
 ```bash
-rm -rf "$HOME/Library/Application Support/OpenWhispr"
+rm -rf "$HOME/Library/Application Support/ChordVox"
 rm -rf "$HOME/Library/Application Support/open-whispr"
 ```
 
 **Preferences** (system-level settings):
 ```bash
-rm -rf "$HOME/Library/Preferences/com.openwhispr.app.plist"
-rm -rf "$HOME/Library/Preferences/com.electron.openwhispr.plist"
+rm -rf "$HOME/Library/Preferences/com.chordvox.app.plist"
+rm -rf "$HOME/Library/Preferences/com.electron.chordvox.plist"
 ```
 
 **Caches**:
 ```bash
-rm -rf "$HOME/Library/Caches/OpenWhispr"
+rm -rf "$HOME/Library/Caches/ChordVox"
 rm -rf "$HOME/Library/Caches/open-whispr"
 ```
 
 **Logs**:
 ```bash
-rm -rf "$HOME/Library/Logs/OpenWhispr"
+rm -rf "$HOME/Library/Logs/ChordVox"
 rm -rf "$HOME/Library/Logs/open-whispr"
 ```
 
 **Saved Application State**:
 ```bash
-rm -rf "$HOME/Library/Saved Application State/com.openwhispr.app.savedState"
+rm -rf "$HOME/Library/Saved Application State/com.chordvox.app.savedState"
 ```
 
 ### 4. Remove Whisper Models (optional, ~2-3GB)
@@ -117,7 +117,7 @@ rm -rf "$HOME/.cache/huggingface"
 
 ```bash
 find /tmp -name "whisper_audio_*" -delete
-find /tmp -name "openwhispr_*" -delete
+find /tmp -name "chordvox_*" -delete
 ```
 
 ### 6. Clean Development Environment
@@ -146,10 +146,10 @@ The cleanup script **cannot** remove macOS system permissions. These persist eve
 
 ```bash
 # Reset microphone permission
-tccutil reset Microphone com.openwhispr.app
+tccutil reset Microphone com.chordvox.app
 
 # Reset accessibility permission
-tccutil reset Accessibility com.openwhispr.app
+tccutil reset Accessibility com.chordvox.app
 
 # For dev mode (Terminal)
 tccutil reset Microphone com.apple.Terminal
@@ -246,7 +246,7 @@ bash scripts/complete-uninstall.sh
 **Solution:**
 ```bash
 # Remove database files specifically
-rm -rf "$HOME/Library/Application Support/OpenWhispr"
+rm -rf "$HOME/Library/Application Support/ChordVox"
 rm -rf "$HOME/Library/Application Support/open-whispr"
 
 # Rebuild dependencies
@@ -266,19 +266,19 @@ npm run postinstall
 
 ## Data Locations Reference
 
-All OpenWhispr data is stored in these locations:
+All ChordVox data is stored in these locations:
 
 | Type | Location |
 |------|----------|
-| **Databases** | `~/Library/Application Support/OpenWhispr/transcriptions.db` |
-| **Dev Database** | `~/Library/Application Support/OpenWhispr/transcriptions-dev.db` |
+| **Databases** | `~/Library/Application Support/ChordVox/transcriptions.db` |
+| **Dev Database** | `~/Library/Application Support/ChordVox/transcriptions-dev.db` |
 | **Settings** | Browser localStorage (in Electron's userData) |
 | **API Keys** | `.env` file in project root (dev) |
-| **Logs** | `~/Library/Application Support/OpenWhispr/logs/` |
-| **Debug Logs** | `~/Library/Logs/OpenWhispr/` |
+| **Logs** | `~/Library/Application Support/ChordVox/logs/` |
+| **Debug Logs** | `~/Library/Logs/ChordVox/` |
 | **Whisper Models** | `~/.cache/whisper/` |
-| **Preferences** | `~/Library/Preferences/com.openwhispr.app.plist` |
-| **Caches** | `~/Library/Caches/OpenWhispr/` |
+| **Preferences** | `~/Library/Preferences/com.chordvox.app.plist` |
+| **Caches** | `~/Library/Caches/ChordVox/` |
 | **Temp Audio** | `/tmp/whisper_audio_*.wav` |
 
 ---
@@ -301,6 +301,6 @@ If cleanup doesn't solve your issue:
 2. Check Node version: `node -v`
 3. Check Electron version: `npm list electron`
 4. Run with debug mode: `npm run dev -- --debug`
-5. Check logs in: `~/Library/Application Support/OpenWhispr/logs/`
+5. Check logs in: `~/Library/Application Support/ChordVox/logs/`
 
 Report issues with this information at: [GitHub Issues](https://github.com/your-repo/open-whispr/issues)

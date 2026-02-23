@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const AGENT_NAME_KEY = "agentName";
 const DICTIONARY_KEY = "customDictionary";
-const DEFAULT_AGENT_NAME = "OpenWhispr";
+const DEFAULT_AGENT_NAME = "ChordVox";
 
 export const getAgentName = (): string => {
   return localStorage.getItem(AGENT_NAME_KEY) || DEFAULT_AGENT_NAME;

@@ -54,9 +54,9 @@ export default function SupportDropdown({ className }: SupportDropdownProps) {
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={async () => {
-            const result = await window.electronAPI?.openExternal("mailto:support@openwhispr.com");
+            const result = await window.electronAPI?.openExternal("mailto:support@chordvox.com");
             if (!result?.success) {
-              openExternal("https://mail.google.com/mail/?view=cm&to=support@openwhispr.com");
+              openExternal("https://mail.google.com/mail/?view=cm&to=support@chordvox.com");
             }
           }}
         >
@@ -64,7 +64,7 @@ export default function SupportDropdown({ className }: SupportDropdownProps) {
           Contact Support
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => openExternal("https://github.com/OpenWhispr/openwhispr/issues")}
+          onClick={() => openExternal("https://github.com/ChordVox/chordvox/issues")}
         >
           <Bug className="mr-2 h-4 w-4" />
           Submit Bug

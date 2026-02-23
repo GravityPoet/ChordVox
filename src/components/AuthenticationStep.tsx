@@ -8,7 +8,7 @@ import {
   updateLastSignInTime,
   type SocialProvider,
 } from "../lib/neonAuth";
-import { OPENWHISPR_API_URL } from "../config/constants";
+import { CHORDVOX_API_URL } from "../config/constants";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { AlertCircle, ArrowRight, Check, Loader2, ChevronLeft } from "lucide-react";
@@ -98,9 +98,9 @@ export default function AuthenticationStep({
       return;
 
     const initAndComplete = async () => {
-      if (OPENWHISPR_API_URL) {
+      if (CHORDVOX_API_URL) {
         try {
-          const res = await fetch(`${OPENWHISPR_API_URL}/api/auth/init-user`, {
+          const res = await fetch(`${CHORDVOX_API_URL}/api/auth/init-user`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -172,12 +172,12 @@ export default function AuthenticationStep({
     setError(null);
 
     try {
-      if (!OPENWHISPR_API_URL) {
+      if (!CHORDVOX_API_URL) {
         setAuthMode("sign-up");
         return;
       }
 
-      const response = await fetch(`${OPENWHISPR_API_URL}/api/check-user`, {
+      const response = await fetch(`${CHORDVOX_API_URL}/api/check-user`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
@@ -240,9 +240,9 @@ export default function AuthenticationStep({
           } else {
             updateLastSignInTime();
 
-            if (OPENWHISPR_API_URL) {
+            if (CHORDVOX_API_URL) {
               try {
-                await fetch(`${OPENWHISPR_API_URL}/api/auth/init-user`, {
+                await fetch(`${CHORDVOX_API_URL}/api/auth/init-user`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
@@ -323,7 +323,7 @@ export default function AuthenticationStep({
         <div className="text-center mb-4">
           <img
             src={logoIcon}
-            alt="OpenWhispr"
+            alt="ChordVox"
             className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
           />
           <p className="text-lg font-semibold text-foreground tracking-tight leading-tight">
@@ -355,7 +355,7 @@ export default function AuthenticationStep({
         <div className="text-center mb-4">
           <img
             src={logoIcon}
-            alt="OpenWhispr"
+            alt="ChordVox"
             className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
           />
           <div className="w-5 h-5 mx-auto bg-success/10 rounded-full flex items-center justify-center mb-2">
@@ -522,7 +522,7 @@ export default function AuthenticationStep({
       <div className="text-center mb-4">
         <img
           src={logoIcon}
-          alt="OpenWhispr"
+          alt="ChordVox"
           className="w-12 h-12 mx-auto mb-2.5 rounded-lg shadow-sm"
         />
         <p className="text-lg font-semibold text-foreground tracking-tight leading-tight">
@@ -617,7 +617,7 @@ export default function AuthenticationStep({
       <p className="text-[10px] text-muted-foreground/80 leading-tight text-center">
         {t("auth.legal.prefix")}{" "}
         <a
-          href="https://openwhispr.com/terms"
+          href="https://chordvox.com/terms"
           target="_blank"
           rel="noopener noreferrer"
           className="text-link underline decoration-link/30 hover:decoration-link/60 transition-colors"
@@ -626,7 +626,7 @@ export default function AuthenticationStep({
         </a>{" "}
         {t("auth.legal.and")}{" "}
         <a
-          href="https://openwhispr.com/privacy"
+          href="https://chordvox.com/privacy"
           target="_blank"
           rel="noopener noreferrer"
           className="text-link underline decoration-link/30 hover:decoration-link/60 transition-colors"
