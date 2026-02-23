@@ -1,6 +1,7 @@
-<p align="center">
-  <img src="src/assets/icon.png" width="128" height="128" alt="ChordVox Logo">
-<h1 align="center">ChordVox IME</h1>
+<h1 align="center">
+  <img src="src/assets/icon.png" width="120" height="120" alt="ChordVox Logo"><br/>
+  ChordVox IME
+</h1>
 
 <p align="center">
   <strong> AI语音输入法，彻底革新您的打字体验。拥有高隐私本地转录、AI 润色、光标处自动粘贴功能，无需云端账号，为您带来惊艳的 AI 语音输入体验。</strong>
