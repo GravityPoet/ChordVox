@@ -1,7 +1,6 @@
 <p align="center">
   <img src="src/assets/icon.png" width="128" height="128" alt="ChordVox Logo">
 </p>
-
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
