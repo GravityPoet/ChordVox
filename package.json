@@ -1,5 +1,5 @@
 {
-  "name": "open-whispr",
+  "name": "chordvox",
   "version": "1.4.11",
   "description": "A desktop dictation application using whisper.cpp for speech-to-text transcription",
   "main": "main.js",
