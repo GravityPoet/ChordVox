@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-  <strong>Your voice, refined by AI, pasted where you need it.</strong>
+  <strong>A global AI smart dictation app that truly understands you.<br>Just speak into your microphone, and it converts your voice into perfectly polished text, pasting it instantly wherever your cursor is.<br>Fully offline-capable. Your audio stays secure on your device, freeing your hands so your thoughts can keep up with your speech.</strong>
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
 
 ### One-liner
 
-> **AI voice input method, completely revolutionizing your typing experience. An amazing AI voice input experience with high-privacy local transcription, AI polishing, and direct pasting at the cursor—no cloud account required.**
+> **Press a hotkey to speak, and release it to have perfectly formatted text instantly pasted into your current window. Embedded with local large models to guarantee absolute privacy without ever needing the internet.**
 
 ---
 
