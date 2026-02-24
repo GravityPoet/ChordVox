@@ -4,6 +4,8 @@ const fs = require("fs");
 const { i18nMain } = require("./i18nMain");
 
 class TrayManager {
+  static MAC_TRAY_ICON_SIZE = 22;
+
   constructor() {
     this.tray = null;
     this.mainWindow = null;
@@ -133,9 +135,17 @@ class TrayManager {
 
     if (platform === "darwin") {
       if (isDevelopment) {
-        candidatePaths.push(path.join(__dirname, "..", "assets", "iconTemplate@3x.png"));
+        candidatePaths.push(
+          path.join(__dirname, "..", "assets", "trayIcon.png"),
+          path.join(__dirname, "..", "assets", "icon.png"),
+          path.join(__dirname, "..", "assets", "iconTemplate@3x.png")
+        );
       } else {
         candidatePaths.push(
+          path.join(process.resourcesPath, "src", "assets", "trayIcon.png"),
+          path.join(process.resourcesPath, "assets", "trayIcon.png"),
+          path.join(process.resourcesPath, "src", "assets", "icon.png"),
+          path.join(process.resourcesPath, "assets", "icon.png"),
           path.join(process.resourcesPath, "src", "assets", "iconTemplate@3x.png"),
           path.join(process.resourcesPath, "assets", "iconTemplate@3x.png"),
           path.join(
@@ -143,9 +153,27 @@ class TrayManager {
             "app.asar.unpacked",
             "src",
             "assets",
+            "trayIcon.png"
+          ),
+          path.join(
+            process.resourcesPath,
+            "app.asar.unpacked",
+            "src",
+            "assets",
+            "icon.png"
+          ),
+          path.join(
+            process.resourcesPath,
+            "app.asar.unpacked",
+            "src",
+            "assets",
             "iconTemplate@3x.png"
           ),
+          path.join(__dirname, "..", "..", "src", "assets", "trayIcon.png"),
+          path.join(__dirname, "..", "..", "src", "assets", "icon.png"),
           path.join(__dirname, "..", "..", "src", "assets", "iconTemplate@3x.png"),
+          path.join(app.getAppPath(), "src", "assets", "trayIcon.png"),
+          path.join(app.getAppPath(), "src", "assets", "icon.png"),
           path.join(app.getAppPath(), "src", "assets", "iconTemplate@3x.png")
         );
       }
@@ -172,11 +200,10 @@ class TrayManager {
         if (fs.existsSync(testPath)) {
           const icon = nativeImage.createFromPath(testPath);
           if (icon && !icon.isEmpty()) {
-            if (platform === "darwin") {
-              icon.setTemplateImage(true);
-            }
+            const normalizedIcon =
+              platform === "darwin" ? this.normalizeMacTrayIcon(icon) : icon;
             console.log("Using tray icon:", testPath);
-            return icon;
+            return normalizedIcon;
           }
         }
       } catch (error) {
@@ -218,6 +245,22 @@ class TrayManager {
       const fallbackIcon = nativeImage.createFromBuffer(pngData);
       console.log("✅ Created minimal fallback tray icon");
       return fallbackIcon;
+    }
+  }
+
+  normalizeMacTrayIcon(icon) {
+    try {
+      const sized = icon.resize({
+        width: TrayManager.MAC_TRAY_ICON_SIZE,
+        height: TrayManager.MAC_TRAY_ICON_SIZE,
+        quality: "best",
+      });
+      sized.setTemplateImage(false);
+      return sized;
+    } catch (error) {
+      console.error("Failed to normalize macOS tray icon:", error.message);
+      icon.setTemplateImage(false);
+      return icon;
     }
   }
 
