@@ -193,8 +193,8 @@
   },
   "publish": {
     "provider": "github",
-    "owner": "ChordVox",
-    "repo": "chordvox",
+    "owner": "GravityPoet",
+    "repo": "ChordVox",
     "private": false,
     "releaseType": "draft"
   }
