@@ -4,7 +4,9 @@
 </h1>
 
 <p align="center">
-  <strong>A global AI smart dictation app that truly understands you.<br>Just speak into your microphone, and it converts your voice into perfectly polished text, pasting it instantly wherever your cursor is.<br>Fully offline-capable. Your audio stays secure on your device, freeing your hands so your thoughts can keep up with your speech.</strong>
+  <strong>A global AI smart dictation app built to save your time and protect your privacy.</strong><br>
+  <strong>Zero Friction:</strong> Hold a hotkey to speak. AI instantly transcribes and polishes your words, pasting perfectly formatted text as soon as you release the key, so your typing can finally keep up with your brain.<br>
+  <strong>Total Privacy:</strong> Powered entirely by local large language models. No internet required—your sensitive data and ideas never leave your hard drive.
 </p>
 
 <p align="center">
@@ -22,7 +24,7 @@
 
 ### One-liner
 
-> **Press a hotkey to speak, and release it to have perfectly formatted text instantly pasted into your current window. Embedded with local large models to guarantee absolute privacy without ever needing the internet.**
+> **Hold a hotkey and speak. Let AI instantly convert your speech into polished text and paste it for you—all while local models guarantee complete absolute privacy.**
 
 ---
 
