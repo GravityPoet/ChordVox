@@ -1,6 +1,7 @@
 import React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { getCachedPlatform } from "../../utils/platform";
 
 export interface SidebarItem<T extends string> {
   id: T;
@@ -36,6 +37,8 @@ export default function SidebarModal<T extends string>({
   sidebarWidth = "w-52",
   version,
 }: SidebarModalProps<T>) {
+  const isMac = React.useMemo(() => getCachedPlatform() === "darwin", []);
+
   // Group items by their group property
   const groupedItems = React.useMemo(() => {
     const groups: { label: string | null; items: SidebarItem<T>[] }[] = [];
@@ -80,27 +83,26 @@ export default function SidebarModal<T extends string>({
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 max-h-[85vh] w-[90vw] max-w-4xl translate-x-[-50%] translate-y-[-50%] rounded-xl p-0 overflow-hidden bg-background border border-border shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] dark:bg-surface-1 dark:border-border-subtle dark:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.05)] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-98 data-[state=open]:zoom-in-98">
-          <div className="relative h-full max-h-[85vh] overflow-hidden">
+        <DialogPrimitive.Content className="fixed inset-0 z-50 h-screen w-screen max-h-none max-w-none rounded-none p-0 overflow-hidden bg-background border-0 shadow-none dark:bg-surface-1 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+          <div className="relative h-full overflow-hidden">
             <DialogPrimitive.Close className="absolute right-4 top-4 z-10 rounded-md p-1.5 opacity-40 ring-offset-background transition-all hover:opacity-100 bg-transparent hover:bg-muted dark:hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring/30 focus:ring-offset-1">
               <X className="h-3.5 w-3.5 text-muted-foreground" />
               <span className="sr-only">Close</span>
             </DialogPrimitive.Close>
 
-            <div className="flex h-[85vh]">
+            <div className="flex h-full">
               {/* Sidebar */}
               <div
                 className={`${sidebarWidth} shrink-0 border-r border-border/40 dark:border-border-subtle flex flex-col bg-surface-1 dark:bg-surface-0`}
               >
-                {/* Title */}
-                <div className="px-4 pt-5 pb-0.5">
-                  <h2 className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/50">
-                    {title}
-                  </h2>
-                </div>
+                {/* Reserve title-bar area on macOS to avoid traffic-light overlap */}
+                <div className={isMac ? "h-14 shrink-0" : "h-4 shrink-0"} aria-hidden="true" />
 
                 {/* Navigation */}
-                <nav className="relative flex-1 px-2 pt-2.5 pb-2 overflow-y-auto">
+                <nav
+                  aria-label={title}
+                  className="relative flex-1 px-2 pt-2.5 pb-2 overflow-y-auto"
+                >
                   {groupedItems.map((group, groupIndex) => (
                     <div key={groupIndex} className={groupIndex > 0 ? "mt-3" : ""}>
                       {group.label && (

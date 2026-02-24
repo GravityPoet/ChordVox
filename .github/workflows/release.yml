@@ -3,19 +3,53 @@ name: Release
 on:
   push:
     tags:
-      - "v*.*.*" # Triggers on version tags like v1.0.0, v2.1.3, etc.
+      - "v*.*.*"
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to release (e.g., 1.0.0)"
+        description: "Release version (e.g. 1.5.0)"
         required: true
         type: string
 
 permissions:
-  contents: write # Required for creating releases
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref || github.event.inputs.version }}
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN != '' && secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+  PUBLIC_RELEASE_REPO: ${{ vars.PUBLIC_RELEASE_REPO != '' && vars.PUBLIC_RELEASE_REPO || 'GravityPoet/ChordVox' }}
 
 jobs:
+  resolve-release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - name: Resolve release version/tag
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$ ]]; then
+            echo "Invalid version: $VERSION"
+            exit 1
+          fi
+          TAG="v${VERSION}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Resolved release: $TAG"
+
   build-linux:
+    needs: resolve-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,17 +72,17 @@ jobs:
       - name: Download whisper.cpp binaries
         run: node scripts/download-whisper-cpp.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download llama-server binaries
         run: node scripts/download-llama-server.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download sherpa-onnx binaries
         run: node scripts/download-sherpa-onnx.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Cache Electron
         uses: actions/cache@v4
@@ -62,15 +96,31 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rpm
 
-      - name: Build Application
-        run: npm run build:linux -- --publish always
+      - name: Build Linux artifacts
+        run: >
+          npm run build:linux -- --publish never
+          --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }}
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
           VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
           VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
           VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
 
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-linux
+          if-no-files-found: error
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+            dist/latest-linux.yml
+            dist/latest.yml
+
   build-windows:
+    needs: resolve-release
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -93,32 +143,22 @@ jobs:
       - name: Download whisper.cpp binaries
         run: node scripts/download-whisper-cpp.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download llama-server binaries
         run: node scripts/download-llama-server.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download sherpa-onnx binaries
         run: node scripts/download-sherpa-onnx.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download nircmd.exe
         run: node scripts/download-nircmd.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Download windows-fast-paste.exe
-        run: node scripts/download-windows-fast-paste.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Download windows-key-listener.exe
-        run: node scripts/download-windows-key-listener.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Cache Electron
         uses: actions/cache@v4
@@ -127,15 +167,29 @@ jobs:
           key: windows-electron-${{ hashFiles('**/package-lock.json') }}
           restore-keys: windows-electron-
 
-      - name: Build Application
-        run: npm run build:win -- --publish always
+      - name: Build Windows artifacts
+        run: >
+          npm run build:win -- --publish never
+          --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }}
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
           VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
           VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
           VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
 
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows
+          if-no-files-found: error
+          path: |
+            dist/*.exe
+            dist/*.zip
+            dist/*.blockmap
+            dist/latest.yml
+
   build-macos:
+    needs: resolve-release
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -162,17 +216,17 @@ jobs:
       - name: Download whisper.cpp binaries
         run: node scripts/download-whisper-cpp.js --current --platform darwin --arch ${{ matrix.arch }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download llama-server binaries
         run: node scripts/download-llama-server.js --current --platform darwin --arch ${{ matrix.arch }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download sherpa-onnx binaries
         run: node scripts/download-sherpa-onnx.js --current --platform darwin --arch ${{ matrix.arch }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Cache Electron
         uses: actions/cache@v4
@@ -181,7 +235,24 @@ jobs:
           key: macos-${{ matrix.arch }}-electron-${{ hashFiles('**/package-lock.json') }}
           restore-keys: macos-${{ matrix.arch }}-electron-
 
+      - name: Detect macOS signing readiness
+        id: signing
+        shell: bash
+        run: |
+          if [ -n "${{ secrets.APPLE_CERTIFICATE_BASE64 }}" ] && \
+             [ -n "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" ] && \
+             [ -n "${{ secrets.APPLE_API_KEY_BASE64 }}" ] && \
+             [ -n "${{ secrets.APPLE_API_KEY_ID }}" ] && \
+             [ -n "${{ secrets.APPLE_API_ISSUER }}" ] && \
+             [ -n "${{ secrets.APPLE_TEAM_ID }}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Signing secrets not configured. Building unsigned macOS artifacts."
+          fi
+
       - name: Setup macOS Code Signing
+        if: steps.signing.outputs.enabled == 'true'
         env:
           APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
@@ -191,37 +262,130 @@ jobs:
           API_KEY_PATH=$RUNNER_TEMP/api_key.p8
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > $CERTIFICATE_PATH
-          echo "$APPLE_API_KEY_BASE64" | base64 --decode > $API_KEY_PATH
+          echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
+          echo "$APPLE_API_KEY_BASE64" | base64 --decode > "$API_KEY_PATH"
 
-          security create-keychain -p "runner" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "runner" $KEYCHAIN_PATH
+          security create-keychain -p "runner" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "runner" "$KEYCHAIN_PATH"
 
-          security import $CERTIFICATE_PATH -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
+          security import "$CERTIFICATE_PATH" -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -s -k "runner" "$KEYCHAIN_PATH"
 
-          security set-key-partition-list -S apple-tool:,apple: -s -k "runner" $KEYCHAIN_PATH
+          echo "APPLE_API_KEY=$API_KEY_PATH" >> "$GITHUB_ENV"
 
-          echo "APPLE_API_KEY=$API_KEY_PATH" >> $GITHUB_ENV
-
-      - name: Build Application (${{ matrix.arch }})
-        run: npm run build:mac -- --${{ matrix.arch }} --publish always
+      - name: Build macOS artifacts (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXTRA_ARGS=""
+          if [ "${{ steps.signing.outputs.enabled }}" != "true" ]; then
+            EXTRA_ARGS="--config.mac.identity=- --config.mac.notarize=false --config.mac.hardenedRuntime=false"
+          fi
+          npm run build:mac -- --${{ matrix.arch }} --publish never \
+            --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }} \
+            $EXTRA_ARGS
         env:
           TARGET_ARCH: ${{ matrix.arch }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
           VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
           VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
           VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
-          CSC_IDENTITY_AUTO_DISCOVERY: true
+          CSC_IDENTITY_AUTO_DISCOVERY: ${{ steps.signing.outputs.enabled == 'true' && 'true' || 'false' }}
           CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
+      - name: Upload macOS artifacts (${{ matrix.arch }})
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-macos-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.zip.blockmap
+            dist/*.dmg.blockmap
+
+      - name: Upload latest-mac.yml (arm64 only)
+        if: matrix.arch == 'arm64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-macos-metadata
+          if-no-files-found: error
+          path: |
+            dist/latest-mac.yml
+
       - name: Cleanup Certificates
-        if: always()
+        if: always() && steps.signing.outputs.enabled == 'true'
         run: |
-          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db || true
-          rm -f $RUNNER_TEMP/build_certificate.p12
-          rm -f $RUNNER_TEMP/api_key.p8
+          security delete-keychain "$RUNNER_TEMP/app-signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/build_certificate.p12"
+          rm -f "$RUNNER_TEMP/api_key.p8"
+
+  publish-public-release:
+    needs: [resolve-release, build-linux, build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Verify artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Assets prepared for release:"
+          find release-assets -maxdepth 2 -type f | sort
+          COUNT=$(find release-assets -type f | wc -l | tr -d ' ')
+          if [ "$COUNT" = "0" ]; then
+            echo "No release artifacts found."
+            exit 1
+          fi
+
+      - name: Publish to public repository release
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          VERSION="${RELEASE_VERSION}"
+
+          cat > release-notes.md <<EOF
+          # ChordVox v${VERSION}
+
+          Automated release from private build pipeline.
+
+          ## Downloads
+
+          | Platform | Chip | Format | File |
+          | --- | --- | --- | --- |
+          | Windows | x64 | exe | \`ChordVox-${VERSION}-windows-x64.exe\` |
+          | macOS | Apple Silicon | dmg | \`ChordVox-${VERSION}-arm64.dmg\` |
+          | macOS | Intel | dmg | \`ChordVox-${VERSION}.dmg\` |
+          | Linux | x64 | AppImage/deb/rpm/tar.gz | see assets below |
+
+          EOF
+
+          if gh release view "$TAG" -R "$REPO" >/dev/null 2>&1; then
+            gh release edit "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
+          else
+            gh release create "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
+          fi
+
+          mapfile -t ASSETS < <(find release-assets -maxdepth 2 -type f | sort)
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No files to upload."
+            exit 1
+          fi
+
+          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
+          echo "Release published: ${REPO} ${TAG}"

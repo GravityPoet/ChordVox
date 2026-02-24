@@ -78,6 +78,11 @@ export const useAudioRecording = (toast, options = {}) => {
         }
       },
       onError: (error) => {
+        const isPasteFailed =
+          error?.code === "PASTE_FAILED" ||
+          error?.title === "Paste Error" ||
+          error?.title === "PASTE_FAILED";
+
         // Provide specific titles for cloud error codes
         const title =
           error.code === "AUTH_EXPIRED"
@@ -86,11 +91,17 @@ export const useAudioRecording = (toast, options = {}) => {
               ? t("hooks.audioRecording.errorTitles.offline")
               : error.code === "LIMIT_REACHED"
                 ? t("hooks.audioRecording.errorTitles.dailyLimitReached")
-                : error.title;
+                : isPasteFailed
+                  ? t("hooks.clipboard.pasteFailed.title")
+                  : error.title;
+
+        const description = isPasteFailed
+          ? t("hooks.clipboard.pasteFailed.description")
+          : error.description;
 
         toast({
           title,
-          description: error.description,
+          description,
           variant: "destructive",
           duration: error.code === "AUTH_EXPIRED" ? 8000 : undefined,
         });

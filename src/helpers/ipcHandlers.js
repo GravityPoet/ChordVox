@@ -179,12 +179,12 @@ class IPCHandlers {
 
     // Clipboard handlers
     ipcMain.handle("paste-text", async (event, text, options) => {
-      // If the floating dictation panel currently has focus, blur it first so the
+      // If the floating dictation panel currently has focus, hide it first so the
       // paste keystroke lands in the user's target app instead of the overlay.
       const mainWindow = this.windowManager?.mainWindow;
       if (mainWindow && !mainWindow.isDestroyed() && mainWindow.isFocused()) {
-        mainWindow.blur();
-        await new Promise((resolve) => setTimeout(resolve, 80));
+        mainWindow.hide();
+        await new Promise((resolve) => setTimeout(resolve, 140));
       }
       return this.clipboardManager.pasteText(text, { ...options, webContents: event.sender });
     });
