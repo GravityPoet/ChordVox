@@ -40,7 +40,7 @@
 
 - 🧠 **AI Refinement Pipeline** — Raw speech → polished text. Connect to OpenAI / Anthropic / Google Gemini / Groq / any OpenAI-compatible endpoint, or run a local GGUF model via bundled llama.cpp. Includes smart contextual repair and format correction.
 
-- ⌨️ **Cursor-level Paste** — One hotkey triggers → records → transcribes → refines → pastes at your active cursor. Works across every app on macOS (AppleScript), Windows (SendKeys + nircmd), and Linux (XTest / xdotool / wtype / ydotool). True Push-to-Talk with native keyboard hooks on macOS (Globe/Fn key via Swift listener) and Windows (low-level `WH_KEYBOARD_LL` hook).
+- ⌨️ **Auto Paste** — One hotkey triggers → records → transcribes → refines → pastes automatically. Works across every app on macOS (AppleScript), Windows (SendKeys + nircmd), and Linux (XTest / xdotool / wtype / ydotool). True Push-to-Talk with native keyboard hooks on macOS (Globe/Fn key via Swift listener) and Windows (low-level `WH_KEYBOARD_LL` hook).
 
 - 🌍 **58 Languages · 10 Interface Languages** — Auto-detect or pin your language. Full UI localization in EN / ZH-CN / ZH-TW / JA / DE / FR / ES / PT / IT / RU.
 
@@ -57,7 +57,7 @@
 | Typing is slow; you think faster than you type | Speak naturally → get polished text in < 2 seconds |
 | Cloud voice tools send audio to unknown servers | Local STT means audio stays on-device |
 | Dictation output is raw and messy | AI refinement fixes grammar, punctuation, and formatting automatically |
-| Switching between dictation app and target app breaks flow | Paste-at-cursor removes the copy-paste step entirely |
+| Switching between dictation app and target app breaks flow | Auto-paste removes the copy-paste step entirely |
 | Enterprise / medical / legal jargon gets mangled | Custom Dictionary biases the model toward your domain-specific terms |
 | You need different AI quality for different tasks | Dual-profile hotkeys: one for fast drafts (Groq), one for polished output (GPT-5 / Claude) |
 
@@ -67,9 +67,9 @@
 
 ```
 ┌─────────────┐    ┌──────────────────────────┐    ┌─────────────────┐    ┌──────────────┐
-│  Hotkey      │───▶│  Audio Capture           │───▶│  STT Engine     │───▶│  AI Refine   │───▶ Paste
-│  (Globe/Fn/  │    │  MediaRecorder → IPC     │    │  whisper.cpp    │    │  GPT / Claude│    at
-│   Custom)    │    │  → temp .wav file        │    │  Parakeet       │    │  Gemini/Groq │    Cursor
+│  Hotkey      │───▶│  Audio Capture           │───▶│  STT Engine     │───▶│  AI Refine   │───▶  Auto
+│  (Globe/Fn/  │    │  MediaRecorder → IPC     │    │  whisper.cpp    │    │  GPT / Claude│    Paste
+│   Custom)    │    │  → temp .wav file        │    │  Parakeet       │    │  Gemini/Groq │
 └─────────────┘    └──────────────────────────┘    │  SenseVoice     │    │  Local GGUF  │
                                                     │  Cloud STT      │    └──────────────┘
                                                     └─────────────────┘
