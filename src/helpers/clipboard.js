@@ -52,13 +52,6 @@ const PASTE_DELAYS = {
   linux: 50,
 };
 
-const RESTORE_DELAYS = {
-  darwin: 450,
-  win32_nircmd: 80,
-  win32_pwsh: 80,
-  linux: 200,
-};
-
 function writeClipboardInRenderer(webContents, text) {
   if (!webContents || !webContents.executeJavaScript) {
     return Promise.reject(new Error("Invalid webContents for clipboard write"));
@@ -387,9 +380,7 @@ class ClipboardManager {
 
           if (code === 0) {
             this.safeLog(`Text pasted successfully via ${useFastPaste ? "CGEvent" : "osascript"}`);
-            setTimeout(() => {
-              clipboard.writeText(originalClipboard);
-            }, RESTORE_DELAYS.darwin);
+            this.safeLog("📌 Keeping transcribed text in clipboard");
             resolve();
           } else if (useFastPaste) {
             this.safeLog(
@@ -451,9 +442,7 @@ class ClipboardManager {
 
         if (code === 0) {
           this.safeLog("Text pasted successfully via osascript fallback");
-          setTimeout(() => {
-            clipboard.writeText(originalClipboard);
-          }, RESTORE_DELAYS.darwin);
+          this.safeLog("📌 Keeping transcribed text in clipboard");
           resolve();
         } else {
           this.accessibilityCache = { value: null, expiresAt: 0 };
@@ -529,10 +518,7 @@ class ClipboardManager {
               elapsedMs: elapsed,
               output,
             });
-            setTimeout(() => {
-              clipboard.writeText(originalClipboard);
-              this.safeLog("🔄 Clipboard restored");
-            }, RESTORE_DELAYS.win32_nircmd);
+            this.safeLog("📌 Keeping transcribed text in clipboard");
             resolve();
           } else {
             this.safeLog(
@@ -575,7 +561,6 @@ class ClipboardManager {
   async pasteWithNircmd(nircmdPath, originalClipboard) {
     return new Promise((resolve, reject) => {
       const pasteDelay = PASTE_DELAYS.win32_nircmd;
-      const restoreDelay = RESTORE_DELAYS.win32_nircmd;
 
       setTimeout(() => {
         let hasTimedOut = false;
@@ -600,12 +585,8 @@ class ClipboardManager {
           if (code === 0) {
             this.safeLog(`✅ nircmd paste success`, {
               elapsedMs: elapsed,
-              restoreDelayMs: restoreDelay,
             });
-            setTimeout(() => {
-              clipboard.writeText(originalClipboard);
-              this.safeLog("🔄 Clipboard restored");
-            }, restoreDelay);
+            this.safeLog("📌 Keeping transcribed text in clipboard");
             resolve();
           } else {
             this.safeLog(`❌ nircmd failed (code ${code}), falling back to PowerShell`, {
@@ -642,7 +623,6 @@ class ClipboardManager {
   async pasteWithPowerShell(originalClipboard) {
     return new Promise((resolve, reject) => {
       const pasteDelay = PASTE_DELAYS.win32_pwsh;
-      const restoreDelay = RESTORE_DELAYS.win32_pwsh;
 
       setTimeout(() => {
         let hasTimedOut = false;
@@ -676,12 +656,8 @@ class ClipboardManager {
           if (code === 0) {
             this.safeLog(`✅ PowerShell paste success`, {
               elapsedMs: elapsed,
-              restoreDelayMs: restoreDelay,
             });
-            setTimeout(() => {
-              clipboard.writeText(originalClipboard);
-              this.safeLog("🔄 Clipboard restored");
-            }, restoreDelay);
+            this.safeLog("📌 Keeping transcribed text in clipboard");
             resolve();
           } else {
             this.safeLog(`❌ PowerShell paste failed`, {
@@ -759,14 +735,8 @@ class ClipboardManager {
       "clipboard"
     );
 
-    const restoreClipboard = () => {
-      setTimeout(() => {
-        if (isWayland) {
-          this._writeClipboardWayland(originalClipboard, webContents);
-        } else {
-          clipboard.writeText(originalClipboard);
-        }
-      }, RESTORE_DELAYS.linux);
+    const keepClipboard = () => {
+      this.safeLog("📌 Keeping transcribed text in clipboard");
     };
 
     const terminalClasses = [
@@ -880,7 +850,7 @@ class ClipboardManager {
             { tool: "linux-fast-paste", method: "uinput" },
             "clipboard"
           );
-          restoreClipboard();
+          keepClipboard();
           return;
         } catch (uinputError) {
           debugLogger.warn("uinput paste failed", { error: uinputError?.message }, "clipboard");
@@ -898,7 +868,7 @@ class ClipboardManager {
                 { tool: "linux-fast-paste", method: "xtest-xwayland" },
                 "clipboard"
               );
-              restoreClipboard();
+              keepClipboard();
               return;
             } catch (xtestError) {
               debugLogger.warn(
@@ -926,7 +896,7 @@ class ClipboardManager {
             { tool: "linux-fast-paste", method: "xtest" },
             "clipboard"
           );
-          restoreClipboard();
+          keepClipboard();
           return;
         } catch (error) {
           this.safeLog(
@@ -1084,7 +1054,7 @@ class ClipboardManager {
 
             if (code === 0) {
               debugLogger.debug("Paste successful", { cmd: tool.cmd }, "clipboard");
-              restoreClipboard();
+              keepClipboard();
               resolve();
             } else {
               debugLogger.error(
