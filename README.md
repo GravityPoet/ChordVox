@@ -4,9 +4,9 @@
 </h1>
 
 <p align="center">
-  <strong>把“说话”直接变成可发送的高质量文字，不再手打、不再反复改稿。</strong><br>
-  <strong>击中效率痛点：</strong>长按快捷键开口说，AI自动完成转写+润色+排版，松开即自动粘贴，减少打字、改错、切窗口三步重复操作。<br>
-  <strong>击中隐私痛点：</strong>支持纯本地离线模型，会议纪要、客户信息、商业机密不出设备，速度快且更可控。
+  <strong>A global AI smart dictation app built to save your time and protect your privacy.</strong><br>
+  <strong>Zero Friction:</strong> Hold a hotkey to speak. AI instantly transcribes and polishes your words, pasting perfectly formatted text as soon as you release the key, so your typing can finally keep up with your brain.<br>
+  <strong>Total Privacy:</strong> Powered entirely by local large language models. No internet required—your sensitive data and ideas never leave your hard drive.
 </p>
 
 <p align="center">
@@ -17,75 +17,75 @@
 </p>
 
 <p align="center">
-  <a href="./README.en.md">English</a> | <strong>中文</strong>
+  <strong>English</strong> | <a href="./README.zh.md">中文</a>
 </p>
 
 ---
 
-### 一句话简介
+### One-liner
 
-> **一款为你节省时间、保护隐私的全局 AI 智能输入法。按住快捷键说话，AI 瞬间完成高精度识别与语病润色。内置本地大语言模型，完全无需联网，让隐私与数据永远只掌握在你手中。**
-
----
-
-### 核心特性
-
-- 🔒 **隐私优先，本地运行** — 内置三大语音引擎（whisper.cpp · NVIDIA Parakeet · SenseVoice），音频不出本机。无需 Python 环境，原生二进制开箱即用。
-
-- 💼 **企业级专属特性 (Pro)** — 除基础开源功能外，可平滑升级解锁更强大的商业重度需求：专业领域商业词库注入、复杂的上下文风控机制、反作弊策略及专属极速商用接口集成（即买即用，免去四处寻找和配置第三方 API Key）。
-
-- 🎯 **助手命名与指令模式** — 为 AI 助手设定专属名字。比如对它说“Hi ChordVox，帮我起草一封回信……”，AI 会瞬间从打字模式切换为执行指令的智能助理模式。
-
-- 📖 **专业自定义词典** — 提供内置的专有词汇表。添加你的专属人名、业务黑话、缩写名词，大幅度提升针对特定工作流的转录准确度。
-
-- 🧠 **AI 润色管线** — 语音原文 → 精修成文。对接 OpenAI / Anthropic / Gemini / Groq / 自定义端点，或通过内置 llama.cpp 跑本地 GGUF 模型。支持自动纠正句法、上下文智能修复与排版。
-
-- ⌨️ **自动粘贴** — 快捷键一按：录音 → 转写 → 润色 → 自动粘贴，全程无需切换窗口。macOS 使用 AppleScript 精准粘贴，Windows 使用 SendKeys + nircmd，Linux 全覆盖 XTest / xdotool / wtype / ydotool。macOS Globe/Fn 键原生 Swift 监听，Windows 底层键盘钩子，支持真正的 Push-to-Talk。
-
-- 🌍 **58 种语言 · 10 种界面语言** — 自动检测或手动锁定语种。界面完整本地化：中 / 英 / 日 / 德 / 法 / 西 / 葡 / 意 / 俄。
-
-- 🔄 **双配置热键** — 两套独立快捷键绑定不同 STT 引擎、AI 模型与润色策略，一键切换工作流。
-
-- 🧹 **存储空间管理** — 贴心的磁盘清理。在设置面板只需一键即可轻松卸载那些庞大的本地下载的 Whisper / GGUF 模型缓存，释放你的磁盘空间。
+> **Hold a hotkey and speak. Let AI instantly convert your speech into polished text and paste it for you—all while local models guarantee complete absolute privacy.**
 
 ---
 
-### 应用场景 / 痛点解决
+### Key Features
 
-| 痛点 | ChordVox 方案 |
+- 🔒 **Privacy-first, Local-first** — Ship with built-in STT engines (whisper.cpp · NVIDIA Parakeet · SenseVoice). Your audio never leaves your machine unless you choose it to. Zero Python dependency; a single native binary handles everything.
+
+- 💼 **Enterprise-Grade Features (Pro)** — Smoothly upgrade to unlock heavy-duty commercial capabilities: injection of professional-domain business dictionaries, complex anti-abuse and content moderation mechanisms, and integration of exclusive high-speed commercial endpoints (ready to use, no need to hunt for and configure third-party API keys).
+
+- 🎯 **Agent Naming & Command Mode** — Personalize your AI assistant's name. Address it directly ("Hi ChordVox, draft an email…") to instantly switch from normal dictation to instruction-following mode.
+
+- 📖 **Custom Dictionary** — Add domain-specific jargon, names, and technical terms to the in-app dictionary to drastically improve transcription accuracy for your specific workflows.
+
+- 🧠 **AI Refinement Pipeline** — Raw speech → polished text. Connect to OpenAI / Anthropic / Google Gemini / Groq / any OpenAI-compatible endpoint, or run a local GGUF model via bundled llama.cpp. Includes smart contextual repair and format correction.
+
+- ⌨️ **Auto Paste** — One hotkey triggers → records → transcribes → refines → pastes automatically. Works across every app on macOS (AppleScript), Windows (SendKeys + nircmd), and Linux (XTest / xdotool / wtype / ydotool). True Push-to-Talk with native keyboard hooks on macOS (Globe/Fn key via Swift listener) and Windows (low-level `WH_KEYBOARD_LL` hook).
+
+- 🌍 **58 Languages · 10 Interface Languages** — Auto-detect or pin your language. Full UI localization in EN / ZH-CN / ZH-TW / JA / DE / FR / ES / PT / IT / RU.
+
+- 🔄 **Dual-Profile Hotkeys** — Bind two independent hotkey profiles, each with its own STT engine, AI model, and refinement strategy. Switch workflows in a single keystroke.
+
+- 🧹 **Storage Management** — Built-in cache cleanup tools. Easily remove downloaded Whisper/GGUF models to free up disk space with a single click in Settings.
+
+---
+
+### Use Cases / Problems Solved
+
+| Pain Point | ChordVox Solution |
 |---|---|
-| 打字太慢，思维跑在手指前面 | 自然说话 → 2 秒内获得精修文本 |
-| 云端语音工具将录音发往未知服务器 | 本地 STT，音频不出机器 |
-| 语音识别原文粗糙、标点混乱 | AI 润色自动修正语法、标点和排版 |
-| 在听写软件和目标应用之间反复切窗 | 自动粘贴，零中断 |
-| 专业术语（医学 / 法律 / 代码）被识别错误 | 自定义词典引导模型偏好你的领域用词 |
-| 不同任务需要不同 AI 质量 | 双配置热键：一路快速草稿（Groq），一路精修输出（GPT-5 / Claude） |
+| Typing is slow; you think faster than you type | Speak naturally → get polished text in < 2 seconds |
+| Cloud voice tools send audio to unknown servers | Local STT means audio stays on-device |
+| Dictation output is raw and messy | AI refinement fixes grammar, punctuation, and formatting automatically |
+| Switching between dictation app and target app breaks flow | Auto-paste removes the copy-paste step entirely |
+| Enterprise / medical / legal jargon gets mangled | Custom Dictionary biases the model toward your domain-specific terms |
+| You need different AI quality for different tasks | Dual-profile hotkeys: one for fast drafts (Groq), one for polished output (GPT-5 / Claude) |
 
 ---
 
-### 运行机制
+### How It Works
 
 ```
 ┌─────────────┐    ┌──────────────────────────┐    ┌─────────────────┐    ┌──────────────┐
-│  快捷键      │───▶│  音频采集                │───▶│  语音引擎       │───▶│  AI 润色     │───▶  自动
-│  (Globe/Fn/  │    │  MediaRecorder → IPC     │    │  whisper.cpp    │    │  GPT / Claude│    粘贴
-│   自定义)    │    │  → 临时 .wav 文件        │    │  Parakeet       │    │  Gemini/Groq │
-└─────────────┘    └──────────────────────────┘    │  SenseVoice     │    │  本地 GGUF   │
-                                                    │  云端 STT       │    └──────────────┘
+│  Hotkey      │───▶│  Audio Capture           │───▶│  STT Engine     │───▶│  AI Refine   │───▶  Auto
+│  (Globe/Fn/  │    │  MediaRecorder → IPC     │    │  whisper.cpp    │    │  GPT / Claude│    Paste
+│   Custom)    │    │  → temp .wav file        │    │  Parakeet       │    │  Gemini/Groq │
+└─────────────┘    └──────────────────────────┘    │  SenseVoice     │    │  Local GGUF  │
+                                                    │  Cloud STT      │    └──────────────┘
                                                     └─────────────────┘
 ```
 
-**技术栈**：Electron 36 · React 19 · TypeScript · Vite · Tailwind CSS v4 · shadcn/ui · better-sqlite3 · whisper.cpp · sherpa-onnx (Parakeet) · llama.cpp · FFmpeg（内置）
+**Tech Stack**: Electron 36 · React 19 · TypeScript · Vite · Tailwind CSS v4 · shadcn/ui · better-sqlite3 · whisper.cpp · sherpa-onnx (Parakeet) · llama.cpp · FFmpeg (bundled)
 
 ---
 
-### 下载
+### Download
 
-您可以前往 [GitHub Releases](https://github.com/GravityPoet/ChordVox/releases/latest) 页面下载适合您操作系统的最新版本。
+You can always find the latest format specific to your operating system on the [GitHub Releases](https://github.com/GravityPoet/ChordVox/releases/latest) page.
 
-#### macOS 首次启动
+#### macOS First Launch
 
-版本非APP Store下载可能被 Gatekeeper 拦截，执行以下命令解除：
+Unsigned builds may trigger Gatekeeper. Fix with:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/ChordVox.app
@@ -94,14 +94,14 @@ open /Applications/ChordVox.app
 
 ---
 
-### 快速链接
+### Quick Links
 
-- 📦 [所有版本](https://github.com/GravityPoet/ChordVox/releases)
-- 📖 [完整技术文档](docs/README_LEGACY.md)
-- 📬 联系方式：`moonlitpoet@proton.me`
+- 📦 [All Releases](https://github.com/GravityPoet/ChordVox/releases)
+- 📖 [Legacy Technical README](docs/README_LEGACY.md)
+- 📬 Contact: `moonlitpoet@proton.me`
 
 ---
 
-### 许可证
+### License
 
-MIT License. 详见 [LICENSE](./LICENSE) 与 [NOTICE](./NOTICE) 文件。
+MIT License. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
