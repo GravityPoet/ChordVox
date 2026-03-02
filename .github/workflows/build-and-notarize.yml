@@ -15,6 +15,9 @@ on:
       - ".github/ISSUE_TEMPLATE/**"
   workflow_dispatch:
 
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+
 jobs:
   build-linux:
     runs-on: ubuntu-latest
@@ -39,17 +42,17 @@ jobs:
       - name: Download whisper.cpp binaries
         run: node scripts/download-whisper-cpp.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download llama-server binaries
         run: node scripts/download-llama-server.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download sherpa-onnx binaries
         run: node scripts/download-sherpa-onnx.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Cache Electron
         uses: actions/cache@v4
@@ -66,7 +69,7 @@ jobs:
       - name: Build Application
         run: npm run build:linux -- --publish never
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
           VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
           VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
           VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
@@ -101,32 +104,32 @@ jobs:
       - name: Download whisper.cpp binaries
         run: node scripts/download-whisper-cpp.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download llama-server binaries
         run: node scripts/download-llama-server.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download sherpa-onnx binaries
         run: node scripts/download-sherpa-onnx.js --current
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download nircmd.exe
         run: node scripts/download-nircmd.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download windows-fast-paste.exe
         run: node scripts/download-windows-fast-paste.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download windows-key-listener.exe
         run: node scripts/download-windows-key-listener.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Cache Electron
         uses: actions/cache@v4
@@ -138,7 +141,7 @@ jobs:
       - name: Build Application
         run: npm run build:win -- --publish never
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
           VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
           VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
           VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
@@ -177,17 +180,17 @@ jobs:
       - name: Download whisper.cpp binaries
         run: node scripts/download-whisper-cpp.js --current --platform darwin --arch ${{ matrix.arch }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download llama-server binaries
         run: node scripts/download-llama-server.js --current --platform darwin --arch ${{ matrix.arch }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Download sherpa-onnx binaries
         run: node scripts/download-sherpa-onnx.js --current --platform darwin --arch ${{ matrix.arch }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
 
       - name: Cache Electron
         uses: actions/cache@v4
@@ -225,7 +228,7 @@ jobs:
         run: npm run build:mac -- --${{ matrix.arch }} --publish never
         env:
           TARGET_ARCH: ${{ matrix.arch }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
           VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
           VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
           VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
