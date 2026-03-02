@@ -514,7 +514,9 @@ async function startApp() {
   await trayManager.createTray();
 
   updateManager.setWindows(windowManager.mainWindow, windowManager.controlPanelWindow);
-  updateManager.checkForUpdatesOnStartup();
+  if (environmentManager.getAutoCheckUpdate()) {
+    updateManager.checkForUpdatesOnStartup();
+  }
 
   if (process.platform === "darwin") {
     let globeKeyDownTime = 0;

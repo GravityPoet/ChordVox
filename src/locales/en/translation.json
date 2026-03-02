@@ -1076,6 +1076,8 @@
       "startup": {
         "launchAtLogin": "Launch at login",
         "launchAtLoginDescription": "Start ChordVox automatically when you log in",
+        "autoCheckUpdate": "Auto Check for Updates",
+        "autoCheckUpdateDescription": "Automatically check for and download new versions when ChordVox starts",
         "title": "Startup"
       },
       "updates": {

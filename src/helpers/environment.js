@@ -20,6 +20,7 @@ const PERSISTED_KEYS = [
   "DICTATION_KEY",
   "ACTIVATION_MODE",
   "FLOATING_ICON_AUTO_HIDE",
+  "AUTO_CHECK_UPDATE",
   "UI_LANGUAGE",
 ];
 
@@ -146,6 +147,18 @@ class EnvironmentManager {
 
   saveFloatingIconAutoHide(enabled) {
     const result = this._saveKey("FLOATING_ICON_AUTO_HIDE", String(enabled));
+    this.saveAllKeysToEnvFile().catch(() => {});
+    return result;
+  }
+
+  getAutoCheckUpdate() {
+    const val = this._getKey("AUTO_CHECK_UPDATE");
+    // Default enabled when not configured.
+    return val !== "false";
+  }
+
+  saveAutoCheckUpdate(enabled) {
+    const result = this._saveKey("AUTO_CHECK_UPDATE", String(enabled));
     this.saveAllKeysToEnvFile().catch(() => {});
     return result;
   }

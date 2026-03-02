@@ -1,6 +1,6 @@
 {
   "name": "chordvox",
-  "version": "1.4.11",
+  "version": "1.5.34",
   "description": "A desktop dictation application using whisper.cpp for speech-to-text transcription",
   "main": "main.js",
   "private": true,

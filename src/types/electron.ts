@@ -428,6 +428,8 @@ declare global {
       // Auto-start at login
       getAutoStartEnabled?: () => Promise<boolean>;
       setAutoStartEnabled?: (enabled: boolean) => Promise<{ success: boolean; error?: string }>;
+      getAutoCheckUpdate?: () => Promise<boolean>;
+      setAutoCheckUpdate?: (enabled: boolean) => Promise<{ success: boolean; error?: string }>;
 
       // Auth
       authClearSession?: () => Promise<void>;

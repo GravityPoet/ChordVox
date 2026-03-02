@@ -1076,6 +1076,8 @@
       "startup": {
         "launchAtLogin": "登录时启动",
         "launchAtLoginDescription": "登录时自动启动 ChordVox",
+        "autoCheckUpdate": "自动检查更新",
+        "autoCheckUpdateDescription": "启动时自动检测并下载最新版本",
         "title": "启动"
       },
       "updates": {

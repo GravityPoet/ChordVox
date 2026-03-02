@@ -315,4 +315,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   // Auto-start management
   getAutoStartEnabled: () => ipcRenderer.invoke("get-auto-start-enabled"),
   setAutoStartEnabled: (enabled) => ipcRenderer.invoke("set-auto-start-enabled", enabled),
+
+  // Auto-check-update management
+  getAutoCheckUpdate: () => ipcRenderer.invoke("get-auto-check-update"),
+  setAutoCheckUpdate: (enabled) => ipcRenderer.invoke("set-auto-check-update", enabled),
 });

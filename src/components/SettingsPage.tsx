@@ -811,6 +811,40 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     }
   };
 
+  const [autoCheckUpdateEnabled, setAutoCheckUpdateEnabled] = useState(true);
+  const [autoCheckUpdateLoading, setAutoCheckUpdateLoading] = useState(true);
+
+  useEffect(() => {
+    const loadAutoCheckUpdate = async () => {
+      if (window.electronAPI?.getAutoCheckUpdate) {
+        try {
+          const enabled = await window.electronAPI.getAutoCheckUpdate();
+          setAutoCheckUpdateEnabled(enabled);
+        } catch (error) {
+          logger.error("Failed to get auto-check-update status", error, "settings");
+        }
+      }
+      setAutoCheckUpdateLoading(false);
+    };
+    loadAutoCheckUpdate();
+  }, []);
+
+  const handleAutoCheckUpdateChange = async (enabled: boolean) => {
+    if (window.electronAPI?.setAutoCheckUpdate) {
+      try {
+        setAutoCheckUpdateLoading(true);
+        const result = await window.electronAPI.setAutoCheckUpdate(enabled);
+        if (result.success) {
+          setAutoCheckUpdateEnabled(enabled);
+        }
+      } catch (error) {
+        logger.error("Failed to set auto-check-update", error, "settings");
+      } finally {
+        setAutoCheckUpdateLoading(false);
+      }
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
 
@@ -1647,10 +1681,10 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
             </div>
 
             {/* Startup */}
-            {platform !== "linux" && (
-              <div>
-                <SectionHeader title={t("settingsPage.general.startup.title")} />
-                <SettingsPanel>
+            <div>
+              <SectionHeader title={t("settingsPage.general.startup.title")} />
+              <SettingsPanel>
+                {platform !== "linux" && (
                   <SettingsPanelRow>
                     <SettingsRow
                       label={t("settingsPage.general.startup.launchAtLogin")}
@@ -1663,9 +1697,21 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                       />
                     </SettingsRow>
                   </SettingsPanelRow>
-                </SettingsPanel>
-              </div>
-            )}
+                )}
+                <SettingsPanelRow>
+                  <SettingsRow
+                    label={t("settingsPage.general.startup.autoCheckUpdate")}
+                    description={t("settingsPage.general.startup.autoCheckUpdateDescription")}
+                  >
+                    <Toggle
+                      checked={autoCheckUpdateEnabled}
+                      onChange={(checked: boolean) => handleAutoCheckUpdateChange(checked)}
+                      disabled={autoCheckUpdateLoading}
+                    />
+                  </SettingsRow>
+                </SettingsPanelRow>
+              </SettingsPanel>
+            </div>
 
             {/* Microphone */}
             <div>

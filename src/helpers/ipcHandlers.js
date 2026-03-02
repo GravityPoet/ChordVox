@@ -627,6 +627,27 @@ class IPCHandlers {
       }
     });
 
+    // Auto-check-update handlers
+    ipcMain.handle("get-auto-check-update", async () => {
+      try {
+        return this.environmentManager.getAutoCheckUpdate();
+      } catch (error) {
+        debugLogger.error("Error getting auto-check-update status:", error);
+        return true; // default to enabled
+      }
+    });
+
+    ipcMain.handle("set-auto-check-update", async (event, enabled) => {
+      try {
+        this.environmentManager.saveAutoCheckUpdate(enabled);
+        debugLogger.debug("Auto-check-update setting updated", { enabled });
+        return { success: true };
+      } catch (error) {
+        debugLogger.error("Error setting auto-check-update:", error);
+        return { success: false, error: error.message };
+      }
+    });
+
     // Model management handlers
     ipcMain.handle("model-get-all", async () => {
       try {
