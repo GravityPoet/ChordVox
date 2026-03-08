@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/icon.png" alt="ChordVox" width="128" />
+  <img src="assets/logo.png" alt="ChordVox" width="128" />
 </p>
 
 
