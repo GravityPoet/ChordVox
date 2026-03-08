@@ -1,15 +1,7 @@
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
-<<<<<<< HEAD
   <strong> 还在手动打字 or 改语音识别的错别字？试试这套纯本地 AI 语音输入法。说话秒变精修长文，自动粘贴一气呵成。你的隐私掌握在你的手中，免注册开箱即用，你的嘴就是最快的键盘。</strong>
-=======
-<<<<<<< HEAD
-  <strong> 还在手动打字 or 改语音识别的错别字？试试这套纯本地 AI 语音输入法。说话秒变精修长文，自动粘贴一气呵成。全程断网可用，免注册开箱即用，你的嘴就是最快的键盘。</strong>
-=======
-  <strong>还在手动打字或者改语音识别的错别字？试试这套纯本地 AI 语音输入法。说话秒变精修长文，自动粘贴一气呵成。全程断网可用，免注册开箱即用，你的嘴就是最快的键盘。</strong>
->>>>>>> 39fc3b5 (docs: completely rewrite Chinese README in direct, benefit-focused, user-centric style)
->>>>>>> ebe3ae9 (docs: completely rewrite Chinese README in direct, benefit-focused, user-centric style)
 </p>
 
 <p align="center">
