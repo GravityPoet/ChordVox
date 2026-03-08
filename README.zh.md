@@ -1,7 +1,7 @@
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
-  <strong> AI语音输入法，开口即输入，AI 润色，光标处落字。</strong>
+  <strong> AI语音输入法，开口即输入，AI 润色，自动粘贴，一气呵成。本AI语音输入法把隐私、效率、AI润色效果做到极致</strong>
 </p>
 
 <p align="center">
