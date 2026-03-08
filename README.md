@@ -64,12 +64,14 @@
 > [!IMPORTANT]
 > **macOS Users: Required First-Launch Unlock**
 > 
-> Because this open-source app is not self-signed with an expensive Apple Developer certificate, macOS Gatekeeper will block it on the first run. **All code is 100% open-source, fully transparent, and safe to inspect.** After dragging `ChordVox.app` to your `Applications ` folder, **you must open your `Terminal` and run this command once to unlock the app**:
+> Because this is an open-source app and not downloaded from the Mac App Store, macOS may block it on its first run. After installing the app for the first time, please open your `Terminal` and run the following command to remove this restriction (this only needs to be done once):
 > 
 > ```bash
 > xattr -dr com.apple.quarantine /Applications/ChordVox.app
 > open /Applications/ChordVox.app
 > ```
+> 
+> The code for this software is entirely transparent and open source. You can feel safe running it.
 
 ---
 
