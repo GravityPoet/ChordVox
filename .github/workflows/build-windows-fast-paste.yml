@@ -1,12 +1,6 @@
 name: Build Windows Fast Paste
 
 on:
-  push:
-    paths:
-      - 'resources/windows-fast-paste.c'
-      - '.github/workflows/build-windows-fast-paste.yml'
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       version:
