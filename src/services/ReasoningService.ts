@@ -6,11 +6,13 @@ import { API_ENDPOINTS, TOKEN_LIMITS, buildApiUrl, normalizeBaseUrl } from "../c
 import logger from "../utils/logger";
 import { isSecureEndpoint } from "../utils/urlUtils";
 import { withSessionRefresh } from "../lib/neonAuth";
+import { signRequest } from "../utils/awsSigV4";
 
 class ReasoningService extends BaseReasoningService {
   private apiKeyCache: SecureCache<string>;
   private openAiEndpointPreference = new Map<string, "responses" | "chat">();
   private static readonly OPENAI_ENDPOINT_PREF_STORAGE_KEY = "openAiEndpointPreference";
+  private static readonly OPENROUTER_BASE = "https://openrouter.ai/api/v1";
   private cacheCleanupStop: (() => void) | undefined;
 
   constructor() {
@@ -23,23 +25,52 @@ class ReasoningService extends BaseReasoningService {
     }
   }
 
-  private getConfiguredOpenAIBase(): string {
+  private getProviderEndpointOverride(providerId: string): string | null {
+    if (typeof window === "undefined" || !window.localStorage) return null;
+    try {
+      const raw = window.localStorage.getItem("providerEndpoints");
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      const value = parsed?.[providerId];
+      if (typeof value === "string" && value.trim()) {
+        return normalizeBaseUrl(value.trim()) || null;
+      }
+    } catch { /* ignore */ }
+    return null;
+  }
+
+  private getConfiguredOpenAIBase(providerOverride?: "openai" | "openrouter" | "custom"): string {
     if (typeof window === "undefined" || !window.localStorage) {
-      return API_ENDPOINTS.OPENAI_BASE;
+      return providerOverride === "openrouter"
+        ? ReasoningService.OPENROUTER_BASE
+        : API_ENDPOINTS.OPENAI_BASE;
     }
 
     try {
-      const provider = window.localStorage.getItem("reasoningProvider") || "";
+      const provider = providerOverride || window.localStorage.getItem("reasoningProvider") || "";
       const isCustomProvider = provider === "custom";
+      const defaultEndpoint =
+        provider === "openrouter" ? ReasoningService.OPENROUTER_BASE : API_ENDPOINTS.OPENAI_BASE;
 
+      // Check per-provider endpoint override (from UI endpoint editor)
       if (!isCustomProvider) {
+        const override = this.getProviderEndpointOverride(provider || "openai");
+        if (override && override !== defaultEndpoint) {
+          logger.logReasoning("CUSTOM_REASONING_ENDPOINT_CHECK", {
+            hasCustomUrl: true,
+            provider,
+            reason: "Using per-provider endpoint override",
+            overrideEndpoint: override,
+          });
+          return override;
+        }
         logger.logReasoning("CUSTOM_REASONING_ENDPOINT_CHECK", {
           hasCustomUrl: false,
           provider,
-          reason: "Provider is not 'custom', using default OpenAI endpoint",
-          defaultEndpoint: API_ENDPOINTS.OPENAI_BASE,
+          reason: "Provider is not 'custom', using default provider endpoint",
+          defaultEndpoint,
         });
-        return API_ENDPOINTS.OPENAI_BASE;
+        return defaultEndpoint;
       }
 
       const stored = window.localStorage.getItem("cloudReasoningBaseUrl") || "";
@@ -50,25 +81,26 @@ class ReasoningService extends BaseReasoningService {
           hasCustomUrl: false,
           provider,
           usingDefault: true,
-          defaultEndpoint: API_ENDPOINTS.OPENAI_BASE,
+          defaultEndpoint,
         });
-        return API_ENDPOINTS.OPENAI_BASE;
+        return defaultEndpoint;
       }
 
-      const normalized = normalizeBaseUrl(trimmed) || API_ENDPOINTS.OPENAI_BASE;
+      const normalized = normalizeBaseUrl(trimmed) || defaultEndpoint;
 
       logger.logReasoning("CUSTOM_REASONING_ENDPOINT_CHECK", {
         hasCustomUrl: true,
         provider,
         rawUrl: trimmed,
         normalizedUrl: normalized,
-        defaultEndpoint: API_ENDPOINTS.OPENAI_BASE,
+        defaultEndpoint,
       });
 
       const knownNonOpenAIUrls = [
         "api.groq.com",
         "api.anthropic.com",
         "generativelanguage.googleapis.com",
+        "openrouter.ai",
       ];
 
       const isKnownNonOpenAI = knownNonOpenAIUrls.some((url) => normalized.includes(url));
@@ -77,7 +109,7 @@ class ReasoningService extends BaseReasoningService {
           reason: "Custom URL is a known non-OpenAI provider, using default OpenAI endpoint",
           attempted: normalized,
         });
-        return API_ENDPOINTS.OPENAI_BASE;
+        return defaultEndpoint;
       }
 
       if (!isSecureEndpoint(normalized)) {
@@ -85,7 +117,7 @@ class ReasoningService extends BaseReasoningService {
           reason: "HTTPS required (HTTP allowed for local network only)",
           attempted: normalized,
         });
-        return API_ENDPOINTS.OPENAI_BASE;
+        return defaultEndpoint;
       }
 
       logger.logReasoning("CUSTOM_REASONING_ENDPOINT_RESOLVED", {
@@ -98,9 +130,14 @@ class ReasoningService extends BaseReasoningService {
     } catch (error) {
       logger.logReasoning("CUSTOM_REASONING_ENDPOINT_ERROR", {
         error: (error as Error).message,
-        fallbackTo: API_ENDPOINTS.OPENAI_BASE,
+        fallbackTo:
+          providerOverride === "openrouter"
+            ? ReasoningService.OPENROUTER_BASE
+            : API_ENDPOINTS.OPENAI_BASE,
       });
-      return API_ENDPOINTS.OPENAI_BASE;
+      return providerOverride === "openrouter"
+        ? ReasoningService.OPENROUTER_BASE
+        : API_ENDPOINTS.OPENAI_BASE;
     }
   }
 
@@ -173,11 +210,11 @@ class ReasoningService extends BaseReasoningService {
         ReasoningService.OPENAI_ENDPOINT_PREF_STORAGE_KEY,
         JSON.stringify(data)
       );
-    } catch {}
+    } catch { }
   }
 
   private async getApiKey(
-    provider: "openai" | "anthropic" | "gemini" | "groq" | "custom"
+    provider: "openai" | "openrouter" | "anthropic" | "gemini" | "groq" | "bedrock" | "custom"
   ): Promise<string> {
     if (provider === "custom") {
       let customKey = "";
@@ -201,6 +238,17 @@ class ReasoningService extends BaseReasoningService {
       return trimmedKey;
     }
 
+    // Bedrock uses access key + secret key, not a single API key
+    if (provider === "bedrock") {
+      const accessKey = window.localStorage?.getItem("bedrockAccessKeyId") || "";
+      const secretKey = window.localStorage?.getItem("bedrockSecretAccessKey") || "";
+      if (!accessKey.trim() || !secretKey.trim()) {
+        throw new Error("AWS Bedrock credentials not configured");
+      }
+      // Return access key as the "api key" – processWithBedrock reads both separately
+      return accessKey.trim();
+    }
+
     let apiKey = this.apiKeyCache.get(provider);
 
     logger.logReasoning(`${provider.toUpperCase()}_KEY_RETRIEVAL`, {
@@ -213,6 +261,7 @@ class ReasoningService extends BaseReasoningService {
       try {
         const keyGetters = {
           openai: () => window.electronAPI.getOpenAIKey(),
+          openrouter: () => window.electronAPI.getOpenRouterKey(),
           anthropic: () => window.electronAPI.getAnthropicKey(),
           gemini: () => window.electronAPI.getGeminiKey(),
           groq: () => window.electronAPI.getGroqKey(),
@@ -235,6 +284,30 @@ class ReasoningService extends BaseReasoningService {
           error: (error as Error).message,
           stack: (error as Error).stack,
         });
+      }
+    }
+
+    // Fallback to localStorage if IPC returned empty
+    if (!apiKey && typeof window !== "undefined" && window.localStorage) {
+      const localStorageKeys: Record<string, string> = {
+        openai: "openaiApiKey",
+        openrouter: "openrouterApiKey",
+        anthropic: "anthropicApiKey",
+        gemini: "geminiApiKey",
+        groq: "groqApiKey",
+      };
+      const lsKey = localStorageKeys[provider];
+      if (lsKey) {
+        const lsValue = (window.localStorage.getItem(lsKey) || "").trim();
+        if (lsValue) {
+          logger.logReasoning(`${provider.toUpperCase()}_KEY_LOCALSTORAGE_FALLBACK`, {
+            provider,
+            hasKey: true,
+            keyLength: lsValue.length,
+          });
+          apiKey = lsValue;
+          this.apiKeyCache.set(provider, apiKey);
+        }
       }
     }
 
@@ -423,6 +496,7 @@ class ReasoningService extends BaseReasoningService {
 
       switch (provider) {
         case "openai":
+        case "openrouter":
           result = await this.processWithOpenAI(text, trimmedModel, agentName, config);
           break;
         case "anthropic":
@@ -437,8 +511,11 @@ class ReasoningService extends BaseReasoningService {
         case "groq":
           result = await this.processWithGroq(text, model, agentName, config);
           break;
-        case "chordvox":
-          result = await this.processWithChordVox(text, model, agentName, config);
+        case "openwhispr":
+          result = await this.processWithOpenWhispr(text, model, agentName, config);
+          break;
+        case "bedrock":
+          result = await this.processWithBedrock(text, trimmedModel, agentName, config);
           break;
         default:
           throw new Error(`Unsupported reasoning provider: ${provider}`);
@@ -474,10 +551,16 @@ class ReasoningService extends BaseReasoningService {
   ): Promise<string> {
     const reasoningProvider = window.localStorage?.getItem("reasoningProvider") || "";
     const isCustomProvider = reasoningProvider === "custom";
+    const effectiveProvider = isCustomProvider
+      ? "custom"
+      : reasoningProvider === "openrouter"
+        ? "openrouter"
+        : "openai";
 
     logger.logReasoning("OPENAI_START", {
       model,
       agentName,
+      provider: effectiveProvider,
       isCustomProvider,
       hasApiKey: false, // Will update after fetching
     });
@@ -486,7 +569,7 @@ class ReasoningService extends BaseReasoningService {
       throw new Error("Already processing a request");
     }
 
-    const apiKey = await this.getApiKey(isCustomProvider ? "custom" : "openai");
+    const apiKey = await this.getApiKey(effectiveProvider);
 
     logger.logReasoning("OPENAI_API_KEY", {
       hasApiKey: !!apiKey,
@@ -506,7 +589,7 @@ class ReasoningService extends BaseReasoningService {
 
       const isOlderModel = model && (model.startsWith("gpt-4") || model.startsWith("gpt-3"));
 
-      const openAiBase = this.getConfiguredOpenAIBase();
+      const openAiBase = this.getConfiguredOpenAIBase(effectiveProvider);
       const endpointCandidates = this.getOpenAIEndpointCandidates(openAiBase);
       const isCustomEndpoint = openAiBase !== API_ENDPOINTS.OPENAI_BASE;
 
@@ -852,8 +935,9 @@ class ReasoningService extends BaseReasoningService {
       let response: any;
       try {
         response = await withRetry(async () => {
+          const geminiBase = this.getProviderEndpointOverride("gemini") || API_ENDPOINTS.GEMINI;
           logger.logReasoning("GEMINI_REQUEST", {
-            endpoint: `${API_ENDPOINTS.GEMINI}/models/${model}:generateContent`,
+            endpoint: `${geminiBase}/models/${model}:generateContent`,
             model,
             hasApiKey: !!apiKey,
             requestBody: JSON.stringify(requestBody).substring(0, 200),
@@ -862,7 +946,7 @@ class ReasoningService extends BaseReasoningService {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 30000);
           try {
-            const res = await fetch(`${API_ENDPOINTS.GEMINI}/models/${model}:generateContent`, {
+            const res = await fetch(`${geminiBase}/models/${model}:generateContent`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -992,7 +1076,8 @@ class ReasoningService extends BaseReasoningService {
     this.isProcessing = true;
 
     try {
-      const endpoint = buildApiUrl(API_ENDPOINTS.GROQ_BASE, "/chat/completions");
+      const groqBase = this.getProviderEndpointOverride("groq") || API_ENDPOINTS.GROQ_BASE;
+      const endpoint = buildApiUrl(groqBase, "/chat/completions");
       return await this.callChatCompletionsApi(
         endpoint,
         apiKey,
@@ -1014,13 +1099,152 @@ class ReasoningService extends BaseReasoningService {
     }
   }
 
-  private async processWithChordVox(
+  private async processWithBedrock(
     text: string,
     model: string,
     agentName: string | null = null,
     config: ReasoningConfig = {}
   ): Promise<string> {
-    logger.logReasoning("CHORDVOX_START", { model, agentName });
+    logger.logReasoning("BEDROCK_START", { model, agentName });
+
+    if (this.isProcessing) {
+      throw new Error("Already processing a request");
+    }
+
+    const accessKeyId = (window.localStorage?.getItem("bedrockAccessKeyId") || "").trim();
+    const secretAccessKey = (window.localStorage?.getItem("bedrockSecretAccessKey") || "").trim();
+    const region = (window.localStorage?.getItem("bedrockRegion") || "us-east-1").trim();
+    const sessionToken = (window.localStorage?.getItem("bedrockSessionToken") || "").trim() || undefined;
+
+    if (!accessKeyId || !secretAccessKey) {
+      throw new Error("AWS Bedrock credentials not configured");
+    }
+
+    this.isProcessing = true;
+
+    try {
+      const systemPrompt = this.getSystemPrompt(agentName, text);
+      const userPrompt = text;
+
+      const bedrockBase = this.getProviderEndpointOverride("bedrock") ||
+        `https://bedrock-runtime.${region}.amazonaws.com`;
+      const endpoint = `${bedrockBase}/model/${model}/converse`;
+
+      const requestBody = JSON.stringify({
+        system: [{ text: systemPrompt }],
+        messages: [
+          { role: "user", content: [{ text: userPrompt }] },
+        ],
+        inferenceConfig: {
+          temperature: config.temperature ?? 0.3,
+          maxTokens: config.maxTokens || Math.max(
+            4096,
+            this.calculateMaxTokens(
+              text.length,
+              TOKEN_LIMITS.MIN_TOKENS,
+              TOKEN_LIMITS.MAX_TOKENS,
+              TOKEN_LIMITS.TOKEN_MULTIPLIER
+            )
+          ),
+        },
+      });
+
+      logger.logReasoning("BEDROCK_REQUEST", {
+        endpoint,
+        model,
+        region,
+        requestPreview: requestBody.substring(0, 200),
+      });
+
+      const signed = await signRequest({
+        method: "POST",
+        url: endpoint,
+        region,
+        service: "bedrock",
+        accessKeyId,
+        secretAccessKey,
+        sessionToken,
+        body: requestBody,
+        headers: { "content-type": "application/json" },
+      });
+
+      const response = await withRetry(async () => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        try {
+          const res = await fetch(signed.url, {
+            method: "POST",
+            headers: signed.headers,
+            body: requestBody,
+            signal: controller.signal,
+          });
+
+          if (!res.ok) {
+            const errorText = await res.text();
+            let errorData: any = { error: res.statusText };
+            try { errorData = JSON.parse(errorText); } catch { errorData = { error: errorText || res.statusText }; }
+            const errorMessage = errorData.message || errorData.error?.message || errorData.error || `Bedrock API error: ${res.status}`;
+            throw new Error(errorMessage);
+          }
+
+          return await res.json();
+        } catch (error) {
+          if ((error as Error).name === "AbortError") {
+            throw new Error("Bedrock request timed out after 60s");
+          }
+          throw error;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      }, createApiRetryStrategy());
+
+      // Bedrock Converse API response format
+      let responseText = "";
+      if (response?.output?.message?.content) {
+        for (const block of response.output.message.content) {
+          if (block.text) {
+            responseText += block.text;
+          }
+        }
+      }
+      // Fallback: OpenAI-compatible response format
+      if (!responseText && response?.choices?.[0]?.message?.content) {
+        responseText = response.choices[0].message.content;
+      }
+
+      responseText = responseText.trim();
+
+      logger.logReasoning("BEDROCK_RESPONSE", {
+        model,
+        responseLength: responseText.length,
+        usage: response.usage,
+        success: !!responseText,
+      });
+
+      if (!responseText) {
+        throw new Error("Bedrock returned empty response");
+      }
+
+      return responseText;
+    } catch (error) {
+      logger.logReasoning("BEDROCK_ERROR", {
+        model,
+        error: (error as Error).message,
+        errorType: (error as Error).name,
+      });
+      throw error;
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
+  private async processWithOpenWhispr(
+    text: string,
+    model: string,
+    agentName: string | null = null,
+    config: ReasoningConfig = {}
+  ): Promise<string> {
+    logger.logReasoning("OPENWHISPR_START", { model, agentName });
 
     if (this.isProcessing) {
       throw new Error("Already processing a request");
@@ -1053,7 +1277,7 @@ class ReasoningService extends BaseReasoningService {
         return res;
       });
 
-      logger.logReasoning("CHORDVOX_SUCCESS", {
+      logger.logReasoning("OPENWHISPR_SUCCESS", {
         model: result.model,
         provider: result.provider,
         resultLength: result.text.length,
@@ -1061,7 +1285,7 @@ class ReasoningService extends BaseReasoningService {
 
       return result.text;
     } catch (error) {
-      logger.logReasoning("CHORDVOX_ERROR", {
+      logger.logReasoning("OPENWHISPR_ERROR", {
         model,
         error: (error as Error).message,
       });
@@ -1093,23 +1317,76 @@ class ReasoningService extends BaseReasoningService {
     }
   }
 
-  async isAvailable(): Promise<boolean> {
+  async isAvailable(provider?: string): Promise<boolean> {
     try {
-      const openaiKey = await window.electronAPI?.getOpenAIKey?.();
-      const anthropicKey = await window.electronAPI?.getAnthropicKey?.();
-      const geminiKey = await window.electronAPI?.getGeminiKey?.();
-      const groqKey = await window.electronAPI?.getGroqKey?.();
+      const getKeyWithFallback = async (
+        ipcGetter: (() => Promise<string | null | undefined>) | undefined,
+        localStorageKey: string
+      ): Promise<string> => {
+        let key = "";
+        try {
+          key = (await ipcGetter?.()) || "";
+        } catch { /* ignore IPC errors */ }
+        if (!key && typeof window !== "undefined" && window.localStorage) {
+          key = window.localStorage.getItem(localStorageKey) || "";
+        }
+        return key.trim();
+      };
+
+      const openaiKey = await getKeyWithFallback(window.electronAPI?.getOpenAIKey, "openaiApiKey");
+      const openrouterKey = await getKeyWithFallback(window.electronAPI?.getOpenRouterKey, "openrouterApiKey");
+      const anthropicKey = await getKeyWithFallback(window.electronAPI?.getAnthropicKey, "anthropicApiKey");
+      const geminiKey = await getKeyWithFallback(window.electronAPI?.getGeminiKey, "geminiApiKey");
+      const groqKey = await getKeyWithFallback(window.electronAPI?.getGroqKey, "groqApiKey");
+      const customReasoningKey = await getKeyWithFallback(window.electronAPI?.getCustomReasoningKey, "customReasoningApiKey");
+      const bedrockAccessKey = (window.localStorage?.getItem("bedrockAccessKeyId") || "").trim();
+      const bedrockSecretKey = (window.localStorage?.getItem("bedrockSecretAccessKey") || "").trim();
       const localAvailable = await window.electronAPI?.checkLocalReasoningAvailable?.();
+      const configuredProvider = String(
+        provider || window.localStorage?.getItem("reasoningProvider") || "auto"
+      )
+        .trim()
+        .toLowerCase();
+      const customEndpoint = (window.localStorage?.getItem("cloudReasoningBaseUrl") || "").trim();
 
       logger.logReasoning("API_KEY_CHECK", {
+        provider: configuredProvider,
         hasOpenAI: !!openaiKey,
+        hasOpenRouter: !!openrouterKey,
         hasAnthropic: !!anthropicKey,
         hasGemini: !!geminiKey,
         hasGroq: !!groqKey,
+        hasCustomReasoningKey: !!customReasoningKey,
+        hasCustomEndpoint: !!customEndpoint,
+        hasBedrock: !!(bedrockAccessKey && bedrockSecretKey),
         hasLocal: !!localAvailable,
       });
 
-      return !!(openaiKey || anthropicKey || geminiKey || groqKey || localAvailable);
+      switch (configuredProvider) {
+        case "openai":
+          return !!openaiKey;
+        case "openrouter":
+          return !!openrouterKey;
+        case "anthropic":
+          return !!anthropicKey;
+        case "gemini":
+          return !!geminiKey;
+        case "groq":
+          return !!groqKey;
+        case "bedrock":
+          return !!(bedrockAccessKey && bedrockSecretKey);
+        case "local":
+          return !!localAvailable;
+        case "custom":
+          // Custom endpoint can be keyless; endpoint URL is the minimum requirement.
+          return !!customEndpoint;
+        case "openwhispr":
+          // OpenWhispr cloud path handles auth errors at call-time.
+          return true;
+        case "auto":
+        default:
+          return !!(openaiKey || openrouterKey || anthropicKey || geminiKey || groqKey || localAvailable || customEndpoint);
+      }
     } catch (error) {
       logger.logReasoning("API_KEY_CHECK_ERROR", {
         error: (error as Error).message,
@@ -1121,7 +1398,7 @@ class ReasoningService extends BaseReasoningService {
   }
 
   clearApiKeyCache(
-    provider?: "openai" | "anthropic" | "gemini" | "groq" | "mistral" | "custom"
+    provider?: "openai" | "openrouter" | "anthropic" | "gemini" | "groq" | "mistral" | "custom"
   ): void {
     if (provider) {
       if (provider !== "custom") {

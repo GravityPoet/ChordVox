@@ -36,7 +36,7 @@ const PROVIDER_CONFIG: Record<string, ProviderConfig> = {
   anthropic: { label: "Anthropic", apiKeyStorageKey: "anthropicApiKey" },
   gemini: { label: "Gemini", apiKeyStorageKey: "geminiApiKey" },
   groq: { label: "Groq", apiKeyStorageKey: "groqApiKey" },
-  chordvox: { label: "ChordVox Cloud" },
+  openwhispr: { label: "ChordVox Cloud" },
   custom: {
     label: "Custom endpoint",
     apiKeyStorageKey: "openaiApiKey",
@@ -45,11 +45,17 @@ const PROVIDER_CONFIG: Record<string, ProviderConfig> = {
   local: { label: "Local" },
 };
 
+function migrateLegacyBrandNames(input: string): string {
+  return input.replace(/\b(?:AriaKey|Whispr|OpenWhispr|MoonlitVoice)\b/gi, "ChordVox");
+}
+
 function getCurrentPrompt(): string {
   const customPrompt = localStorage.getItem("customUnifiedPrompt");
   if (customPrompt) {
     try {
-      return JSON.parse(customPrompt);
+      const parsed = JSON.parse(customPrompt);
+      if (typeof parsed !== "string") return UNIFIED_SYSTEM_PROMPT;
+      return migrateLegacyBrandNames(parsed);
     } catch {
       return UNIFIED_SYSTEM_PROMPT;
     }
@@ -74,8 +80,11 @@ export default function PromptStudio({ className = "" }: PromptStudioProps) {
     if (legacyPrompts && !localStorage.getItem("customUnifiedPrompt")) {
       try {
         const parsed = JSON.parse(legacyPrompts);
-        if (parsed.agent) {
-          localStorage.setItem("customUnifiedPrompt", JSON.stringify(parsed.agent));
+        if (typeof parsed?.agent === "string") {
+          localStorage.setItem(
+            "customUnifiedPrompt",
+            JSON.stringify(migrateLegacyBrandNames(parsed.agent))
+          );
           localStorage.removeItem("customPrompts");
         }
       } catch (e) {
@@ -86,7 +95,14 @@ export default function PromptStudio({ className = "" }: PromptStudioProps) {
     const customPrompt = localStorage.getItem("customUnifiedPrompt");
     if (customPrompt) {
       try {
-        setEditedPrompt(JSON.parse(customPrompt));
+        const parsed = JSON.parse(customPrompt);
+        if (typeof parsed === "string") {
+          const migrated = migrateLegacyBrandNames(parsed);
+          if (migrated !== parsed) {
+            localStorage.setItem("customUnifiedPrompt", JSON.stringify(migrated));
+          }
+          setEditedPrompt(migrated);
+        }
       } catch (error) {
         console.error("Failed to load custom prompt:", error);
       }
@@ -124,13 +140,13 @@ export default function PromptStudio({ className = "" }: PromptStudioProps) {
 
     try {
       const useReasoningModel = localStorage.getItem("useReasoningModel") === "true";
-      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "chordvox";
+      const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "openwhispr";
       const isSignedIn = localStorage.getItem("isSignedIn") === "true";
-      const isCloudMode = isSignedIn && cloudReasoningMode === "chordvox";
+      const isCloudMode = isSignedIn && cloudReasoningMode === "openwhispr";
 
       const reasoningModel = localStorage.getItem("reasoningModel") || "";
       const reasoningProvider = isCloudMode
-        ? "chordvox"
+        ? "openwhispr"
         : reasoningModel
           ? getModelProvider(reasoningModel)
           : "openai";
@@ -360,13 +376,13 @@ export default function PromptStudio({ className = "" }: PromptStudioProps) {
         {activeTab === "test" &&
           (() => {
             const useReasoningModel = localStorage.getItem("useReasoningModel") === "true";
-            const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "chordvox";
+            const cloudReasoningMode = localStorage.getItem("cloudReasoningMode") || "openwhispr";
             const isSignedIn = localStorage.getItem("isSignedIn") === "true";
-            const isCloudMode = isSignedIn && cloudReasoningMode === "chordvox";
+            const isCloudMode = isSignedIn && cloudReasoningMode === "openwhispr";
 
             const reasoningModel = localStorage.getItem("reasoningModel") || "";
             const reasoningProvider = isCloudMode
-              ? "chordvox"
+              ? "openwhispr"
               : reasoningModel
                 ? getModelProvider(reasoningModel)
                 : "openai";
@@ -375,7 +391,7 @@ export default function PromptStudio({ className = "" }: PromptStudioProps) {
             };
 
             const displayModel = isCloudMode
-              ? t("promptStudio.test.chordvoxCloud")
+              ? t("promptStudio.test.openwhisprCloud")
               : reasoningModel || t("promptStudio.test.none");
             const displayProvider = providerConfig.label;
 

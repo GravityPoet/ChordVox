@@ -174,6 +174,7 @@
     "hold": "Mantener",
     "less": "Menos",
     "more": "Más",
+    "noMatchingModels": "No se encontraron modelos coincidentes",
     "private": "Privado",
     "tap": "Pulsar"
   },
@@ -754,7 +755,7 @@
       "reset": "Restablecer",
       "save": "Guardar"
     },
-    "defaultTestInput": "Hola Whispr, ¿cómo está el clima hoy?",
+    "defaultTestInput": "Hola ChordVox, ¿cómo está el clima hoy?",
     "dialogs": {
       "reset": {
         "description": "El prompt ha sido restablecido al valor predeterminado.",
@@ -794,7 +795,7 @@
       "none": "Ninguno",
       "outputLabel": "Salida",
       "processing": "Procesando...",
-      "chordvoxCloud": "ChordVox Cloud",
+      "openwhisprCloud": "ChordVox Cloud",
       "providerLabel": "Proveedor",
       "run": "Ejecutar prueba"
     },
@@ -980,8 +981,8 @@
       "description": "Corrige transcripciones, gestiona comandos y soluciona errores preservando tu tono.",
       "enableTextCleanup": "Activar corrección de texto",
       "enableTextCleanupDescription": "La IA mejora la calidad de transcripción",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "Funciona de inmediato. Sin configuración necesaria.",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "Funciona de inmediato. Sin configuración necesaria.",
       "title": "Mejora de texto con IA",
       "toasts": {
         "switchedCloud": {
@@ -1169,8 +1170,8 @@
       "customSetup": "Configuración personalizada",
       "customSetupDescription": "Usa tu propio proveedor y clave API.",
       "description": "Elige cómo ChordVox transcribe tu voz",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "Funciona de inmediato. Sin configuración necesaria.",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "Funciona de inmediato. Sin configuración necesaria.",
       "title": "Voz a texto",
       "toasts": {
         "switchedCloud": {

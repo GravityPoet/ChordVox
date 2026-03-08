@@ -6,7 +6,6 @@ import {
   Brain,
   User,
   Sparkles,
-  UserCircle,
   Wrench,
   BookOpen,
   ShieldCheck,
@@ -21,19 +20,18 @@ interface SettingsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialSection?: SettingsSectionType;
+  onOpenTranscriptionHistory?: () => void;
 }
 
-export default function SettingsModal({ open, onOpenChange, initialSection }: SettingsModalProps) {
+export default function SettingsModal({
+  open,
+  onOpenChange,
+  initialSection,
+  onOpenTranscriptionHistory,
+}: SettingsModalProps) {
   const { t } = useTranslation();
   const sidebarItems: SidebarItem<SettingsSectionType>[] = useMemo(
     () => [
-      {
-        id: "account",
-        label: t("settingsModal.sections.account.label"),
-        icon: UserCircle,
-        description: t("settingsModal.sections.account.description"),
-        group: t("settingsModal.groups.profile"),
-      },
       {
         id: "general",
         label: t("settingsModal.sections.general.label"),
@@ -101,7 +99,7 @@ export default function SettingsModal({ open, onOpenChange, initialSection }: Se
     [t]
   );
 
-  const [activeSection, setActiveSection] = React.useState<SettingsSectionType>("account");
+  const [activeSection, setActiveSection] = React.useState<SettingsSectionType>("general");
 
   // Navigate to initial section when modal opens
   useEffect(() => {
@@ -119,7 +117,10 @@ export default function SettingsModal({ open, onOpenChange, initialSection }: Se
       activeSection={activeSection}
       onSectionChange={setActiveSection}
     >
-      <SettingsPage activeSection={activeSection} />
+      <SettingsPage
+        activeSection={activeSection}
+        onOpenTranscriptionHistory={onOpenTranscriptionHistory}
+      />
     </SidebarModal>
   );
 }

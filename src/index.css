@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* ChordVox Theme — registers color tokens with Tailwind v4.
+  /* OpenWhispr Theme — registers color tokens with Tailwind v4.
      These are the light-mode defaults; .dark overrides them below. */
   --color-primary: #2563eb;
   --color-primary-foreground: #ffffff;
@@ -173,7 +173,7 @@
   }
 }
 
-/* ChordVox Brand Typography */
+/* OpenWhispr Brand Typography */
 .brand-heading {
   font-family: var(--font-family-sans);
   font-weight: 600;
@@ -419,6 +419,63 @@ a:hover {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* Floating mic success feedback */
+@keyframes mic-success-pop {
+  0% {
+    transform: scale(0.72) rotate(-8deg);
+    opacity: 0;
+  }
+  65% {
+    transform: scale(1.08) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes mic-success-glow {
+  0% {
+    box-shadow:
+      0 0 0 oklch(0.72 0.22 285 / 0),
+      0 0 0 oklch(0.82 0.2 315 / 0);
+  }
+  45% {
+    box-shadow:
+      0 0 16px oklch(0.72 0.22 285 / 0.55),
+      0 0 28px oklch(0.82 0.2 315 / 0.4);
+  }
+  100% {
+    box-shadow:
+      0 0 8px oklch(0.72 0.22 285 / 0.32),
+      0 0 18px oklch(0.82 0.2 315 / 0.2);
+  }
+}
+
+@keyframes mic-success-ring {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+.mic-success-shell {
+  animation: mic-success-glow 1.2s ease-out both;
+}
+
+.mic-success-icon {
+  animation: mic-success-pop 220ms cubic-bezier(0.2, 0.85, 0.3, 1.1) both;
+}
+
+.mic-success-ring {
+  animation: mic-success-ring 1.2s ease-out both;
 }
 
 /* Indeterminate progress bar sweep */

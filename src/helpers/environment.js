@@ -6,20 +6,27 @@ const { normalizeUiLanguage } = require("./i18nMain");
 
 const PERSISTED_KEYS = [
   "OPENAI_API_KEY",
+  "OPENROUTER_API_KEY",
   "ANTHROPIC_API_KEY",
   "GEMINI_API_KEY",
   "GROQ_API_KEY",
   "MISTRAL_API_KEY",
   "CUSTOM_TRANSCRIPTION_API_KEY",
   "CUSTOM_REASONING_API_KEY",
+  "LICENSE_API_BASE_URL",
+  "LICENSE_PRODUCT_ID",
+  "LICENSE_ALLOW_DEV_KEYS",
   "LOCAL_TRANSCRIPTION_PROVIDER",
   "PARAKEET_MODEL",
   "LOCAL_WHISPER_MODEL",
+  "SENSEVOICE_MODEL_PATH",
+  "SENSEVOICE_BINARY_PATH",
   "REASONING_PROVIDER",
   "LOCAL_REASONING_MODEL",
   "DICTATION_KEY",
   "ACTIVATION_MODE",
   "FLOATING_ICON_AUTO_HIDE",
+  "AUTO_START_ENABLED",
   "AUTO_CHECK_UPDATE",
   "UI_LANGUAGE",
 ];
@@ -36,7 +43,7 @@ class EnvironmentManager {
       if (fs.existsSync(userDataEnv)) {
         require("dotenv").config({ path: userDataEnv });
       }
-    } catch {}
+    } catch { }
 
     const fallbackPaths = [
       path.join(__dirname, "..", "..", ".env"), // Development
@@ -50,7 +57,7 @@ class EnvironmentManager {
         if (fs.existsSync(envPath)) {
           require("dotenv").config({ path: envPath });
         }
-      } catch {}
+      } catch { }
     }
   }
 
@@ -69,6 +76,14 @@ class EnvironmentManager {
 
   saveOpenAIKey(key) {
     return this._saveKey("OPENAI_API_KEY", key);
+  }
+
+  getOpenRouterKey() {
+    return this._getKey("OPENROUTER_API_KEY");
+  }
+
+  saveOpenRouterKey(key) {
+    return this._saveKey("OPENROUTER_API_KEY", key);
   }
 
   getAnthropicKey() {
@@ -119,13 +134,35 @@ class EnvironmentManager {
     return this._saveKey("CUSTOM_REASONING_API_KEY", key);
   }
 
+  getLicenseApiBaseUrl() {
+    return this._getKey("LICENSE_API_BASE_URL");
+  }
+
+  saveLicenseApiBaseUrl(url) {
+    const normalized = String(url || "").trim().replace(/\/+$/, "");
+    const result = this._saveKey("LICENSE_API_BASE_URL", normalized);
+    this.saveAllKeysToEnvFile().catch(() => { });
+    return { ...result, value: normalized };
+  }
+
+  getLicenseProductId() {
+    return this._getKey("LICENSE_PRODUCT_ID");
+  }
+
+  saveLicenseProductId(productId) {
+    const normalized = String(productId || "").trim();
+    const result = this._saveKey("LICENSE_PRODUCT_ID", normalized);
+    this.saveAllKeysToEnvFile().catch(() => { });
+    return { ...result, value: normalized };
+  }
+
   getDictationKey() {
     return this._getKey("DICTATION_KEY");
   }
 
   saveDictationKey(key) {
     const result = this._saveKey("DICTATION_KEY", key);
-    this.saveAllKeysToEnvFile().catch(() => {});
+    this.saveAllKeysToEnvFile().catch(() => { });
     return result;
   }
 
@@ -137,7 +174,7 @@ class EnvironmentManager {
   saveActivationMode(mode) {
     const validMode = mode === "push" ? "push" : "tap";
     const result = this._saveKey("ACTIVATION_MODE", validMode);
-    this.saveAllKeysToEnvFile().catch(() => {});
+    this.saveAllKeysToEnvFile().catch(() => { });
     return result;
   }
 
@@ -147,19 +184,30 @@ class EnvironmentManager {
 
   saveFloatingIconAutoHide(enabled) {
     const result = this._saveKey("FLOATING_ICON_AUTO_HIDE", String(enabled));
-    this.saveAllKeysToEnvFile().catch(() => {});
+    this.saveAllKeysToEnvFile().catch(() => { });
+    return result;
+  }
+
+  getAutoStartEnabled() {
+    const val = this._getKey("AUTO_START_ENABLED");
+    return val !== "false";
+  }
+
+  saveAutoStartEnabled(enabled) {
+    const result = this._saveKey("AUTO_START_ENABLED", String(enabled));
+    this.saveAllKeysToEnvFile().catch(() => { });
     return result;
   }
 
   getAutoCheckUpdate() {
     const val = this._getKey("AUTO_CHECK_UPDATE");
-    // Default enabled when not configured.
+    // Default to true if not explicitly set to "false"
     return val !== "false";
   }
 
   saveAutoCheckUpdate(enabled) {
     const result = this._saveKey("AUTO_CHECK_UPDATE", String(enabled));
-    this.saveAllKeysToEnvFile().catch(() => {});
+    this.saveAllKeysToEnvFile().catch(() => { });
     return result;
   }
 
@@ -170,7 +218,7 @@ class EnvironmentManager {
   saveUiLanguage(language) {
     const normalized = normalizeUiLanguage(language);
     const result = this._saveKey("UI_LANGUAGE", normalized);
-    this.saveAllKeysToEnvFile().catch(() => {});
+    this.saveAllKeysToEnvFile().catch(() => { });
     return { ...result, language: normalized };
   }
 
@@ -191,13 +239,44 @@ OPENAI_API_KEY=${apiKey}
   async saveAllKeysToEnvFile() {
     const envPath = path.join(app.getPath("userData"), ".env");
 
-    let envContent = "# ChordVox Environment Variables\n";
+    const existingMap = new Map();
+    const orderedKeys = [];
+
+    try {
+      const existingContent = await fsPromises.readFile(envPath, "utf8");
+      const lines = existingContent.split(/\r?\n/);
+      for (const line of lines) {
+        const match = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+        if (!match) continue;
+        const key = match[1];
+        const value = match[2] || "";
+        if (!existingMap.has(key)) {
+          orderedKeys.push(key);
+        }
+        existingMap.set(key, value);
+      }
+    } catch {
+      // No previous env file; start fresh.
+    }
 
     for (const key of PERSISTED_KEYS) {
-      if (process.env[key]) {
-        envContent += `${key}=${process.env[key]}\n`;
+      const value = process.env[key];
+      if (value) {
+        if (!existingMap.has(key)) {
+          orderedKeys.push(key);
+        }
+        existingMap.set(key, value);
+      } else if (existingMap.has(key)) {
+        existingMap.delete(key);
       }
     }
+
+    const lines = ["# ChordVox Environment Variables"];
+    for (const key of orderedKeys) {
+      if (!existingMap.has(key)) continue;
+      lines.push(`${key}=${existingMap.get(key)}`);
+    }
+    const envContent = `${lines.join("\n")}\n`;
 
     await fsPromises.writeFile(envPath, envContent, "utf8");
     require("dotenv").config({ path: envPath });

@@ -4,23 +4,51 @@ import AudioManager from "../helpers/audioManager";
 import logger from "../utils/logger";
 import { playStartCue, playStopCue } from "../utils/dictationCues";
 
+const SUCCESS_FEEDBACK_DURATION_MS = 1200;
+
 export const useAudioRecording = (toast, options = {}) => {
   const { t } = useTranslation();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [micFeedbackState, setMicFeedbackState] = useState("idle"); // idle | pasting | success
   const [transcript, setTranscript] = useState("");
   const [partialTranscript, setPartialTranscript] = useState("");
   const audioManagerRef = useRef(null);
   const startLockRef = useRef(false);
   const stopLockRef = useRef(false);
+  const successFeedbackTimerRef = useRef(null);
   const { onToggle } = options;
+  const resolveProfileId = useCallback(
+    (payload) => (payload?.profileId === "secondary" ? "secondary" : "primary"),
+    []
+  );
+  const clearSuccessFeedback = useCallback(() => {
+    if (successFeedbackTimerRef.current) {
+      clearTimeout(successFeedbackTimerRef.current);
+      successFeedbackTimerRef.current = null;
+    }
+    setMicFeedbackState("idle");
+  }, []);
+  const triggerSuccessFeedback = useCallback(() => {
+    if (successFeedbackTimerRef.current) {
+      clearTimeout(successFeedbackTimerRef.current);
+      successFeedbackTimerRef.current = null;
+    }
+    setMicFeedbackState("success");
+    successFeedbackTimerRef.current = setTimeout(() => {
+      successFeedbackTimerRef.current = null;
+      setMicFeedbackState("idle");
+    }, SUCCESS_FEEDBACK_DURATION_MS);
+  }, []);
 
-  const performStartRecording = useCallback(async () => {
+  const performStartRecording = useCallback(async (profileId = "primary") => {
     if (startLockRef.current) return false;
     startLockRef.current = true;
     try {
       if (!audioManagerRef.current) return false;
+      clearSuccessFeedback();
+      audioManagerRef.current.setActiveHotkeyProfile?.(profileId);
 
       const currentState = audioManagerRef.current.getState();
       if (currentState.isRecording || currentState.isProcessing) return false;
@@ -37,7 +65,7 @@ export const useAudioRecording = (toast, options = {}) => {
     } finally {
       startLockRef.current = false;
     }
-  }, []);
+  }, [clearSuccessFeedback]);
 
   const performStopRecording = useCallback(async () => {
     if (stopLockRef.current) return false;
@@ -73,11 +101,15 @@ export const useAudioRecording = (toast, options = {}) => {
         setIsRecording(isRecording);
         setIsProcessing(isProcessing);
         setIsStreaming(isStreaming ?? false);
+        if (isRecording || isProcessing) {
+          clearSuccessFeedback();
+        }
         if (!isStreaming) {
           setPartialTranscript("");
         }
       },
       onError: (error) => {
+        clearSuccessFeedback();
         const isPasteFailed =
           error?.code === "PASTE_FAILED" ||
           error?.title === "Paste Error" ||
@@ -112,13 +144,23 @@ export const useAudioRecording = (toast, options = {}) => {
       onTranscriptionComplete: async (result) => {
         if (result.success) {
           setTranscript(result.text);
+          // Keep non-idle visual state while paste result is pending,
+          // so users don't see an idle gray flash before success.
+          setMicFeedbackState("pasting");
 
           const isStreaming = result.source?.includes("streaming");
           const pasteStart = performance.now();
-          await audioManagerRef.current.safePaste(
+          const didPaste = await audioManagerRef.current.safePaste(
             result.text,
-            isStreaming ? { fromStreaming: true } : {}
+            isStreaming
+              ? { fromStreaming: true, traceId: result.traceId, source: result.source }
+              : { traceId: result.traceId, source: result.source }
           );
+          if (didPaste) {
+            triggerSuccessFeedback();
+          } else {
+            clearSuccessFeedback();
+          }
           logger.info(
             "Paste timing",
             {
@@ -129,7 +171,10 @@ export const useAudioRecording = (toast, options = {}) => {
             "streaming"
           );
 
-          audioManagerRef.current.saveTranscription(result.text);
+          const saveHistory = localStorage.getItem("transcriptionHistoryEnabled") !== "false";
+          if (saveHistory) {
+            audioManagerRef.current.saveTranscription(result.text);
+          }
 
           if (result.source === "openai" && localStorage.getItem("useLocalWhisper") === "true") {
             toast({
@@ -140,7 +185,7 @@ export const useAudioRecording = (toast, options = {}) => {
           }
 
           // Cloud usage: limit reached after this transcription
-          if (result.source === "chordvox" && result.limitReached) {
+          if (result.source === "openwhispr" && result.limitReached) {
             // Notify control panel to show UpgradePrompt dialog
             window.electronAPI?.notifyLimitReached?.({
               wordsUsed: result.wordsUsed,
@@ -158,36 +203,39 @@ export const useAudioRecording = (toast, options = {}) => {
 
     audioManagerRef.current.warmupStreamingConnection();
 
-    const handleToggle = async () => {
+    const handleToggle = async (payload) => {
       if (!audioManagerRef.current) return;
+      const profileId = resolveProfileId(payload);
       const currentState = audioManagerRef.current.getState();
 
       if (!currentState.isRecording && !currentState.isProcessing) {
-        await performStartRecording();
+        audioManagerRef.current.setActiveHotkeyProfile?.(profileId);
+        await performStartRecording(profileId);
       } else if (currentState.isRecording) {
         await performStopRecording();
       }
     };
 
-    const handleStart = async () => {
-      await performStartRecording();
+    const handleStart = async (payload) => {
+      const profileId = resolveProfileId(payload);
+      await performStartRecording(profileId);
     };
 
     const handleStop = async () => {
       await performStopRecording();
     };
 
-    const disposeToggle = window.electronAPI.onToggleDictation(() => {
-      handleToggle();
+    const disposeToggle = window.electronAPI.onToggleDictation((payload) => {
+      handleToggle(payload);
       onToggle?.();
     });
 
-    const disposeStart = window.electronAPI.onStartDictation?.(() => {
-      handleStart();
+    const disposeStart = window.electronAPI.onStartDictation?.((payload) => {
+      handleStart(payload);
       onToggle?.();
     });
 
-    const disposeStop = window.electronAPI.onStopDictation?.(() => {
+    const disposeStop = window.electronAPI.onStopDictation?.((_payload) => {
       handleStop();
       onToggle?.();
     });
@@ -208,11 +256,21 @@ export const useAudioRecording = (toast, options = {}) => {
       disposeStart?.();
       disposeStop?.();
       disposeNoAudio?.();
+      clearSuccessFeedback();
       if (audioManagerRef.current) {
         audioManagerRef.current.cleanup();
       }
     };
-  }, [toast, onToggle, performStartRecording, performStopRecording, t]);
+  }, [
+    clearSuccessFeedback,
+    onToggle,
+    performStartRecording,
+    performStopRecording,
+    resolveProfileId,
+    t,
+    toast,
+    triggerSuccessFeedback,
+  ]);
 
   const startRecording = async () => {
     return performStartRecording();
@@ -223,6 +281,7 @@ export const useAudioRecording = (toast, options = {}) => {
   };
 
   const cancelRecording = async () => {
+    clearSuccessFeedback();
     if (audioManagerRef.current) {
       const state = audioManagerRef.current.getState();
       if (state.isStreaming) {
@@ -234,6 +293,7 @@ export const useAudioRecording = (toast, options = {}) => {
   };
 
   const cancelProcessing = () => {
+    clearSuccessFeedback();
     if (audioManagerRef.current) {
       return audioManagerRef.current.cancelProcessing();
     }
@@ -256,6 +316,8 @@ export const useAudioRecording = (toast, options = {}) => {
     isRecording,
     isProcessing,
     isStreaming,
+    micFeedbackState,
+    isSuccessFeedback: micFeedbackState === "success",
     transcript,
     partialTranscript,
     startRecording,

@@ -7,28 +7,28 @@ Enable verbose logging to diagnose issues like "no audio detected" or transcript
 ### Option 1: Command Line
 ```bash
 # macOS
-/Applications/ChordVox.app/Contents/MacOS/ChordVox --log-level=debug
+/Applications/OpenWhispr.app/Contents/MacOS/OpenWhispr --log-level=debug
 
 # Windows
-ChordVox.exe --log-level=debug
+OpenWhispr.exe --log-level=debug
 ```
 
 ### Option 2: Environment File
 Add to your `.env` file and restart:
 ```
-CHORDVOX_LOG_LEVEL=debug
+OPENWHISPR_LOG_LEVEL=debug
 ```
 
 **Env file locations:**
-- macOS: `~/Library/Application Support/ChordVox/.env`
-- Windows: `%APPDATA%\ChordVox\.env`
-- Linux: `~/.config/ChordVox/.env`
+- macOS: `~/Library/Application Support/OpenWhispr/.env`
+- Windows: `%APPDATA%\OpenWhispr\.env`
+- Linux: `~/.config/OpenWhispr/.env`
 
 ## Log File Locations
 
-- **macOS**: `~/Library/Application Support/ChordVox/logs/debug-*.log`
-- **Windows**: `%APPDATA%\ChordVox\logs\debug-*.log`
-- **Linux**: `~/.config/ChordVox/logs/debug-*.log`
+- **macOS**: `~/Library/Application Support/OpenWhispr/logs/debug-*.log`
+- **Windows**: `%APPDATA%\OpenWhispr\logs\debug-*.log`
+- **Linux**: `~/.config/OpenWhispr/logs/debug-*.log`
 
 ## What Gets Logged
 
@@ -70,4 +70,4 @@ When reporting issues:
 
 Debug mode is off by default. To ensure it's disabled:
 - Remove `--log-level=debug` from command
-- Remove `CHORDVOX_LOG_LEVEL` from `.env`
+- Remove `OPENWHISPR_LOG_LEVEL` from `.env`

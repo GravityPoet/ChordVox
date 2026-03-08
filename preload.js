@@ -7,7 +7,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 const registerListener = (channel, handlerFactory) => {
   return (callback) => {
     if (typeof callback !== "function") {
-      return () => {};
+      return () => { };
     }
 
     const listener =
@@ -26,9 +26,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
   pasteText: (text, options) => ipcRenderer.invoke("paste-text", text, options),
   hideWindow: () => ipcRenderer.invoke("hide-window"),
   showDictationPanel: () => ipcRenderer.invoke("show-dictation-panel"),
-  onToggleDictation: registerListener("toggle-dictation", (callback) => () => callback()),
-  onStartDictation: registerListener("start-dictation", (callback) => () => callback()),
-  onStopDictation: registerListener("stop-dictation", (callback) => () => callback()),
+  onToggleDictation: registerListener(
+    "toggle-dictation",
+    (callback) => (_event, payload) => callback(payload || {})
+  ),
+  onStartDictation: registerListener(
+    "start-dictation",
+    (callback) => (_event, payload) => callback(payload || {})
+  ),
+  onStopDictation: registerListener(
+    "stop-dictation",
+    (callback) => (_event, payload) => callback(payload || {})
+  ),
 
   // Database functions
   saveTranscription: (text) => ipcRenderer.invoke("db-save-transcription", text),
@@ -98,6 +107,26 @@ contextBridge.exposeInMainWorld("electronAPI", {
   cancelParakeetDownload: () => ipcRenderer.invoke("cancel-parakeet-download"),
   getParakeetDiagnostics: () => ipcRenderer.invoke("get-parakeet-diagnostics"),
 
+  // Local SenseVoice (external CLI + local GGUF model)
+  transcribeLocalSenseVoice: (audioBlob, options) =>
+    ipcRenderer.invoke("transcribe-local-sensevoice", audioBlob, options),
+  checkSenseVoiceInstallation: (binaryPath) =>
+    ipcRenderer.invoke("check-sensevoice-installation", binaryPath),
+  downloadSenseVoiceModel: (modelName) => ipcRenderer.invoke("download-sensevoice-model", modelName),
+  onSenseVoiceDownloadProgress: registerListener("sensevoice-download-progress"),
+  checkSenseVoiceModelStatus: (modelPath) =>
+    ipcRenderer.invoke("check-sensevoice-model-status", modelPath),
+  listSenseVoiceModels: () => ipcRenderer.invoke("list-sensevoice-models"),
+  deleteSenseVoiceModel: (modelName) => ipcRenderer.invoke("delete-sensevoice-model", modelName),
+  deleteAllSenseVoiceModels: () => ipcRenderer.invoke("delete-all-sensevoice-models"),
+  cancelSenseVoiceDownload: () => ipcRenderer.invoke("cancel-sensevoice-download"),
+  pickWhisperModelFile: (defaultPath) => ipcRenderer.invoke("pick-whisper-model-file", defaultPath),
+  pickParakeetModelDirectory: (defaultPath) =>
+    ipcRenderer.invoke("pick-parakeet-model-directory", defaultPath),
+  pickSenseVoiceModelFile: (defaultPath) =>
+    ipcRenderer.invoke("pick-sensevoice-model-file", defaultPath),
+  pickSenseVoiceBinary: (defaultPath) => ipcRenderer.invoke("pick-sensevoice-binary", defaultPath),
+
   // Parakeet server functions (faster repeated transcriptions)
   parakeetServerStart: (modelName) => ipcRenderer.invoke("parakeet-server-start", modelName),
   parakeetServerStop: () => ipcRenderer.invoke("parakeet-server-stop"),
@@ -114,6 +143,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   // Cleanup function
   cleanupApp: () => ipcRenderer.invoke("cleanup-app"),
   updateHotkey: (hotkey) => ipcRenderer.invoke("update-hotkey", hotkey),
+  updateSecondaryHotkey: (hotkey) => ipcRenderer.invoke("update-secondary-hotkey", hotkey),
   setHotkeyListeningMode: (enabled, newHotkey) =>
     ipcRenderer.invoke("set-hotkey-listening-mode", enabled, newHotkey),
   getHotkeyModeInfo: () => ipcRenderer.invoke("get-hotkey-mode-info"),
@@ -157,6 +187,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   // Anthropic API
   getAnthropicKey: () => ipcRenderer.invoke("get-anthropic-key"),
   saveAnthropicKey: (key) => ipcRenderer.invoke("save-anthropic-key", key),
+  getOpenRouterKey: () => ipcRenderer.invoke("get-openrouter-key"),
+  saveOpenRouterKey: (key) => ipcRenderer.invoke("save-openrouter-key", key),
   getUiLanguage: () => ipcRenderer.invoke("get-ui-language"),
   saveUiLanguage: (language) => ipcRenderer.invoke("save-ui-language", language),
   setUiLanguage: (language) => ipcRenderer.invoke("set-ui-language", language),
@@ -190,6 +222,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   saveAllKeysToEnv: () => ipcRenderer.invoke("save-all-keys-to-env"),
   syncStartupPreferences: (prefs) => ipcRenderer.invoke("sync-startup-preferences", prefs),
+  exportSettingsFile: (payload) => ipcRenderer.invoke("export-settings-file", payload),
+  importSettingsFile: () => ipcRenderer.invoke("import-settings-file"),
 
   // Local reasoning
   processLocalReasoning: (text, modelId, agentName, config) =>
@@ -217,6 +251,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getDebugState: () => ipcRenderer.invoke("get-debug-state"),
   setDebugLogging: (enabled) => ipcRenderer.invoke("set-debug-logging", enabled),
   openLogsFolder: () => ipcRenderer.invoke("open-logs-folder"),
+  getCallTraceSessions: (limit) => ipcRenderer.invoke("get-call-trace-sessions", limit),
+  getCallTraceEvents: (runId, limit) => ipcRenderer.invoke("get-call-trace-events", runId, limit),
+  clearCallTraces: () => ipcRenderer.invoke("clear-call-traces"),
 
   // System settings helpers for microphone/audio permissions
   requestMicrophoneAccess: () => ipcRenderer.invoke("request-microphone-access"),
@@ -226,7 +263,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   openWhisperModelsFolder: () => ipcRenderer.invoke("open-whisper-models-folder"),
   authClearSession: () => ipcRenderer.invoke("auth-clear-session"),
 
-  // ChordVox Cloud API
+  // OpenWhispr Cloud API
   cloudTranscribe: (audioBuffer, opts) => ipcRenderer.invoke("cloud-transcribe", audioBuffer, opts),
   cloudReason: (text, opts) => ipcRenderer.invoke("cloud-reason", text, opts),
   cloudUsage: () => ipcRenderer.invoke("cloud-usage"),
@@ -302,7 +339,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   // Notify main process of activation mode changes (for Windows Push-to-Talk)
   notifyActivationModeChanged: (mode) => ipcRenderer.send("activation-mode-changed", mode),
-  notifyHotkeyChanged: (hotkey) => ipcRenderer.send("hotkey-changed", hotkey),
+  notifyHotkeyChanged: (hotkey, profileId = "primary") =>
+    ipcRenderer.send("hotkey-changed", hotkey, profileId),
 
   // Floating icon auto-hide
   notifyFloatingIconAutoHideChanged: (enabled) =>
@@ -312,6 +350,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     (callback) => (_event, enabled) => callback(enabled)
   ),
 
+  // Auto-start management
   // Auto-start management
   getAutoStartEnabled: () => ipcRenderer.invoke("get-auto-start-enabled"),
   setAutoStartEnabled: (enabled) => ipcRenderer.invoke("set-auto-start-enabled", enabled),

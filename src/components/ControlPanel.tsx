@@ -41,11 +41,11 @@ export default function ControlPanel() {
   const { t } = useTranslation();
   const history = useTranscriptions();
   const [isLoading, setIsLoading] = useState(true);
-  const [showSettings, setShowSettings] = useState(false);
+  const [showSettings, setShowSettings] = useState(true);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [limitData, setLimitData] = useState<{ wordsUsed: number; limit: number } | null>(null);
   const hasShownUpgradePrompt = useRef(false);
-  const [settingsSection, setSettingsSection] = useState<SettingsSectionType | undefined>();
+  const [settingsSection, setSettingsSection] = useState<SettingsSectionType | undefined>("general");
   const [aiCTADismissed, setAiCTADismissed] = useState(
     () => localStorage.getItem("aiCTADismissed") === "true"
   );
@@ -142,7 +142,7 @@ export default function ControlPanel() {
 
     cloudMigrationProcessed.current = true;
     setUseLocalWhisper(false);
-    setCloudTranscriptionMode("chordvox");
+    setCloudTranscriptionMode("openwhispr");
     localStorage.removeItem("pendingCloudMigration");
     setShowCloudMigrationBanner(true);
   }, [authLoaded, isSignedIn, setUseLocalWhisper, setCloudTranscriptionMode]);
@@ -269,6 +269,11 @@ export default function ControlPanel() {
     }
   };
 
+  const handleOpenHistoryFromPrivacy = useCallback(() => {
+    setShowSettings(false);
+    setSettingsSection(undefined);
+  }, []);
+
   const getUpdateButtonContent = () => {
     if (isInstalling) {
       return (
@@ -374,6 +379,7 @@ export default function ControlPanel() {
               if (!open) setSettingsSection(undefined);
             }}
             initialSection={settingsSection}
+            onOpenTranscriptionHistory={handleOpenHistoryFromPrivacy}
           />
         </Suspense>
       )}
@@ -400,7 +406,7 @@ export default function ControlPanel() {
                     size="sm"
                     className="h-7 text-[11px]"
                     onClick={() => {
-                      setSettingsSection("account");
+                      setSettingsSection("general");
                       setShowSettings(true);
                     }}
                   >

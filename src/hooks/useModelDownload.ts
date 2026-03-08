@@ -16,7 +16,7 @@ export interface DownloadProgress {
   eta?: number;
 }
 
-export type ModelType = "whisper" | "llm" | "parakeet";
+export type ModelType = "whisper" | "llm" | "parakeet" | "sensevoice";
 
 interface UseModelDownloadOptions {
   modelType: ModelType;
@@ -93,8 +93,8 @@ export function useModelDownload({
 
   useEffect(() => {
     const handleModelsCleared = () => onModelsClearedRef.current?.();
-    window.addEventListener("chordvox-models-cleared", handleModelsCleared);
-    return () => window.removeEventListener("chordvox-models-cleared", handleModelsCleared);
+    window.addEventListener("openwhispr-models-cleared", handleModelsCleared);
+    return () => window.removeEventListener("openwhispr-models-cleared", handleModelsCleared);
   }, []);
 
   const handleWhisperProgress = useCallback(
@@ -161,6 +161,8 @@ export function useModelDownload({
       dispose = window.electronAPI?.onWhisperDownloadProgress(handleWhisperProgress);
     } else if (modelType === "parakeet") {
       dispose = window.electronAPI?.onParakeetDownloadProgress(handleWhisperProgress);
+    } else if (modelType === "sensevoice") {
+      dispose = window.electronAPI?.onSenseVoiceDownloadProgress(handleWhisperProgress);
     } else {
       dispose = window.electronAPI?.onModelDownloadProgress(handleLLMProgress);
     }
@@ -218,6 +220,22 @@ export function useModelDownload({
                 : t("hooks.modelDownload.downloadFailed.title");
             setDownloadError(msg);
             showAlertDialog({ title, description: msg });
+          } else {
+            success = result?.success ?? false;
+          }
+        } else if (modelType === "sensevoice") {
+          const result = await window.electronAPI?.downloadSenseVoiceModel(modelId);
+          if (!result?.success && !result?.error?.includes("interrupted by user")) {
+            const msg = getDownloadErrorMessage(
+              t,
+              result?.error || t("hooks.modelDownload.errors.unknown"),
+              result?.code
+            );
+            setDownloadError(msg);
+            showAlertDialog({
+              title: t("hooks.modelDownload.downloadFailed.title"),
+              description: msg,
+            });
           } else {
             success = result?.success ?? false;
           }
@@ -297,6 +315,16 @@ export function useModelDownload({
               }),
             });
           }
+        } else if (modelType === "sensevoice") {
+          const result = await window.electronAPI?.deleteSenseVoiceModel(modelId);
+          if (result?.success) {
+            toast({
+              title: t("hooks.modelDownload.modelDeleted.title"),
+              description: t("hooks.modelDownload.modelDeleted.descriptionWithSpace", {
+                sizeMb: result.freed_mb,
+              }),
+            });
+          }
         } else {
           await window.electronAPI?.modelDelete?.(modelId);
           toast({
@@ -326,6 +354,8 @@ export function useModelDownload({
         await window.electronAPI?.cancelWhisperDownload();
       } else if (modelType === "parakeet") {
         await window.electronAPI?.cancelParakeetDownload();
+      } else if (modelType === "sensevoice") {
+        await window.electronAPI?.cancelSenseVoiceDownload();
       } else {
         await window.electronAPI?.modelCancelDownload?.(downloadingModel);
       }

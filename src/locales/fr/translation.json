@@ -174,6 +174,7 @@
     "hold": "Maintenir",
     "less": "Moins",
     "more": "Plus",
+    "noMatchingModels": "Aucun modele correspondant trouve",
     "private": "Privé",
     "tap": "Appui"
   },
@@ -754,7 +755,7 @@
       "reset": "Réinitialiser",
       "save": "Enregistrer"
     },
-    "defaultTestInput": "Hey Whispr, quel temps fait-il aujourd'hui ?",
+    "defaultTestInput": "Hi ChordVox, quel temps fait-il aujourd'hui ?",
     "dialogs": {
       "reset": {
         "description": "Le prompt a été réinitialisé à la valeur par défaut.",
@@ -794,7 +795,7 @@
       "none": "Aucun",
       "outputLabel": "Sortie",
       "processing": "Traitement...",
-      "chordvoxCloud": "ChordVox Cloud",
+      "openwhisprCloud": "ChordVox Cloud",
       "providerLabel": "Fournisseur",
       "run": "Lancer le test"
     },
@@ -980,8 +981,8 @@
       "description": "Corrige les transcriptions, gère les commandes et corrige les erreurs tout en préservant votre ton.",
       "enableTextCleanup": "Activer la correction de texte",
       "enableTextCleanupDescription": "L'IA améliore la qualité de transcription",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "Fonctionne directement. Aucune configuration requise.",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "Fonctionne directement. Aucune configuration requise.",
       "title": "Amélioration du texte par IA",
       "toasts": {
         "switchedCloud": {
@@ -1169,8 +1170,8 @@
       "customSetup": "Configuration personnalisée",
       "customSetupDescription": "Utilisez votre propre fournisseur et clé API.",
       "description": "Choisissez comment ChordVox transcrit votre voix",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "Fonctionne directement. Aucune configuration requise.",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "Fonctionne directement. Aucune configuration requise.",
       "title": "Reconnaissance vocale",
       "toasts": {
         "switchedCloud": {

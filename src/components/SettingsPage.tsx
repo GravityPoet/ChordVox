@@ -6,6 +6,7 @@ import { Badge } from "./ui/badge";
 import {
   RefreshCw,
   Download,
+  Upload,
   Command,
   Mic,
   Shield,
@@ -55,7 +56,7 @@ import { Skeleton } from "./ui/skeleton";
 import { Progress } from "./ui/progress";
 import { useToast } from "./ui/Toast";
 import { useTheme } from "../hooks/useTheme";
-import type { LocalTranscriptionProvider } from "../types/electron";
+import type { LicenseStatusResult, LocalTranscriptionProvider } from "../types/electron";
 import logger from "../utils/logger";
 import { SettingsRow } from "./ui/SettingsSection";
 import { useUsage } from "../hooks/useUsage";
@@ -75,6 +76,7 @@ export type SettingsSectionType =
 
 interface SettingsPageProps {
   activeSection?: SettingsSectionType;
+  onOpenTranscriptionHistory?: () => void;
 }
 
 const UI_LANGUAGE_OPTIONS: import("./ui/LanguageSelector").LanguageOption[] = [
@@ -89,6 +91,22 @@ const UI_LANGUAGE_OPTIONS: import("./ui/LanguageSelector").LanguageOption[] = [
   { value: "zh-CN", label: "简体中文", flag: "🇨🇳" },
   { value: "zh-TW", label: "繁體中文", flag: "🇹🇼" },
 ];
+
+const MODIFIER_PARTS = new Set([
+  "control",
+  "ctrl",
+  "alt",
+  "option",
+  "shift",
+  "super",
+  "meta",
+  "win",
+  "command",
+  "cmd",
+  "commandorcontrol",
+  "cmdorctrl",
+  "fn",
+]);
 
 function SettingsPanel({
   children,
@@ -127,6 +145,52 @@ function SectionHeader({ title, description }: { title: string; description?: st
   );
 }
 
+function getLicenseStatusLabel(
+  status: LicenseStatusResult["status"] | undefined,
+  t: (key: string) => string
+): string {
+  switch (status) {
+    case "active":
+      return t("settingsPage.account.desktopLicense.statusLabels.active");
+    case "offline_grace":
+      return t("settingsPage.account.desktopLicense.statusLabels.offlineGrace");
+    case "expired":
+      return t("settingsPage.account.desktopLicense.statusLabels.expired");
+    case "invalid":
+      return t("settingsPage.account.desktopLicense.statusLabels.invalid");
+    default:
+      return t("settingsPage.account.desktopLicense.statusLabels.notActivated");
+  }
+}
+
+function getLocalizedLicenseErrorDescription(
+  error: string | null | undefined,
+  t: (key: string, options?: any) => string
+): string | null {
+  switch (error) {
+    case "LICENSE_SERVER_NOT_CONFIGURED":
+      return t("settingsPage.account.desktopLicense.toasts.serverNotReadyDescription");
+    case "LICENSE_ACTIVATION_LIMIT":
+      return t("settingsPage.account.desktopLicense.toasts.activationLimitDescription");
+    case "LICENSE_DEVICE_NOT_ACTIVATED":
+      return t("settingsPage.account.desktopLicense.toasts.deviceNotActivatedDescription");
+    case "LICENSE_REVOKED":
+      return t("settingsPage.account.desktopLicense.toasts.revokedDescription");
+    case "LICENSE_EXPIRED":
+      return t("settingsPage.account.desktopLicense.toasts.expiredDescription");
+    case "LICENSE_NOT_ACTIVE":
+      return t("settingsPage.account.desktopLicense.toasts.notActiveDescription");
+    case "LICENSE_REQUIRED":
+    case "LICENSE_KEY_MISSING":
+    case "LICENSE_KEY_REQUIRED":
+      return t("settingsPage.account.desktopLicense.toasts.keyRequiredDescription");
+    case "LICENSE_INVALID":
+      return t("settingsPage.account.desktopLicense.toasts.invalidDescription");
+    default:
+      return null;
+  }
+}
+
 interface TranscriptionSectionProps {
   isSignedIn: boolean;
   cloudTranscriptionMode: string;
@@ -144,6 +208,10 @@ interface TranscriptionSectionProps {
   setWhisperModel: (model: string) => void;
   parakeetModel: string;
   setParakeetModel: (model: string) => void;
+  senseVoiceModelPath: string;
+  setSenseVoiceModelPath: (path: string) => void;
+  senseVoiceBinaryPath: string;
+  setSenseVoiceBinaryPath: (path: string) => void;
   openaiApiKey: string;
   setOpenaiApiKey: (key: string) => void;
   groqApiKey: string;
@@ -179,6 +247,10 @@ function TranscriptionSection({
   setWhisperModel,
   parakeetModel,
   setParakeetModel,
+  senseVoiceModelPath,
+  setSenseVoiceModelPath,
+  senseVoiceBinaryPath,
+  setSenseVoiceBinaryPath,
   openaiApiKey,
   setOpenaiApiKey,
   groqApiKey,
@@ -193,7 +265,7 @@ function TranscriptionSection({
 }: TranscriptionSectionProps) {
   const { t, i18n } = useTranslation();
   const isCustomMode = cloudTranscriptionMode === "byok" || useLocalWhisper;
-  const isCloudMode = isSignedIn && cloudTranscriptionMode === "chordvox" && !useLocalWhisper;
+  const isCloudMode = isSignedIn && cloudTranscriptionMode === "openwhispr" && !useLocalWhisper;
 
   return (
     <div className="space-y-4">
@@ -209,7 +281,7 @@ function TranscriptionSection({
             <button
               onClick={() => {
                 if (!isCloudMode) {
-                  setCloudTranscriptionMode("chordvox");
+                  setCloudTranscriptionMode("openwhispr");
                   setUseLocalWhisper(false);
                   updateTranscriptionSettings({ useLocalWhisper: false });
                   toast({
@@ -223,22 +295,20 @@ function TranscriptionSection({
               className="w-full flex items-center gap-3 text-left cursor-pointer group"
             >
               <div
-                className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-colors ${
-                  isCloudMode
+                className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-colors ${isCloudMode
                     ? "bg-primary/10 dark:bg-primary/15"
                     : "bg-muted/60 dark:bg-surface-raised group-hover:bg-muted dark:group-hover:bg-surface-3"
-                }`}
+                  }`}
               >
                 <Cloud
-                  className={`w-4 h-4 transition-colors ${
-                    isCloudMode ? "text-primary" : "text-muted-foreground"
-                  }`}
+                  className={`w-4 h-4 transition-colors ${isCloudMode ? "text-primary" : "text-muted-foreground"
+                    }`}
                 />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-[12px] font-medium text-foreground">
-                    {t("settingsPage.transcription.chordvoxCloud")}
+                    {t("settingsPage.transcription.openwhisprCloud")}
                   </span>
                   {isCloudMode && (
                     <span className="text-[10px] font-medium text-primary bg-primary/10 dark:bg-primary/15 px-1.5 py-px rounded-sm">
@@ -247,15 +317,14 @@ function TranscriptionSection({
                   )}
                 </div>
                 <p className="text-[11px] text-muted-foreground/80 mt-0.5">
-                  {t("settingsPage.transcription.chordvoxCloudDescription")}
+                  {t("settingsPage.transcription.openwhisprCloudDescription")}
                 </p>
               </div>
               <div
-                className={`w-4 h-4 rounded-full border-2 shrink-0 transition-colors ${
-                  isCloudMode
+                className={`w-4 h-4 rounded-full border-2 shrink-0 transition-colors ${isCloudMode
                     ? "border-primary bg-primary"
                     : "border-border-hover dark:border-border-subtle"
-                }`}
+                  }`}
               >
                 {isCloudMode && (
                   <div className="w-full h-full flex items-center justify-center">
@@ -283,16 +352,14 @@ function TranscriptionSection({
               className="w-full flex items-center gap-3 text-left cursor-pointer group"
             >
               <div
-                className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-colors ${
-                  isCustomMode
+                className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-colors ${isCustomMode
                     ? "bg-accent/10 dark:bg-accent/15"
                     : "bg-muted/60 dark:bg-surface-raised group-hover:bg-muted dark:group-hover:bg-surface-3"
-                }`}
+                  }`}
               >
                 <Key
-                  className={`w-4 h-4 transition-colors ${
-                    isCustomMode ? "text-accent" : "text-muted-foreground"
-                  }`}
+                  className={`w-4 h-4 transition-colors ${isCustomMode ? "text-accent" : "text-muted-foreground"
+                    }`}
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -311,11 +378,10 @@ function TranscriptionSection({
                 </p>
               </div>
               <div
-                className={`w-4 h-4 rounded-full border-2 shrink-0 transition-colors ${
-                  isCustomMode
+                className={`w-4 h-4 rounded-full border-2 shrink-0 transition-colors ${isCustomMode
                     ? "border-accent bg-accent"
                     : "border-border-hover dark:border-border-subtle"
-                }`}
+                  }`}
               >
                 {isCustomMode && (
                   <div className="w-full h-full flex items-center justify-center">
@@ -336,11 +402,18 @@ function TranscriptionSection({
           selectedCloudModel={cloudTranscriptionModel}
           onCloudModelSelect={setCloudTranscriptionModel}
           selectedLocalModel={
-            localTranscriptionProvider === "nvidia" ? parakeetModel : whisperModel
+            localTranscriptionProvider === "nvidia"
+              ? parakeetModel
+              : localTranscriptionProvider === "sensevoice"
+                ? senseVoiceModelPath
+                : whisperModel
           }
-          onLocalModelSelect={(modelId) => {
-            if (localTranscriptionProvider === "nvidia") {
+          onLocalModelSelect={(modelId, providerId) => {
+            const targetProvider = providerId || localTranscriptionProvider;
+            if (targetProvider === "nvidia") {
               setParakeetModel(modelId);
+            } else if (targetProvider === "sensevoice") {
+              setSenseVoiceModelPath(modelId);
             } else {
               setWhisperModel(modelId);
             }
@@ -363,6 +436,10 @@ function TranscriptionSection({
           setMistralApiKey={setMistralApiKey}
           customTranscriptionApiKey={customTranscriptionApiKey}
           setCustomTranscriptionApiKey={setCustomTranscriptionApiKey}
+          senseVoiceModelPath={senseVoiceModelPath}
+          setSenseVoiceModelPath={setSenseVoiceModelPath}
+          senseVoiceBinaryPath={senseVoiceBinaryPath}
+          setSenseVoiceBinaryPath={setSenseVoiceBinaryPath}
           cloudTranscriptionBaseUrl={cloudTranscriptionBaseUrl}
           setCloudTranscriptionBaseUrl={setCloudTranscriptionBaseUrl}
           variant="settings"
@@ -392,6 +469,8 @@ interface AiModelsSectionProps {
   setGeminiApiKey: (key: string) => void;
   groqApiKey: string;
   setGroqApiKey: (key: string) => void;
+  openrouterApiKey: string;
+  setOpenrouterApiKey: (key: string) => void;
   customReasoningApiKey: string;
   setCustomReasoningApiKey: (key: string) => void;
   showAlertDialog: (dialog: { title: string; description: string }) => void;
@@ -423,6 +502,8 @@ function AiModelsSection({
   setGeminiApiKey,
   groqApiKey,
   setGroqApiKey,
+  openrouterApiKey,
+  setOpenrouterApiKey,
   customReasoningApiKey,
   setCustomReasoningApiKey,
   showAlertDialog,
@@ -430,7 +511,7 @@ function AiModelsSection({
 }: AiModelsSectionProps) {
   const { t, i18n } = useTranslation();
   const isCustomMode = cloudReasoningMode === "byok";
-  const isCloudMode = isSignedIn && cloudReasoningMode === "chordvox";
+  const isCloudMode = isSignedIn && cloudReasoningMode === "openwhispr";
 
   return (
     <div className="space-y-4">
@@ -460,7 +541,7 @@ function AiModelsSection({
                 <button
                   onClick={() => {
                     if (!isCloudMode) {
-                      setCloudReasoningMode("chordvox");
+                      setCloudReasoningMode("openwhispr");
                       toast({
                         title: t("settingsPage.aiModels.toasts.switchedCloud.title"),
                         description: t("settingsPage.aiModels.toasts.switchedCloud.description"),
@@ -472,22 +553,20 @@ function AiModelsSection({
                   className="w-full flex items-center gap-3 text-left cursor-pointer group"
                 >
                   <div
-                    className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-colors ${
-                      isCloudMode
+                    className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-colors ${isCloudMode
                         ? "bg-primary/10 dark:bg-primary/15"
                         : "bg-muted/60 dark:bg-surface-raised group-hover:bg-muted dark:group-hover:bg-surface-3"
-                    }`}
+                      }`}
                   >
                     <Cloud
-                      className={`w-4 h-4 transition-colors ${
-                        isCloudMode ? "text-primary" : "text-muted-foreground"
-                      }`}
+                      className={`w-4 h-4 transition-colors ${isCloudMode ? "text-primary" : "text-muted-foreground"
+                        }`}
                     />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-[12px] font-medium text-foreground">
-                        {t("settingsPage.aiModels.chordvoxCloud")}
+                        {t("settingsPage.aiModels.openwhisprCloud")}
                       </span>
                       {isCloudMode && (
                         <span className="text-[10px] font-medium text-primary bg-primary/10 dark:bg-primary/15 px-1.5 py-px rounded-sm">
@@ -496,15 +575,14 @@ function AiModelsSection({
                       )}
                     </div>
                     <p className="text-[11px] text-muted-foreground/80 mt-0.5">
-                      {t("settingsPage.aiModels.chordvoxCloudDescription")}
+                      {t("settingsPage.aiModels.openwhisprCloudDescription")}
                     </p>
                   </div>
                   <div
-                    className={`w-4 h-4 rounded-full border-2 shrink-0 transition-colors ${
-                      isCloudMode
+                    className={`w-4 h-4 rounded-full border-2 shrink-0 transition-colors ${isCloudMode
                         ? "border-primary bg-primary"
                         : "border-border-hover dark:border-border-subtle"
-                    }`}
+                      }`}
                   >
                     {isCloudMode && (
                       <div className="w-full h-full flex items-center justify-center">
@@ -530,16 +608,14 @@ function AiModelsSection({
                   className="w-full flex items-center gap-3 text-left cursor-pointer group"
                 >
                   <div
-                    className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-colors ${
-                      isCustomMode
+                    className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 transition-colors ${isCustomMode
                         ? "bg-accent/10 dark:bg-accent/15"
                         : "bg-muted/60 dark:bg-surface-raised group-hover:bg-muted dark:group-hover:bg-surface-3"
-                    }`}
+                      }`}
                   >
                     <Key
-                      className={`w-4 h-4 transition-colors ${
-                        isCustomMode ? "text-accent" : "text-muted-foreground"
-                      }`}
+                      className={`w-4 h-4 transition-colors ${isCustomMode ? "text-accent" : "text-muted-foreground"
+                        }`}
                     />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -558,11 +634,10 @@ function AiModelsSection({
                     </p>
                   </div>
                   <div
-                    className={`w-4 h-4 rounded-full border-2 shrink-0 transition-colors ${
-                      isCustomMode
+                    className={`w-4 h-4 rounded-full border-2 shrink-0 transition-colors ${isCustomMode
                         ? "border-accent bg-accent"
                         : "border-border-hover dark:border-border-subtle"
-                    }`}
+                      }`}
                   >
                     {isCustomMode && (
                       <div className="w-full h-full flex items-center justify-center">
@@ -588,6 +663,8 @@ function AiModelsSection({
               setCloudReasoningBaseUrl={setCloudReasoningBaseUrl}
               openaiApiKey={openaiApiKey}
               setOpenaiApiKey={setOpenaiApiKey}
+              openrouterApiKey={openrouterApiKey}
+              setOpenrouterApiKey={setOpenrouterApiKey}
               anthropicApiKey={anthropicApiKey}
               setAnthropicApiKey={setAnthropicApiKey}
               geminiApiKey={geminiApiKey}
@@ -605,7 +682,10 @@ function AiModelsSection({
   );
 }
 
-export default function SettingsPage({ activeSection = "general" }: SettingsPageProps) {
+export default function SettingsPage({
+  activeSection = "general",
+  onOpenTranscriptionHistory,
+}: SettingsPageProps) {
   const {
     confirmDialog,
     alertDialog,
@@ -620,6 +700,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     whisperModel,
     localTranscriptionProvider,
     parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
     uiLanguage,
     preferredLanguage,
     cloudTranscriptionProvider,
@@ -631,11 +713,14 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     reasoningModel,
     reasoningProvider,
     openaiApiKey,
+    openrouterApiKey,
     anthropicApiKey,
     geminiApiKey,
     groqApiKey,
     mistralApiKey,
     dictationKey,
+    dictationKeySecondary,
+    secondaryHotkeyProfile,
     activationMode,
     setActivationMode,
     preferBuiltInMic,
@@ -647,6 +732,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     setWhisperModel,
     setLocalTranscriptionProvider,
     setParakeetModel,
+    setSenseVoiceModelPath,
+    setSenseVoiceBinaryPath,
     setCloudTranscriptionProvider,
     setCloudTranscriptionModel,
     setCloudTranscriptionBaseUrl,
@@ -656,6 +743,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     setReasoningModel,
     setReasoningProvider,
     setOpenaiApiKey,
+    setOpenrouterApiKey,
     setAnthropicApiKey,
     setGeminiApiKey,
     setGroqApiKey,
@@ -665,6 +753,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     customReasoningApiKey,
     setCustomReasoningApiKey,
     setDictationKey,
+    setDictationKeySecondary,
+    captureSecondaryHotkeyProfileFromCurrent,
     updateTranscriptionSettings,
     updateReasoningSettings,
     cloudTranscriptionMode,
@@ -679,6 +769,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     setCloudBackupEnabled,
     telemetryEnabled,
     setTelemetryEnabled,
+    transcriptionHistoryEnabled,
+    setTranscriptionHistoryEnabled,
   } = useSettings();
 
   const { t, i18n } = useTranslation();
@@ -702,11 +794,15 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     downloadUpdate,
     installUpdate: installUpdateAction,
     getAppVersion,
-    error: updateError,
   } = useUpdater();
 
   const isUpdateAvailable =
     !updateStatus.isDevelopment && (updateStatus.updateAvailable || updateStatus.updateDownloaded);
+  const manualUpdateUrl =
+    updateInfo && updateInfo.manualOnly && updateInfo.manualDownloadUrl
+      ? updateInfo.manualDownloadUrl
+      : "";
+  const isManualUpdate = Boolean(manualUpdateUrl);
 
   const whisperHook = useWhisper();
   const permissionsHook = usePermissions(showAlertDialog);
@@ -714,6 +810,12 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
   const { agentName, setAgentName } = useAgentName();
   const [agentNameInput, setAgentNameInput] = useState(agentName);
   const { theme, setTheme } = useTheme();
+  const [licenseStatus, setLicenseStatus] = useState<LicenseStatusResult | null>(null);
+  const [licenseKeyInput, setLicenseKeyInput] = useState("");
+  const [licenseBusyAction, setLicenseBusyAction] = useState<
+    "activate" | "validate" | "clear" | null
+  >(null);
+  const [showLicenseKeyInput, setShowLicenseKeyInput] = useState(false);
   const usage = useUsage();
   const hasShownApproachingToast = useRef(false);
   useEffect(() => {
@@ -730,6 +832,135 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     }
   }, [usage?.isApproachingLimit, usage?.wordsUsed, usage?.limit, toast, t, i18n.language]);
 
+  const refreshLicenseStatus = useCallback(async () => {
+    if (!window.electronAPI?.licenseGetStatus) return;
+    try {
+      const result = await window.electronAPI.licenseGetStatus();
+      setLicenseStatus(result);
+    } catch (error) {
+      logger.error("Failed to load license status", error, "license");
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshLicenseStatus();
+  }, [refreshLicenseStatus]);
+
+  useEffect(() => {
+    if (licenseStatus?.isActive && licenseStatus?.keyPresent) {
+      setShowLicenseKeyInput(false);
+    }
+  }, [licenseStatus?.isActive, licenseStatus?.keyPresent]);
+
+  const handleActivateLicense = useCallback(async () => {
+    if (!window.electronAPI?.licenseActivate) return;
+    const licenseKey = licenseKeyInput.trim();
+    if (!licenseKey) {
+      toast({
+        title: t("settingsPage.account.desktopLicense.toasts.keyRequiredTitle"),
+        description: t("settingsPage.account.desktopLicense.toasts.keyRequiredDescription"),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLicenseBusyAction("activate");
+    try {
+      const result = await window.electronAPI.licenseActivate(licenseKey);
+      setLicenseStatus(result);
+
+      if (result.success) {
+        setLicenseKeyInput("");
+        setShowLicenseKeyInput(false);
+        toast({
+          title: t("settingsPage.account.desktopLicense.toasts.activatedTitle"),
+          description: t("settingsPage.account.desktopLicense.toasts.activatedDescription"),
+          variant: "success",
+        });
+      } else {
+        const userFacingErrorMessage = getLocalizedLicenseErrorDescription(result.error, t);
+        toast({
+          title: t("settingsPage.account.desktopLicense.toasts.activationFailedTitle"),
+          description:
+            userFacingErrorMessage ||
+            t("settingsPage.account.desktopLicense.toasts.activationFailedDescription"),
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      logger.error("Failed to activate license", error, "license");
+      toast({
+        title: t("settingsPage.account.desktopLicense.toasts.activationFailedTitle"),
+        description: t("settingsPage.account.desktopLicense.toasts.activationUnexpectedError"),
+        variant: "destructive",
+      });
+    } finally {
+      setLicenseBusyAction(null);
+    }
+  }, [licenseKeyInput, t, toast]);
+
+  const handleValidateLicense = useCallback(async () => {
+    if (!window.electronAPI?.licenseValidate) return;
+    setLicenseBusyAction("validate");
+    try {
+      const result = await window.electronAPI.licenseValidate();
+      setLicenseStatus(result);
+      toast({
+        title: result.success
+          ? t("settingsPage.account.desktopLicense.toasts.validatedTitle")
+          : t("settingsPage.account.desktopLicense.toasts.validateFailedTitle"),
+        description:
+          result.success
+            ? t("settingsPage.account.desktopLicense.toasts.validatedDescription")
+            : getLocalizedLicenseErrorDescription(result.error, t) ||
+            t("settingsPage.account.desktopLicense.toasts.invalidDescription"),
+        variant: result.success ? "success" : "destructive",
+      });
+    } catch (error) {
+      logger.error("Failed to validate license", error, "license");
+      toast({
+        title: t("settingsPage.account.desktopLicense.toasts.validateFailedTitle"),
+        description: t("settingsPage.account.desktopLicense.toasts.validateUnexpectedError"),
+        variant: "destructive",
+      });
+    } finally {
+      setLicenseBusyAction(null);
+    }
+  }, [t, toast]);
+
+  const handleClearLicense = useCallback(() => {
+    if (!window.electronAPI?.licenseClear) return;
+
+    showConfirmDialog({
+      title: t("settingsPage.account.desktopLicense.dialogs.removeTitle"),
+      description: t("settingsPage.account.desktopLicense.dialogs.removeDescription"),
+      confirmText: t("settingsPage.account.desktopLicense.dialogs.removeConfirm"),
+      variant: "destructive",
+      onConfirm: async () => {
+        setLicenseBusyAction("clear");
+        try {
+          const result = await window.electronAPI.licenseClear();
+          setLicenseStatus(result);
+          setLicenseKeyInput("");
+          toast({
+            title: t("settingsPage.account.desktopLicense.toasts.removedTitle"),
+            description: t("settingsPage.account.desktopLicense.toasts.removedDescription"),
+            variant: "success",
+          });
+        } catch (error) {
+          logger.error("Failed to clear license", error, "license");
+          toast({
+            title: t("settingsPage.account.desktopLicense.toasts.removeFailedTitle"),
+            description: t("settingsPage.account.desktopLicense.toasts.removeFailedDescription"),
+            variant: "destructive",
+          });
+        } finally {
+          setLicenseBusyAction(null);
+        }
+      },
+    });
+  }, [showConfirmDialog, t, toast]);
+
   const installTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { registerHotkey, isRegistering: isHotkeyRegistering } = useHotkeyRegistration({
@@ -745,6 +976,118 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     (hotkey: string) => getValidationMessage(hotkey, getPlatform()),
     []
   );
+
+  const validateSecondaryHotkeyForInput = useCallback(
+    (hotkey: string) => {
+      const baseValidation = getValidationMessage(hotkey, getPlatform());
+      if (baseValidation) return baseValidation;
+
+      const normalized = hotkey?.trim() || "";
+      if (!normalized) return null;
+
+      if (normalized === "GLOBE") {
+        return t("settingsPage.general.hotkey.secondary.globeNotSupported");
+      }
+
+      if (
+        /^Right(Control|Ctrl|Alt|Option|Shift|Super|Win|Meta|Command|Cmd)$/i.test(normalized)
+      ) {
+        return t("settingsPage.general.hotkey.secondary.rightModifierNotSupported");
+      }
+
+      if (
+        normalized.includes("+") &&
+        normalized
+          .split("+")
+          .map((part) => part.trim().toLowerCase())
+          .every((part) => MODIFIER_PARTS.has(part))
+      ) {
+        return t("settingsPage.general.hotkey.secondary.modifiersOnlyNotSupported");
+      }
+
+      return null;
+    },
+    [t]
+  );
+
+  const [isSecondaryHotkeyRegistering, setIsSecondaryHotkeyRegistering] = useState(false);
+
+  const registerSecondaryHotkey = useCallback(
+    async (hotkey: string) => {
+      if (!hotkey || !hotkey.trim()) {
+        try {
+          setIsSecondaryHotkeyRegistering(true);
+          await window.electronAPI?.updateSecondaryHotkey?.("");
+          setDictationKeySecondary("");
+          return true;
+        } finally {
+          setIsSecondaryHotkeyRegistering(false);
+        }
+      }
+
+      const validationError = validateSecondaryHotkeyForInput(hotkey);
+      if (validationError) {
+        showAlertDialog({
+          title: t("hooks.hotkeyRegistration.titles.invalidHotkey"),
+          description: validationError,
+        });
+        return false;
+      }
+
+      if (!window.electronAPI?.updateSecondaryHotkey) {
+        setDictationKeySecondary(hotkey);
+        return true;
+      }
+
+      try {
+        setIsSecondaryHotkeyRegistering(true);
+        const result = await window.electronAPI.updateSecondaryHotkey(hotkey);
+        if (!result?.success) {
+          showAlertDialog({
+            title: t("hooks.hotkeyRegistration.titles.notRegistered"),
+            description:
+              result?.message || t("settingsPage.general.hotkey.secondary.registerFailed"),
+          });
+          return false;
+        }
+
+        setDictationKeySecondary(hotkey);
+        toast({
+          title: t("settingsPage.general.hotkey.secondary.savedTitle"),
+          description: t("settingsPage.general.hotkey.secondary.savedDescription"),
+          variant: "success",
+        });
+        return true;
+      } catch (error) {
+        showAlertDialog({
+          title: t("hooks.hotkeyRegistration.titles.error"),
+          description:
+            error instanceof Error
+              ? error.message
+              : t("settingsPage.general.hotkey.secondary.registerRetry"),
+        });
+        return false;
+      } finally {
+        setIsSecondaryHotkeyRegistering(false);
+      }
+    },
+    [
+      setDictationKeySecondary,
+      showAlertDialog,
+      t,
+      toast,
+      validateSecondaryHotkeyForInput,
+    ]
+  );
+
+  const saveCurrentAsSecondaryProfile = useCallback(() => {
+    captureSecondaryHotkeyProfileFromCurrent();
+    toast({
+      title: t("settingsPage.general.hotkey.secondary.profileSavedTitle"),
+      description: t("settingsPage.general.hotkey.secondary.profileSavedDescription"),
+      variant: "success",
+    });
+  }, [captureSecondaryHotkeyProfileFromCurrent, t, toast]);
 
   const [isUsingGnomeHotkeys, setIsUsingGnomeHotkeys] = useState(false);
 
@@ -881,15 +1224,6 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
   }, [setActivationMode]);
 
   useEffect(() => {
-    if (updateError) {
-      showAlertDialog({
-        title: t("settingsPage.general.updates.dialogs.updateError.title"),
-        description: t("settingsPage.general.updates.dialogs.updateError.description"),
-      });
-    }
-  }, [updateError, showAlertDialog, t]);
-
-  useEffect(() => {
     if (installInitiated) {
       if (installTimeoutRef.current) {
         clearTimeout(installTimeoutRef.current);
@@ -953,7 +1287,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
               description: t("settingsPage.developer.removeModels.failedDescription"),
             });
           } else {
-            window.dispatchEvent(new Event("chordvox-models-cleared"));
+            window.dispatchEvent(new Event("openwhispr-models-cleared"));
             showAlertDialog({
               title: t("settingsPage.developer.removeModels.successTitle"),
               description: t("settingsPage.developer.removeModels.successDescription"),
@@ -970,6 +1304,208 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
       },
     });
   }, [isRemovingModels, cachePathHint, showConfirmDialog, showAlertDialog, t]);
+
+  const collectSettingsSnapshot = useCallback(async () => {
+    const localStorageData: Record<string, string> = {};
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+      const value = localStorage.getItem(key);
+      if (value !== null) {
+        localStorageData[key] = value;
+      }
+    }
+
+    const dictionary =
+      (await window.electronAPI?.getDictionary?.().catch(() => [])) ||
+      [];
+    const dictationKey = await window.electronAPI?.getDictationKey?.().catch(() => null);
+    const activationMode = await window.electronAPI?.getActivationMode?.().catch(() => null);
+    const licenseApiBaseUrl = await window.electronAPI
+      ?.getLicenseApiBaseUrl?.()
+      .catch(() => null);
+
+    return {
+      schemaVersion: 1,
+      app: "ChordVox",
+      exportedAt: new Date().toISOString(),
+      appVersion: currentVersion || (await getAppVersion()) || null,
+      localStorage: localStorageData,
+      dictionary: Array.isArray(dictionary) ? dictionary : [],
+      runtime: {
+        dictationKey,
+        activationMode,
+        licenseApiBaseUrl,
+      },
+    };
+  }, [currentVersion, getAppVersion]);
+
+  const handleExportSettings = useCallback(async () => {
+    if (!window.electronAPI?.exportSettingsFile) return;
+    try {
+      const snapshot = await collectSettingsSnapshot();
+      const result = await window.electronAPI.exportSettingsFile(snapshot);
+      if (!result.success) {
+        throw new Error(result.error || "Failed to export settings");
+      }
+      if (result.cancelled) {
+        return;
+      }
+      showAlertDialog({
+        title: t("settingsPage.developer.settingsTransfer.exportSuccessTitle"),
+        description: t("settingsPage.developer.settingsTransfer.exportSuccessDescription", {
+          path: result.filePath || "",
+        }),
+      });
+    } catch (error) {
+      showAlertDialog({
+        title: t("settingsPage.developer.settingsTransfer.exportFailedTitle"),
+        description: t("settingsPage.developer.settingsTransfer.exportFailedDescription"),
+      });
+    }
+  }, [collectSettingsSnapshot, showAlertDialog, t]);
+
+  const applyImportedSettings = useCallback(
+    async (data: any) => {
+      if (!data || typeof data !== "object") {
+        throw new Error("Invalid settings payload");
+      }
+
+      const localStorageData =
+        data.localStorage && typeof data.localStorage === "object" ? data.localStorage : data;
+
+      if (!localStorageData || typeof localStorageData !== "object") {
+        throw new Error("Invalid localStorage data");
+      }
+
+      localStorage.clear();
+      Object.entries(localStorageData).forEach(([key, value]) => {
+        localStorage.setItem(key, String(value ?? ""));
+      });
+
+      const parsedDictionary = (() => {
+        if (Array.isArray(data.dictionary)) return data.dictionary;
+        const raw = localStorageData.customDictionary;
+        if (Array.isArray(raw)) return raw;
+        if (typeof raw === "string") {
+          try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : null;
+          } catch {
+            return null;
+          }
+        }
+        return null;
+      })();
+
+      if (parsedDictionary && window.electronAPI?.setDictionary) {
+        await window.electronAPI.setDictionary(
+          parsedDictionary
+            .filter((word: any) => typeof word === "string")
+            .map((word: string) => word.trim())
+            .filter(Boolean)
+        );
+      }
+
+      const dictationKey = data?.runtime?.dictationKey || localStorageData.dictationKey;
+      if (typeof dictationKey === "string" && window.electronAPI?.saveDictationKey) {
+        await window.electronAPI.saveDictationKey(dictationKey);
+      }
+
+      const activationMode = data?.runtime?.activationMode || localStorageData.activationMode;
+      if (
+        (activationMode === "tap" || activationMode === "push") &&
+        window.electronAPI?.saveActivationMode
+      ) {
+        await window.electronAPI.saveActivationMode(activationMode);
+      }
+
+      const licenseApiBaseUrl =
+        data?.runtime?.licenseApiBaseUrl || localStorageData.licenseApiBaseUrl;
+      if (typeof licenseApiBaseUrl === "string" && window.electronAPI?.saveLicenseApiBaseUrl) {
+        await window.electronAPI.saveLicenseApiBaseUrl(licenseApiBaseUrl);
+      }
+
+      if (window.electronAPI?.saveAllKeysToEnv) {
+        await window.electronAPI.saveAllKeysToEnv();
+      }
+
+      if (window.electronAPI?.syncStartupPreferences) {
+        const localProviderRaw = String(localStorageData.localTranscriptionProvider || "whisper");
+        const localProvider: LocalTranscriptionProvider =
+          localProviderRaw === "nvidia" || localProviderRaw === "sensevoice"
+            ? localProviderRaw
+            : "whisper";
+        const useLocalWhisperValue = String(localStorageData.useLocalWhisper || "false") === "true";
+        const reasoningProviderValue = String(localStorageData.reasoningProvider || "openai");
+
+        let model = String(localStorageData.whisperModel || "base");
+        if (localProvider === "nvidia") {
+          model = String(localStorageData.parakeetModel || "");
+        } else if (localProvider === "sensevoice") {
+          model = String(localStorageData.senseVoiceModelPath || "");
+        }
+
+        await window.electronAPI.syncStartupPreferences({
+          useLocalWhisper: useLocalWhisperValue,
+          localTranscriptionProvider: localProvider,
+          model: model || undefined,
+          senseVoiceBinaryPath:
+            localProvider === "sensevoice" && localStorageData.senseVoiceBinaryPath
+              ? String(localStorageData.senseVoiceBinaryPath)
+              : undefined,
+          reasoningProvider: reasoningProviderValue,
+          reasoningModel:
+            reasoningProviderValue === "local" && localStorageData.reasoningModel
+              ? String(localStorageData.reasoningModel)
+              : undefined,
+        });
+      }
+    },
+    []
+  );
+
+  const handleImportSettings = useCallback(async () => {
+    if (!window.electronAPI?.importSettingsFile) return;
+    try {
+      const result = await window.electronAPI.importSettingsFile();
+      if (!result.success) {
+        throw new Error(result.error || "Failed to import settings");
+      }
+      if (result.cancelled) {
+        return;
+      }
+      const importedData = result.data;
+      showConfirmDialog({
+        title: t("settingsPage.developer.settingsTransfer.importConfirmTitle"),
+        description: t("settingsPage.developer.settingsTransfer.importConfirmDescription"),
+        confirmText: t("settingsPage.developer.settingsTransfer.importConfirmButton"),
+        onConfirm: async () => {
+          try {
+            await applyImportedSettings(importedData);
+            showAlertDialog({
+              title: t("settingsPage.developer.settingsTransfer.importSuccessTitle"),
+              description: t("settingsPage.developer.settingsTransfer.importSuccessDescription"),
+            });
+            setTimeout(() => {
+              window.location.reload();
+            }, 800);
+          } catch (error) {
+            showAlertDialog({
+              title: t("settingsPage.developer.settingsTransfer.importFailedTitle"),
+              description: t("settingsPage.developer.settingsTransfer.importFailedDescription"),
+            });
+          }
+        },
+        variant: "destructive",
+      });
+    } catch (error) {
+      showAlertDialog({
+        title: t("settingsPage.developer.settingsTransfer.importFailedTitle"),
+        description: t("settingsPage.developer.settingsTransfer.importFailedDescription"),
+      });
+    }
+  }, [applyImportedSettings, showAlertDialog, showConfirmDialog, t]);
 
   const { isSignedIn, isLoaded, user } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -991,29 +1527,151 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
     }
   }, [showAlertDialog, t]);
 
+  const renderLicensePanel = () => {
+    const status = licenseStatus?.status;
+    const isActive = Boolean(licenseStatus?.isActive);
+    const keyPresent = Boolean(licenseStatus?.keyPresent);
+    const isTrial = licenseStatus?.plan === "trial" && !keyPresent;
+    const showKeyInput = !isActive || !keyPresent || showLicenseKeyInput;
+    const licenseBadgeVariant: "success" | "warning" | "destructive" | "outline" =
+      status === "active"
+        ? "success"
+        : status === "offline_grace"
+          ? "warning"
+          : status === "expired" || status === "invalid"
+            ? "destructive"
+            : "outline";
+
+    const hintDescription = licenseStatus?.configured
+      ? t("settingsPage.account.desktopLicense.descriptionConfigured")
+      : t("settingsPage.account.desktopLicense.descriptionNotConfigured");
+    const currentStatusDescription =
+      licenseStatus?.error === "LICENSE_SERVER_NOT_CONFIGURED"
+        ? t("settingsPage.account.desktopLicense.currentStatusNotConfigured")
+        : getLocalizedLicenseErrorDescription(licenseStatus?.error, t) ||
+        (isTrial
+          ? licenseStatus?.trialActive
+            ? t("settingsPage.account.desktopLicense.currentStatusTrialDescription", {
+              days: licenseStatus?.trialDaysLeft ?? licenseStatus?.trialDays ?? 0,
+            })
+            : t("settingsPage.account.desktopLicense.currentStatusTrialExpiredDescription")
+          : licenseStatus?.isActive
+            ? t("settingsPage.account.desktopLicense.currentStatusActiveDescription")
+            : t("settingsPage.account.desktopLicense.currentStatusDescription"));
+    const currentStatusLabel = isTrial
+      ? t("settingsPage.account.desktopLicense.statusLabels.trial")
+      : getLicenseStatusLabel(status, t);
+
+    return (
+      <div className="space-y-3">
+        <SectionHeader title={t("settingsPage.account.desktopLicense.title")} description={hintDescription} />
+        <SettingsPanel>
+          <SettingsPanelRow>
+            <SettingsRow
+              label={t("settingsPage.account.desktopLicense.currentStatusLabel")}
+              description={currentStatusDescription}
+            >
+              <Badge variant={licenseBadgeVariant}>{currentStatusLabel}</Badge>
+            </SettingsRow>
+          </SettingsPanelRow>
+          <SettingsPanelRow>
+            <div className="space-y-3">
+              {showKeyInput ? (
+                <Input
+                  value={licenseKeyInput}
+                  onChange={(event) => setLicenseKeyInput(event.target.value)}
+                  placeholder={t("settingsPage.account.desktopLicense.inputPlaceholder")}
+                  className="h-8 text-sm"
+                />
+              ) : (
+                <p className="text-[11px] text-muted-foreground">
+                  {t("settingsPage.account.desktopLicense.activatedHint")}
+                </p>
+              )}
+
+              <div className="flex items-center gap-2">
+                {showKeyInput ? (
+                  <Button
+                    size="sm"
+                    onClick={handleActivateLicense}
+                    disabled={licenseBusyAction !== null}
+                  >
+                    {licenseBusyAction === "activate" ? (
+                      <>
+                        <Loader2 size={14} className="animate-spin" />
+                        {t("settingsPage.account.desktopLicense.actions.activating")}
+                      </>
+                    ) : (
+                      t("settingsPage.account.desktopLicense.actions.activate")
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setShowLicenseKeyInput(true)}
+                    disabled={licenseBusyAction !== null}
+                  >
+                    {t("settingsPage.account.desktopLicense.actions.changeKey")}
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleValidateLicense}
+                  disabled={licenseBusyAction !== null || !keyPresent}
+                >
+                  {licenseBusyAction === "validate" ? (
+                    <>
+                      <Loader2 size={14} className="animate-spin" />
+                      {t("settingsPage.account.desktopLicense.actions.checking")}
+                    </>
+                  ) : (
+                    t("settingsPage.account.desktopLicense.actions.validate")
+                  )}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleClearLicense}
+                  disabled={licenseBusyAction !== null || !keyPresent}
+                >
+                  {t("settingsPage.account.desktopLicense.actions.clear")}
+                </Button>
+              </div>
+              {licenseStatus?.plan && (
+                <p className="text-[11px] text-muted-foreground">
+                  {t("settingsPage.account.desktopLicense.meta.plan", { plan: licenseStatus.plan })}
+                </p>
+              )}
+              {licenseStatus?.expiresAt && (
+                <p className="text-[11px] text-muted-foreground">
+                  {t("settingsPage.account.desktopLicense.meta.expires", {
+                    date: new Date(licenseStatus.expiresAt).toLocaleString(i18n.language),
+                  })}
+                </p>
+              )}
+              {licenseStatus?.lastValidatedAt && (
+                <p className="text-[11px] text-muted-foreground">
+                  {t("settingsPage.account.desktopLicense.meta.lastCheck", {
+                    date: new Date(licenseStatus.lastValidatedAt).toLocaleString(i18n.language),
+                  })}
+                </p>
+              )}
+            </div>
+          </SettingsPanelRow>
+        </SettingsPanel>
+      </div>
+    );
+  };
+
   const renderSectionContent = () => {
     switch (activeSection) {
       case "account":
         return (
           <div className="space-y-5">
-            {!NEON_AUTH_URL ? (
-              <>
-                <SectionHeader
-                  title={t("settingsPage.account.title")}
-                  description={t("settingsPage.account.notConfigured")}
-                />
-                <SettingsPanel>
-                  <SettingsPanelRow>
-                    <SettingsRow
-                      label={t("settingsPage.account.featuresDisabled")}
-                      description={t("settingsPage.account.featuresDisabledDescription")}
-                    >
-                      <Badge variant="warning">{t("settingsPage.account.disabled")}</Badge>
-                    </SettingsRow>
-                  </SettingsPanelRow>
-                </SettingsPanel>
-              </>
-            ) : isLoaded && isSignedIn && user ? (
+            {renderLicensePanel()}
+            {NEON_AUTH_URL && (isLoaded && isSignedIn && user ? (
               <>
                 <SectionHeader title={t("settingsPage.account.title")} />
                 <SettingsPanel>
@@ -1088,26 +1746,26 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                         description={
                           usage.isTrial
                             ? t("settingsPage.account.planDescriptions.trial", {
-                                days: usage.trialDaysLeft,
-                              })
+                              days: usage.trialDaysLeft,
+                            })
                             : usage.isPastDue
                               ? t("settingsPage.account.planDescriptions.pastDue", {
-                                  used: usage.wordsUsed.toLocaleString(i18n.language),
-                                  limit: usage.limit.toLocaleString(i18n.language),
-                                })
+                                used: usage.wordsUsed.toLocaleString(i18n.language),
+                                limit: usage.limit.toLocaleString(i18n.language),
+                              })
                               : usage.isSubscribed
                                 ? usage.currentPeriodEnd
                                   ? t("settingsPage.account.planDescriptions.nextBilling", {
-                                      date: new Date(usage.currentPeriodEnd).toLocaleDateString(
-                                        i18n.language,
-                                        { month: "short", day: "numeric", year: "numeric" }
-                                      ),
-                                    })
+                                    date: new Date(usage.currentPeriodEnd).toLocaleDateString(
+                                      i18n.language,
+                                      { month: "short", day: "numeric", year: "numeric" }
+                                    ),
+                                  })
                                   : t("settingsPage.account.planDescriptions.unlimited")
                                 : t("settingsPage.account.planDescriptions.freeUsage", {
-                                    used: usage.wordsUsed.toLocaleString(i18n.language),
-                                    limit: usage.limit.toLocaleString(i18n.language),
-                                  })
+                                  used: usage.wordsUsed.toLocaleString(i18n.language),
+                                  limit: usage.limit.toLocaleString(i18n.language),
+                                })
                         }
                       >
                         {usage.isTrial ? (
@@ -1323,7 +1981,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                   </SettingsPanelRow>
                 </SettingsPanel>
               </>
-            )}
+            ))}
           </div>
         );
 
@@ -1373,32 +2031,80 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                         try {
                           const result = await checkForUpdates();
                           if (result?.updateAvailable) {
+                            if (result.manualOnly && result.manualDownloadUrl) {
+                              showConfirmDialog({
+                                title: t(
+                                  "settingsPage.general.updates.dialogs.manualUpdateAvailable.title"
+                                ),
+                                description: t(
+                                  "settingsPage.general.updates.dialogs.manualUpdateAvailable.description",
+                                  {
+                                    version:
+                                      result.version ||
+                                      t("settingsPage.general.updates.newVersion"),
+                                  }
+                                ),
+                                confirmText: t(
+                                  "settingsPage.general.updates.dialogs.manualUpdateAvailable.confirmText"
+                                ),
+                                onConfirm: async () => {
+                                  await window.electronAPI.openExternal(result.manualDownloadUrl);
+                                },
+                              });
+                            } else {
+                              showConfirmDialog({
+                                title: t(
+                                  "settingsPage.general.updates.dialogs.updateAvailable.title"
+                                ),
+                                description: t(
+                                  "settingsPage.general.updates.dialogs.updateAvailable.description",
+                                  {
+                                    version:
+                                      result.version ||
+                                      t("settingsPage.general.updates.newVersion"),
+                                  }
+                                ),
+                                confirmText: t("settingsPage.general.updates.downloadUpdate", {
+                                  version: result.version || "",
+                                }),
+                                onConfirm: async () => {
+                                  try {
+                                    await downloadUpdate();
+                                  } catch (error: any) {
+                                    showAlertDialog({
+                                      title: t(
+                                        "settingsPage.general.updates.dialogs.downloadFailed.title"
+                                      ),
+                                      description: t(
+                                        "settingsPage.general.updates.dialogs.downloadFailed.description"
+                                      ),
+                                    });
+                                  }
+                                },
+                              });
+                            }
+                          } else if (result?.error) {
                             showAlertDialog({
-                              title: t(
-                                "settingsPage.general.updates.dialogs.updateAvailable.title"
-                              ),
+                              title: t("settingsPage.general.updates.dialogs.checkFailed.title"),
                               description: t(
-                                "settingsPage.general.updates.dialogs.updateAvailable.description",
+                                "settingsPage.general.updates.dialogs.checkFailed.description",
                                 {
-                                  version:
-                                    result.version || t("settingsPage.general.updates.newVersion"),
+                                  message: result.error,
                                 }
                               ),
                             });
                           } else {
                             showAlertDialog({
                               title: t("settingsPage.general.updates.dialogs.noUpdates.title"),
-                              description:
-                                result?.message ||
-                                t("settingsPage.general.updates.dialogs.noUpdates.description"),
+                              description: t(
+                                "settingsPage.general.updates.dialogs.noUpdates.description"
+                              ),
                             });
                           }
                         } catch (error: any) {
                           showAlertDialog({
-                            title: t("settingsPage.general.updates.dialogs.checkFailed.title"),
-                            description: t(
-                              "settingsPage.general.updates.dialogs.checkFailed.description"
-                            ),
+                            title: t("settingsPage.general.updates.dialogs.noUpdates.title"),
+                            description: t("settingsPage.general.updates.dialogs.noUpdates.description"),
                           });
                         }
                       }}
@@ -1421,7 +2127,11 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                         <Button
                           onClick={async () => {
                             try {
-                              await downloadUpdate();
+                              if (isManualUpdate && manualUpdateUrl) {
+                                await window.electronAPI.openExternal(manualUpdateUrl);
+                              } else {
+                                await downloadUpdate();
+                              }
                             } catch (error: any) {
                               showAlertDialog({
                                 title: t(
@@ -1442,11 +2152,13 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                             size={13}
                             className={`mr-1.5 ${downloadingUpdate ? "animate-pulse" : ""}`}
                           />
-                          {downloadingUpdate
-                            ? t("settingsPage.general.updates.downloading", {
+                          {isManualUpdate
+                            ? t("settingsPage.general.updates.openReleasePage")
+                            : downloadingUpdate
+                              ? t("settingsPage.general.updates.downloading", {
                                 progress: Math.round(updateDownloadProgress),
                               })
-                            : t("settingsPage.general.updates.downloadUpdate", {
+                              : t("settingsPage.general.updates.downloadUpdate", {
                                 version: updateInfo?.version || "",
                               })}
                         </Button>
@@ -1564,10 +2276,9 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                             className={`
                               flex items-center gap-1 px-2.5 py-1 rounded-[5px] text-[11px] font-medium
                               transition-all duration-100
-                              ${
-                                isSelected
-                                  ? "bg-background dark:bg-surface-raised text-foreground shadow-sm"
-                                  : "text-muted-foreground hover:text-foreground"
+                              ${isSelected
+                                ? "bg-background dark:bg-surface-raised text-foreground shadow-sm"
+                                : "text-muted-foreground hover:text-foreground"
                               }
                             `}
                           >
@@ -1669,6 +2380,37 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                   />
                 </SettingsPanelRow>
 
+                <SettingsPanelRow>
+                  <div className="space-y-2">
+                    <p className="text-[11px] font-medium text-muted-foreground/80">
+                      {t("settingsPage.general.hotkey.secondary.title")}
+                    </p>
+                    <HotkeyInput
+                      value={dictationKeySecondary}
+                      onChange={async (newHotkey) => {
+                        await registerSecondaryHotkey(newHotkey);
+                      }}
+                      disabled={isSecondaryHotkeyRegistering}
+                      validate={validateSecondaryHotkeyForInput}
+                    />
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[11px] text-muted-foreground/80">
+                        {secondaryHotkeyProfile
+                          ? t("settingsPage.general.hotkey.secondary.profileSavedState")
+                          : t("settingsPage.general.hotkey.secondary.profileUnsavedState")}
+                      </p>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={saveCurrentAsSecondaryProfile}
+                        className="h-7 px-2 text-[11px]"
+                      >
+                        {t("settingsPage.general.hotkey.secondary.saveCurrentAsProfile2")}
+                      </Button>
+                    </div>
+                  </div>
+                </SettingsPanelRow>
+
                 {!isUsingGnomeHotkeys && (
                   <SettingsPanelRow>
                     <p className="text-[11px] font-medium text-muted-foreground/80 mb-2">
@@ -1752,6 +2494,10 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
             setWhisperModel={setWhisperModel}
             parakeetModel={parakeetModel}
             setParakeetModel={setParakeetModel}
+            senseVoiceModelPath={senseVoiceModelPath}
+            setSenseVoiceModelPath={setSenseVoiceModelPath}
+            senseVoiceBinaryPath={senseVoiceBinaryPath}
+            setSenseVoiceBinaryPath={setSenseVoiceBinaryPath}
             openaiApiKey={openaiApiKey}
             setOpenaiApiKey={setOpenaiApiKey}
             groqApiKey={groqApiKey}
@@ -1848,11 +2594,10 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                         return (
                           <span
                             key={word}
-                            className={`group inline-flex items-center gap-0.5 py-0.5 rounded-[5px] text-[11px] border transition-all ${
-                              isAgentName
+                            className={`group inline-flex items-center gap-0.5 py-0.5 rounded-[5px] text-[11px] border transition-all ${isAgentName
                                 ? "pl-2 pr-2 bg-primary/10 dark:bg-primary/15 text-primary border-primary/20 dark:border-primary/30"
                                 : "pl-2 pr-1 bg-primary/5 dark:bg-primary/10 text-foreground border-border/30 dark:border-border-subtle hover:border-destructive/40 hover:bg-destructive/5"
-                            }`}
+                              }`}
                             title={
                               isAgentName
                                 ? t("settingsPage.dictionary.agentNameAutoManaged")
@@ -1938,6 +2683,8 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
             setCloudReasoningBaseUrl={setCloudReasoningBaseUrl}
             openaiApiKey={openaiApiKey}
             setOpenaiApiKey={setOpenaiApiKey}
+            openrouterApiKey={openrouterApiKey}
+            setOpenrouterApiKey={setOpenrouterApiKey}
             anthropicApiKey={anthropicApiKey}
             setAnthropicApiKey={setAnthropicApiKey}
             geminiApiKey={geminiApiKey}
@@ -2038,11 +2785,10 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                     ].map((example, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <span
-                          className={`shrink-0 mt-0.5 text-[10px] font-medium uppercase tracking-wider px-1.5 py-px rounded ${
-                            example.mode === t("settingsPage.agentConfig.instructionMode")
+                          className={`shrink-0 mt-0.5 text-[10px] font-medium uppercase tracking-wider px-1.5 py-px rounded ${example.mode === t("settingsPage.agentConfig.instructionMode")
                               ? "bg-primary/10 text-primary dark:bg-primary/15"
                               : "bg-muted text-muted-foreground"
-                          }`}
+                            }`}
                         >
                           {example.mode}
                         </span>
@@ -2096,6 +2842,28 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
             )}
 
             <SettingsPanel>
+              <SettingsPanelRow>
+                <SettingsRow
+                  label={t("settingsPage.privacy.transcriptionHistory")}
+                  description={t("settingsPage.privacy.transcriptionHistoryDescription")}
+                >
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 px-3 text-[11px]"
+                      disabled={!onOpenTranscriptionHistory}
+                      onClick={() => onOpenTranscriptionHistory?.()}
+                    >
+                      {t("settingsPage.developer.open")}
+                    </Button>
+                    <Toggle
+                      checked={transcriptionHistoryEnabled}
+                      onChange={setTranscriptionHistoryEnabled}
+                    />
+                  </div>
+                </SettingsRow>
+              </SettingsPanelRow>
               <SettingsPanelRow>
                 <SettingsRow
                   label={t("settingsPage.privacy.usageAnalytics")}
@@ -2235,6 +3003,26 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
                 <SettingsPanel>
                   <SettingsPanelRow>
                     <SettingsRow
+                      label={t("settingsPage.developer.settingsTransfer.title")}
+                      description={t("settingsPage.developer.settingsTransfer.description")}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" onClick={handleExportSettings}>
+                          <Download className="mr-1.5 h-3.5 w-3.5" />
+                          {t("settingsPage.developer.settingsTransfer.export")}
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={handleImportSettings}>
+                          <Upload className="mr-1.5 h-3.5 w-3.5" />
+                          {t("settingsPage.developer.settingsTransfer.import")}
+                        </Button>
+                      </div>
+                    </SettingsRow>
+                  </SettingsPanelRow>
+                </SettingsPanel>
+
+                <SettingsPanel>
+                  <SettingsPanelRow>
+                    <SettingsRow
                       label={t("settingsPage.developer.resetAppData")}
                       description={t("settingsPage.developer.resetAppDataDescription")}
                     >
@@ -2307,7 +3095,7 @@ export default function SettingsPage({ activeSection = "general" }: SettingsPage
         onOpenChange={(open) => !open && hideAlertDialog()}
         title={alertDialog.title}
         description={alertDialog.description}
-        onOk={() => {}}
+        onOk={() => { }}
       />
 
       {renderSectionContent()}

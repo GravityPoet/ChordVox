@@ -9,7 +9,7 @@ const DEFAULT_OAUTH_PROTOCOL_BY_CHANNEL = {
   staging: "chordvox-staging",
   production: "chordvox",
 };
-const BASE_WINDOWS_APP_ID = "com.herotools.openwispr";
+const BASE_WINDOWS_APP_ID = "com.gravitypoet.chordvox";
 const DEFAULT_AUTH_BRIDGE_PORT = 5199;
 
 function isElectronBinaryExec() {
@@ -29,7 +29,7 @@ function inferDefaultChannel() {
 }
 
 function resolveAppChannel() {
-  const rawChannel = (process.env.CHORDVOX_CHANNEL || process.env.VITE_CHORDVOX_CHANNEL || "")
+  const rawChannel = (process.env.OPENWHISPR_CHANNEL || process.env.VITE_OPENWHISPR_CHANNEL || "")
     .trim()
     .toLowerCase();
 
@@ -41,7 +41,7 @@ function resolveAppChannel() {
 }
 
 const APP_CHANNEL = resolveAppChannel();
-process.env.CHORDVOX_CHANNEL = APP_CHANNEL;
+process.env.OPENWHISPR_CHANNEL = APP_CHANNEL;
 
 function configureChannelUserDataPath() {
   if (APP_CHANNEL === "production") {
@@ -58,7 +58,6 @@ configureChannelUserDataPath();
 // the compositor to set up an ARGB visual before any windows are created.
 // --disable-gpu-compositing prevents GPU compositing conflicts with the compositor.
 if (process.platform === "linux") {
-  app.commandLine.appendSwitch("gtk-version", "3");
   app.commandLine.appendSwitch("enable-transparent-visuals");
   app.commandLine.appendSwitch("disable-gpu-compositing");
 }
@@ -81,7 +80,7 @@ if (process.platform === "win32") {
 }
 
 function getOAuthProtocol() {
-  const fromEnv = (process.env.VITE_CHORDVOX_PROTOCOL || process.env.CHORDVOX_PROTOCOL || "")
+  const fromEnv = (process.env.VITE_OPENWHISPR_PROTOCOL || process.env.OPENWHISPR_PROTOCOL || "")
     .trim()
     .toLowerCase();
 
@@ -154,6 +153,7 @@ const DatabaseManager = require("./src/helpers/database");
 const ClipboardManager = require("./src/helpers/clipboard");
 const WhisperManager = require("./src/helpers/whisper");
 const ParakeetManager = require("./src/helpers/parakeet");
+const SenseVoiceManager = require("./src/helpers/sensevoice");
 const TrayManager = require("./src/helpers/tray");
 const IPCHandlers = require("./src/helpers/ipcHandlers");
 const UpdateManager = require("./src/updater");
@@ -171,6 +171,7 @@ let databaseManager = null;
 let clipboardManager = null;
 let whisperManager = null;
 let parakeetManager = null;
+let senseVoiceManager = null;
 let trayManager = null;
 let updateManager = null;
 let globeKeyManager = null;
@@ -179,7 +180,7 @@ let globeKeyAlertShown = false;
 let authBridgeServer = null;
 
 function parseAuthBridgePort() {
-  const raw = (process.env.CHORDVOX_AUTH_BRIDGE_PORT || "").trim();
+  const raw = (process.env.OPENWHISPR_AUTH_BRIDGE_PORT || "").trim();
   if (!raw) return DEFAULT_AUTH_BRIDGE_PORT;
 
   const parsed = Number(raw);
@@ -234,6 +235,7 @@ function initializeCoreManagers() {
   clipboardManager = new ClipboardManager();
   whisperManager = new WhisperManager();
   parakeetManager = new ParakeetManager();
+  senseVoiceManager = new SenseVoiceManager();
   updateManager = new UpdateManager();
   windowsKeyManager = new WindowsKeyManager();
 
@@ -244,6 +246,7 @@ function initializeCoreManagers() {
     clipboardManager,
     whisperManager,
     parakeetManager,
+    senseVoiceManager,
     windowManager,
     updateManager,
     windowsKeyManager,
@@ -283,6 +286,28 @@ function initializeDeferredManagers() {
       });
     });
   }
+}
+
+function syncAutoStartSetting() {
+  if (process.platform === "linux") {
+    return;
+  }
+
+  const desiredOpenAtLogin = environmentManager.getAutoStartEnabled();
+  const current = app.getLoginItemSettings().openAtLogin;
+  if (current === desiredOpenAtLogin) {
+    return;
+  }
+
+  app.setLoginItemSettings({
+    openAtLogin: desiredOpenAtLogin,
+    openAsHidden: true,
+  });
+
+  debugLogger.debug("Auto-start setting synchronized at startup", {
+    desiredOpenAtLogin,
+    previousOpenAtLogin: current,
+  });
 }
 
 app.on("open-url", (event, url) => {
@@ -432,6 +457,7 @@ async function startApp() {
   // Phase 1: Core managers + IPC handlers before windows
   initializeCoreManagers();
   startAuthBridgeServer();
+  syncAutoStartSetting();
 
   // Electron's file:// sends no Origin header, which Neon Auth rejects.
   session.defaultSession.webRequest.onBeforeSendHeaders(
@@ -496,6 +522,10 @@ async function startApp() {
     debugLogger.debug("Parakeet startup init error (non-fatal)", { error: err.message });
   });
 
+  senseVoiceManager.initializeAtStartup().catch((err) => {
+    debugLogger.debug("SenseVoice startup init error (non-fatal)", { error: err.message });
+  });
+
   if (process.env.REASONING_PROVIDER === "local" && process.env.LOCAL_REASONING_MODEL) {
     const modelManager = require("./src/helpers/modelManagerBridge").default;
     modelManager.prewarmServer(process.env.LOCAL_REASONING_MODEL).catch((err) => {
@@ -545,12 +575,14 @@ async function startApp() {
             setTimeout(async () => {
               if (globeKeyDownTime === pressTime && !globeKeyIsRecording) {
                 globeKeyIsRecording = true;
-                windowManager.sendStartDictation();
+                windowManager.sendStartDictation("primary");
               }
             }, MIN_HOLD_DURATION_MS);
           } else {
             windowManager.showDictationPanel();
-            windowManager.mainWindow.webContents.send("toggle-dictation");
+            windowManager.mainWindow.webContents.send("toggle-dictation", {
+              profileId: "primary",
+            });
           }
         }
       }
@@ -570,7 +602,7 @@ async function startApp() {
           globeLastStopTime = Date.now();
           if (globeKeyIsRecording) {
             globeKeyIsRecording = false;
-            windowManager.sendStopDictation();
+            windowManager.sendStopDictation("primary");
           }
         }
       }
@@ -606,12 +638,14 @@ async function startApp() {
         setTimeout(() => {
           if (rightModDownTime === pressTime && !rightModIsRecording) {
             rightModIsRecording = true;
-            windowManager.sendStartDictation();
+            windowManager.sendStartDictation("primary");
           }
         }, MIN_HOLD_DURATION_MS);
       } else {
         windowManager.showDictationPanel();
-        windowManager.mainWindow.webContents.send("toggle-dictation");
+        windowManager.mainWindow.webContents.send("toggle-dictation", {
+          profileId: "primary",
+        });
       }
     });
 
@@ -626,7 +660,7 @@ async function startApp() {
         rightModLastStopTime = Date.now();
         if (rightModIsRecording) {
           rightModIsRecording = false;
-          windowManager.sendStopDictation();
+          windowManager.sendStopDictation("primary");
         } else {
           windowManager.hideDictationPanel();
         }
@@ -636,7 +670,7 @@ async function startApp() {
     globeKeyManager.start();
 
     // Reset native key state when hotkey changes
-    ipcMain.on("hotkey-changed", (_event, _newHotkey) => {
+    ipcMain.on("hotkey-changed", (_event, _newHotkey, _profileId = "primary") => {
       globeKeyDownTime = 0;
       globeKeyIsRecording = false;
       globeLastStopTime = 0;
@@ -671,7 +705,9 @@ async function startApp() {
         windowManager.startWindowsPushToTalk();
       } else if (activationMode === "tap") {
         windowManager.showDictationPanel();
-        windowManager.mainWindow.webContents.send("toggle-dictation");
+        windowManager.mainWindow.webContents.send("toggle-dictation", {
+          profileId: "primary",
+        });
       }
     });
 
@@ -733,7 +769,8 @@ async function startApp() {
       }
     });
 
-    ipcMain.on("hotkey-changed", (_event, hotkey) => {
+    ipcMain.on("hotkey-changed", (_event, hotkey, profileId = "primary") => {
+      if (profileId !== "primary") return;
       if (!isLiveWindow(windowManager.mainWindow)) return;
       windowManager.resetWindowsPushState();
       const activationMode = windowManager.getActivationMode();
@@ -877,14 +914,14 @@ if (gotSingleInstanceLock) {
     }
     // Stop whisper server if running
     if (whisperManager) {
-      whisperManager.stopServer().catch(() => {});
+      whisperManager.stopServer().catch(() => { });
     }
     // Stop parakeet WS server if running
     if (parakeetManager) {
-      parakeetManager.stopServer().catch(() => {});
+      parakeetManager.stopServer().catch(() => { });
     }
     // Stop llama-server if running
     const modelManager = require("./src/helpers/modelManagerBridge").default;
-    modelManager.stopServer().catch(() => {});
+    modelManager.stopServer().catch(() => { });
   });
 }

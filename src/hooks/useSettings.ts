@@ -22,6 +22,8 @@ export interface TranscriptionSettings {
   whisperModel: string;
   localTranscriptionProvider: LocalTranscriptionProvider;
   parakeetModel: string;
+  senseVoiceModelPath: string;
+  senseVoiceBinaryPath: string;
   allowOpenAIFallback: boolean;
   allowLocalFallback: boolean;
   fallbackWhisperModel: string;
@@ -47,6 +49,27 @@ export interface HotkeySettings {
   activationMode: "tap" | "push";
 }
 
+export interface SecondaryHotkeyProfile {
+  useLocalWhisper: boolean;
+  localTranscriptionProvider: LocalTranscriptionProvider;
+  whisperModel: string;
+  parakeetModel: string;
+  senseVoiceModelPath: string;
+  senseVoiceBinaryPath: string;
+  allowOpenAIFallback: boolean;
+  allowLocalFallback: boolean;
+  fallbackWhisperModel: string;
+  preferredLanguage: string;
+  cloudTranscriptionMode: string;
+  cloudTranscriptionProvider: string;
+  cloudTranscriptionModel: string;
+  cloudTranscriptionBaseUrl: string;
+  useReasoningModel: boolean;
+  reasoningModel: string;
+  reasoningProvider: string;
+  cloudReasoningMode: string;
+}
+
 export interface MicrophoneSettings {
   preferBuiltInMic: boolean;
   selectedMicDeviceId: string;
@@ -54,6 +77,7 @@ export interface MicrophoneSettings {
 
 export interface ApiKeySettings {
   openaiApiKey: string;
+  openrouterApiKey: string;
   anthropicApiKey: string;
   geminiApiKey: string;
   groqApiKey: string;
@@ -65,6 +89,7 @@ export interface ApiKeySettings {
 export interface PrivacySettings {
   cloudBackupEnabled: boolean;
   telemetryEnabled: boolean;
+  transcriptionHistoryEnabled: boolean;
 }
 
 export interface ThemeSettings {
@@ -98,13 +123,35 @@ function useSettingsInternal() {
   const [localTranscriptionProvider, setLocalTranscriptionProvider] =
     useLocalStorage<LocalTranscriptionProvider>("localTranscriptionProvider", "whisper", {
       serialize: String,
-      deserialize: (value) => (value === "nvidia" ? "nvidia" : "whisper"),
+      deserialize: (value) => {
+        if (value === "nvidia") return "nvidia";
+        if (value === "sensevoice") return "sensevoice";
+        return "whisper";
+      },
     });
 
   const [parakeetModel, setParakeetModel] = useLocalStorage("parakeetModel", "", {
     serialize: String,
     deserialize: String,
   });
+
+  const [senseVoiceModelPath, setSenseVoiceModelPath] = useLocalStorage(
+    "senseVoiceModelPath",
+    "",
+    {
+      serialize: String,
+      deserialize: String,
+    }
+  );
+
+  const [senseVoiceBinaryPath, setSenseVoiceBinaryPath] = useLocalStorage(
+    "senseVoiceBinaryPath",
+    "",
+    {
+      serialize: String,
+      deserialize: String,
+    }
+  );
 
   const [allowOpenAIFallback, setAllowOpenAIFallback] = useLocalStorage(
     "allowOpenAIFallback",
@@ -236,7 +283,7 @@ function useSettingsInternal() {
 
   const [cloudTranscriptionMode, setCloudTranscriptionMode] = useLocalStorage(
     "cloudTranscriptionMode",
-    hasStoredByokKey() ? "byok" : "chordvox",
+    hasStoredByokKey() ? "byok" : "openwhispr",
     {
       serialize: String,
       deserialize: String,
@@ -245,7 +292,7 @@ function useSettingsInternal() {
 
   const [cloudReasoningMode, setCloudReasoningMode] = useLocalStorage(
     "cloudReasoningMode",
-    "chordvox",
+    "openwhispr",
     {
       serialize: String,
       deserialize: String,
@@ -349,6 +396,11 @@ function useSettingsInternal() {
     deserialize: String,
   });
 
+  const [openrouterApiKey, setOpenrouterApiKeyLocal] = useLocalStorage("openrouterApiKey", "", {
+    serialize: String,
+    deserialize: String,
+  });
+
   const [anthropicApiKey, setAnthropicApiKeyLocal] = useLocalStorage("anthropicApiKey", "", {
     serialize: String,
     deserialize: String,
@@ -378,16 +430,25 @@ function useSettingsInternal() {
     },
   });
 
-  // Privacy settings — both default to OFF
+  // Privacy settings — customer builds default these to ON except cloud backup.
   const [cloudBackupEnabled, setCloudBackupEnabled] = useLocalStorage("cloudBackupEnabled", false, {
     serialize: String,
     deserialize: (value) => value === "true",
   });
 
-  const [telemetryEnabled, setTelemetryEnabled] = useLocalStorage("telemetryEnabled", false, {
+  const [telemetryEnabled, setTelemetryEnabled] = useLocalStorage("telemetryEnabled", true, {
     serialize: String,
     deserialize: (value) => value === "true",
   });
+
+  const [transcriptionHistoryEnabled, setTranscriptionHistoryEnabled] = useLocalStorage(
+    "transcriptionHistoryEnabled",
+    true,
+    {
+      serialize: String,
+      deserialize: (value) => value !== "false",
+    }
+  );
 
   // Custom endpoint API keys - synced to .env like other keys
   const [customTranscriptionApiKey, setCustomTranscriptionApiKeyLocal] = useLocalStorage(
@@ -425,6 +486,10 @@ function useSettingsInternal() {
       if (!anthropicApiKey) {
         const envKey = await window.electronAPI.getAnthropicKey?.();
         if (envKey) setAnthropicApiKeyLocal(envKey);
+      }
+      if (!openrouterApiKey) {
+        const envKey = await window.electronAPI.getOpenRouterKey?.();
+        if (envKey) setOpenrouterApiKeyLocal(envKey);
       }
       if (!geminiApiKey) {
         const envKey = await window.electronAPI.getGeminiKey?.();
@@ -471,7 +536,16 @@ function useSettingsInternal() {
   }, 1000);
 
   const invalidateApiKeyCaches = useCallback(
-    (provider?: "openai" | "anthropic" | "gemini" | "groq" | "mistral" | "custom") => {
+    (
+      provider?:
+        | "openai"
+        | "openrouter"
+        | "anthropic"
+        | "gemini"
+        | "groq"
+        | "mistral"
+        | "custom"
+    ) => {
       if (provider) {
         getReasoningService().clearApiKeyCache(provider);
       }
@@ -497,6 +571,15 @@ function useSettingsInternal() {
       invalidateApiKeyCaches("anthropic");
     },
     [setAnthropicApiKeyLocal, invalidateApiKeyCaches]
+  );
+
+  const setOpenrouterApiKey = useCallback(
+    (key: string) => {
+      setOpenrouterApiKeyLocal(key);
+      window.electronAPI?.saveOpenRouterKey?.(key);
+      invalidateApiKeyCaches("openrouter");
+    },
+    [setOpenrouterApiKeyLocal, invalidateApiKeyCaches]
   );
 
   const setGeminiApiKey = useCallback(
@@ -561,6 +644,136 @@ function useSettingsInternal() {
     },
     [setDictationKeyLocal]
   );
+
+  const [dictationKeySecondary, setDictationKeySecondaryLocal] = useLocalStorage(
+    "dictationKeySecondary",
+    "",
+    {
+      serialize: String,
+      deserialize: String,
+    }
+  );
+
+  const setDictationKeySecondary = useCallback(
+    (key: string) => {
+      setDictationKeySecondaryLocal(key);
+      if (typeof window !== "undefined" && window.electronAPI?.notifyHotkeyChanged) {
+        window.electronAPI.notifyHotkeyChanged(key, "secondary");
+      }
+    },
+    [setDictationKeySecondaryLocal]
+  );
+
+  const [secondaryHotkeyProfile, setSecondaryHotkeyProfileRaw] = useLocalStorage<
+    SecondaryHotkeyProfile | null
+  >("secondaryHotkeyProfile", null, {
+    serialize: JSON.stringify,
+    deserialize: (value) => {
+      if (!value) return null;
+      try {
+        const parsed = JSON.parse(value);
+        if (!parsed || typeof parsed !== "object") return null;
+        return {
+          useLocalWhisper: parsed.useLocalWhisper === true,
+          localTranscriptionProvider:
+            parsed.localTranscriptionProvider === "nvidia" ||
+            parsed.localTranscriptionProvider === "sensevoice"
+              ? parsed.localTranscriptionProvider
+              : "whisper",
+          whisperModel: typeof parsed.whisperModel === "string" ? parsed.whisperModel : "base",
+          parakeetModel: typeof parsed.parakeetModel === "string" ? parsed.parakeetModel : "",
+          senseVoiceModelPath:
+            typeof parsed.senseVoiceModelPath === "string" ? parsed.senseVoiceModelPath : "",
+          senseVoiceBinaryPath:
+            typeof parsed.senseVoiceBinaryPath === "string" ? parsed.senseVoiceBinaryPath : "",
+          allowOpenAIFallback: parsed.allowOpenAIFallback === true,
+          allowLocalFallback: parsed.allowLocalFallback === true,
+          fallbackWhisperModel:
+            typeof parsed.fallbackWhisperModel === "string" ? parsed.fallbackWhisperModel : "base",
+          preferredLanguage:
+            typeof parsed.preferredLanguage === "string" ? parsed.preferredLanguage : "auto",
+          cloudTranscriptionMode:
+            typeof parsed.cloudTranscriptionMode === "string"
+              ? parsed.cloudTranscriptionMode
+              : "byok",
+          cloudTranscriptionProvider:
+            typeof parsed.cloudTranscriptionProvider === "string"
+              ? parsed.cloudTranscriptionProvider
+              : "openai",
+          cloudTranscriptionModel:
+            typeof parsed.cloudTranscriptionModel === "string"
+              ? parsed.cloudTranscriptionModel
+              : "gpt-4o-mini-transcribe",
+          cloudTranscriptionBaseUrl:
+            typeof parsed.cloudTranscriptionBaseUrl === "string"
+              ? parsed.cloudTranscriptionBaseUrl
+              : API_ENDPOINTS.TRANSCRIPTION_BASE,
+          useReasoningModel: parsed.useReasoningModel !== false,
+          reasoningModel: typeof parsed.reasoningModel === "string" ? parsed.reasoningModel : "",
+          reasoningProvider:
+            typeof parsed.reasoningProvider === "string" ? parsed.reasoningProvider : "openai",
+          cloudReasoningMode:
+            typeof parsed.cloudReasoningMode === "string"
+              ? parsed.cloudReasoningMode
+              : "openwhispr",
+        } satisfies SecondaryHotkeyProfile;
+      } catch {
+        return null;
+      }
+    },
+  });
+
+  const setSecondaryHotkeyProfile = useCallback(
+    (profile: SecondaryHotkeyProfile | null) => {
+      setSecondaryHotkeyProfileRaw(profile);
+    },
+    [setSecondaryHotkeyProfileRaw]
+  );
+
+  const captureSecondaryHotkeyProfileFromCurrent = useCallback(() => {
+    const profile: SecondaryHotkeyProfile = {
+      useLocalWhisper,
+      localTranscriptionProvider,
+      whisperModel,
+      parakeetModel,
+      senseVoiceModelPath,
+      senseVoiceBinaryPath,
+      allowOpenAIFallback,
+      allowLocalFallback,
+      fallbackWhisperModel,
+      preferredLanguage,
+      cloudTranscriptionMode,
+      cloudTranscriptionProvider,
+      cloudTranscriptionModel,
+      cloudTranscriptionBaseUrl,
+      useReasoningModel,
+      reasoningModel,
+      reasoningProvider,
+      cloudReasoningMode,
+    };
+    setSecondaryHotkeyProfileRaw(profile);
+    return profile;
+  }, [
+    useLocalWhisper,
+    localTranscriptionProvider,
+    whisperModel,
+    parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
+    allowOpenAIFallback,
+    allowLocalFallback,
+    fallbackWhisperModel,
+    preferredLanguage,
+    cloudTranscriptionMode,
+    cloudTranscriptionProvider,
+    cloudTranscriptionModel,
+    cloudTranscriptionBaseUrl,
+    useReasoningModel,
+    reasoningModel,
+    reasoningProvider,
+    cloudReasoningMode,
+    setSecondaryHotkeyProfileRaw,
+  ]);
 
   const [activationMode, setActivationModeLocal] = useLocalStorage<"tap" | "push">(
     "activationMode",
@@ -655,12 +868,22 @@ function useSettingsInternal() {
   useEffect(() => {
     if (typeof window === "undefined" || !window.electronAPI?.syncStartupPreferences) return;
 
-    const model = localTranscriptionProvider === "nvidia" ? parakeetModel : whisperModel;
+    let model = whisperModel;
+    if (localTranscriptionProvider === "nvidia") {
+      model = parakeetModel;
+    } else if (localTranscriptionProvider === "sensevoice") {
+      model = senseVoiceModelPath;
+    }
+
     window.electronAPI
       .syncStartupPreferences({
         useLocalWhisper,
         localTranscriptionProvider,
         model: model || undefined,
+        senseVoiceBinaryPath:
+          localTranscriptionProvider === "sensevoice" && senseVoiceBinaryPath
+            ? senseVoiceBinaryPath
+            : undefined,
         reasoningProvider,
         reasoningModel: reasoningProvider === "local" ? reasoningModel : undefined,
       })
@@ -676,6 +899,8 @@ function useSettingsInternal() {
     localTranscriptionProvider,
     whisperModel,
     parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
     reasoningProvider,
     reasoningModel,
   ]);
@@ -689,6 +914,10 @@ function useSettingsInternal() {
       if (settings.localTranscriptionProvider !== undefined)
         setLocalTranscriptionProvider(settings.localTranscriptionProvider);
       if (settings.parakeetModel !== undefined) setParakeetModel(settings.parakeetModel);
+      if (settings.senseVoiceModelPath !== undefined)
+        setSenseVoiceModelPath(settings.senseVoiceModelPath);
+      if (settings.senseVoiceBinaryPath !== undefined)
+        setSenseVoiceBinaryPath(settings.senseVoiceBinaryPath);
       if (settings.allowOpenAIFallback !== undefined)
         setAllowOpenAIFallback(settings.allowOpenAIFallback);
       if (settings.allowLocalFallback !== undefined)
@@ -711,6 +940,8 @@ function useSettingsInternal() {
       setWhisperModel,
       setLocalTranscriptionProvider,
       setParakeetModel,
+      setSenseVoiceModelPath,
+      setSenseVoiceBinaryPath,
       setAllowOpenAIFallback,
       setAllowLocalFallback,
       setFallbackWhisperModel,
@@ -746,12 +977,20 @@ function useSettingsInternal() {
   const updateApiKeys = useCallback(
     (keys: Partial<ApiKeySettings>) => {
       if (keys.openaiApiKey !== undefined) setOpenaiApiKey(keys.openaiApiKey);
+      if (keys.openrouterApiKey !== undefined) setOpenrouterApiKey(keys.openrouterApiKey);
       if (keys.anthropicApiKey !== undefined) setAnthropicApiKey(keys.anthropicApiKey);
       if (keys.geminiApiKey !== undefined) setGeminiApiKey(keys.geminiApiKey);
       if (keys.groqApiKey !== undefined) setGroqApiKey(keys.groqApiKey);
       if (keys.mistralApiKey !== undefined) setMistralApiKey(keys.mistralApiKey);
     },
-    [setOpenaiApiKey, setAnthropicApiKey, setGeminiApiKey, setGroqApiKey, setMistralApiKey]
+    [
+      setOpenaiApiKey,
+      setOpenrouterApiKey,
+      setAnthropicApiKey,
+      setGeminiApiKey,
+      setGroqApiKey,
+      setMistralApiKey,
+    ]
   );
 
   return {
@@ -760,6 +999,8 @@ function useSettingsInternal() {
     uiLanguage,
     localTranscriptionProvider,
     parakeetModel,
+    senseVoiceModelPath,
+    senseVoiceBinaryPath,
     allowOpenAIFallback,
     allowLocalFallback,
     fallbackWhisperModel,
@@ -777,17 +1018,22 @@ function useSettingsInternal() {
     reasoningModel,
     reasoningProvider,
     openaiApiKey,
+    openrouterApiKey,
     anthropicApiKey,
     geminiApiKey,
     groqApiKey,
     mistralApiKey,
     dictationKey,
+    dictationKeySecondary,
+    secondaryHotkeyProfile,
     theme,
     setUseLocalWhisper,
     setWhisperModel,
     setUiLanguage,
     setLocalTranscriptionProvider,
     setParakeetModel,
+    setSenseVoiceModelPath,
+    setSenseVoiceBinaryPath,
     setAllowOpenAIFallback,
     setAllowLocalFallback,
     setFallbackWhisperModel,
@@ -803,6 +1049,7 @@ function useSettingsInternal() {
     setReasoningModel,
     setReasoningProvider,
     setOpenaiApiKey,
+    setOpenrouterApiKey,
     setAnthropicApiKey,
     setGeminiApiKey,
     setGroqApiKey,
@@ -812,6 +1059,9 @@ function useSettingsInternal() {
     customReasoningApiKey,
     setCustomReasoningApiKey,
     setDictationKey,
+    setDictationKeySecondary,
+    setSecondaryHotkeyProfile,
+    captureSecondaryHotkeyProfileFromCurrent,
     setTheme,
     activationMode,
     setActivationMode,
@@ -826,7 +1076,9 @@ function useSettingsInternal() {
     cloudBackupEnabled,
     setCloudBackupEnabled,
     telemetryEnabled,
+    transcriptionHistoryEnabled,
     setTelemetryEnabled,
+    setTranscriptionHistoryEnabled,
     updateTranscriptionSettings,
     updateReasoningSettings,
     updateApiKeys,

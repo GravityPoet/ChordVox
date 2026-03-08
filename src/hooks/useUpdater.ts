@@ -17,6 +17,8 @@ interface UpdateInfo {
   releaseDate?: string;
   releaseNotes?: string;
   files?: any[];
+  manualDownloadUrl?: string | null;
+  manualOnly?: boolean;
 }
 
 interface UpdateProgress {
@@ -137,11 +139,20 @@ function registerEventListeners() {
   // Update error
   if (window.electronAPI.onUpdateError) {
     const dispose = window.electronAPI.onUpdateError((_event, error) => {
+      // Treat transient updater failures as "no update" for end users.
+      // This avoids noisy error popups when feed/signing is unavailable.
+      console.warn("Updater event error (suppressed):", error);
       updateGlobalState({
+        status: {
+          ...globalState.status,
+          updateAvailable: false,
+          updateDownloaded: false,
+        },
+        info: null,
         isChecking: false,
         isDownloading: false,
         isInstalling: false,
-        error: error instanceof Error ? error : new Error(String(error)),
+        error: null,
       });
     });
     if (dispose) cleanupFunctions.push(dispose);
@@ -215,14 +226,52 @@ export function useUpdater() {
     updateGlobalState({ isChecking: true, error: null });
     try {
       const result = await window.electronAPI.checkForUpdates();
-      updateGlobalState({ isChecking: false });
+      if (result?.updateAvailable) {
+        updateGlobalState({
+          isChecking: false,
+          status: {
+            ...globalState.status,
+            updateAvailable: true,
+            updateDownloaded: false,
+          },
+          info: {
+            version: result.version,
+            releaseDate: result.releaseDate,
+            releaseNotes:
+              typeof result.releaseNotes === "string" ? result.releaseNotes : undefined,
+            files: result.files,
+            manualDownloadUrl: result.manualDownloadUrl ?? null,
+            manualOnly: result.manualOnly === true,
+          },
+        });
+      } else {
+        updateGlobalState({
+          isChecking: false,
+          status: {
+            ...globalState.status,
+            updateAvailable: false,
+            updateDownloaded: false,
+          },
+          info: null,
+        });
+      }
       return result;
     } catch (error) {
       updateGlobalState({
         isChecking: false,
-        error: error instanceof Error ? error : new Error(String(error)),
+        status: {
+          ...globalState.status,
+          updateAvailable: false,
+          updateDownloaded: false,
+        },
+        info: null,
+        // Do not surface transient check errors to users as blocking failures.
+        error: null,
       });
-      throw error;
+      return {
+        updateAvailable: false,
+        message: "Unable to check updates right now",
+      };
     }
   }, []);
 

@@ -17,6 +17,12 @@ const BYTES_PER_SAMPLE = 4; // float32
 const MAX_SEGMENT_SECONDS = 30;
 const MAX_SEGMENT_BYTES = MAX_SEGMENT_SECONDS * SAMPLE_RATE * BYTES_PER_SAMPLE;
 const SILENCE_RMS_THRESHOLD = 0.001;
+const REQUIRED_MODEL_FILES = [
+  "encoder.int8.onnx",
+  "decoder.int8.onnx",
+  "joiner.int8.onnx",
+  "tokens.txt",
+];
 
 class ParakeetServerManager {
   constructor() {
@@ -35,24 +41,14 @@ class ParakeetServerManager {
     return getModelsDirForService("parakeet");
   }
 
+  isModelDirectoryValid(modelDir) {
+    if (!modelDir || !fs.existsSync(modelDir)) return false;
+    return REQUIRED_MODEL_FILES.every((file) => fs.existsSync(path.join(modelDir, file)));
+  }
+
   isModelDownloaded(modelName) {
     const modelDir = path.join(this.getModelsDir(), modelName);
-    const requiredFiles = [
-      "encoder.int8.onnx",
-      "decoder.int8.onnx",
-      "joiner.int8.onnx",
-      "tokens.txt",
-    ];
-
-    if (!fs.existsSync(modelDir)) return false;
-
-    for (const file of requiredFiles) {
-      if (!fs.existsSync(path.join(modelDir, file))) {
-        return false;
-      }
-    }
-
-    return true;
+    return this.isModelDirectoryValid(modelDir);
   }
 
   async _ensureWav(audioBuffer) {
@@ -86,15 +82,16 @@ class ParakeetServerManager {
   }
 
   async transcribe(audioBuffer, options = {}) {
-    const { modelName = "parakeet-tdt-0.6b-v3", language = "auto" } = options;
-
-    const modelDir = path.join(this.getModelsDir(), modelName);
-    if (!this.isModelDownloaded(modelName)) {
-      throw new Error(`Parakeet model "${modelName}" not downloaded`);
+    const { modelName = "parakeet-tdt-0.6b-v3", modelPath = "", language = "auto" } = options;
+    const resolvedModelDir = modelPath ? path.resolve(modelPath) : path.join(this.getModelsDir(), modelName);
+    const modelKey = modelPath ? `path:${resolvedModelDir.toLowerCase()}` : modelName;
+    if (!this.isModelDirectoryValid(resolvedModelDir)) {
+      throw new Error(`Parakeet model directory not found or invalid: ${resolvedModelDir}`);
     }
 
     debugLogger.debug("Parakeet transcription request", {
       modelName,
+      modelPath: modelPath || null,
       language,
       audioSize: audioBuffer?.length || 0,
       isWavFormat: isWavFormat(audioBuffer),
@@ -102,8 +99,8 @@ class ParakeetServerManager {
 
     const { wavBuffer, filesToCleanup } = await this._ensureWav(audioBuffer);
     try {
-      if (!this.wsServer.ready || this.wsServer.modelName !== modelName) {
-        await this.wsServer.start(modelName, modelDir);
+      if (!this.wsServer.ready || this.wsServer.modelName !== modelKey) {
+        await this.wsServer.start(modelKey, resolvedModelDir);
       }
 
       const samples = wavToFloat32Samples(wavBuffer);

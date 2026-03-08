@@ -60,6 +60,37 @@ class WhisperManager {
     return path.join(this.getModelsDir(), config.fileName);
   }
 
+  isLikelyCustomModelPath(value) {
+    const raw = String(value || "").trim();
+    if (!raw) return false;
+    if (raw.includes("/") || raw.includes("\\")) return true;
+    return raw.endsWith(".bin");
+  }
+
+  resolveModelSelection(modelOrPath = "base", explicitModelPath = "") {
+    const directPath = String(explicitModelPath || "").trim();
+    const raw = String(modelOrPath || "").trim() || "base";
+    const rawPath = directPath || (this.isLikelyCustomModelPath(raw) ? raw : "");
+
+    if (rawPath) {
+      const resolvedPath = path.resolve(rawPath);
+      return {
+        modelName: null,
+        modelPath: resolvedPath,
+        modelKey: `path:${resolvedPath.toLowerCase()}`,
+        modelLabel: path.basename(resolvedPath),
+      };
+    }
+
+    this.validateModelName(raw);
+    return {
+      modelName: raw,
+      modelPath: this.getModelPath(raw),
+      modelKey: raw,
+      modelLabel: raw,
+    };
+  }
+
   async initializeAtStartup(settings = {}) {
     const startTime = Date.now();
 
@@ -76,34 +107,35 @@ class WhisperManager {
         whisperModel &&
         this.serverManager.isAvailable()
       ) {
-        const modelPath = this.getModelPath(whisperModel);
+        const selection = this.resolveModelSelection(whisperModel);
+        const modelPath = selection.modelPath;
 
         if (fs.existsSync(modelPath)) {
           debugLogger.info("Pre-warming whisper-server", {
-            model: whisperModel,
+            model: selection.modelLabel,
             modelPath,
           });
 
           try {
             const serverStartTime = Date.now();
             await this.serverManager.start(modelPath);
-            this.currentServerModel = whisperModel;
+            this.currentServerModel = selection.modelKey;
 
             debugLogger.info("whisper-server pre-warmed successfully", {
-              model: whisperModel,
+              model: selection.modelLabel,
               startupTimeMs: Date.now() - serverStartTime,
               port: this.serverManager.port,
             });
           } catch (err) {
             debugLogger.warn("Server pre-warm failed (will start on first use)", {
               error: err.message,
-              model: whisperModel,
+              model: selection.modelLabel,
             });
             // Non-fatal: server will start on first transcription
           }
         } else {
           debugLogger.debug("Skipping server pre-warm: model not downloaded", {
-            model: whisperModel,
+            model: selection.modelLabel,
             modelPath,
           });
         }
@@ -253,25 +285,32 @@ class WhisperManager {
     const model = options.model || "base";
     const language = options.language || null;
     const initialPrompt = options.initialPrompt || null;
-    const modelPath = this.getModelPath(model);
+    const selection = this.resolveModelSelection(model, options.modelPath);
+    const modelPath = selection.modelPath;
 
     // Check if model exists
     if (!fs.existsSync(modelPath)) {
-      throw new Error(`Whisper model "${model}" not downloaded. Please download it from Settings.`);
+      throw new Error(
+        selection.modelName
+          ? `Whisper model "${selection.modelName}" not downloaded. Please download it from Settings.`
+          : `Whisper model file not found: ${modelPath}`
+      );
     }
 
-    return await this.transcribeViaServer(audioBlob, model, language, initialPrompt);
+    return await this.transcribeViaServer(selection, audioBlob, language, initialPrompt);
   }
 
-  async transcribeViaServer(audioBlob, model, language, initialPrompt = null) {
-    debugLogger.info("Transcription mode: SERVER", { model, language: language || "auto" });
-    const modelPath = this.getModelPath(model);
+  async transcribeViaServer(modelSelection, audioBlob, language, initialPrompt = null) {
+    const modelLabel = modelSelection?.modelLabel || modelSelection?.modelName || "custom";
+    const modelPath = modelSelection?.modelPath;
+    const modelKey = modelSelection?.modelKey || modelLabel;
+    debugLogger.info("Transcription mode: SERVER", { model: modelLabel, language: language || "auto" });
 
     // Start server if not running or if model changed
-    if (!this.serverManager.ready || this.currentServerModel !== model) {
-      debugLogger.debug("Starting/restarting whisper-server for model", { model });
+    if (!this.serverManager.ready || this.currentServerModel !== modelKey) {
+      debugLogger.debug("Starting/restarting whisper-server for model", { model: modelLabel });
       await this.serverManager.start(modelPath);
-      this.currentServerModel = model;
+      this.currentServerModel = modelKey;
     }
 
     // Convert audioBlob to Buffer if needed
@@ -296,7 +335,7 @@ class WhisperManager {
 
     debugLogger.logWhisperPipeline("transcribeViaServer - sending to server", {
       bufferSize: audioBuffer.length,
-      model,
+      model: modelLabel,
       language,
       port: this.serverManager.port,
     });
@@ -454,13 +493,21 @@ class WhisperManager {
     return { success: false, error: "No active download to cancel" };
   }
 
-  async checkModelStatus(modelName) {
-    const modelPath = this.getModelPath(modelName);
+  async checkModelStatus(modelName, explicitModelPath = "") {
+    let selection;
+    try {
+      selection = this.resolveModelSelection(modelName, explicitModelPath);
+    } catch {
+      return { model: modelName, downloaded: false, success: true };
+    }
+
+    const modelPath = selection.modelPath;
+    const modelLabel = selection.modelName || selection.modelLabel;
 
     if (fs.existsSync(modelPath)) {
       const stats = await fsPromises.stat(modelPath);
       return {
-        model: modelName,
+        model: modelLabel,
         downloaded: true,
         path: modelPath,
         size_bytes: stats.size,
@@ -469,7 +516,7 @@ class WhisperManager {
       };
     }
 
-    return { model: modelName, downloaded: false, success: true };
+    return { model: modelLabel, downloaded: false, success: true };
   }
 
   async listWhisperModels() {

@@ -39,6 +39,99 @@
       "descriptionKey": "models.descriptions.parakeet.parakeet_tdt_0_6b_v3"
     }
   },
+  "senseVoiceModels": {
+    "sense-voice-small-q4_k": {
+      "name": "SenseVoice Small Q4_K",
+      "description": "Best balance of speed and quality",
+      "size": "182MB",
+      "sizeMb": 182,
+      "expectedSizeBytes": 182278688,
+      "fileName": "sense-voice-small-q4_k.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-q4_k.gguf",
+      "recommended": true
+    },
+    "sense-voice-small-q4_1": {
+      "name": "SenseVoice Small Q4_1",
+      "description": "Improved Q4 quality with moderate size",
+      "size": "196MB",
+      "sizeMb": 196,
+      "expectedSizeBytes": 195992096,
+      "fileName": "sense-voice-small-q4_1.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-q4_1.gguf"
+    },
+    "sense-voice-small-q5_0": {
+      "name": "SenseVoice Small Q5_0",
+      "description": "Higher accuracy, slightly slower",
+      "size": "210MB",
+      "sizeMb": 210,
+      "expectedSizeBytes": 209705504,
+      "fileName": "sense-voice-small-q5_0.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-q5_0.gguf"
+    },
+    "sense-voice-small-q6_k": {
+      "name": "SenseVoice Small Q6_K",
+      "description": "High quality local transcription",
+      "size": "239MB",
+      "sizeMb": 239,
+      "expectedSizeBytes": 238846496,
+      "fileName": "sense-voice-small-q6_k.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-q6_k.gguf"
+    },
+    "sense-voice-small-q8_0": {
+      "name": "SenseVoice Small Q8_0",
+      "description": "Maximum quality quantized model",
+      "size": "292MB",
+      "sizeMb": 292,
+      "expectedSizeBytes": 291985952,
+      "fileName": "sense-voice-small-q8_0.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-q8_0.gguf"
+    },
+    "sense-voice-small-fp16": {
+      "name": "SenseVoice Small FP16",
+      "description": "Full precision baseline",
+      "size": "470MB",
+      "sizeMb": 470,
+      "expectedSizeBytes": 470292448,
+      "fileName": "sense-voice-small-fp16.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-fp16.gguf"
+    },
+    "sense-voice-small-fp32": {
+      "name": "SenseVoice Small FP32",
+      "description": "Highest precision, largest size",
+      "size": "937MB",
+      "sizeMb": 937,
+      "expectedSizeBytes": 936516064,
+      "fileName": "sense-voice-small-fp32.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-fp32.gguf"
+    },
+    "sense-voice-small-q3_k": {
+      "name": "SenseVoice Small Q3_K",
+      "description": "Smaller model for low-resource devices",
+      "size": "153MB",
+      "sizeMb": 153,
+      "expectedSizeBytes": 153137696,
+      "fileName": "sense-voice-small-q3_k.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-q3_k.gguf"
+    },
+    "sense-voice-small-q4_0": {
+      "name": "SenseVoice Small Q4_0",
+      "description": "Compact model with solid quality",
+      "size": "182MB",
+      "sizeMb": 182,
+      "expectedSizeBytes": 182278688,
+      "fileName": "sense-voice-small-q4_0.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-q4_0.gguf"
+    },
+    "sense-voice-small-q5_k": {
+      "name": "SenseVoice Small Q5_K",
+      "description": "Q5 quantization with strong accuracy",
+      "size": "210MB",
+      "sizeMb": 210,
+      "expectedSizeBytes": 209705504,
+      "fileName": "sense-voice-small-q5_k.gguf",
+      "downloadUrl": "https://huggingface.co/lovemefan/sense-voice-gguf/resolve/main/sense-voice-small-q5_k.gguf"
+    }
+  },
   "whisperModels": {
     "tiny": {
       "name": "Tiny",
@@ -203,10 +296,10 @@
       "name": "Anthropic",
       "models": [
         {
-          "id": "claude-sonnet-4-6",
-          "name": "Claude Sonnet 4.6",
+          "id": "claude-sonnet-4-5",
+          "name": "Claude Sonnet 4.5",
           "description": "Balanced performance",
-          "descriptionKey": "models.descriptions.cloud.anthropic_claude_sonnet_4_6"
+          "descriptionKey": "models.descriptions.cloud.anthropic_claude_sonnet_4_5"
         },
         {
           "id": "claude-haiku-4-5",
@@ -215,10 +308,10 @@
           "descriptionKey": "models.descriptions.cloud.anthropic_claude_haiku_4_5"
         },
         {
-          "id": "claude-opus-4-6",
-          "name": "Claude Opus 4.6",
+          "id": "claude-opus-4-5",
+          "name": "Claude Opus 4.5",
           "description": "Most capable Claude model",
-          "descriptionKey": "models.descriptions.cloud.anthropic_claude_opus_4_6"
+          "descriptionKey": "models.descriptions.cloud.anthropic_claude_opus_4_5"
         }
       ]
     },
@@ -227,10 +320,10 @@
       "name": "Google Gemini",
       "models": [
         {
-          "id": "gemini-3.1-pro-preview",
-          "name": "Gemini 3.1 Pro",
+          "id": "gemini-3-pro-preview",
+          "name": "Gemini 3 Pro",
           "description": "Next-gen flagship model for complex reasoning",
-          "descriptionKey": "models.descriptions.cloud.gemini_gemini_3_1_pro_preview"
+          "descriptionKey": "models.descriptions.cloud.gemini_gemini_3_pro_preview"
         },
         {
           "id": "gemini-3-flash-preview",
@@ -294,6 +387,11 @@
           "descriptionKey": "models.descriptions.cloud.groq_gemma2_9b_it"
         }
       ]
+    },
+    {
+      "id": "openrouter",
+      "name": "OpenRouter",
+      "models": []
     }
   ],
   "localProviders": [
@@ -538,7 +636,7 @@
       ]
     }
   ],
-  "chordvoxCloudModels": {
+  "openwhisprCloudModels": {
     "tiers": [
       {
         "id": "fast",

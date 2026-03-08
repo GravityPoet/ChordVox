@@ -1,5 +1,8 @@
-import { Globe, Download, Trash2, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Globe, Download, Trash2, X, ChevronDown, ChevronUp, Search } from "lucide-react";
 import { Button } from "./button";
+import { Input } from "./input";
 import type { ColorScheme } from "../../utils/modelPickerStyles";
 
 export interface ModelCardOption {
@@ -25,6 +28,8 @@ interface ModelCardListProps {
   onDelete?: (modelId: string) => void;
   onCancelDownload?: () => void;
   isCancelling?: boolean;
+  enableSearch?: boolean;
+  noSearchResultsText?: string;
 }
 
 const COLOR_CONFIG: Record<
@@ -64,21 +69,90 @@ export default function ModelCardList({
   onDelete,
   onCancelDownload,
   isCancelling = false,
+  enableSearch = false,
+  noSearchResultsText,
 }: ModelCardListProps) {
+  const { t } = useTranslation();
   const styles = COLOR_CONFIG[colorScheme];
   const isLocalMode = Boolean(onDownload);
+  const [expanded, setExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  if (models.length === 0) {
+  const COLLAPSE_LIMIT = 20;
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+  const hasSearchQuery = enableSearch && normalizedSearchQuery.length > 0;
+
+  const filteredModels = useMemo(() => {
+    if (!hasSearchQuery) return models;
+
+    return models.filter((model) =>
+      [model.value, model.label, model.description]
+        .filter(Boolean)
+        .some((value) => value?.toLowerCase().includes(normalizedSearchQuery))
+    );
+  }, [hasSearchQuery, models, normalizedSearchQuery]);
+
+  const canCollapse = !hasSearchQuery && filteredModels.length > COLLAPSE_LIMIT;
+
+  const displayedModels = useMemo(() => {
+    if (!canCollapse || expanded) return filteredModels;
+
+    const initialModels = filteredModels.slice(0, COLLAPSE_LIMIT);
+    if (!selectedModel || initialModels.some((model) => model.value === selectedModel)) {
+      return initialModels;
+    }
+
+    const selected = filteredModels.find((model) => model.value === selectedModel);
+    if (!selected) return initialModels;
+
+    return [selected, ...initialModels.slice(0, COLLAPSE_LIMIT - 1)];
+  }, [canCollapse, expanded, filteredModels, selectedModel]);
+
+  if (displayedModels.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground py-2">
-        {isLocalMode ? "No models available for this provider" : "No models available"}
-      </p>
+      <div className={`space-y-2 ${className}`}>
+        {enableSearch && (
+          <div className="relative">
+            <Search
+              size={14}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50"
+            />
+            <Input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={t("languageSelector.searchPlaceholder")}
+              className="h-9 pl-9 text-sm"
+            />
+          </div>
+        )}
+        <p className="text-sm text-muted-foreground py-2">
+          {hasSearchQuery
+            ? noSearchResultsText || t("common.noMatchingModels")
+            : isLocalMode
+              ? "No models available for this provider"
+              : "No models available"}
+        </p>
+      </div>
     );
   }
 
   return (
     <div className={`space-y-0.5 ${className}`}>
-      {models.map((model) => {
+      {enableSearch && (
+        <div className="relative pb-2">
+          <Search
+            size={14}
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50"
+          />
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t("languageSelector.searchPlaceholder")}
+            className="h-9 pl-9 text-sm"
+          />
+        </div>
+      )}
+      {displayedModels.map((model) => {
         const isSelected = selectedModel === model.value;
         const isDownloaded = model.isDownloaded;
         const isDownloading = model.isDownloading;
@@ -125,7 +199,7 @@ export default function ModelCardList({
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-primary via-primary to-primary/80 rounded-l-md" />
             )}
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 min-w-0">
               {/* Status dot with LED glow */}
               <div
                 className={`w-1.5 h-1.5 rounded-full shrink-0 ${getStatusDotClass()} ${
@@ -149,15 +223,23 @@ export default function ModelCardList({
                 <Globe className="w-3.5 h-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
               )}
 
-              {/* Model info - inline */}
-              <span className="text-sm font-semibold text-foreground truncate tracking-tight">
-                {model.label}
-              </span>
-              {model.description && (
-                <span className="text-[11px] text-muted-foreground/50 tabular-nums shrink-0">
-                  {model.description}
+              {/* Model info - keep primary label visible; truncate description first */}
+              <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                <span
+                  title={model.label}
+                  className="text-sm font-semibold text-foreground tracking-tight truncate min-w-[8rem] max-w-[60%]"
+                >
+                  {model.label}
                 </span>
-              )}
+                {model.description && (
+                  <span
+                    title={model.description}
+                    className="text-[11px] text-muted-foreground/50 tabular-nums min-w-0 flex-1 truncate"
+                  >
+                    {model.description}
+                  </span>
+                )}
+              </div>
 
               {/* Recommended badge */}
               {model.recommended && (
@@ -225,6 +307,30 @@ export default function ModelCardList({
           </div>
         );
       })}
+
+      {canCollapse && (
+        <div className="pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setExpanded((prev) => !prev)}
+            className="w-full text-xs"
+          >
+            {expanded ? (
+              <>
+                <ChevronUp size={14} className="mr-1" />
+                {t("common.less")}
+              </>
+            ) : (
+              <>
+                <ChevronDown size={14} className="mr-1" />
+                {t("common.more")} ({filteredModels.length})
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

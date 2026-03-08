@@ -174,6 +174,7 @@
     "hold": "Halten",
     "less": "Weniger",
     "more": "Mehr",
+    "noMatchingModels": "Keine passenden Modelle gefunden",
     "private": "Privat",
     "tap": "Tippen"
   },
@@ -754,7 +755,7 @@
       "reset": "Zurücksetzen",
       "save": "Speichern"
     },
-    "defaultTestInput": "Hey Whispr, wie ist das Wetter heute?",
+    "defaultTestInput": "Hi ChordVox, wie ist das Wetter heute?",
     "dialogs": {
       "reset": {
         "description": "Der Prompt wurde auf den Standardwert zurückgesetzt.",
@@ -794,7 +795,7 @@
       "none": "Keine",
       "outputLabel": "Ausgabe",
       "processing": "Verarbeitung...",
-      "chordvoxCloud": "ChordVox Cloud",
+      "openwhisprCloud": "ChordVox Cloud",
       "providerLabel": "Anbieter",
       "run": "Test ausführen"
     },
@@ -980,8 +981,8 @@
       "description": "Bereinigt Transkriptionen, verarbeitet Befehle und korrigiert Fehler unter Beibehaltung Ihres Stils.",
       "enableTextCleanup": "Textbereinigung aktivieren",
       "enableTextCleanupDescription": "KI verbessert die Transkriptionsqualität",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "Funktioniert sofort. Keine Konfiguration nötig.",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "Funktioniert sofort. Keine Konfiguration nötig.",
       "title": "KI-Textverbesserung",
       "toasts": {
         "switchedCloud": {
@@ -1169,8 +1170,8 @@
       "customSetup": "Benutzerdefinierte Einrichtung",
       "customSetupDescription": "Verwenden Sie Ihren eigenen Anbieter und API-Schlüssel.",
       "description": "Wählen Sie, wie ChordVox Ihre Stimme transkribiert",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "Funktioniert sofort. Keine Konfiguration nötig.",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "Funktioniert sofort. Keine Konfiguration nötig.",
       "title": "Sprache-zu-Text",
       "toasts": {
         "switchedCloud": {

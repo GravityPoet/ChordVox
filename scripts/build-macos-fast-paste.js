@@ -15,7 +15,7 @@ const swiftSource = path.join(projectRoot, "resources", "macos-fast-paste.swift"
 const outputDir = path.join(projectRoot, "resources", "bin");
 const outputBinary = path.join(outputDir, "macos-fast-paste");
 const hashFile = path.join(outputDir, ".macos-fast-paste.hash");
-const moduleCacheDir = path.join(outputDir, ".swift-module-cache");
+const moduleCacheDir = "/tmp/swift-module-cache-paste";
 
 function log(message) {
   console.log(`[fast-paste] ${message}`);
@@ -92,10 +92,10 @@ const compileArgs = [
   outputBinary,
 ];
 
-let result = attemptCompile("xcrun", ["swiftc", ...compileArgs]);
+let result = attemptCompile("swiftc", compileArgs);
 
 if (result.status !== 0) {
-  result = attemptCompile("swiftc", compileArgs);
+  result = attemptCompile("xcrun", ["swiftc", ...compileArgs]);
 }
 
 if (result.status !== 0) {

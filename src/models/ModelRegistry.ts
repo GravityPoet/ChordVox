@@ -93,8 +93,23 @@ export interface ParakeetModelInfo {
 
 export type ParakeetModelsMap = Record<string, ParakeetModelInfo>;
 
+export interface SenseVoiceModelInfo {
+  name: string;
+  description: string;
+  descriptionKey?: string;
+  size: string;
+  sizeMb: number;
+  expectedSizeBytes: number;
+  fileName: string;
+  downloadUrl: string;
+  recommended?: boolean;
+}
+
+export type SenseVoiceModelsMap = Record<string, SenseVoiceModelInfo>;
+
 interface ModelRegistryData {
   parakeetModels: ParakeetModelsMap;
+  senseVoiceModels: SenseVoiceModelsMap;
   whisperModels: WhisperModelsMap;
   transcriptionProviders: TranscriptionProviderData[];
   cloudProviders: CloudProviderData[];
@@ -251,12 +266,25 @@ export function getReasoningModelLabel(modelId: string): string {
 }
 
 export function getModelProvider(modelId: string): string {
-  // When in ChordVox cloud mode, route reasoning through the cloud API
+  // When in OpenWhispr cloud mode, route reasoning through the cloud API
   if (typeof localStorage !== "undefined") {
     const cloudMode = localStorage.getItem("cloudReasoningMode");
     const isSignedIn = localStorage.getItem("isSignedIn") === "true";
-    if (cloudMode === "chordvox" && isSignedIn) {
-      return "chordvox";
+    if (cloudMode === "openwhispr" && isSignedIn) {
+      return "openwhispr";
+    }
+  }
+
+  // If the user explicitly selected "bedrock" as their provider, trust that selection.
+  // Bedrock hosts many third-party models (e.g. moonshotai.kimi-k2.5, nvidia.nemotron-*)
+  // whose IDs don't match any hardcoded pattern.
+  if (typeof localStorage !== "undefined") {
+    const explicitProvider = localStorage.getItem("reasoningProvider");
+    if (explicitProvider === "bedrock") {
+      return "bedrock";
+    }
+    if (explicitProvider === "openrouter") {
+      return "openrouter";
     }
   }
 
@@ -267,6 +295,17 @@ export function getModelProvider(modelId: string): string {
     if (modelId.includes("gemini") && !modelId.includes("gemma")) return "gemini";
     if ((modelId.includes("gpt-4") || modelId.includes("gpt-5")) && !modelId.includes("gpt-oss"))
       return "openai";
+    // Bedrock model IDs: us.anthropic.claude-*, amazon.nova-*, us.meta.llama-*, etc.
+    if (
+      modelId.includes("amazon.") ||
+      modelId.includes("us.anthropic.") ||
+      modelId.includes("us.meta.") ||
+      modelId.includes("us.amazon.") ||
+      modelId.includes("cohere.") ||
+      modelId.includes("ai21.") ||
+      modelId.includes("stability.")
+    )
+      return "bedrock";
     if (
       modelId.includes("qwen/") ||
       modelId.includes("openai/") ||
@@ -335,6 +374,16 @@ export function getParakeetModelInfo(modelId: string): ParakeetModelInfo | undef
 }
 
 export const PARAKEET_MODEL_INFO = modelData.parakeetModels;
+
+export function getSenseVoiceModels(): SenseVoiceModelsMap {
+  return modelData.senseVoiceModels;
+}
+
+export function getSenseVoiceModelInfo(modelId: string): SenseVoiceModelInfo | undefined {
+  return modelData.senseVoiceModels[modelId];
+}
+
+export const SENSEVOICE_MODEL_INFO = modelData.senseVoiceModels;
 
 export function getWhisperModelConfig(modelId: string): WhisperModelConfig | null {
   const modelInfo = modelData.whisperModels[modelId];

@@ -174,6 +174,7 @@
     "hold": "按住",
     "less": "收起",
     "more": "展开",
+    "noMatchingModels": "未找到匹配的模型",
     "private": "隐私",
     "tap": "点按"
   },
@@ -308,6 +309,7 @@
       "queryPrefix": "我们将查询",
       "querySuffix": "获取可用模型。",
       "modelsReloadHint": "当你离开 URL 输入框或点击\u201c应用并刷新\u201d时，模型列表将重新加载。",
+      "bedrockEndpointHint": "默认根据 Region 自动生成，自定义端点可用于 VPC Endpoint 等场景。",
       "enterEndpoint": "请在上方输入端点 URL 以加载模型。",
       "fetchingModels": "正在从端点获取模型列表...",
       "noModels": "未返回任何模型，请检查端点 URL。",
@@ -547,10 +549,59 @@
       "label": "Debug 模式"
     },
     "description": "捕获详细日志以帮助诊断问题",
+    "localOnlyNotice": "日志仅保存在本机，不会自动上传。",
     "openLogsFolder": "打开日志文件夹",
     "performanceNote": {
       "description": "Debug 日志会持续写入磁盘，可能略微影响性能。不排查问题时请关闭。",
       "label": "注意"
+    },
+    "trace": {
+      "clear": "清空",
+      "description": "查看每次快捷键触发后，转录/润色/粘贴是否成功以及具体错误。",
+      "emptyEvents": "选择左侧一条记录查看详细事件",
+      "emptySessions": "暂无调用记录",
+      "errorPrefix": "错误",
+      "eventLabel": "事件详情",
+      "models": {
+        "reasoning": "润色模型",
+        "transcription": "转录模型"
+      },
+      "phases": {
+        "paste": "粘贴",
+        "reasoning": "润色",
+        "recording": "录音",
+        "session": "会话",
+        "transcription": "转录"
+      },
+      "refresh": "刷新",
+      "runId": "运行ID",
+      "sessionLabel": "调用记录",
+      "showingLatest": "最多显示最近 {{count}} 条记录",
+      "startedAt": "开始时间",
+      "status": {
+        "cancelled": "已取消",
+        "error": "失败",
+        "skipped": "已跳过",
+        "start": "进行中",
+        "success": "成功",
+        "unknown": "未知"
+      },
+      "title": "调用诊断",
+      "toasts": {
+        "clearFailed": {
+          "description": "调用记录清空失败，请重试。",
+          "title": "清空失败"
+        },
+        "cleared": {
+          "description": "调用记录已从本地内存清除。",
+          "title": "已清空调用记录"
+        },
+        "loadFailed": {
+          "description": "请稍后重试。",
+          "title": "无法加载调用记录"
+        }
+      },
+      "updatedAt": "最近更新时间"
     },
     "sharing": {
       "footer": "日志不包含 API Key 或敏感数据",
@@ -754,7 +805,7 @@
       "reset": "重置",
       "save": "保存"
     },
-    "defaultTestInput": "你好 Whispr，今天天气怎么样？",
+    "defaultTestInput": "你好 ChordVox，今天天气怎么样？",
     "dialogs": {
       "reset": {
         "description": "提示词已重置为默认值。",
@@ -794,7 +845,7 @@
       "none": "无",
       "outputLabel": "输出",
       "processing": "处理中...",
-      "chordvoxCloud": "ChordVox Cloud",
+      "openwhisprCloud": "ChordVox Cloud",
       "providerLabel": "服务商",
       "run": "运行测试"
     },
@@ -953,6 +1004,78 @@
         "description": "无限转录、优先处理等更多功能。",
         "title": "免费试用 Pro 版 7 天"
       },
+      "desktopLicense": {
+        "title": "桌面授权",
+        "descriptionConfigured": "当前构建会通过你的授权 API 校验桌面授权密钥。",
+        "descriptionNotConfigured": "授权服务尚未就绪，请联系技术支持。",
+        "currentStatusLabel": "当前状态",
+        "currentStatusDescription": "输入付费授权密钥即可在本机解锁商业使用。",
+        "currentStatusActiveDescription": "本机已激活，可正常进行商业使用。",
+        "currentStatusTrialDescription": "试用中，剩余 {{days}} 天后需要输入授权码。",
+        "currentStatusTrialExpiredDescription": "试用已结束，请输入付费授权码继续使用。",
+        "currentStatusNotConfigured": "当前版本尚未连接授权服务，请联系技术支持。",
+        "licenseApiUrlLabel": "授权 API 地址",
+        "licenseApiUrlPlaceholder": "https://license.your-domain.com",
+        "licenseApiUrlDescription": "这里配置一次后，用户只需输入授权码即可在应用内激活。",
+        "inputPlaceholder": "输入授权密钥",
+        "activatedHint": "当前设备已激活。仅在需要更换授权码时点击“更换授权码”。",
+        "actions": {
+          "activate": "激活",
+          "activating": "激活中",
+          "validate": "校验",
+          "checking": "检查中",
+          "clear": "清除",
+          "changeKey": "更换授权码",
+          "save": "保存",
+          "saving": "保存中"
+        },
+        "statusLabels": {
+          "active": "已激活",
+          "trial": "试用中",
+          "offlineGrace": "离线宽限",
+          "expired": "已过期",
+          "invalid": "无效",
+          "notActivated": "未激活"
+        },
+        "meta": {
+          "plan": "计划：{{plan}}",
+          "expires": "到期时间：{{date}}",
+          "lastCheck": "上次检查：{{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "移除已保存的授权？",
+          "removeDescription": "移除后本机会回到未授权状态，直到你再次激活。",
+          "removeConfirm": "移除"
+        },
+        "toasts": {
+          "keyRequiredTitle": "需要授权密钥",
+          "keyRequiredDescription": "请先输入授权密钥再激活。",
+          "activatedTitle": "授权已激活",
+          "activatedDescription": "这台设备已完成激活。",
+          "activationFailedTitle": "激活失败",
+          "activationFailedDescription": "该授权密钥无法激活。",
+          "activationLimitDescription": "该授权码仅支持 1 台设备。如需换机，请联系技术支持重置旧设备激活。",
+          "serverNotReadyDescription": "授权服务尚未就绪，请联系技术支持。",
+          "deviceNotActivatedDescription": "该授权码尚未在本机激活。",
+          "revokedDescription": "该授权码已被撤销，请联系技术支持。",
+          "expiredDescription": "该授权码已过期。",
+          "notActiveDescription": "该授权码当前未激活。",
+          "activationUnexpectedError": "激活授权时发生未知错误。",
+          "validatedTitle": "授权校验通过",
+          "validateFailedTitle": "授权校验失败",
+          "validatedDescription": "授权有效。",
+          "invalidDescription": "授权无效。",
+          "validateUnexpectedError": "检查授权状态时发生未知错误。",
+          "removedTitle": "授权已移除",
+          "removedDescription": "已清除本机保存的授权状态。",
+          "removeFailedTitle": "无法移除授权",
+          "removeFailedDescription": "移除本机授权时发生未知错误。",
+          "licenseApiSavedTitle": "授权 API 已保存",
+          "licenseApiSavedDescription": "后续授权激活将使用新的 API 地址。",
+          "licenseApiSaveFailedTitle": "无法保存授权 API",
+          "licenseApiSaveFailedDescription": "请检查地址后重试。"
+        }
+      },
       "user": "用户",
       "wordsRemaining": "剩余 {{remaining}} 个词"
     },
@@ -980,8 +1103,8 @@
       "description": "整理转录文本、处理指令、修正错误，同时保留你的语气风格。",
       "enableTextCleanup": "启用文本整理",
       "enableTextCleanupDescription": "AI 提升转录质量",
-      "chordvoxCloud": "ChordVox 云端",
-      "chordvoxCloudDescription": "开箱即用，无需配置。",
+      "openwhisprCloud": "ChordVox 云端",
+      "openwhisprCloudDescription": "开箱即用，无需配置。",
       "title": "AI 文本增强",
       "toasts": {
         "switchedCloud": {
@@ -1011,6 +1134,23 @@
         "title": "删除已下载的模型？"
       },
       "removing": "正在删除...",
+      "settingsTransfer": {
+        "description": "导出当前配置到文件，或从文件恢复配置",
+        "export": "导出设置",
+        "exportFailedDescription": "导出配置失败，请重试。",
+        "exportFailedTitle": "导出失败",
+        "exportSuccessDescription": "配置已导出到：{{path}}",
+        "exportSuccessTitle": "导出成功",
+        "import": "导入设置",
+        "importConfirmButton": "导入并覆盖",
+        "importConfirmDescription": "这会覆盖当前设置，并在完成后自动重启应用。",
+        "importConfirmTitle": "确认导入设置？",
+        "importFailedDescription": "导入配置失败，请确认文件格式正确。",
+        "importFailedTitle": "导入失败",
+        "importSuccessDescription": "配置已导入，应用即将重启。",
+        "importSuccessTitle": "导入成功",
+        "title": "设置备份"
+      },
       "resetAll": {
         "confirmText": "删除所有数据",
         "description": "这将永久删除所有设置、转录记录和缓存数据。重置后应用将重新加载。",
@@ -1062,6 +1202,21 @@
       "hotkey": {
         "activationMode": "激活模式",
         "description": "用于开始和停止语音听写的组合键",
+        "secondary": {
+          "title": "方案 2 快捷键（独立模型/润色）",
+          "profileSavedState": "已保存方案 2 配置",
+          "profileUnsavedState": "未保存方案 2 配置（先调好模型，再点右侧按钮）",
+          "saveCurrentAsProfile2": "保存当前为方案 2",
+          "savedTitle": "副快捷键已保存",
+          "savedDescription": "方案 2 的快捷键已更新。",
+          "profileSavedTitle": "方案 2 已保存",
+          "profileSavedDescription": "当前转写与 AI 润色配置已保存到副快捷键方案。",
+          "registerFailed": "副快捷键注册失败，请更换一个快捷键。",
+          "registerRetry": "副快捷键注册失败，请重试。",
+          "globeNotSupported": "副快捷键暂不支持 Globe/Fn 键。",
+          "rightModifierNotSupported": "副快捷键暂不支持右侧单修饰键。",
+          "modifiersOnlyNotSupported": "副快捷键暂不支持纯修饰键组合。"
+        },
         "title": "听写快捷键"
       },
       "microphone": {
@@ -1077,7 +1232,7 @@
         "launchAtLogin": "登录时启动",
         "launchAtLoginDescription": "登录时自动启动 ChordVox",
         "autoCheckUpdate": "自动检查更新",
-        "autoCheckUpdateDescription": "启动时自动检测并下载最新版本",
+        "autoCheckUpdateDescription": "启动时自动检测新版本（不会自动安装）",
         "title": "启动"
       },
       "updates": {
@@ -1096,7 +1251,7 @@
             "title": "即将完成"
           },
           "checkFailed": {
-            "description": "检查更新时出错，请稍后重试。",
+            "description": "检查更新时出错，请稍后重试。{{message}}",
             "title": "无法检查更新"
           },
           "downloadFailed": {
@@ -1116,6 +1271,11 @@
             "description": "你已经是最新版本。",
             "title": "无可用更新"
           },
+          "manualUpdateAvailable": {
+            "confirmText": "打开下载页面",
+            "description": "检测到新版本 v{{version}}。当前环境无法自动下载安装，请打开 Release 页面手动下载。",
+            "title": "检测到新版本"
+          },
           "updateAvailable": {
             "description": "有可用更新：v{{version}}",
             "title": "有可用更新"
@@ -1127,6 +1287,7 @@
         },
         "downloadUpdate": "下载更新 {{version}}",
         "downloading": "下载中... {{progress}}%",
+        "openReleasePage": "打开下载页面",
         "installAndRestart": "安装并重启",
         "latestVersion": "你已经是最新版本",
         "newVersion": "有更新的版本可用",
@@ -1158,10 +1319,12 @@
     "privacy": {
       "cloudBackup": "云端备份",
       "cloudBackupDescription": "将转录记录保存到云端，确保永不丢失。",
-      "description": "控制哪些数据会离开你的设备。默认全部关闭。",
+      "description": "控制日志、转录记录和分析行为。你可以随时按需关闭。",
+      "transcriptionHistory": "保存转录记录",
+      "transcriptionHistoryDescription": "关闭后仅执行转写与粘贴，不再保存到转录记录列表。",
       "title": "隐私",
       "usageAnalytics": "使用分析",
-      "usageAnalyticsDescription": "通过分享匿名性能数据帮助我们改进 ChordVox。我们绝不发送转录内容——仅发送计时和错误数据。"
+      "usageAnalyticsDescription": "当前版本未启用远程使用分析。该开关仅保存在本机，不会上传任何转录或性能数据。"
     },
     "prompts": {
       "description": "查看、自定义和测试用于文本整理和指令识别的统一系统提示词",
@@ -1171,8 +1334,8 @@
       "customSetup": "自定义设置",
       "customSetupDescription": "使用你自己的服务商和 API Key。",
       "description": "选择 ChordVox 转录语音的方式",
-      "chordvoxCloud": "ChordVox 云端",
-      "chordvoxCloudDescription": "开箱即用，无需配置。",
+      "openwhisprCloud": "ChordVox 云端",
+      "openwhisprCloudDescription": "开箱即用，无需配置。",
       "title": "语音转文字",
       "toasts": {
         "switchedCloud": {

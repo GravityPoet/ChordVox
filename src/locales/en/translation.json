@@ -174,6 +174,7 @@
     "hold": "Hold",
     "less": "Less",
     "more": "More",
+    "noMatchingModels": "No matching models found",
     "private": "Private",
     "tap": "Tap"
   },
@@ -308,6 +309,7 @@
       "queryPrefix": "We'll query",
       "querySuffix": "for available models.",
       "modelsReloadHint": "Models will reload when you click away from the URL field or click \"Apply & Refresh\".",
+      "bedrockEndpointHint": "Auto-generated from Region by default. Use a custom endpoint for VPC Endpoints and similar setups.",
       "enterEndpoint": "Enter an endpoint URL above to load models.",
       "fetchingModels": "Fetching model list from endpoint...",
       "noModels": "No models returned. Check your endpoint URL.",
@@ -547,10 +549,59 @@
       "label": "Debug mode"
     },
     "description": "Capture detailed logs to help diagnose issues",
+    "localOnlyNotice": "Logs are stored locally on this device and are never uploaded automatically.",
     "openLogsFolder": "Open Logs Folder",
     "performanceNote": {
       "description": "Debug logging writes to disk continuously and may slightly affect performance. Disable when not troubleshooting.",
       "label": "Note"
+    },
+    "trace": {
+      "clear": "Clear",
+      "description": "Check whether transcription, AI refinement, and paste succeeded for each hotkey run, and see exact errors.",
+      "emptyEvents": "Select a run on the left to view detailed events",
+      "emptySessions": "No call traces yet",
+      "errorPrefix": "Error",
+      "eventLabel": "Event details",
+      "models": {
+        "reasoning": "Refinement model",
+        "transcription": "Transcription model"
+      },
+      "phases": {
+        "paste": "Paste",
+        "reasoning": "Refinement",
+        "recording": "Recording",
+        "session": "Session",
+        "transcription": "Transcription"
+      },
+      "refresh": "Refresh",
+      "runId": "Run ID",
+      "sessionLabel": "Call traces",
+      "showingLatest": "Showing up to {{count}} recent runs",
+      "startedAt": "Started",
+      "status": {
+        "cancelled": "Cancelled",
+        "error": "Failed",
+        "skipped": "Skipped",
+        "start": "In progress",
+        "success": "Success",
+        "unknown": "Unknown"
+      },
+      "title": "Call Diagnostics",
+      "toasts": {
+        "clearFailed": {
+          "description": "Failed to clear call traces. Please try again.",
+          "title": "Clear failed"
+        },
+        "cleared": {
+          "description": "Call traces were cleared from local memory.",
+          "title": "Call traces cleared"
+        },
+        "loadFailed": {
+          "description": "Please try again in a moment.",
+          "title": "Couldn't load call traces"
+        }
+      },
+      "updatedAt": "Last updated"
     },
     "sharing": {
       "footer": "Logs do not contain API keys or sensitive data",
@@ -754,7 +805,7 @@
       "reset": "Reset",
       "save": "Save"
     },
-    "defaultTestInput": "Hey Whispr, what's the weather like today?",
+    "defaultTestInput": "Hi ChordVox, what's the weather like today?",
     "dialogs": {
       "reset": {
         "description": "Prompt has been reset to the default value.",
@@ -794,7 +845,7 @@
       "none": "None",
       "outputLabel": "Output",
       "processing": "Processing...",
-      "chordvoxCloud": "ChordVox Cloud",
+      "openwhisprCloud": "ChordVox Cloud",
       "providerLabel": "Provider",
       "run": "Run Test"
     },
@@ -953,6 +1004,78 @@
         "description": "Unlimited transcriptions, priority processing, and more.",
         "title": "Try Pro free for 7 days"
       },
+      "desktopLicense": {
+        "title": "Desktop License",
+        "descriptionConfigured": "This build validates desktop keys against your license API.",
+        "descriptionNotConfigured": "License service is not ready yet. Please contact support.",
+        "currentStatusLabel": "Current status",
+        "currentStatusDescription": "Use a paid license key to unlock commercial usage on this device.",
+        "currentStatusActiveDescription": "This device is activated and ready for commercial usage.",
+        "currentStatusTrialDescription": "Trial active. {{days}} day(s) remaining before a license key is required.",
+        "currentStatusTrialExpiredDescription": "Trial has ended. Enter a paid license key to continue.",
+        "currentStatusNotConfigured": "License service is not ready on this build yet. Please contact support.",
+        "licenseApiUrlLabel": "License API URL",
+        "licenseApiUrlPlaceholder": "https://license.your-domain.com",
+        "licenseApiUrlDescription": "Set this once, then users can activate directly with a license key in this app.",
+        "inputPlaceholder": "Enter license key",
+        "activatedHint": "This device is activated. Use \"Change key\" only when replacing the license.",
+        "actions": {
+          "activate": "Activate",
+          "activating": "Activating",
+          "validate": "Validate",
+          "checking": "Checking",
+          "clear": "Clear",
+          "changeKey": "Change key",
+          "save": "Save",
+          "saving": "Saving"
+        },
+        "statusLabels": {
+          "active": "Active",
+          "trial": "Trial",
+          "offlineGrace": "Offline Grace",
+          "expired": "Expired",
+          "invalid": "Invalid",
+          "notActivated": "Not Activated"
+        },
+        "meta": {
+          "plan": "Plan: {{plan}}",
+          "expires": "Expires: {{date}}",
+          "lastCheck": "Last check: {{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "Remove saved license?",
+          "removeDescription": "This device will return to unlicensed mode until you activate again.",
+          "removeConfirm": "Remove"
+        },
+        "toasts": {
+          "keyRequiredTitle": "License key required",
+          "keyRequiredDescription": "Enter your license key before activating.",
+          "activatedTitle": "License activated",
+          "activatedDescription": "This device is now activated.",
+          "activationFailedTitle": "Activation failed",
+          "activationFailedDescription": "The license key could not be activated.",
+          "activationLimitDescription": "This license key supports only one device. To switch devices, contact support to reset the previous activation.",
+          "serverNotReadyDescription": "License service is not ready yet. Please contact support.",
+          "deviceNotActivatedDescription": "This license key is not activated on this device.",
+          "revokedDescription": "This license key has been revoked. Please contact support.",
+          "expiredDescription": "This license key has expired.",
+          "notActiveDescription": "This license key is currently not active.",
+          "activationUnexpectedError": "Unexpected error while activating the license.",
+          "validatedTitle": "License validated",
+          "validateFailedTitle": "License check failed",
+          "validatedDescription": "License is valid.",
+          "invalidDescription": "License is invalid.",
+          "validateUnexpectedError": "Unexpected error while checking license status.",
+          "removedTitle": "License removed",
+          "removedDescription": "Saved license state was cleared.",
+          "removeFailedTitle": "Could not remove license",
+          "removeFailedDescription": "Unexpected error while removing the saved license.",
+          "licenseApiSavedTitle": "License API saved",
+          "licenseApiSavedDescription": "License activation now uses the new API URL.",
+          "licenseApiSaveFailedTitle": "Could not save License API",
+          "licenseApiSaveFailedDescription": "Please check the URL and try again."
+        }
+      },
       "user": "User",
       "wordsRemaining": "{{remaining}} remaining"
     },
@@ -980,8 +1103,8 @@
       "description": "Clean up transcriptions, handle commands, and fix errors while preserving your tone.",
       "enableTextCleanup": "Enable text cleanup",
       "enableTextCleanupDescription": "AI improves transcription quality",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "Just works. No configuration needed.",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "Just works. No configuration needed.",
       "title": "AI Text Enhancement",
       "toasts": {
         "switchedCloud": {
@@ -1011,6 +1134,23 @@
         "title": "Remove downloaded models?"
       },
       "removing": "Removing...",
+      "settingsTransfer": {
+        "description": "Export current settings to a file, or restore settings from a file.",
+        "export": "Export Settings",
+        "exportFailedDescription": "Failed to export settings. Please try again.",
+        "exportFailedTitle": "Export failed",
+        "exportSuccessDescription": "Settings exported to: {{path}}",
+        "exportSuccessTitle": "Export successful",
+        "import": "Import Settings",
+        "importConfirmButton": "Import & Overwrite",
+        "importConfirmDescription": "This will overwrite current settings and restart the app when done.",
+        "importConfirmTitle": "Import settings now?",
+        "importFailedDescription": "Failed to import settings. Please verify the file format.",
+        "importFailedTitle": "Import failed",
+        "importSuccessDescription": "Settings imported. The app will restart now.",
+        "importSuccessTitle": "Import successful",
+        "title": "Settings Backup"
+      },
       "resetAll": {
         "confirmText": "Delete Everything",
         "description": "This will permanently delete all settings, transcriptions, and cached data. The app will reload after reset.",
@@ -1062,6 +1202,21 @@
       "hotkey": {
         "activationMode": "Activation Mode",
         "description": "The key combination that starts and stops voice dictation",
+        "secondary": {
+          "title": "Profile 2 Hotkey (Independent model/refine)",
+          "profileSavedState": "Profile 2 settings saved",
+          "profileUnsavedState": "Profile 2 settings not saved (set models first, then click the button)",
+          "saveCurrentAsProfile2": "Save current as Profile 2",
+          "savedTitle": "Secondary hotkey saved",
+          "savedDescription": "Profile 2 hotkey was updated.",
+          "profileSavedTitle": "Profile 2 saved",
+          "profileSavedDescription": "Current transcription and AI refine settings were saved to Profile 2.",
+          "registerFailed": "Failed to register secondary hotkey. Please choose another shortcut.",
+          "registerRetry": "Failed to register secondary hotkey. Please try again.",
+          "globeNotSupported": "Secondary hotkey does not support the Globe/Fn key.",
+          "rightModifierNotSupported": "Secondary hotkey does not support right-side single modifiers.",
+          "modifiersOnlyNotSupported": "Secondary hotkey does not support modifiers-only combinations."
+        },
         "title": "Dictation Hotkey"
       },
       "microphone": {
@@ -1077,7 +1232,7 @@
         "launchAtLogin": "Launch at login",
         "launchAtLoginDescription": "Start ChordVox automatically when you log in",
         "autoCheckUpdate": "Auto Check for Updates",
-        "autoCheckUpdateDescription": "Automatically check for and download new versions when ChordVox starts",
+        "autoCheckUpdateDescription": "Automatically check for new versions when ChordVox starts (no auto-install)",
         "title": "Startup"
       },
       "updates": {
@@ -1096,7 +1251,7 @@
             "title": "Almost there"
           },
           "checkFailed": {
-            "description": "We had trouble checking for updates. Please try again later.",
+            "description": "We had trouble checking for updates. Please try again later. {{message}}",
             "title": "Couldn't check for updates"
           },
           "downloadFailed": {
@@ -1116,6 +1271,11 @@
             "description": "You're on the latest version.",
             "title": "No Updates"
           },
+          "manualUpdateAvailable": {
+            "confirmText": "Open download page",
+            "description": "Version v{{version}} is available. Automatic download isn't available in this environment, so please open the Release page to update.",
+            "title": "Update available"
+          },
           "updateAvailable": {
             "description": "Update available: v{{version}}",
             "title": "Update Available"
@@ -1127,6 +1287,7 @@
         },
         "downloadUpdate": "Download Update {{version}}",
         "downloading": "Downloading... {{progress}}%",
+        "openReleasePage": "Open download page",
         "installAndRestart": "Install & Restart",
         "latestVersion": "You're on the latest version",
         "newVersion": "A newer version is available",
@@ -1158,10 +1319,12 @@
     "privacy": {
       "cloudBackup": "Cloud backup",
       "cloudBackupDescription": "Save your transcriptions to the cloud so you never lose them.",
-      "description": "Control what data leaves your device. Everything is off by default.",
+      "description": "Control logging, transcription history, and analytics behavior. You can turn these off at any time.",
+      "transcriptionHistory": "Save transcription history",
+      "transcriptionHistoryDescription": "When disabled, ChordVox will still transcribe and paste, but won't save new history entries.",
       "title": "Privacy",
       "usageAnalytics": "Usage analytics",
-      "usageAnalyticsDescription": "Help us improve ChordVox by sharing anonymous performance metrics. We never send transcription content — only timing and error data."
+      "usageAnalyticsDescription": "Remote usage analytics are not enabled in this build. This switch is local-only and does not upload any transcription or performance data."
     },
     "prompts": {
       "description": "View, customize, and test the unified system prompt that powers text cleanup and instruction detection",
@@ -1171,8 +1334,8 @@
       "customSetup": "Custom Setup",
       "customSetupDescription": "Use your own provider and API key.",
       "description": "Choose how ChordVox transcribes your voice",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "Just works. No configuration needed.",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "Just works. No configuration needed.",
       "title": "Speech to Text",
       "toasts": {
         "switchedCloud": {
