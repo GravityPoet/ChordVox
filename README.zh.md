@@ -1,7 +1,7 @@
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
-  <strong> AI语音输入法，开口即输入，AI 模型自动润色，自动粘贴，一气呵成。本 AI 语音输入法把隐私、效率、AI润色效果做到极致，让你彻底告别繁琐打字修改。</strong>
+  <strong> 还在手动改语音识别的错别字？试试这套纯本地 AI 语音输入。说话秒变精修长文，自动粘贴一气呵成。全程断网可用，免注册开箱即用，你的嘴就是最快的键盘。</strong>
 </p>
 
 <p align="center">
