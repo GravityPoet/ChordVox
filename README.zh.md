@@ -47,8 +47,6 @@
 
 - 🔄 **工作流随心切换** — 我们提供了双重热键设置。你可以设置一个热键专门用来速记、发草稿（只管快）；另一个热键专门用来写极度严谨的公文（调用最强的推理大脑），互相不干扰。 
 
-- 💼 **企业满血版接口 (Pro 专属)** — 有极致速度或者专业工作流要求的重度用户，不需要你自己满世界去找各种乱七八糟的大模型 API Key。用我们的官方极速高速专网直接即插即用，还自带词库增强和商业级风控能力。
-
 ---
 
 ### 运行机制
@@ -69,14 +67,7 @@
 
 ### 下载
 
-当前稳定版：[`v1.5.18`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.18)
-
-| 系统 | 芯片 | 格式 | 下载 |
-|---|---|---|---|
-| macOS | Apple Silicon | dmg | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.18/ChordVox-1.5.18-arm64.dmg) |
-| macOS | Intel | dmg | 即将上线 |
-| Windows | x64 | exe | 即将上线 |
-| Linux | x64 | AppImage / deb | 即将上线 |
+您可以前往 [GitHub Releases](https://github.com/GravityPoet/ChordVox/releases/latest) 页面下载适合您操作系统的最新版本。
 
 #### macOS 首次启动
 

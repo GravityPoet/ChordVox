@@ -28,8 +28,6 @@
 
 - 🔒 **Privacy-first, Local-first** — Ship with built-in STT engines (whisper.cpp · NVIDIA Parakeet · SenseVoice). Your audio never leaves your machine unless you choose it to. Zero Python dependency; a single native binary handles everything.
 
-- 💼 **Enterprise-Grade Features (Pro)** — Smoothly upgrade to unlock heavy-duty commercial capabilities: injection of professional-domain business dictionaries, complex anti-abuse and content moderation mechanisms, and integration of exclusive high-speed commercial endpoints (ready to use, no need to hunt for and configure third-party API keys).
-
 - 🎯 **Agent Naming & Command Mode** — Personalize your AI assistant's name. Address it directly ("Hi ChordVox, draft an email…") to instantly switch from normal dictation to instruction-following mode.
 
 - 📖 **Custom Dictionary** — Add domain-specific jargon, names, and technical terms to the in-app dictionary to drastically improve transcription accuracy for your specific workflows.
@@ -77,14 +75,7 @@
 
 ### Download
 
-Current stable: [`v1.5.18`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.18)
-
-| System | Chip | Format | Link |
-|---|---|---|---|
-| macOS | Apple Silicon | dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.18/ChordVox-1.5.18-arm64.dmg) |
-| macOS | Intel | dmg | Coming soon |
-| Windows | x64 | exe | Coming soon |
-| Linux | x64 | AppImage / deb | Coming soon |
+You can always find the latest format specific to your operating system on the [GitHub Releases](https://github.com/GravityPoet/ChordVox/releases/latest) page.
 
 #### macOS First Launch
 
