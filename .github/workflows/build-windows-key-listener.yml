@@ -1,12 +1,6 @@
 name: Build Windows Key Listener
 
 on:
-  push:
-    paths:
-      - 'resources/windows-key-listener.c'
-      - '.github/workflows/build-windows-key-listener.yml'
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       version:
