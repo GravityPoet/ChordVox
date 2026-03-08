@@ -2,7 +2,7 @@
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
-  <strong>Your voice, refined by AI, pasted where you need it.</strong>
+  <strong>Still typing manually or fixing speech-to-text typos? Try this entirely local AI dictation app. Speak and instantly get polished text, auto-pasted in one go. Your privacy is in your hands—no registration required, ready to use out of the box. Your mouth is the fastest keyboard.</strong>
 </p>
 
 <p align="center">
@@ -20,40 +20,33 @@
 
 ### One-liner
 
-> **Desktop voice keyboard that transcribes locally, refines with AI, and pastes directly at your cursor — no cloud account required.**
+> **An AI dictation app: speak to input, let AI refine, and auto-paste in one go. We push privacy, efficiency, and AI refinement to the extreme, letting you say goodbye to tedious typing and fixing. No cloud account needed, ready out of the box.**
 
 ---
 
-### Key Features
+### How Can This App Help You?
 
-- 🔒 **Privacy-first, Local-first** — Ship with built-in STT engines (whisper.cpp · NVIDIA Parakeet · SenseVoice). Your audio never leaves your machine unless you choose it to. Zero Python dependency; a single native binary handles everything.
-
-- 🎯 **Agent Naming & Command Mode** — Personalize your AI assistant's name. Address it directly ("Hi ChordVox, draft an email…") to instantly switch from normal dictation to instruction-following mode.
-
-- 📖 **Custom Dictionary** — Add domain-specific jargon, names, and technical terms to the in-app dictionary to drastically improve transcription accuracy for your specific workflows.
-
-- 🧠 **AI Refinement Pipeline** — Raw speech → polished text. Connect to OpenAI / Anthropic / Google Gemini / Groq / any OpenAI-compatible endpoint, or run a local GGUF model via bundled llama.cpp. Includes smart contextual repair and format correction.
-
-- ⌨️ **Cursor-level Paste** — One hotkey triggers → records → transcribes → refines → pastes at your active cursor. Works across every app on macOS (AppleScript), Windows (SendKeys + nircmd), and Linux (XTest / xdotool / wtype / ydotool). True Push-to-Talk with native keyboard hooks on macOS (Globe/Fn key via Swift listener) and Windows (low-level `WH_KEYBOARD_LL` hook).
-
-- 🌍 **58 Languages · 10 Interface Languages** — Auto-detect or pin your language. Full UI localization in EN / ZH-CN / ZH-TW / JA / DE / FR / ES / PT / IT / RU.
-
-- 🔄 **Dual-Profile Hotkeys** — Bind two independent hotkey profiles, each with its own STT engine, AI model, and refinement strategy. Switch workflows in a single keystroke.
-
-- 🧹 **Storage Management** — Built-in cache cleanup tools. Easily remove downloaded Whisper/GGUF models to free up disk space with a single click in Settings.
-
----
-
-### Use Cases / Problems Solved
-
-| Pain Point | ChordVox Solution |
+| Pain Point | How We Solve It |
 |---|---|
-| Typing is slow; you think faster than you type | Speak naturally → get polished text in < 2 seconds |
-| Cloud voice tools send audio to unknown servers | Local STT means audio stays on-device |
-| Dictation output is raw and messy | AI refinement fixes grammar, punctuation, and formatting automatically |
-| Switching between dictation app and target app breaks flow | Paste-at-cursor removes the copy-paste step entirely |
-| Enterprise / medical / legal jargon gets mangled | Custom Dictionary biases the model toward your domain-specific terms |
-| You need different AI quality for different tasks | Dual-profile hotkeys: one for fast drafts (Groq), one for polished output (GPT-5 / Claude) |
+| **"Typing is too slow, I lose my train of thought."** | Just say whatever is on your mind. Even if you stutter, it'll spit out a beautiful, coherent text in under 2 seconds. |
+| **"I'm afraid to upload meeting notes or papers for fear of leaks."** | **Unplug the internet and use it anyway.** We've embedded a powerful local AI brain directly into the app. Your trade secrets rot safely on your hard drive. |
+| **"Dictation apps make too many typos, I still have to fix them."** | Built-in top-tier AI grammar correction. Say filler words or use Yoda syntax—the LLM automatically straightens it into proper formal writing, complete with correct punctuation and formatting. |
+| **"I have to copy the transcribed text and switch windows."** | As simple as sending a WhatsApp voice note. Hold a hotkey to speak in any input box; release it, and the polished text is **automatically pasted at your cursor**. No mouse needed. |
+| **"My industry has jargon, the AI always gets it wrong."** | Custom dictionaries. Throw your client names and industry jargon in there, and it'll never spell them wrong again. |
+
+---
+
+### Killer Features That Will Change How You Work
+
+- 🔒 **100% Local, Hardcore Privacy Protection** — No messing around with complex Python setups. Download the app, double-click, and open it. Even with a microscope, no one could find your audio leaving this machine.
+
+- 🧠 **AI Refinement (Eradicate Typos and Grammar Errors)** — Top-tier text polishing pipeline. The raw transcript isn't just slapped onto your screen; it is refined through an LLM. Tie it to OpenAI / Claude / Gemini, or run a local model to handle auto-formatting.
+
+- ⌨️ **Walkie-Talkie-Like Immersive Experience** — We use low-level system hooks to catch your global hotkeys. Whether you're in Word, WhatsApp, or a browser, hold your hotkey to speak, and the text is automatically typed for you. This is the ultimate "seamless typing."
+
+- 🎯 **Not Just Dictation, Give Commands Too** — Setup a name for your assistant and tell it: "Hey ChordVox, write a polite salary raise request..." Boom, a perfectly crafted petition appears instantly on your screen.
+
+- 🔄 **Switch Workflows with Ease** — We provide dual hotkey setups. Map one hotkey for quick drafts (fastest transcription) and the other for highly rigorous formal documents (using your strongest reasoning LLM)—without interfering with each other.
 
 ---
 
