@@ -56,7 +56,7 @@
 > [!IMPORTANT]
 > **macOS 必看：首次启动请解除系统限制**
 > 
-> 由于本应用为开源软件未进行苹果开发者证书签名，macOS 首次运行通常会被系统自动拦截。请在将下载的 `ChordVox.app` 拖入`应用程序 (Applications)`文件夹后，**务必打开「终端 (Terminal)」执行下方命令为应用放行**（该操作只需执行一次）：
+> 由于本应用未向苹果交“过路费”购买高昂的开发者证书签名，macOS 首次运行通常会被 Gatekeeper 拦截。**本软件代码 100% 开源透明，接受全网审查，绝对无毒无害。** 请在将下载的 `ChordVox.app` 拖入 `应用程序 (Applications)` 文件夹后，**务必打开「终端 (Terminal)」执行下方命令为应用放行**（该操作只需执行一次）：
 > 
 > ```bash
 > xattr -dr com.apple.quarantine /Applications/ChordVox.app
