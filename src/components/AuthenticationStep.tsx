@@ -8,7 +8,7 @@ import {
   updateLastSignInTime,
   type SocialProvider,
 } from "../lib/neonAuth";
-import { CHORDVOX_API_URL } from "../config/constants";
+import { OPENWHISPR_API_URL } from "../config/constants";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { AlertCircle, ArrowRight, Check, Loader2, ChevronLeft } from "lucide-react";
@@ -98,9 +98,9 @@ export default function AuthenticationStep({
       return;
 
     const initAndComplete = async () => {
-      if (CHORDVOX_API_URL) {
+      if (OPENWHISPR_API_URL) {
         try {
-          const res = await fetch(`${CHORDVOX_API_URL}/api/auth/init-user`, {
+          const res = await fetch(`${OPENWHISPR_API_URL}/api/auth/init-user`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -172,12 +172,12 @@ export default function AuthenticationStep({
     setError(null);
 
     try {
-      if (!CHORDVOX_API_URL) {
+      if (!OPENWHISPR_API_URL) {
         setAuthMode("sign-up");
         return;
       }
 
-      const response = await fetch(`${CHORDVOX_API_URL}/api/check-user`, {
+      const response = await fetch(`${OPENWHISPR_API_URL}/api/check-user`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
@@ -240,9 +240,9 @@ export default function AuthenticationStep({
           } else {
             updateLastSignInTime();
 
-            if (CHORDVOX_API_URL) {
+            if (OPENWHISPR_API_URL) {
               try {
-                await fetch(`${CHORDVOX_API_URL}/api/auth/init-user`, {
+                await fetch(`${OPENWHISPR_API_URL}/api/auth/init-user`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
@@ -331,12 +331,6 @@ export default function AuthenticationStep({
           </p>
           <p className="text-muted-foreground text-sm mt-1 leading-tight">
             {t("auth.welcomeSubtitle")}
-          </p>
-        </div>
-
-        <div className="bg-warning/5 p-2.5 rounded border border-warning/20">
-          <p className="text-[10px] text-warning text-center leading-snug">
-            {t("auth.cloudNotConfigured")}
           </p>
         </div>
 
@@ -617,7 +611,7 @@ export default function AuthenticationStep({
       <p className="text-[10px] text-muted-foreground/80 leading-tight text-center">
         {t("auth.legal.prefix")}{" "}
         <a
-          href="https://chordvox.com/terms"
+          href="https://github.com/GravityPoet/ChordVox/blob/main/docs/legal/TERMS.md"
           target="_blank"
           rel="noopener noreferrer"
           className="text-link underline decoration-link/30 hover:decoration-link/60 transition-colors"
@@ -626,7 +620,7 @@ export default function AuthenticationStep({
         </a>{" "}
         {t("auth.legal.and")}{" "}
         <a
-          href="https://chordvox.com/privacy"
+          href="https://github.com/GravityPoet/ChordVox/blob/main/docs/legal/PRIVACY.md"
           target="_blank"
           rel="noopener noreferrer"
           className="text-link underline decoration-link/30 hover:decoration-link/60 transition-colors"

@@ -29,20 +29,38 @@
 
 **macOS:**
 1. Open System Settings → Privacy & Security → Microphone
-2. Ensure ChordVox is listed and enabled
+2. Ensure OpenWhispr is listed and enabled
 3. If not listed, click "Grant Access" in the app to trigger the permission prompt
 4. You can also click "Open Microphone Privacy" button in the app
 
 **Windows:**
 1. Open Settings → Privacy → Microphone
 2. Ensure "Allow apps to access your microphone" is ON
-3. Ensure ChordVox is listed and enabled
+3. Ensure OpenWhispr is listed and enabled
 4. You can also click "Open Privacy Settings" button in the app
 
 **Linux:**
 1. Check your audio settings (e.g., `pavucontrol`)
 2. Ensure the correct input device is selected
 3. Linux doesn't have app-level microphone permissions like macOS/Windows
+
+### macOS says "ChordVox.app is damaged and can't be opened"
+
+**Symptoms:** Finder blocks launch and asks to move the app to Trash.
+
+**Cause:** This happens with unsigned / not notarized builds downloaded from the internet (Gatekeeper quarantine).
+
+**Fix:**
+1. Move `ChordVox.app` to `/Applications`
+2. Try right-click → **Open** first
+3. If still blocked, run:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/ChordVox.app
+open /Applications/ChordVox.app
+```
+
+Usually this is needed only once per installation.
 
 ### Empty Transcriptions
 
@@ -80,7 +98,7 @@
 3. If bundled binary fails, install via package manager:
    - macOS: `brew install whisper-cpp`
    - Linux: Build from source at https://github.com/ggml-org/whisper.cpp
-4. Clear model cache: `rm -rf ~/.cache/chordvox/whisper-models`
+4. Clear model cache: `rm -rf ~/.cache/openwhispr/whisper-models`
 5. Try cloud transcription as fallback
 
 ### Wayland Clipboard Issues (Linux)
@@ -95,9 +113,9 @@
    - Fedora/RHEL: `sudo dnf install wl-clipboard`
    - Arch: `sudo pacman -S wl-clipboard`
 2. Ensure a paste tool is installed (`xdotool` recommended, or `wtype` for Sway/Hyprland, or `ydotool` with daemon)
-3. Restart ChordVox after installing
+3. Restart OpenWhispr after installing
 
-ChordVox tries clipboard methods in order: `wl-copy` (most reliable) → renderer `navigator.clipboard` → X11 fallback.
+OpenWhispr tries clipboard methods in order: `wl-copy` (most reliable) → renderer `navigator.clipboard` → X11 fallback.
 
 ### Windows-Specific Issues
 
@@ -113,8 +131,8 @@ For detailed diagnostics, see [DEBUG.md](DEBUG.md).
 
 1. Enable debug mode and reproduce the issue
 2. Collect diagnostic output from commands above
-3. Open an issue at https://github.com/ChordVox/chordvox/issues with:
+3. Open an issue at https://github.com/OpenWhispr/openwhispr/issues with:
    - OS version
-   - ChordVox version
+   - OpenWhispr version
    - Relevant log sections
    - Steps to reproduce

@@ -1,8 +1,9 @@
-const { ipcMain, app, shell, BrowserWindow } = require("electron");
+const { ipcMain, app, shell, BrowserWindow, dialog } = require("electron");
 const path = require("path");
 const http = require("http");
 const https = require("https");
 const crypto = require("crypto");
+const fsPromises = require("fs/promises");
 const AppUtils = require("../utils");
 const debugLogger = require("./debugLogger");
 const GnomeShortcutManager = require("./gnomeShortcut");
@@ -19,6 +20,8 @@ class IPCHandlers {
     this.clipboardManager = managers.clipboardManager;
     this.whisperManager = managers.whisperManager;
     this.parakeetManager = managers.parakeetManager;
+    this.senseVoiceManager = managers.senseVoiceManager;
+    this.licenseManager = managers.licenseManager;
     this.windowManager = managers.windowManager;
     this.updateManager = managers.updateManager;
     this.windowsKeyManager = managers.windowsKeyManager;
@@ -26,7 +29,48 @@ class IPCHandlers {
     this.sessionId = crypto.randomUUID();
     this.assemblyAiStreaming = null;
     this.deepgramStreaming = null;
+    this.secondaryHotkeyBeforeCapture = "";
     this.setupHandlers();
+  }
+
+  async checkLicenseGate() {
+    if (!this.licenseManager?.getStatus) {
+      return { allowed: true, status: null };
+    }
+
+    try {
+      const status = await this.licenseManager.getStatus();
+      return {
+        allowed: Boolean(status?.isActive),
+        status: status || null,
+      };
+    } catch (error) {
+      debugLogger.error("License gate check failed:", error);
+      return {
+        allowed: false,
+        status: {
+          success: false,
+          status: "invalid",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_CHECK_FAILED",
+          message: "Failed to verify license status. Please open Settings > Account and retry.",
+        },
+      };
+    }
+  }
+
+  buildLicenseDeniedResponse(status) {
+    const message =
+      status?.message || "Trial expired. Enter a license key in Settings > Account to continue.";
+
+    return {
+      success: false,
+      error: "LICENSE_REQUIRED",
+      code: "LICENSE_REQUIRED",
+      message,
+      licenseStatus: status || null,
+    };
   }
 
   _syncStartupEnv(setVars, clearVars = []) {
@@ -48,7 +92,7 @@ class IPCHandlers {
         set: Object.keys(setVars),
         cleared: clearVars.filter((k) => !process.env[k]),
       });
-      this.environmentManager.saveAllKeysToEnvFile().catch(() => {});
+      this.environmentManager.saveAllKeysToEnvFile().catch(() => { });
     }
   }
 
@@ -88,11 +132,19 @@ class IPCHandlers {
     });
 
     ipcMain.handle("hide-window", () => {
-      if (process.platform === "darwin") {
-        this.windowManager.hideDictationPanel();
-        if (app.dock) app.dock.show();
-      } else {
-        this.windowManager.hideDictationPanel();
+      this.windowManager.hideDictationPanel();
+
+      if (process.platform === "darwin" && app.dock) {
+        const controlPanelWindow = this.windowManager?.controlPanelWindow;
+        const isControlPanelVisible =
+          controlPanelWindow &&
+          !controlPanelWindow.isDestroyed() &&
+          controlPanelWindow.isVisible();
+
+        // Keep Dock hidden for background dictation-only mode.
+        if (!isControlPanelVisible) {
+          app.dock.hide();
+        }
       }
     });
 
@@ -203,6 +255,11 @@ class IPCHandlers {
 
     // Whisper handlers
     ipcMain.handle("transcribe-local-whisper", async (event, audioBlob, options = {}) => {
+      const licenseGate = await this.checkLicenseGate();
+      if (!licenseGate.allowed) {
+        return this.buildLicenseDeniedResponse(licenseGate.status);
+      }
+
       debugLogger.log("transcribe-local-whisper called", {
         audioBlobType: typeof audioBlob,
         audioBlobSize: audioBlob?.byteLength || audioBlob?.length || 0,
@@ -268,7 +325,10 @@ class IPCHandlers {
             message: "No audio detected",
           };
         }
-        if (errorMessage.includes("model") && errorMessage.includes("not downloaded")) {
+        if (
+          (errorMessage.includes("model") && errorMessage.includes("not downloaded")) ||
+          errorMessage.includes("model directory not found or invalid")
+        ) {
           return {
             success: false,
             error: "model_not_found",
@@ -352,6 +412,11 @@ class IPCHandlers {
 
     // Parakeet (NVIDIA) handlers
     ipcMain.handle("transcribe-local-parakeet", async (event, audioBlob, options = {}) => {
+      const licenseGate = await this.checkLicenseGate();
+      if (!licenseGate.allowed) {
+        return this.buildLicenseDeniedResponse(licenseGate.status);
+      }
+
       debugLogger.log("transcribe-local-parakeet called", {
         audioBlobType: typeof audioBlob,
         audioBlobSize: audioBlob?.byteLength || audioBlob?.length || 0,
@@ -474,6 +539,297 @@ class IPCHandlers {
       return this.parakeetManager.getServerStatus();
     });
 
+    // SenseVoice handlers (external local model via sense-voice-main)
+    ipcMain.handle("transcribe-local-sensevoice", async (event, audioBlob, options = {}) => {
+      const licenseGate = await this.checkLicenseGate();
+      if (!licenseGate.allowed) {
+        return this.buildLicenseDeniedResponse(licenseGate.status);
+      }
+
+      debugLogger.log("transcribe-local-sensevoice called", {
+        audioBlobType: typeof audioBlob,
+        audioBlobSize: audioBlob?.byteLength || audioBlob?.length || 0,
+        options,
+      });
+
+      try {
+        const result = await this.senseVoiceManager.transcribeLocalSenseVoice(audioBlob, options);
+
+        debugLogger.log("SenseVoice result", {
+          success: result.success,
+          hasText: !!result.text,
+          message: result.message,
+          error: result.error,
+        });
+
+        if (!result.success && result.message === "No audio detected") {
+          debugLogger.log("Sending no-audio-detected event to renderer");
+          event.sender.send("no-audio-detected");
+        }
+
+        return result;
+      } catch (error) {
+        debugLogger.error("Local SenseVoice transcription error", error);
+        const errorMessage = error.message || "Unknown error";
+
+        if (errorMessage.includes("model path is empty")) {
+          return {
+            success: false,
+            error: "sensevoice_model_not_set",
+            message: "SenseVoice model path is empty. Please select a local GGUF model.",
+          };
+        }
+        if (errorMessage.includes("model file not found")) {
+          return {
+            success: false,
+            error: "sensevoice_model_not_found",
+            message: errorMessage,
+          };
+        }
+        if (errorMessage.includes("binary not found")) {
+          return {
+            success: false,
+            error: "sensevoice_binary_not_found",
+            message: "SenseVoice binary not found. Please select sense-voice-main path.",
+          };
+        }
+        if (errorMessage.includes("timed out")) {
+          return {
+            success: false,
+            error: "sensevoice_timeout",
+            message: errorMessage,
+          };
+        }
+        if (errorMessage.includes("Audio buffer is empty")) {
+          return {
+            success: false,
+            error: "no_audio_data",
+            message: "No audio detected",
+          };
+        }
+
+        throw error;
+      }
+    });
+
+    ipcMain.handle("check-sensevoice-installation", async (_event, binaryPath = "") => {
+      return this.senseVoiceManager.checkInstallation(binaryPath);
+    });
+
+    ipcMain.handle("download-sensevoice-model", async (event, modelName) => {
+      try {
+        const result = await this.senseVoiceManager.downloadSenseVoiceModel(
+          modelName,
+          (progressData) => {
+            if (!event.sender.isDestroyed()) {
+              event.sender.send("sensevoice-download-progress", progressData);
+            }
+          }
+        );
+        return result;
+      } catch (error) {
+        if (!event.sender.isDestroyed()) {
+          event.sender.send("sensevoice-download-progress", {
+            type: "error",
+            model: modelName,
+            error: error.message,
+            code: error.code || "DOWNLOAD_FAILED",
+          });
+        }
+        return {
+          success: false,
+          error: error.message,
+          code: error.code || "DOWNLOAD_FAILED",
+        };
+      }
+    });
+
+    ipcMain.handle("check-sensevoice-model-status", async (_event, modelPath = "") => {
+      return this.senseVoiceManager.checkModelStatus(modelPath);
+    });
+
+    ipcMain.handle("list-sensevoice-models", async () => {
+      return this.senseVoiceManager.listSenseVoiceModels();
+    });
+
+    ipcMain.handle("delete-sensevoice-model", async (_event, modelName) => {
+      return this.senseVoiceManager.deleteSenseVoiceModel(modelName);
+    });
+
+    ipcMain.handle("delete-all-sensevoice-models", async () => {
+      return this.senseVoiceManager.deleteAllSenseVoiceModels();
+    });
+
+    ipcMain.handle("cancel-sensevoice-download", async () => {
+      return this.senseVoiceManager.cancelDownload();
+    });
+
+    ipcMain.handle("pick-whisper-model-file", async (event, defaultPath = "") => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const options = {
+          title: "Select Whisper model",
+          defaultPath: defaultPath || undefined,
+          properties: ["openFile"],
+          filters: [
+            { name: "Whisper model", extensions: ["bin"] },
+            { name: "All files", extensions: ["*"] },
+          ],
+        };
+        const result = targetWindow
+          ? await dialog.showOpenDialog(targetWindow, options)
+          : await dialog.showOpenDialog(options);
+
+        if (result.canceled || !result.filePaths?.length) {
+          return { success: true, path: null, cancelled: true };
+        }
+
+        return { success: true, path: result.filePaths[0], cancelled: false };
+      } catch (error) {
+        return { success: false, error: error.message, path: null, cancelled: false };
+      }
+    });
+
+    ipcMain.handle("pick-parakeet-model-directory", async (event, defaultPath = "") => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const options = {
+          title: "Select Parakeet model directory",
+          defaultPath: defaultPath || undefined,
+          properties: ["openDirectory"],
+        };
+        const result = targetWindow
+          ? await dialog.showOpenDialog(targetWindow, options)
+          : await dialog.showOpenDialog(options);
+
+        if (result.canceled || !result.filePaths?.length) {
+          return { success: true, path: null, cancelled: true };
+        }
+
+        return { success: true, path: result.filePaths[0], cancelled: false };
+      } catch (error) {
+        return { success: false, error: error.message, path: null, cancelled: false };
+      }
+    });
+
+    ipcMain.handle("pick-sensevoice-model-file", async (event, defaultPath = "") => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const options = {
+          title: "Select SenseVoice model",
+          defaultPath: defaultPath || undefined,
+          properties: ["openFile"],
+          filters: [
+            { name: "GGUF model", extensions: ["gguf"] },
+            { name: "All files", extensions: ["*"] },
+          ],
+        };
+        const result = targetWindow
+          ? await dialog.showOpenDialog(targetWindow, options)
+          : await dialog.showOpenDialog(options);
+
+        if (result.canceled || !result.filePaths?.length) {
+          return { success: true, path: null, cancelled: true };
+        }
+
+        return { success: true, path: result.filePaths[0], cancelled: false };
+      } catch (error) {
+        return { success: false, error: error.message, path: null, cancelled: false };
+      }
+    });
+
+    ipcMain.handle("pick-sensevoice-binary", async (event, defaultPath = "") => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const options = {
+          title: "Select sense-voice-main binary",
+          defaultPath: defaultPath || undefined,
+          properties: ["openFile"],
+          filters: [
+            {
+              name: "SenseVoice binary",
+              extensions: process.platform === "win32" ? ["exe"] : ["*"],
+            },
+            { name: "All files", extensions: ["*"] },
+          ],
+        };
+        const result = targetWindow
+          ? await dialog.showOpenDialog(targetWindow, options)
+          : await dialog.showOpenDialog(options);
+
+        if (result.canceled || !result.filePaths?.length) {
+          return { success: true, path: null, cancelled: true };
+        }
+
+        return { success: true, path: result.filePaths[0], cancelled: false };
+      } catch (error) {
+        return { success: false, error: error.message, path: null, cancelled: false };
+      }
+    });
+
+    ipcMain.handle("export-settings-file", async (event, payload = {}) => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const options = {
+          title: "Export ChordVox Settings",
+          defaultPath: `ChordVox-settings-${timestamp}.json`,
+          filters: [{ name: "JSON", extensions: ["json"] }],
+        };
+
+        const result = targetWindow
+          ? await dialog.showSaveDialog(targetWindow, options)
+          : await dialog.showSaveDialog(options);
+
+        if (result.canceled || !result.filePath) {
+          return { success: true, cancelled: true };
+        }
+
+        await fsPromises.writeFile(result.filePath, JSON.stringify(payload, null, 2), "utf8");
+        return { success: true, cancelled: false, filePath: result.filePath };
+      } catch (error) {
+        debugLogger.error("Failed to export settings file:", error);
+        return { success: false, cancelled: false, error: error.message };
+      }
+    });
+
+    ipcMain.handle("import-settings-file", async (event) => {
+      try {
+        const targetWindow = BrowserWindow.fromWebContents(event.sender);
+        const options = {
+          title: "Import ChordVox Settings",
+          properties: ["openFile"],
+          filters: [{ name: "JSON", extensions: ["json"] }],
+        };
+
+        const result = targetWindow
+          ? await dialog.showOpenDialog(targetWindow, options)
+          : await dialog.showOpenDialog(options);
+
+        if (result.canceled || !result.filePaths?.length) {
+          return { success: true, cancelled: true };
+        }
+
+        const filePath = result.filePaths[0];
+        const raw = await fsPromises.readFile(filePath, "utf8");
+        let parsed;
+        try {
+          parsed = JSON.parse(raw);
+        } catch (parseError) {
+          return {
+            success: false,
+            cancelled: false,
+            error: `Invalid JSON file: ${parseError.message}`,
+          };
+        }
+
+        return { success: true, cancelled: false, filePath, data: parsed };
+      } catch (error) {
+        debugLogger.error("Failed to import settings file:", error);
+        return { success: false, cancelled: false, error: error.message };
+      }
+    });
+
     // Utility handlers
     ipcMain.handle("cleanup-app", async (event) => {
       try {
@@ -486,6 +842,10 @@ class IPCHandlers {
 
     ipcMain.handle("update-hotkey", async (event, hotkey) => {
       return await this.windowManager.updateHotkey(hotkey);
+    });
+
+    ipcMain.handle("update-secondary-hotkey", async (event, hotkey) => {
+      return await this.windowManager.updateSecondaryHotkey(hotkey);
     });
 
     ipcMain.handle("set-hotkey-listening-mode", async (event, enabled, newHotkey = null) => {
@@ -503,6 +863,11 @@ class IPCHandlers {
         isRightSideModifier(hotkey);
 
       if (enabled) {
+        this.secondaryHotkeyBeforeCapture = this.windowManager.secondaryHotkey || "";
+        if (this.secondaryHotkeyBeforeCapture) {
+          await this.windowManager.unregisterSecondaryHotkey();
+        }
+
         // Entering capture mode - unregister globalShortcut so it doesn't consume key events
         const currentHotkey = hotkeyManager.getCurrentHotkey();
         if (currentHotkey && !usesNativeListener(currentHotkey)) {
@@ -527,6 +892,11 @@ class IPCHandlers {
           });
         }
       } else {
+        if (this.secondaryHotkeyBeforeCapture) {
+          await this.windowManager.updateSecondaryHotkey(this.secondaryHotkeyBeforeCapture);
+          this.secondaryHotkeyBeforeCapture = "";
+        }
+
         // Exiting capture mode - re-register globalShortcut if not already registered
         if (effectiveHotkey && !usesNativeListener(effectiveHotkey)) {
           const { globalShortcut } = require("electron");
@@ -605,16 +975,16 @@ class IPCHandlers {
     // Auto-start handlers
     ipcMain.handle("get-auto-start-enabled", async () => {
       try {
-        const loginSettings = app.getLoginItemSettings();
-        return loginSettings.openAtLogin;
+        return this.environmentManager.getAutoStartEnabled();
       } catch (error) {
         debugLogger.error("Error getting auto-start status:", error);
-        return false;
+        return true;
       }
     });
 
     ipcMain.handle("set-auto-start-enabled", async (event, enabled) => {
       try {
+        this.environmentManager.saveAutoStartEnabled(enabled);
         app.setLoginItemSettings({
           openAtLogin: enabled,
           openAsHidden: true, // Start minimized to tray
@@ -756,6 +1126,10 @@ class IPCHandlers {
       return this.environmentManager.getAnthropicKey();
     });
 
+    ipcMain.handle("get-openrouter-key", async () => {
+      return this.environmentManager.getOpenRouterKey();
+    });
+
     ipcMain.handle("get-gemini-key", async (event) => {
       return this.environmentManager.getGeminiKey();
     });
@@ -784,6 +1158,11 @@ class IPCHandlers {
     ipcMain.handle(
       "proxy-mistral-transcription",
       async (event, { audioBuffer, model, language, contextBias }) => {
+        const licenseGate = await this.checkLicenseGate();
+        if (!licenseGate.allowed) {
+          return this.buildLicenseDeniedResponse(licenseGate.status);
+        }
+
         const apiKey = this.environmentManager.getMistralKey();
         if (!apiKey) {
           throw new Error("Mistral API key not configured");
@@ -835,6 +1214,80 @@ class IPCHandlers {
       return this.environmentManager.saveCustomReasoningKey(key);
     });
 
+    ipcMain.handle("get-license-api-base-url", async () => {
+      return this.environmentManager.getLicenseApiBaseUrl();
+    });
+
+    ipcMain.handle("save-license-api-base-url", async (_event, url) => {
+      const result = this.environmentManager.saveLicenseApiBaseUrl(url);
+      this.licenseManager?.refreshConfig?.();
+      return result;
+    });
+
+    ipcMain.handle("license-get-status", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.getStatus();
+    });
+
+    ipcMain.handle("license-activate", async (_event, licenseKey) => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.activateLicense(licenseKey);
+    });
+
+    ipcMain.handle("license-validate", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.validateLicense();
+    });
+
+    ipcMain.handle("license-clear", async () => {
+      if (!this.licenseManager) {
+        return {
+          success: false,
+          configured: false,
+          status: "unlicensed",
+          isActive: false,
+          keyPresent: false,
+          error: "LICENSE_MANAGER_UNAVAILABLE",
+          message: "License manager is not available.",
+        };
+      }
+
+      return this.licenseManager.clearLicense();
+    });
+
     // Dictation key handlers for reliable persistence across restarts
     ipcMain.handle("get-dictation-key", async () => {
       return this.environmentManager.getDictationKey();
@@ -854,6 +1307,10 @@ class IPCHandlers {
 
     ipcMain.handle("save-anthropic-key", async (event, key) => {
       return this.environmentManager.saveAnthropicKey(key);
+    });
+
+    ipcMain.handle("save-openrouter-key", async (event, key) => {
+      return this.environmentManager.saveOpenRouterKey(key);
     });
 
     ipcMain.handle("get-ui-language", async () => {
@@ -886,17 +1343,37 @@ class IPCHandlers {
         setVars.LOCAL_TRANSCRIPTION_PROVIDER = prefs.localTranscriptionProvider;
         if (prefs.localTranscriptionProvider === "nvidia") {
           setVars.PARAKEET_MODEL = prefs.model;
-          clearVars.push("LOCAL_WHISPER_MODEL");
+          clearVars.push("LOCAL_WHISPER_MODEL", "SENSEVOICE_MODEL_PATH", "SENSEVOICE_BINARY_PATH");
+        } else if (prefs.localTranscriptionProvider === "sensevoice") {
+          setVars.SENSEVOICE_MODEL_PATH = prefs.model;
+          if (prefs.senseVoiceBinaryPath) {
+            setVars.SENSEVOICE_BINARY_PATH = prefs.senseVoiceBinaryPath;
+          } else {
+            clearVars.push("SENSEVOICE_BINARY_PATH");
+          }
+          clearVars.push("PARAKEET_MODEL", "LOCAL_WHISPER_MODEL");
         } else {
           setVars.LOCAL_WHISPER_MODEL = prefs.model;
-          clearVars.push("PARAKEET_MODEL");
+          clearVars.push("PARAKEET_MODEL", "SENSEVOICE_MODEL_PATH", "SENSEVOICE_BINARY_PATH");
         }
       } else if (prefs.useLocalWhisper) {
         // Local mode enabled but no model selected - clear pre-warming vars
-        clearVars.push("LOCAL_TRANSCRIPTION_PROVIDER", "PARAKEET_MODEL", "LOCAL_WHISPER_MODEL");
+        clearVars.push(
+          "LOCAL_TRANSCRIPTION_PROVIDER",
+          "PARAKEET_MODEL",
+          "LOCAL_WHISPER_MODEL",
+          "SENSEVOICE_MODEL_PATH",
+          "SENSEVOICE_BINARY_PATH"
+        );
       } else {
         // Cloud mode - clear all local transcription vars
-        clearVars.push("LOCAL_TRANSCRIPTION_PROVIDER", "PARAKEET_MODEL", "LOCAL_WHISPER_MODEL");
+        clearVars.push(
+          "LOCAL_TRANSCRIPTION_PROVIDER",
+          "PARAKEET_MODEL",
+          "LOCAL_WHISPER_MODEL",
+          "SENSEVOICE_MODEL_PATH",
+          "SENSEVOICE_BINARY_PATH"
+        );
       }
 
       if (prefs.reasoningProvider === "local" && prefs.reasoningModel) {
@@ -911,6 +1388,11 @@ class IPCHandlers {
 
     // Local reasoning handler
     ipcMain.handle("process-local-reasoning", async (event, text, modelId, _agentName, config) => {
+      const licenseGate = await this.checkLicenseGate();
+      if (!licenseGate.allowed) {
+        return this.buildLicenseDeniedResponse(licenseGate.status);
+      }
+
       try {
         const LocalReasoningService = require("../services/localReasoningBridge").default;
         const result = await LocalReasoningService.processText(text, modelId, config);
@@ -924,6 +1406,11 @@ class IPCHandlers {
     ipcMain.handle(
       "process-anthropic-reasoning",
       async (event, text, modelId, _agentName, config) => {
+        const licenseGate = await this.checkLicenseGate();
+        if (!licenseGate.allowed) {
+          return this.buildLicenseDeniedResponse(licenseGate.status);
+        }
+
         try {
           const apiKey = this.environmentManager.getAnthropicKey();
 
@@ -966,8 +1453,8 @@ class IPCHandlers {
             }
             throw new Error(
               errorData.error?.message ||
-                errorData.error ||
-                `Anthropic API error: ${response.status}`
+              errorData.error ||
+              `Anthropic API error: ${response.status}`
             );
           }
 
@@ -1155,14 +1642,14 @@ class IPCHandlers {
       const envPath = path.join(__dirname, "..", "dist", "runtime-env.json");
       try {
         if (fs.existsSync(envPath)) return JSON.parse(fs.readFileSync(envPath, "utf8"));
-      } catch {}
+      } catch { }
       return {};
     })();
 
     const getApiUrl = () =>
-      process.env.CHORDVOX_API_URL ||
-      process.env.VITE_CHORDVOX_API_URL ||
-      runtimeEnv.VITE_CHORDVOX_API_URL ||
+      process.env.OPENWHISPR_API_URL ||
+      process.env.VITE_OPENWHISPR_API_URL ||
+      runtimeEnv.VITE_OPENWHISPR_API_URL ||
       "";
 
     const getAuthUrl = () =>
@@ -1225,6 +1712,11 @@ class IPCHandlers {
 
     ipcMain.handle("cloud-transcribe", async (event, audioBuffer, opts = {}) => {
       try {
+        const licenseGate = await this.checkLicenseGate();
+        if (!licenseGate.allowed) {
+          return this.buildLicenseDeniedResponse(licenseGate.status);
+        }
+
         const apiUrl = getApiUrl();
         if (!apiUrl) throw new Error("ChordVox API URL not configured");
 
@@ -1237,8 +1729,8 @@ class IPCHandlers {
 
         parts.push(
           `--${boundary}\r\n` +
-            `Content-Disposition: form-data; name="file"; filename="audio.webm"\r\n` +
-            `Content-Type: audio/webm\r\n\r\n`
+          `Content-Disposition: form-data; name="file"; filename="audio.webm"\r\n` +
+          `Content-Type: audio/webm\r\n\r\n`
         );
         parts.push(audioData);
         parts.push("\r\n");
@@ -1246,36 +1738,36 @@ class IPCHandlers {
         if (opts.language) {
           parts.push(
             `--${boundary}\r\n` +
-              `Content-Disposition: form-data; name="language"\r\n\r\n` +
-              `${opts.language}\r\n`
+            `Content-Disposition: form-data; name="language"\r\n\r\n` +
+            `${opts.language}\r\n`
           );
         }
 
         if (opts.prompt) {
           parts.push(
             `--${boundary}\r\n` +
-              `Content-Disposition: form-data; name="prompt"\r\n\r\n` +
-              `${opts.prompt}\r\n`
+            `Content-Disposition: form-data; name="prompt"\r\n\r\n` +
+            `${opts.prompt}\r\n`
           );
         }
 
         // Add client metadata for logging
         parts.push(
           `--${boundary}\r\n` +
-            `Content-Disposition: form-data; name="clientType"\r\n\r\n` +
-            `desktop\r\n`
+          `Content-Disposition: form-data; name="clientType"\r\n\r\n` +
+          `desktop\r\n`
         );
 
         parts.push(
           `--${boundary}\r\n` +
-            `Content-Disposition: form-data; name="appVersion"\r\n\r\n` +
-            `${app.getVersion()}\r\n`
+          `Content-Disposition: form-data; name="appVersion"\r\n\r\n` +
+          `${app.getVersion()}\r\n`
         );
 
         parts.push(
           `--${boundary}\r\n` +
-            `Content-Disposition: form-data; name="sessionId"\r\n\r\n` +
-            `${this.sessionId}\r\n`
+          `Content-Disposition: form-data; name="sessionId"\r\n\r\n` +
+          `${this.sessionId}\r\n`
         );
 
         parts.push(`--${boundary}--\r\n`);
@@ -1361,6 +1853,11 @@ class IPCHandlers {
 
     ipcMain.handle("cloud-reason", async (event, text, opts = {}) => {
       try {
+        const licenseGate = await this.checkLicenseGate();
+        if (!licenseGate.allowed) {
+          return this.buildLicenseDeniedResponse(licenseGate.status);
+        }
+
         const apiUrl = getApiUrl();
         if (!apiUrl) throw new Error("ChordVox API URL not configured");
 
@@ -1500,11 +1997,12 @@ class IPCHandlers {
 
     ipcMain.handle("open-whisper-models-folder", async () => {
       try {
-        const modelsDir = this.whisperManager.getModelsDir();
-        await shell.openPath(modelsDir);
+        const cacheRoot = path.join(app.getPath("home"), ".cache", "chordvox");
+        await fsPromises.mkdir(cacheRoot, { recursive: true });
+        await shell.openPath(cacheRoot);
         return { success: true };
       } catch (error) {
-        debugLogger.error("Failed to open whisper models folder:", error);
+        debugLogger.error("Failed to open model cache folder:", error);
         return { success: false, error: error.message };
       }
     });
@@ -1538,25 +2036,25 @@ class IPCHandlers {
         // Parse lines
         const lines = envContent.split("\n");
         const logLevelIndex = lines.findIndex((line) =>
-          line.trim().startsWith("CHORDVOX_LOG_LEVEL=")
+          line.trim().startsWith("OPENWHISPR_LOG_LEVEL=")
         );
 
         if (enabled) {
           // Set to debug
           if (logLevelIndex !== -1) {
-            lines[logLevelIndex] = "CHORDVOX_LOG_LEVEL=debug";
+            lines[logLevelIndex] = "OPENWHISPR_LOG_LEVEL=debug";
           } else {
             // Add new line
             if (lines.length > 0 && lines[lines.length - 1] !== "") {
               lines.push("");
             }
             lines.push("# Debug logging setting");
-            lines.push("CHORDVOX_LOG_LEVEL=debug");
+            lines.push("OPENWHISPR_LOG_LEVEL=debug");
           }
         } else {
           // Remove or set to info
           if (logLevelIndex !== -1) {
-            lines[logLevelIndex] = "CHORDVOX_LOG_LEVEL=info";
+            lines[logLevelIndex] = "OPENWHISPR_LOG_LEVEL=info";
           }
         }
 
@@ -1564,7 +2062,7 @@ class IPCHandlers {
         fs.writeFileSync(envPath, lines.join("\n"), "utf8");
 
         // Update environment variable
-        process.env.CHORDVOX_LOG_LEVEL = enabled ? "debug" : "info";
+        process.env.OPENWHISPR_LOG_LEVEL = enabled ? "debug" : "info";
 
         // Refresh logger state
         debugLogger.refreshLogLevel();
@@ -1587,6 +2085,37 @@ class IPCHandlers {
         return { success: true };
       } catch (error) {
         debugLogger.error("Failed to open logs folder:", error);
+        return { success: false, error: error.message };
+      }
+    });
+
+    ipcMain.handle("get-call-trace-sessions", async (_event, limit = 20) => {
+      try {
+        return { success: true, sessions: debugLogger.getCallTraceSessions(limit) };
+      } catch (error) {
+        debugLogger.error("Failed to load call trace sessions:", error);
+        return { success: false, sessions: [], error: error.message };
+      }
+    });
+
+    ipcMain.handle("get-call-trace-events", async (_event, runId, limit = 80) => {
+      try {
+        return {
+          success: true,
+          events: debugLogger.getCallTraceEvents(runId, limit),
+        };
+      } catch (error) {
+        debugLogger.error("Failed to load call trace events:", error);
+        return { success: false, events: [], error: error.message };
+      }
+    });
+
+    ipcMain.handle("clear-call-traces", async () => {
+      try {
+        debugLogger.clearRecentEntries("call-trace");
+        return { success: true };
+      } catch (error) {
+        debugLogger.error("Failed to clear call traces:", error);
         return { success: false, error: error.message };
       }
     });

@@ -16,6 +16,7 @@ import {
   TranscriptionProviderData,
   WHISPER_MODEL_INFO,
   PARAKEET_MODEL_INFO,
+  SENSEVOICE_MODEL_INFO,
 } from "../models/ModelRegistry";
 import {
   MODEL_PICKER_COLORS,
@@ -30,6 +31,8 @@ interface LocalModel {
   model: string;
   size_mb?: number;
   downloaded?: boolean;
+  modelPath?: string;
+  path?: string;
 }
 
 interface LocalModelCardProps {
@@ -183,11 +186,15 @@ interface TranscriptionModelPickerProps {
   selectedCloudModel: string;
   onCloudModelSelect: (modelId: string) => void;
   selectedLocalModel: string;
-  onLocalModelSelect: (modelId: string) => void;
+  onLocalModelSelect: (modelId: string, providerId?: string) => void;
   selectedLocalProvider?: string;
   onLocalProviderSelect?: (providerId: string) => void;
   useLocalWhisper: boolean;
   onModeChange: (useLocal: boolean) => void;
+  senseVoiceModelPath?: string;
+  setSenseVoiceModelPath?: (path: string) => void;
+  senseVoiceBinaryPath?: string;
+  setSenseVoiceBinaryPath?: (path: string) => void;
   openaiApiKey: string;
   setOpenaiApiKey: (key: string) => void;
   groqApiKey: string;
@@ -214,7 +221,13 @@ const VALID_CLOUD_PROVIDER_IDS = CLOUD_PROVIDER_TABS.map((p) => p.id);
 const LOCAL_PROVIDER_TABS: Array<{ id: string; name: string; disabled?: boolean }> = [
   { id: "whisper", name: "OpenAI Whisper" },
   { id: "nvidia", name: "NVIDIA Parakeet" },
+  { id: "sensevoice", name: "SenseVoice" },
 ];
+
+function isLikelyPathInput(value: string) {
+  const raw = String(value || "").trim();
+  return raw.includes("/") || raw.includes("\\");
+}
 
 interface ModeToggleProps {
   useLocalWhisper: boolean;
@@ -263,6 +276,10 @@ export default function TranscriptionModelPicker({
   onLocalProviderSelect,
   useLocalWhisper,
   onModeChange,
+  senseVoiceModelPath = "",
+  setSenseVoiceModelPath,
+  senseVoiceBinaryPath = "",
+  setSenseVoiceBinaryPath,
   openaiApiKey,
   setOpenaiApiKey,
   groqApiKey,
@@ -279,9 +296,11 @@ export default function TranscriptionModelPicker({
   const { t } = useTranslation();
   const [localModels, setLocalModels] = useState<LocalModel[]>([]);
   const [parakeetModels, setParakeetModels] = useState<LocalModel[]>([]);
+  const [senseVoiceModels, setSenseVoiceModels] = useState<LocalModel[]>([]);
   const [internalLocalProvider, setInternalLocalProvider] = useState(selectedLocalProvider);
   const hasLoadedRef = useRef(false);
   const hasLoadedParakeetRef = useRef(false);
+  const hasLoadedSenseVoiceRef = useRef(false);
 
   useEffect(() => {
     if (selectedLocalProvider !== internalLocalProvider) {
@@ -290,8 +309,10 @@ export default function TranscriptionModelPicker({
   }, [selectedLocalProvider]);
   const isLoadingRef = useRef(false);
   const isLoadingParakeetRef = useRef(false);
+  const isLoadingSenseVoiceRef = useRef(false);
   const loadLocalModelsRef = useRef<(() => Promise<void>) | null>(null);
   const loadParakeetModelsRef = useRef<(() => Promise<void>) | null>(null);
+  const loadSenseVoiceModelsRef = useRef<(() => Promise<void>) | null>(null);
   const ensureValidCloudSelectionRef = useRef<(() => void) | null>(null);
   const selectedLocalModelRef = useRef(selectedLocalModel);
   const onLocalModelSelectRef = useRef(onLocalModelSelect);
@@ -314,14 +335,15 @@ export default function TranscriptionModelPicker({
   const validateAndSelectModel = useCallback((loadedModels: LocalModel[]) => {
     const current = selectedLocalModelRef.current;
     if (!current) return;
+    if (isLikelyPathInput(current)) return;
 
     const downloaded = loadedModels.filter((m) => m.downloaded);
     const isCurrentDownloaded = loadedModels.find((m) => m.model === current)?.downloaded;
 
     if (!isCurrentDownloaded && downloaded.length > 0) {
-      onLocalModelSelectRef.current(downloaded[0].model);
+      onLocalModelSelectRef.current(downloaded[0].model, "whisper");
     } else if (!isCurrentDownloaded && downloaded.length === 0) {
-      onLocalModelSelectRef.current("");
+      onLocalModelSelectRef.current("", "whisper");
     }
   }, []);
 
@@ -357,6 +379,23 @@ export default function TranscriptionModelPicker({
       setParakeetModels([]);
     } finally {
       isLoadingParakeetRef.current = false;
+    }
+  }, []);
+
+  const loadSenseVoiceModels = useCallback(async () => {
+    if (isLoadingSenseVoiceRef.current) return;
+    isLoadingSenseVoiceRef.current = true;
+
+    try {
+      const result = await window.electronAPI?.listSenseVoiceModels();
+      if (result?.success) {
+        setSenseVoiceModels(result.models);
+      }
+    } catch (error) {
+      console.error("[TranscriptionModelPicker] Failed to load SenseVoice models:", error);
+      setSenseVoiceModels([]);
+    } finally {
+      isLoadingSenseVoiceRef.current = false;
     }
   }, []);
 
@@ -404,6 +443,9 @@ export default function TranscriptionModelPicker({
     loadParakeetModelsRef.current = loadParakeetModels;
   }, [loadParakeetModels]);
   useEffect(() => {
+    loadSenseVoiceModelsRef.current = loadSenseVoiceModels;
+  }, [loadSenseVoiceModels]);
+  useEffect(() => {
     ensureValidCloudSelectionRef.current = ensureValidCloudSelection;
   }, [ensureValidCloudSelection]);
 
@@ -416,6 +458,9 @@ export default function TranscriptionModelPicker({
     } else if (internalLocalProvider === "nvidia" && !hasLoadedParakeetRef.current) {
       hasLoadedParakeetRef.current = true;
       loadParakeetModelsRef.current?.();
+    } else if (internalLocalProvider === "sensevoice" && !hasLoadedSenseVoiceRef.current) {
+      hasLoadedSenseVoiceRef.current = true;
+      loadSenseVoiceModelsRef.current?.();
     }
   }, [useLocalWhisper, internalLocalProvider]);
 
@@ -424,6 +469,7 @@ export default function TranscriptionModelPicker({
 
     hasLoadedRef.current = false;
     hasLoadedParakeetRef.current = false;
+    hasLoadedSenseVoiceRef.current = false;
     ensureValidCloudSelectionRef.current?.();
   }, [useLocalWhisper]);
 
@@ -431,10 +477,11 @@ export default function TranscriptionModelPicker({
     const handleModelsCleared = () => {
       loadLocalModels();
       loadParakeetModels();
+      loadSenseVoiceModels();
     };
-    window.addEventListener("chordvox-models-cleared", handleModelsCleared);
-    return () => window.removeEventListener("chordvox-models-cleared", handleModelsCleared);
-  }, [loadLocalModels, loadParakeetModels]);
+    window.addEventListener("openwhispr-models-cleared", handleModelsCleared);
+    return () => window.removeEventListener("openwhispr-models-cleared", handleModelsCleared);
+  }, [loadLocalModels, loadParakeetModels, loadSenseVoiceModels]);
 
   const {
     downloadingModel,
@@ -462,6 +509,20 @@ export default function TranscriptionModelPicker({
   } = useModelDownload({
     modelType: "parakeet",
     onDownloadComplete: loadParakeetModels,
+  });
+
+  const {
+    downloadingModel: downloadingSenseVoiceModel,
+    downloadProgress: senseVoiceDownloadProgress,
+    downloadModel: downloadSenseVoiceModel,
+    deleteModel: deleteSenseVoiceModel,
+    isDownloadingModel: isDownloadingSenseVoiceModel,
+    isInstalling: isInstallingSenseVoice,
+    cancelDownload: cancelSenseVoiceDownload,
+    isCancelling: isCancellingSenseVoice,
+  } = useModelDownload({
+    modelType: "sensevoice",
+    onDownloadComplete: loadSenseVoiceModels,
   });
 
   const handleModeChange = useCallback(
@@ -506,7 +567,7 @@ export default function TranscriptionModelPicker({
     (modelId: string) => {
       onLocalProviderSelect?.("whisper");
       setInternalLocalProvider("whisper");
-      onLocalModelSelect(modelId);
+      onLocalModelSelect(modelId, "whisper");
     },
     [onLocalModelSelect, onLocalProviderSelect]
   );
@@ -515,10 +576,182 @@ export default function TranscriptionModelPicker({
     (modelId: string) => {
       onLocalProviderSelect?.("nvidia");
       setInternalLocalProvider("nvidia");
-      onLocalModelSelect(modelId);
+      onLocalModelSelect(modelId, "nvidia");
     },
     [onLocalModelSelect, onLocalProviderSelect]
   );
+
+  const selectedWhisperModelId = useMemo(() => {
+    const rawValue = String(selectedLocalModel || "").trim();
+    if (!rawValue || isLikelyPathInput(rawValue)) {
+      const normalizedPath = rawValue.toLowerCase();
+      if (!normalizedPath) return "";
+      const byPath = localModels.find(
+        (model) => String(model.path || "").trim().toLowerCase() === normalizedPath
+      );
+      return byPath?.model || "";
+    }
+    return rawValue;
+  }, [selectedLocalModel, localModels]);
+
+  const selectedWhisperModelPath = useMemo(() => {
+    const rawValue = String(selectedLocalModel || "").trim();
+    if (isLikelyPathInput(rawValue)) {
+      return rawValue;
+    }
+    const selected = localModels.find((model) => model.model === rawValue);
+    return selected?.path || "";
+  }, [selectedLocalModel, localModels]);
+
+  const handleWhisperModelPathChange = useCallback(
+    (value: string) => {
+      onLocalProviderSelect?.("whisper");
+      setInternalLocalProvider("whisper");
+      onLocalModelSelect(value, "whisper");
+    },
+    [onLocalModelSelect, onLocalProviderSelect]
+  );
+
+  const handlePickWhisperModel = useCallback(async () => {
+    try {
+      const result = await window.electronAPI?.pickWhisperModelFile?.(selectedWhisperModelPath);
+      if (result?.success && result.path) {
+        handleWhisperModelPathChange(result.path);
+      }
+    } catch (error) {
+      console.error("[TranscriptionModelPicker] Failed to pick Whisper model:", error);
+    }
+  }, [selectedWhisperModelPath, handleWhisperModelPathChange]);
+
+  const selectedParakeetModelId = useMemo(() => {
+    const rawValue = String(selectedLocalModel || "").trim();
+    if (!rawValue || isLikelyPathInput(rawValue)) {
+      const normalizedPath = rawValue.toLowerCase();
+      if (!normalizedPath) return "";
+      const byPath = parakeetModels.find(
+        (model) => String(model.path || "").trim().toLowerCase() === normalizedPath
+      );
+      return byPath?.model || "";
+    }
+    return rawValue;
+  }, [selectedLocalModel, parakeetModels]);
+
+  const selectedParakeetModelPath = useMemo(() => {
+    const rawValue = String(selectedLocalModel || "").trim();
+    if (isLikelyPathInput(rawValue)) {
+      return rawValue;
+    }
+    const selected = parakeetModels.find((model) => model.model === rawValue);
+    return selected?.path || "";
+  }, [selectedLocalModel, parakeetModels]);
+
+  const handleParakeetModelPathChange = useCallback(
+    (value: string) => {
+      onLocalProviderSelect?.("nvidia");
+      setInternalLocalProvider("nvidia");
+      onLocalModelSelect(value, "nvidia");
+    },
+    [onLocalModelSelect, onLocalProviderSelect]
+  );
+
+  const handlePickParakeetModelDirectory = useCallback(async () => {
+    try {
+      const result = await window.electronAPI?.pickParakeetModelDirectory?.(
+        selectedParakeetModelPath
+      );
+      if (result?.success && result.path) {
+        handleParakeetModelPathChange(result.path);
+      }
+    } catch (error) {
+      console.error("[TranscriptionModelPicker] Failed to pick Parakeet model directory:", error);
+    }
+  }, [selectedParakeetModelPath, handleParakeetModelPathChange]);
+
+  const selectedSenseVoiceModelId = useMemo(() => {
+    const currentPath = String(senseVoiceModelPath || "").trim().toLowerCase();
+    if (!currentPath) return "";
+
+    const fromLoaded = senseVoiceModels.find((model) => {
+      const candidatePath = String(model.modelPath || model.path || "")
+        .trim()
+        .toLowerCase();
+      return candidatePath && candidatePath === currentPath;
+    });
+    if (fromLoaded?.model) return fromLoaded.model;
+
+    const fileName = currentPath.split(/[\\/]/).pop() || "";
+    for (const [modelId, info] of Object.entries(SENSEVOICE_MODEL_INFO)) {
+      if (info.fileName.toLowerCase() === fileName) {
+        return modelId;
+      }
+    }
+    return "";
+  }, [senseVoiceModelPath, senseVoiceModels]);
+
+  const handleSenseVoiceModelPathChange = useCallback(
+    (value: string) => {
+      setSenseVoiceModelPath?.(value);
+      onLocalProviderSelect?.("sensevoice");
+      setInternalLocalProvider("sensevoice");
+      onLocalModelSelect(value, "sensevoice");
+    },
+    [onLocalModelSelect, onLocalProviderSelect, setSenseVoiceModelPath]
+  );
+
+  const handleSenseVoiceModelSelect = useCallback(
+    async (modelId: string) => {
+      onLocalProviderSelect?.("sensevoice");
+      setInternalLocalProvider("sensevoice");
+
+      try {
+        const status = await window.electronAPI?.checkSenseVoiceModelStatus(modelId);
+        if (status?.downloaded && status.modelPath) {
+          handleSenseVoiceModelPathChange(status.modelPath);
+          return;
+        }
+      } catch (error) {
+        console.error("[TranscriptionModelPicker] Failed to resolve SenseVoice model path:", error);
+      }
+
+      const fallback = senseVoiceModels.find((model) => model.model === modelId);
+      const fallbackPath = fallback?.modelPath || fallback?.path || "";
+      if (fallbackPath) {
+        handleSenseVoiceModelPathChange(fallbackPath);
+      }
+    },
+    [handleSenseVoiceModelPathChange, onLocalProviderSelect, senseVoiceModels]
+  );
+
+  const handleSenseVoiceBinaryPathChange = useCallback(
+    (value: string) => {
+      setSenseVoiceBinaryPath?.(value);
+      onLocalProviderSelect?.("sensevoice");
+      setInternalLocalProvider("sensevoice");
+    },
+    [onLocalProviderSelect, setSenseVoiceBinaryPath]
+  );
+
+  const handlePickSenseVoiceModel = useCallback(async () => {
+    try {
+      const result = await window.electronAPI?.pickSenseVoiceModelFile?.(senseVoiceModelPath);
+      if (result?.success && result.path) {
+        handleSenseVoiceModelPathChange(result.path);
+      }
+    } catch (error) {
+      console.error("[TranscriptionModelPicker] Failed to pick SenseVoice model:", error);
+    }
+  }, [senseVoiceModelPath, handleSenseVoiceModelPathChange]);
+
+  const handlePickSenseVoiceBinary = useCallback(async () => {
+    try {
+      const result = await window.electronAPI?.pickSenseVoiceBinary?.(senseVoiceBinaryPath);
+      if (result?.success && result.path) {
+        handleSenseVoiceBinaryPathChange(result.path);
+      }
+    } catch (error) {
+      console.error("[TranscriptionModelPicker] Failed to pick SenseVoice binary:", error);
+    }
+  }, [senseVoiceBinaryPath, handleSenseVoiceBinaryPathChange]);
 
   const handleBaseUrlBlur = useCallback(() => {
     if (!setCloudTranscriptionBaseUrl || selectedCloudProvider !== "custom") return;
@@ -614,6 +847,17 @@ export default function TranscriptionModelPicker({
       );
     }
 
+    if (downloadingSenseVoiceModel && internalLocalProvider === "sensevoice") {
+      const modelInfo = SENSEVOICE_MODEL_INFO[downloadingSenseVoiceModel];
+      return (
+        <DownloadProgressBar
+          modelName={modelInfo?.name || downloadingSenseVoiceModel}
+          progress={senseVoiceDownloadProgress}
+          isInstalling={isInstallingSenseVoice}
+        />
+      );
+    }
+
     return null;
   }, [
     downloadingModel,
@@ -622,6 +866,9 @@ export default function TranscriptionModelPicker({
     downloadingParakeetModel,
     parakeetDownloadProgress,
     isInstallingParakeet,
+    downloadingSenseVoiceModel,
+    senseVoiceDownloadProgress,
+    isInstallingSenseVoice,
     useLocalWhisper,
     internalLocalProvider,
   ]);
@@ -637,45 +884,73 @@ export default function TranscriptionModelPicker({
         : localModels;
 
     return (
-      <div className="space-y-0.5">
-        {modelsToRender.map((model) => {
-          const modelId = model.model;
-          const info = WHISPER_MODEL_INFO[modelId] ?? {
-            name: modelId,
-            description: t("transcription.fallback.whisperModelDescription"),
-            size: t("common.unknown"),
-            recommended: false,
-          };
+      <div className="space-y-2">
+        <div className="space-y-0.5">
+          {modelsToRender.map((model) => {
+            const modelId = model.model;
+            const info = WHISPER_MODEL_INFO[modelId] ?? {
+              name: modelId,
+              description: t("transcription.fallback.whisperModelDescription"),
+              size: t("common.unknown"),
+              recommended: false,
+            };
 
-          return (
-            <LocalModelCard
-              key={modelId}
-              modelId={modelId}
-              name={info.name}
-              description={info.description}
-              size={info.size}
-              actualSizeMb={model.size_mb}
-              isSelected={modelId === selectedLocalModel}
-              isDownloaded={model.downloaded ?? false}
-              isDownloading={isDownloadingModel(modelId)}
-              isCancelling={isCancelling}
-              recommended={info.recommended}
-              provider="whisper"
-              onSelect={() => handleWhisperModelSelect(modelId)}
-              onDelete={() => handleDelete(modelId)}
-              onDownload={() =>
-                downloadModel(modelId, (downloadedId) => {
-                  setLocalModels((prev) =>
-                    prev.map((m) => (m.model === downloadedId ? { ...m, downloaded: true } : m))
-                  );
-                  handleWhisperModelSelect(downloadedId);
-                })
-              }
-              onCancel={cancelDownload}
-              styles={styles}
+            return (
+              <LocalModelCard
+                key={modelId}
+                modelId={modelId}
+                name={info.name}
+                description={info.description}
+                size={info.size}
+                actualSizeMb={model.size_mb}
+                isSelected={modelId === selectedWhisperModelId}
+                isDownloaded={model.downloaded ?? false}
+                isDownloading={isDownloadingModel(modelId)}
+                isCancelling={isCancelling}
+                recommended={info.recommended}
+                provider="whisper"
+                onSelect={() => handleWhisperModelSelect(modelId)}
+                onDelete={() => handleDelete(modelId)}
+                onDownload={() =>
+                  downloadModel(modelId, (downloadedId) => {
+                    setLocalModels((prev) =>
+                      prev.map((m) => (m.model === downloadedId ? { ...m, downloaded: true } : m))
+                    );
+                    handleWhisperModelSelect(downloadedId);
+                  })
+                }
+                onCancel={cancelDownload}
+                styles={styles}
+              />
+            );
+          })}
+        </div>
+
+        <div className="rounded-md border border-border/50 bg-muted/20 px-2.5 py-2">
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            Download official Whisper models here, or use your own local `.bin` model file.
+          </p>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-foreground">Whisper Model (.bin)</label>
+          <div className="flex items-center gap-1.5">
+            <Input
+              value={selectedWhisperModelPath}
+              onChange={(e) => handleWhisperModelPathChange(e.target.value)}
+              placeholder="/path/to/ggml-base.bin"
+              className="h-8 text-sm"
             />
-          );
-        })}
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 px-2 text-xs"
+              onClick={handlePickWhisperModel}
+            >
+              Browse
+            </Button>
+          </div>
+        </div>
       </div>
     );
   };
@@ -716,47 +991,209 @@ export default function TranscriptionModelPicker({
         : parakeetModels;
 
     return (
-      <div className="space-y-0.5">
-        {modelsToRender.map((model) => {
-          const modelId = model.model;
-          const info = PARAKEET_MODEL_INFO[modelId] ?? {
-            name: modelId,
-            description: t("transcription.fallback.parakeetModelDescription"),
-            size: t("common.unknown"),
-            language: "en",
-            recommended: false,
-          };
+      <div className="space-y-2">
+        <div className="space-y-0.5">
+          {modelsToRender.map((model) => {
+            const modelId = model.model;
+            const info = PARAKEET_MODEL_INFO[modelId] ?? {
+              name: modelId,
+              description: t("transcription.fallback.parakeetModelDescription"),
+              size: t("common.unknown"),
+              language: "en",
+              recommended: false,
+            };
 
-          return (
-            <LocalModelCard
-              key={modelId}
-              modelId={modelId}
-              name={info.name}
-              description={info.description}
-              size={info.size}
-              actualSizeMb={model.size_mb}
-              isSelected={modelId === selectedLocalModel}
-              isDownloaded={model.downloaded ?? false}
-              isDownloading={isDownloadingParakeetModel(modelId)}
-              isCancelling={isCancellingParakeet}
-              recommended={info.recommended}
-              provider="nvidia"
-              languageLabel={getParakeetLanguageLabel(info.language)}
-              onSelect={() => handleParakeetModelSelect(modelId)}
-              onDelete={() => handleParakeetDelete(modelId)}
-              onDownload={() =>
-                downloadParakeetModel(modelId, (downloadedId) => {
-                  setParakeetModels((prev) =>
-                    prev.map((m) => (m.model === downloadedId ? { ...m, downloaded: true } : m))
-                  );
-                  handleParakeetModelSelect(downloadedId);
-                })
-              }
-              onCancel={cancelParakeetDownload}
-              styles={styles}
+            return (
+              <LocalModelCard
+                key={modelId}
+                modelId={modelId}
+                name={info.name}
+                description={info.description}
+                size={info.size}
+                actualSizeMb={model.size_mb}
+                isSelected={modelId === selectedParakeetModelId}
+                isDownloaded={model.downloaded ?? false}
+                isDownloading={isDownloadingParakeetModel(modelId)}
+                isCancelling={isCancellingParakeet}
+                recommended={info.recommended}
+                provider="nvidia"
+                languageLabel={getParakeetLanguageLabel(info.language)}
+                onSelect={() => handleParakeetModelSelect(modelId)}
+                onDelete={() => handleParakeetDelete(modelId)}
+                onDownload={() =>
+                  downloadParakeetModel(modelId, (downloadedId) => {
+                    setParakeetModels((prev) =>
+                      prev.map((m) => (m.model === downloadedId ? { ...m, downloaded: true } : m))
+                    );
+                    handleParakeetModelSelect(downloadedId);
+                  })
+                }
+                onCancel={cancelParakeetDownload}
+                styles={styles}
+              />
+            );
+          })}
+        </div>
+
+        <div className="rounded-md border border-border/50 bg-muted/20 px-2.5 py-2">
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            Download official Parakeet models here, or choose a local model directory.
+          </p>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-foreground">Parakeet Model Directory</label>
+          <div className="flex items-center gap-1.5">
+            <Input
+              value={selectedParakeetModelPath}
+              onChange={(e) => handleParakeetModelPathChange(e.target.value)}
+              placeholder="/path/to/parakeet-tdt-0.6b-v3"
+              className="h-8 text-sm"
             />
-          );
-        })}
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 px-2 text-xs"
+              onClick={handlePickParakeetModelDirectory}
+            >
+              Browse
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const handleSenseVoiceDelete = useCallback(
+    (modelId: string) => {
+      showConfirmDialog({
+        title: t("transcription.deleteModel.title"),
+        description: t("transcription.deleteModel.description"),
+        onConfirm: async () => {
+          await deleteSenseVoiceModel(modelId, async () => {
+            const result = await window.electronAPI?.listSenseVoiceModels();
+            if (result?.success) {
+              setSenseVoiceModels(result.models);
+              if (selectedSenseVoiceModelId === modelId) {
+                handleSenseVoiceModelPathChange("");
+              }
+            }
+          });
+        },
+        variant: "destructive",
+      });
+    },
+    [
+      showConfirmDialog,
+      deleteSenseVoiceModel,
+      handleSenseVoiceModelPathChange,
+      selectedSenseVoiceModelId,
+      t,
+    ]
+  );
+
+  const renderSenseVoiceModels = () => {
+    const modelsToRender =
+      senseVoiceModels.length === 0
+        ? Object.entries(SENSEVOICE_MODEL_INFO).map(([modelId, info]) => ({
+            model: modelId,
+            downloaded: false,
+            size_mb: info.sizeMb,
+          }))
+        : senseVoiceModels;
+
+    return (
+      <div className="space-y-2">
+        <div className="space-y-0.5">
+          {modelsToRender.map((model) => {
+            const modelId = model.model;
+            const info = SENSEVOICE_MODEL_INFO[modelId] ?? {
+              name: modelId,
+              description: t("common.unknown"),
+              size: t("common.unknown"),
+              recommended: false,
+            };
+
+            return (
+              <LocalModelCard
+                key={modelId}
+                modelId={modelId}
+                name={info.name}
+                description={info.description}
+                size={info.size}
+                actualSizeMb={model.size_mb}
+                isSelected={modelId === selectedSenseVoiceModelId}
+                isDownloaded={model.downloaded ?? false}
+                isDownloading={isDownloadingSenseVoiceModel(modelId)}
+                isCancelling={isCancellingSenseVoice}
+                recommended={info.recommended}
+                provider="sensevoice"
+                onSelect={() => {
+                  void handleSenseVoiceModelSelect(modelId);
+                }}
+                onDelete={() => handleSenseVoiceDelete(modelId)}
+                onDownload={() =>
+                  downloadSenseVoiceModel(modelId, (downloadedId) => {
+                    setSenseVoiceModels((prev) =>
+                      prev.map((m) => (m.model === downloadedId ? { ...m, downloaded: true } : m))
+                    );
+                    void handleSenseVoiceModelSelect(downloadedId);
+                  })
+                }
+                onCancel={cancelSenseVoiceDownload}
+                styles={styles}
+              />
+            );
+          })}
+        </div>
+
+        <div className="rounded-md border border-border/50 bg-muted/20 px-2.5 py-2">
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            Download official SenseVoice GGUF models here, or use your own local GGUF file.
+          </p>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-foreground">SenseVoice Model (.gguf)</label>
+          <div className="flex items-center gap-1.5">
+            <Input
+              value={senseVoiceModelPath}
+              onChange={(e) => handleSenseVoiceModelPathChange(e.target.value)}
+              placeholder="/path/to/sense-voice-small-q4_k.gguf"
+              className="h-8 text-sm"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 px-2 text-xs"
+              onClick={handlePickSenseVoiceModel}
+            >
+              Browse
+            </Button>
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-foreground">
+            SenseVoice Binary (sense-voice-main)
+          </label>
+          <div className="flex items-center gap-1.5">
+            <Input
+              value={senseVoiceBinaryPath}
+              onChange={(e) => handleSenseVoiceBinaryPathChange(e.target.value)}
+              placeholder="/path/to/sense-voice-main"
+              className="h-8 text-sm"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 px-2 text-xs"
+              onClick={handlePickSenseVoiceBinary}
+            >
+              Browse
+            </Button>
+          </div>
+        </div>
       </div>
     );
   };
@@ -878,6 +1315,7 @@ export default function TranscriptionModelPicker({
           <div className="p-2">
             {internalLocalProvider === "whisper" && renderLocalModels()}
             {internalLocalProvider === "nvidia" && renderParakeetModels()}
+            {internalLocalProvider === "sensevoice" && renderSenseVoiceModels()}
           </div>
         </div>
       )}

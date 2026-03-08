@@ -174,6 +174,7 @@
     "hold": "ホールド",
     "less": "少なく表示",
     "more": "もっと見る",
+    "noMatchingModels": "一致するモデルが見つかりません",
     "private": "プライベート",
     "tap": "タップ"
   },
@@ -754,7 +755,7 @@
       "reset": "リセット",
       "save": "保存"
     },
-    "defaultTestInput": "ねぇ Whispr、今日の天気はどう？",
+    "defaultTestInput": "ねぇ ChordVox、今日の天気はどう？",
     "dialogs": {
       "reset": {
         "description": "プロンプトをデフォルト値にリセットしました。",
@@ -794,7 +795,7 @@
       "none": "なし",
       "outputLabel": "出力",
       "processing": "処理中...",
-      "chordvoxCloud": "ChordVox Cloud",
+      "openwhisprCloud": "ChordVox Cloud",
       "providerLabel": "プロバイダー",
       "run": "テスト実行"
     },
@@ -980,8 +981,8 @@
       "description": "文字起こしのクリーンアップ、コマンド処理、エラー修正を行いながら、あなたの話し方を維持します。",
       "enableTextCleanup": "テキスト補正を有効にする",
       "enableTextCleanupDescription": "AI が文字起こしの品質を向上",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "設定不要ですぐに使えます。",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "設定不要ですぐに使えます。",
       "title": "AI テキスト補正",
       "toasts": {
         "switchedCloud": {
@@ -1169,8 +1170,8 @@
       "customSetup": "カスタム設定",
       "customSetupDescription": "独自のプロバイダーと API キーを使用。",
       "description": "ChordVox の音声文字起こし方法を選択",
-      "chordvoxCloud": "ChordVox Cloud",
-      "chordvoxCloudDescription": "設定不要ですぐに使えます。",
+      "openwhisprCloud": "ChordVox Cloud",
+      "openwhisprCloudDescription": "設定不要ですぐに使えます。",
       "title": "音声テキスト変換",
       "toasts": {
         "switchedCloud": {

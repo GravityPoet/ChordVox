@@ -93,7 +93,6 @@ const MAC_RESERVED_SHORTCUTS = [
   "Command+Shift+Up",
   "Command+Shift+Down",
   "Command+Control+F",
-  "Command+Space",
   "Command+Alt+Space",
   "Command+Shift+3",
   "Command+Shift+4",

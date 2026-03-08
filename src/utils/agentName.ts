@@ -3,9 +3,33 @@ import { useState } from "react";
 const AGENT_NAME_KEY = "agentName";
 const DICTIONARY_KEY = "customDictionary";
 const DEFAULT_AGENT_NAME = "ChordVox";
+const LEGACY_AGENT_NAMES = new Set([
+  "ariakey",
+  "whispr",
+  "openwhispr",
+  "open whispr",
+  "moonlitvoice",
+  "moonlit voice",
+]);
+
+function isLegacyAgentName(name: string): boolean {
+  return LEGACY_AGENT_NAMES.has(name.trim().toLowerCase());
+}
+
+function normalizeAgentName(name: string | null): string {
+  const trimmed = (name || "").trim();
+  if (!trimmed) return DEFAULT_AGENT_NAME;
+  if (isLegacyAgentName(trimmed)) return DEFAULT_AGENT_NAME;
+  return trimmed;
+}
 
 export const getAgentName = (): string => {
-  return localStorage.getItem(AGENT_NAME_KEY) || DEFAULT_AGENT_NAME;
+  const stored = localStorage.getItem(AGENT_NAME_KEY);
+  const normalized = normalizeAgentName(stored);
+  if ((stored || "").trim() !== normalized) {
+    localStorage.setItem(AGENT_NAME_KEY, normalized);
+  }
+  return normalized;
 };
 
 function syncAgentNameToDictionary(newName: string, oldName?: string): void {
@@ -24,6 +48,7 @@ function syncAgentNameToDictionary(newName: string, oldName?: string): void {
   if (oldName && oldName !== newName) {
     dictionary = dictionary.filter((w) => w !== oldName);
   }
+  dictionary = dictionary.filter((w) => !isLegacyAgentName(w));
 
   // Add new name at the front if not already present
   const trimmed = newName.trim();
@@ -39,7 +64,7 @@ function syncAgentNameToDictionary(newName: string, oldName?: string): void {
 
 export const setAgentName = (name: string): void => {
   const oldName = localStorage.getItem(AGENT_NAME_KEY) || "";
-  const trimmed = name.trim() || DEFAULT_AGENT_NAME;
+  const trimmed = normalizeAgentName(name);
   localStorage.setItem(AGENT_NAME_KEY, trimmed);
   syncAgentNameToDictionary(trimmed, oldName);
 };
@@ -53,8 +78,9 @@ export const useAgentName = () => {
   const [agentName, setAgentNameState] = useState<string>(getAgentName());
 
   const updateAgentName = (name: string) => {
-    setAgentName(name);
-    setAgentNameState(name.trim() || DEFAULT_AGENT_NAME);
+    const normalized = normalizeAgentName(name);
+    setAgentName(normalized);
+    setAgentNameState(normalized);
   };
 
   return { agentName, setAgentName: updateAgentName };

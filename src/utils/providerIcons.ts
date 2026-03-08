@@ -7,10 +7,14 @@ import qwenIcon from "@/assets/icons/providers/qwen.svg";
 import groqIcon from "@/assets/icons/providers/groq.svg";
 import nvidiaIcon from "@/assets/icons/providers/nvidia.svg";
 import openaiOssIcon from "@/assets/icons/providers/openai-oss.svg";
+import openrouterIcon from "@/assets/icons/providers/openrouter.png";
+import sensevoiceIcon from "@/assets/icons/providers/sensevoice.png";
+import bedrockIcon from "@/assets/icons/providers/bedrock.png";
 
 export const PROVIDER_ICONS: Record<string, string> = {
   openai: openaiIcon,
   whisper: openaiIcon,
+  openrouter: openrouterIcon,
   anthropic: anthropicIcon,
   gemini: geminiIcon,
   llama: llamaIcon,
@@ -18,7 +22,9 @@ export const PROVIDER_ICONS: Record<string, string> = {
   qwen: qwenIcon,
   groq: groqIcon,
   nvidia: nvidiaIcon,
+  sensevoice: sensevoiceIcon,
   "openai-oss": openaiOssIcon,
+  bedrock: bedrockIcon,
 };
 
 export function getProviderIcon(provider: string): string | undefined {

@@ -7,6 +7,10 @@ on:
         description: "Release version (e.g. 1.5.0)"
         required: true
         type: string
+      source_sha:
+        description: "Source commit SHA from ChordVox-Pro/main (40 chars)"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -25,7 +29,12 @@ jobs:
     outputs:
       version: ${{ steps.meta.outputs.version }}
       tag: ${{ steps.meta.outputs.tag }}
+      source_sha: ${{ steps.meta.outputs.source_sha }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Resolve release version/tag
         id: meta
         shell: bash
@@ -33,23 +42,72 @@ jobs:
           set -euo pipefail
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             VERSION="${{ github.event.inputs.version }}"
+            SOURCE_SHA="${{ github.event.inputs.source_sha }}"
           else
             VERSION="${GITHUB_REF_NAME#v}"
+            SOURCE_SHA="${GITHUB_SHA}"
           fi
           if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$ ]]; then
             echo "Invalid version: $VERSION"
             exit 1
           fi
+          if ! [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid source SHA: $SOURCE_SHA"
+            exit 1
+          fi
+
+          git fetch origin main --depth=1
+          git cat-file -e "${SOURCE_SHA}^{commit}" || {
+            echo "Source SHA does not exist in repository: $SOURCE_SHA"
+            exit 1
+          }
+          if ! git merge-base --is-ancestor "$SOURCE_SHA" "origin/main"; then
+            echo "Source SHA is not on origin/main: $SOURCE_SHA"
+            exit 1
+          fi
+
           TAG="v${VERSION}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-          echo "Resolved release: $TAG"
+          echo "source_sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "Resolved release: $TAG from source SHA: $SOURCE_SHA"
+
+      - name: Ensure public release exists
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ steps.meta.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.meta.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ steps.meta.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          VERSION="${RELEASE_VERSION}"
+          SOURCE_SHA="${RELEASE_SOURCE_SHA}"
+
+          cat > release-notes.md <<EOF
+          # ChordVox v${VERSION}
+
+          Automated release from private build pipeline.
+
+          - Source repo: \`GravityPoet/ChordVox-Pro\`
+          - Source sha: \`${SOURCE_SHA}\`
+
+          EOF
+
+          if gh release view "$TAG" -R "$REPO" >/dev/null 2>&1; then
+            gh release edit "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
+          else
+            gh release create "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
+          fi
 
   build-linux:
     needs: resolve-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -103,24 +161,29 @@ jobs:
           VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
           VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
 
-      - name: Upload Linux artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-linux
-          if-no-files-found: error
-          path: |
-            dist/*.AppImage
-            dist/*.deb
-            dist/*.rpm
-            dist/*.tar.gz
-            dist/latest-linux.yml
-            dist/latest.yml
+      - name: Publish Linux artifacts directly
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          shopt -s nullglob
+          ASSETS=(dist/*.AppImage dist/*.deb dist/*.rpm dist/*.tar.gz dist/latest-linux.yml)
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No Linux assets found in dist/"
+            exit 1
+          fi
+          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
 
   build-windows:
     needs: resolve-release
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -174,16 +237,21 @@ jobs:
           VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
           VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
 
-      - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-windows
-          if-no-files-found: error
-          path: |
-            dist/*.exe
-            dist/*.zip
-            dist/*.blockmap
-            dist/latest.yml
+      - name: Publish Windows artifacts directly
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          shopt -s nullglob
+          ASSETS=(dist/*.exe dist/*.zip dist/*.blockmap dist/latest.yml)
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No Windows assets found in dist/"
+            exit 1
+          fi
+          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
 
   build-macos:
     needs: resolve-release
@@ -194,6 +262,8 @@ jobs:
         arch: [x64, arm64]
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -295,25 +365,24 @@ jobs:
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
-      - name: Upload macOS artifacts (${{ matrix.arch }})
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-macos-${{ matrix.arch }}
-          if-no-files-found: error
-          path: |
-            dist/*.dmg
-            dist/*.zip
-            dist/*.zip.blockmap
-            dist/*.dmg.blockmap
-
-      - name: Upload latest-mac.yml (arm64 only)
-        if: matrix.arch == 'arm64'
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-macos-metadata
-          if-no-files-found: error
-          path: |
-            dist/latest-mac.yml
+      - name: Publish macOS artifacts directly (${{ matrix.arch }})
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          shopt -s nullglob
+          ASSETS=(dist/*.dmg dist/*.zip dist/*.zip.blockmap dist/*.dmg.blockmap)
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            ASSETS+=(dist/latest-mac.yml)
+          fi
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No macOS assets found in dist/"
+            exit 1
+          fi
+          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
 
       - name: Cleanup Certificates
         if: always() && steps.signing.outputs.enabled == 'true'
@@ -321,68 +390,3 @@ jobs:
           security delete-keychain "$RUNNER_TEMP/app-signing.keychain-db" || true
           rm -f "$RUNNER_TEMP/build_certificate.p12"
           rm -f "$RUNNER_TEMP/api_key.p8"
-
-  publish-public-release:
-    needs: [resolve-release, build-linux, build-windows, build-macos]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download all build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: release-assets
-          merge-multiple: true
-
-      - name: Verify artifacts
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "Assets prepared for release:"
-          find release-assets -maxdepth 2 -type f | sort
-          COUNT=$(find release-assets -type f | wc -l | tr -d ' ')
-          if [ "$COUNT" = "0" ]; then
-            echo "No release artifacts found."
-            exit 1
-          fi
-
-      - name: Publish to public repository release
-        shell: bash
-        env:
-          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
-          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
-        run: |
-          set -euo pipefail
-
-          REPO="${PUBLIC_RELEASE_REPO}"
-          TAG="${RELEASE_TAG}"
-          VERSION="${RELEASE_VERSION}"
-
-          cat > release-notes.md <<EOF
-          # ChordVox v${VERSION}
-
-          Automated release from private build pipeline.
-
-          ## Downloads
-
-          | Platform | Chip | Format | File |
-          | --- | --- | --- | --- |
-          | Windows | x64 | exe | \`ChordVox-${VERSION}-windows-x64.exe\` |
-          | macOS | Apple Silicon | dmg | \`ChordVox-${VERSION}-arm64.dmg\` |
-          | macOS | Intel | dmg | \`ChordVox-${VERSION}.dmg\` |
-          | Linux | x64 | AppImage/deb/rpm/tar.gz | see assets below |
-
-          EOF
-
-          if gh release view "$TAG" -R "$REPO" >/dev/null 2>&1; then
-            gh release edit "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
-          else
-            gh release create "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
-          fi
-
-          mapfile -t ASSETS < <(find release-assets -maxdepth 2 -type f | sort)
-          if [ "${#ASSETS[@]}" -eq 0 ]; then
-            echo "No files to upload."
-            exit 1
-          fi
-
-          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
-          echo "Release published: ${REPO} ${TAG}"

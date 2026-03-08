@@ -22,7 +22,7 @@ function fetchJson(url, redirectCount = 0) {
     }
 
     const headers = {
-      "User-Agent": "ChordVox-Downloader",
+      "User-Agent": "OpenWhispr-Downloader",
       Accept: "application/vnd.github+json",
     };
 

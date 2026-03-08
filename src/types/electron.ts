@@ -1,4 +1,9 @@
-export type LocalTranscriptionProvider = "whisper" | "nvidia";
+export type LocalTranscriptionProvider = "whisper" | "nvidia" | "sensevoice";
+export type DictationProfileId = "primary" | "secondary";
+
+export interface DictationHotkeyPayload {
+  profileId?: DictationProfileId;
+}
 
 export interface TranscriptionItem {
   id: number;
@@ -32,7 +37,7 @@ export interface WhisperModelDeleteResult {
 
 export interface WhisperModelsListResult {
   success: boolean;
-  models: Array<{ model: string; downloaded: boolean; size_mb?: number }>;
+  models: Array<{ model: string; downloaded: boolean; size_mb?: number; path?: string }>;
   cache_dir: string;
 }
 
@@ -60,7 +65,10 @@ export interface UpdateCheckResult {
   releaseDate?: string;
   files?: any[];
   releaseNotes?: string;
+  manualDownloadUrl?: string | null;
+  manualOnly?: boolean;
   message?: string;
+  error?: string;
 }
 
 export interface UpdateStatusResult {
@@ -74,11 +82,15 @@ export interface UpdateInfoResult {
   releaseDate?: string;
   releaseNotes?: string | null;
   files?: any[];
+  manualDownloadUrl?: string | null;
+  manualOnly?: boolean;
 }
 
 export interface UpdateResult {
   success: boolean;
   message: string;
+  manual?: boolean;
+  url?: string;
 }
 
 export interface AppVersionResult {
@@ -124,7 +136,7 @@ export interface ParakeetModelDeleteResult {
 
 export interface ParakeetModelsListResult {
   success: boolean;
-  models: Array<{ model: string; downloaded: boolean; size_mb?: number }>;
+  models: Array<{ model: string; downloaded: boolean; size_mb?: number; path?: string }>;
   cache_dir: string;
 }
 
@@ -155,6 +167,149 @@ export interface ParakeetDiagnosticsResult {
   models: string[];
 }
 
+export interface SenseVoiceCheckResult {
+  installed: boolean;
+  working: boolean;
+  path?: string;
+  error?: string;
+}
+
+export interface SenseVoiceModelStatusResult {
+  success: boolean;
+  model?: string;
+  modelPath: string;
+  downloaded: boolean;
+  size_mb?: number;
+}
+
+export interface SenseVoiceModelResult {
+  success: boolean;
+  model: string;
+  downloaded: boolean;
+  path?: string;
+  size_bytes?: number;
+  size_mb?: number;
+  error?: string;
+  code?: string;
+}
+
+export interface SenseVoiceModelDeleteResult {
+  success: boolean;
+  model: string;
+  deleted: boolean;
+  freed_bytes?: number;
+  freed_mb?: number;
+  error?: string;
+}
+
+export interface SenseVoiceModelsListResult {
+  success: boolean;
+  models: Array<{
+    model: string;
+    modelPath?: string;
+    downloaded: boolean;
+    size_mb?: number;
+    path?: string;
+  }>;
+  cache_dir: string;
+}
+
+export interface SenseVoiceDownloadProgressData {
+  type: "progress" | "installing" | "complete" | "error";
+  model: string;
+  percentage?: number;
+  downloaded_bytes?: number;
+  total_bytes?: number;
+  error?: string;
+  code?: string;
+}
+
+export interface SenseVoiceTranscriptionResult {
+  success: boolean;
+  text?: string;
+  message?: string;
+  error?: string;
+}
+
+export interface FilePickResult {
+  success: boolean;
+  path: string | null;
+  cancelled?: boolean;
+  error?: string;
+}
+
+export interface SettingsFileOperationResult {
+  success: boolean;
+  cancelled?: boolean;
+  filePath?: string;
+  error?: string;
+}
+
+export interface SettingsImportResult extends SettingsFileOperationResult {
+  data?: any;
+}
+
+export interface CallTraceSession {
+  runId: string;
+  profileId: DictationProfileId;
+  startedAt: string | null;
+  updatedAt: string | null;
+  sessionStatus: "unknown" | "start" | "success" | "error" | "cancelled";
+  transcriptionStatus: "unknown" | "start" | "success" | "error" | "skipped";
+  reasoningStatus: "unknown" | "start" | "success" | "error" | "skipped";
+  pasteStatus: "unknown" | "start" | "success" | "error" | "skipped";
+  transcriptionModel: string | null;
+  transcriptionProvider: string | null;
+  reasoningModel: string | null;
+  reasoningProvider: string | null;
+  source: string | null;
+  error: string | null;
+  eventsCount: number;
+}
+
+export interface CallTraceEvent {
+  id: string;
+  timestamp: string;
+  level: string;
+  message: string;
+  scope: string | null;
+  source: string | null;
+  meta: {
+    runId?: string;
+    profileId?: DictationProfileId;
+    phase?: "session" | "recording" | "transcription" | "reasoning" | "paste";
+    status?: "start" | "success" | "error" | "cancelled" | "skipped";
+    source?: string;
+    transcriptionProvider?: string;
+    transcriptionModel?: string;
+    reasoningProvider?: string;
+    reasoningModel?: string;
+    error?: string;
+    [key: string]: any;
+  } | null;
+}
+
+export interface LicenseStatusResult {
+  success: boolean;
+  configured: boolean;
+  requiresServerValidation?: boolean;
+  status: "unlicensed" | "active" | "expired" | "offline_grace" | "invalid";
+  isActive: boolean;
+  keyPresent: boolean;
+  plan?: string | null;
+  expiresAt?: string | null;
+  trialEnabled?: boolean;
+  trialDays?: number;
+  trialStartedAt?: string | null;
+  trialExpiresAt?: string | null;
+  trialDaysLeft?: number;
+  trialActive?: boolean;
+  lastValidatedAt?: string | null;
+  offlineGraceUntil?: string | null;
+  message?: string | null;
+  error?: string | null;
+}
+
 export interface PasteToolsResult {
   platform: "darwin" | "win32" | "linux";
   available: boolean;
@@ -176,9 +331,9 @@ declare global {
       pasteText: (text: string, options?: { fromStreaming?: boolean }) => Promise<void>;
       hideWindow: () => Promise<void>;
       showDictationPanel: () => Promise<void>;
-      onToggleDictation: (callback: () => void) => () => void;
-      onStartDictation?: (callback: () => void) => () => void;
-      onStopDictation?: (callback: () => void) => () => void;
+      onToggleDictation: (callback: (payload?: DictationHotkeyPayload) => void) => () => void;
+      onStartDictation?: (callback: (payload?: DictationHotkeyPayload) => void) => () => void;
+      onStopDictation?: (callback: (payload?: DictationHotkeyPayload) => void) => () => void;
 
       // Database operations
       saveTranscription: (text: string) => Promise<{ id: number; success: boolean }>;
@@ -201,6 +356,8 @@ declare global {
       createProductionEnvFile: (key: string) => Promise<void>;
       getAnthropicKey: () => Promise<string | null>;
       saveAnthropicKey: (key: string) => Promise<void>;
+      getOpenRouterKey: () => Promise<string | null>;
+      saveOpenRouterKey: (key: string) => Promise<void>;
       getUiLanguage: () => Promise<string>;
       saveUiLanguage: (language: string) => Promise<{ success: boolean; language: string }>;
       setUiLanguage: (language: string) => Promise<{ success: boolean; language: string }>;
@@ -209,9 +366,12 @@ declare global {
         useLocalWhisper: boolean;
         localTranscriptionProvider: LocalTranscriptionProvider;
         model?: string;
+        senseVoiceBinaryPath?: string;
         reasoningProvider: string;
         reasoningModel?: string;
       }) => Promise<void>;
+      exportSettingsFile: (payload: any) => Promise<SettingsFileOperationResult>;
+      importSettingsFile: () => Promise<SettingsImportResult>;
 
       // Clipboard operations
       readClipboard: () => Promise<string>;
@@ -247,7 +407,7 @@ declare global {
       // Parakeet operations (NVIDIA via sherpa-onnx)
       transcribeLocalParakeet: (
         audioBlob: ArrayBuffer,
-        options?: { model?: string; language?: string }
+        options?: { model?: string; modelPath?: string; language?: string }
       ) => Promise<ParakeetTranscriptionResult>;
       checkParakeetInstallation: () => Promise<ParakeetCheckResult>;
       downloadParakeetModel: (modelName: string) => Promise<ParakeetModelResult>;
@@ -270,6 +430,43 @@ declare global {
         error?: string;
       }>;
       getParakeetDiagnostics: () => Promise<ParakeetDiagnosticsResult>;
+
+      // SenseVoice operations (external CLI + local GGUF)
+      transcribeLocalSenseVoice: (
+        audioBlob: ArrayBuffer,
+        options?: {
+          modelPath?: string;
+          binaryPath?: string;
+          language?: string;
+          threads?: number;
+          timeoutMs?: number;
+          noGpu?: boolean;
+        }
+      ) => Promise<SenseVoiceTranscriptionResult>;
+      checkSenseVoiceInstallation: (binaryPath?: string) => Promise<SenseVoiceCheckResult>;
+      downloadSenseVoiceModel: (modelName: string) => Promise<SenseVoiceModelResult>;
+      onSenseVoiceDownloadProgress: (
+        callback: (event: any, data: SenseVoiceDownloadProgressData) => void
+      ) => () => void;
+      checkSenseVoiceModelStatus: (modelPathOrModel: string) => Promise<SenseVoiceModelStatusResult>;
+      listSenseVoiceModels: () => Promise<SenseVoiceModelsListResult>;
+      deleteSenseVoiceModel: (modelName: string) => Promise<SenseVoiceModelDeleteResult>;
+      deleteAllSenseVoiceModels: () => Promise<{
+        success: boolean;
+        deleted_count?: number;
+        freed_bytes?: number;
+        freed_mb?: number;
+        error?: string;
+      }>;
+      cancelSenseVoiceDownload: () => Promise<{
+        success: boolean;
+        message?: string;
+        error?: string;
+      }>;
+      pickWhisperModelFile: (defaultPath?: string) => Promise<FilePickResult>;
+      pickParakeetModelDirectory: (defaultPath?: string) => Promise<FilePickResult>;
+      pickSenseVoiceModelFile: (defaultPath?: string) => Promise<FilePickResult>;
+      pickSenseVoiceBinary: (defaultPath?: string) => Promise<FilePickResult>;
 
       // Local AI model management
       modelGetAll: () => Promise<any[]>;
@@ -336,6 +533,7 @@ declare global {
 
       // Hotkey management
       updateHotkey: (key: string) => Promise<{ success: boolean; message: string }>;
+      updateSecondaryHotkey?: (key: string) => Promise<{ success: boolean; message: string }>;
       setHotkeyListeningMode?: (
         enabled: boolean,
         newHotkey?: string | null
@@ -377,6 +575,12 @@ declare global {
       saveCustomTranscriptionKey?: (key: string) => Promise<void>;
       getCustomReasoningKey?: () => Promise<string | null>;
       saveCustomReasoningKey?: (key: string) => Promise<void>;
+      getLicenseApiBaseUrl?: () => Promise<string | null>;
+      saveLicenseApiBaseUrl?: (url: string) => Promise<{ success: boolean; value?: string }>;
+      licenseGetStatus?: () => Promise<LicenseStatusResult>;
+      licenseActivate?: (licenseKey: string) => Promise<LicenseStatusResult>;
+      licenseValidate?: () => Promise<LicenseStatusResult>;
+      licenseClear?: () => Promise<LicenseStatusResult>;
 
       // Dictation key persistence (file-based for reliable startup)
       getDictationKey?: () => Promise<string | null>;
@@ -407,6 +611,14 @@ declare global {
         error?: string;
       }>;
       openLogsFolder: () => Promise<{ success: boolean; error?: string }>;
+      getCallTraceSessions: (
+        limit?: number
+      ) => Promise<{ success: boolean; sessions: CallTraceSession[]; error?: string }>;
+      getCallTraceEvents: (
+        runId: string,
+        limit?: number
+      ) => Promise<{ success: boolean; events: CallTraceEvent[]; error?: string }>;
+      clearCallTraces: () => Promise<{ success: boolean; error?: string }>;
 
       // FFmpeg availability
       checkFFmpegAvailability: () => Promise<FFmpegAvailabilityResult>;
@@ -421,20 +633,22 @@ declare global {
 
       // Windows Push-to-Talk notifications
       notifyActivationModeChanged?: (mode: "tap" | "push") => void;
-      notifyHotkeyChanged?: (hotkey: string) => void;
+      notifyHotkeyChanged?: (hotkey: string, profileId?: DictationProfileId) => void;
       notifyFloatingIconAutoHideChanged?: (enabled: boolean) => void;
       onFloatingIconAutoHideChanged?: (callback: (enabled: boolean) => void) => () => void;
 
       // Auto-start at login
       getAutoStartEnabled?: () => Promise<boolean>;
       setAutoStartEnabled?: (enabled: boolean) => Promise<{ success: boolean; error?: string }>;
+
+      // Auto-check update management
       getAutoCheckUpdate?: () => Promise<boolean>;
       setAutoCheckUpdate?: (enabled: boolean) => Promise<{ success: boolean; error?: string }>;
 
       // Auth
       authClearSession?: () => Promise<void>;
 
-      // ChordVox Cloud API
+      // OpenWhispr Cloud API
       cloudTranscribe?: (
         audioBuffer: ArrayBuffer,
         opts: { language?: string; prompt?: string }

@@ -8,6 +8,7 @@ import ModelCardList from "./ui/ModelCardList";
 import LocalModelPicker, { type LocalProvider } from "./LocalModelPicker";
 import { ProviderTabs } from "./ui/ProviderTabs";
 import { API_ENDPOINTS, buildApiUrl, normalizeBaseUrl } from "../config/constants";
+import { signRequest } from "../utils/awsSigV4";
 import { REASONING_PROVIDERS } from "../models/ModelRegistry";
 import { modelRegistry } from "../models/ModelRegistry";
 import { getProviderIcon, isMonochromeProvider } from "../utils/providerIcons";
@@ -22,6 +23,221 @@ type CloudModelOption = {
   icon?: string;
   ownedBy?: string;
   invertInDark?: boolean;
+  _created?: number;
+};
+
+type UnknownRecord = Record<string, unknown>;
+
+const isRecord = (value: unknown): value is UnknownRecord =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const pickFirstString = (...candidates: unknown[]): string | undefined => {
+  for (const candidate of candidates) {
+    if (typeof candidate === "string" && candidate.trim() !== "") return candidate;
+  }
+  return undefined;
+};
+
+const extractModelEntries = (payload: unknown): unknown[] => {
+  if (!isRecord(payload)) return [];
+
+  const directCandidates = [
+    payload.data,
+    payload.models,
+    payload.items,
+    payload.results,
+    payload.model_list,
+    isRecord(payload.result) ? payload.result.data : undefined,
+    isRecord(payload.result) ? payload.result.models : undefined,
+    isRecord(payload.response) ? payload.response.data : undefined,
+    isRecord(payload.response) ? payload.response.models : undefined,
+    isRecord(payload.output) ? payload.output.models : undefined,
+    isRecord(payload.data) ? payload.data.models : undefined,
+    isRecord(payload.data) ? payload.data.items : undefined,
+    isRecord(payload.models) ? payload.models.data : undefined,
+  ];
+
+  for (const candidate of directCandidates) {
+    if (Array.isArray(candidate)) return candidate;
+  }
+
+  const objectCandidates = [
+    payload.models,
+    isRecord(payload.data) ? payload.data.models : undefined,
+    payload.model_list,
+  ];
+
+  for (const candidate of objectCandidates) {
+    if (!isRecord(candidate)) continue;
+    return Object.entries(candidate).map(([key, value]) => {
+      if (typeof value === "string") {
+        return { id: key, name: value };
+      }
+      if (isRecord(value)) {
+        return {
+          ...value,
+          id: pickFirstString(
+            value.id,
+            value.name,
+            value.model,
+            value.model_id,
+            value.slug,
+            value.value,
+            key
+          ),
+          name: pickFirstString(value.name, value.id, value.model, value.slug, key),
+        };
+      }
+      return { id: key, name: key };
+    });
+  }
+
+  return [];
+};
+
+const extractPayloadError = (payload: unknown): string | undefined => {
+  if (!isRecord(payload)) return undefined;
+  return pickFirstString(
+    payload.error,
+    isRecord(payload.error) ? payload.error.message : undefined,
+    payload.message,
+    payload.detail,
+    payload.reason
+  );
+};
+
+const parseTimestampCandidate = (candidate: unknown): number => {
+  if (typeof candidate === "number" && Number.isFinite(candidate) && candidate > 0) {
+    // Normalize to epoch milliseconds.
+    return candidate > 1e11 ? Math.floor(candidate) : Math.floor(candidate * 1000);
+  }
+
+  if (typeof candidate === "string") {
+    const trimmed = candidate.trim();
+    if (!trimmed) return 0;
+
+    if (/^\d+$/.test(trimmed)) {
+      const numeric = Number(trimmed);
+      if (Number.isFinite(numeric) && numeric > 0) {
+        return numeric > 1e11 ? Math.floor(numeric) : Math.floor(numeric * 1000);
+      }
+    }
+
+    const parsed = Date.parse(trimmed);
+    if (!Number.isNaN(parsed) && parsed > 0) return parsed;
+  }
+
+  return 0;
+};
+
+const extractReleaseTimestamp = (record: UnknownRecord): number => {
+  const lifecycle = isRecord(record.lifecycle) ? record.lifecycle : undefined;
+  const metadata = isRecord(record.metadata) ? record.metadata : undefined;
+
+  const candidates = [
+    // Common model APIs
+    record.created,
+    record.created_at,
+    record.createdAt,
+    record.published,
+    record.published_at,
+    record.publishedAt,
+    record.release_date,
+    record.releaseDate,
+    record.released_at,
+    record.releasedAt,
+    record.release_timestamp,
+    record.releaseTimestamp,
+    // Fallback temporal metadata
+    record.updated_at,
+    record.updatedAt,
+    record.modified_at,
+    record.modifiedAt,
+    record.last_updated,
+    record.lastUpdated,
+    // Nested lifecycle/metadata objects
+    lifecycle?.created_at,
+    lifecycle?.createdAt,
+    lifecycle?.release_date,
+    lifecycle?.releaseDate,
+    lifecycle?.released_at,
+    lifecycle?.releasedAt,
+    metadata?.created_at,
+    metadata?.createdAt,
+    metadata?.published_at,
+    metadata?.publishedAt,
+    metadata?.release_date,
+    metadata?.releaseDate,
+    metadata?.released_at,
+    metadata?.releasedAt,
+  ];
+
+  for (const candidate of candidates) {
+    const ts = parseTimestampCandidate(candidate);
+    if (ts > 0) return ts;
+  }
+
+  return 0;
+};
+
+const extractVersionScore = (modelId: string): number => {
+  const normalized = modelId.toLowerCase();
+
+  // "latest" tags should naturally float to the top.
+  if (/\blatest\b/.test(normalized)) return Number.MAX_SAFE_INTEGER - 1;
+
+  // Prefer sortable date tokens inside IDs (e.g. 20241022 / 2024-10-22).
+  const dateToken = normalized.match(
+    /((?:19|20)\d{2})[-_.]?((?:0[1-9]|1[0-2]))[-_.]?((?:0[1-9]|[12]\d|3[01]))/
+  );
+  if (dateToken) {
+    const year = Number(dateToken[1]);
+    const month = Number(dateToken[2]);
+    const day = Number(dateToken[3]);
+    const dateMs = Date.UTC(year, month - 1, day);
+    if (Number.isFinite(dateMs) && dateMs > 0) return dateMs;
+  }
+
+  // Fallback: semantic-ish numeric score from first numeric groups (e.g. 5.2 > 4.1).
+  const numericChunks = normalized.match(/\d+/g);
+  if (!numericChunks || numericChunks.length === 0) return 0;
+
+  const major = Number(numericChunks[0] ?? "0");
+  const minor = Number(numericChunks[1] ?? "0");
+  const patch = Number(numericChunks[2] ?? "0");
+  if (![major, minor, patch].every((n) => Number.isFinite(n) && n >= 0)) return 0;
+
+  return major * 1_000_000 + minor * 1_000 + patch;
+};
+
+const compareModelsByRecency = (
+  a: { value: string; _created?: number },
+  b: { value: string; _created?: number }
+): number => {
+  const aCreated = a._created ?? 0;
+  const bCreated = b._created ?? 0;
+  if (aCreated !== bCreated) return bCreated - aCreated;
+
+  const aVersionScore = extractVersionScore(a.value);
+  const bVersionScore = extractVersionScore(b.value);
+  if (aVersionScore !== bVersionScore) return bVersionScore - aVersionScore;
+
+  return b.value.localeCompare(a.value, undefined, { numeric: true, sensitivity: "base" });
+};
+
+const prioritizeSelectedModel = (
+  models: CloudModelOption[],
+  selectedModel: string
+): CloudModelOption[] => {
+  if (!selectedModel) return models;
+
+  const selectedIndex = models.findIndex((model) => model.value === selectedModel);
+  if (selectedIndex <= 0) return models;
+
+  const next = [...models];
+  const [selected] = next.splice(selectedIndex, 1);
+  next.unshift(selected);
+  return next;
 };
 
 const OWNED_BY_ICON_RULES: Array<{ match: RegExp; provider: string }> = [
@@ -32,7 +248,8 @@ const OWNED_BY_ICON_RULES: Array<{ match: RegExp; provider: string }> = [
   { match: /(meta|llama)/, provider: "llama" },
   { match: /(mistral)/, provider: "mistral" },
   { match: /(qwen|ali|tongyi)/, provider: "qwen" },
-  { match: /(openrouter|oss)/, provider: "openai-oss" },
+  { match: /(openrouter)/, provider: "openrouter" },
+  { match: /(oss)/, provider: "openai-oss" },
 ];
 
 const resolveOwnedByIcon = (ownedBy?: string): { icon?: string; invertInDark: boolean } => {
@@ -48,6 +265,19 @@ const resolveOwnedByIcon = (ownedBy?: string): { icon?: string; invertInDark: bo
   return { icon: undefined, invertInDark: false };
 };
 
+const PROVIDER_MODELS_CACHE_KEY = "chordvox_reasoning_provider_models_cache";
+const CUSTOM_MODELS_CACHE_KEY = "chordvox_reasoning_custom_models_cache";
+
+const readStorageJson = <T,>(key: string, fallback: T): T => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+};
+
 interface ReasoningModelSelectorProps {
   useReasoningModel: boolean;
   setUseReasoningModel: (value: boolean) => void;
@@ -59,6 +289,8 @@ interface ReasoningModelSelectorProps {
   setCloudReasoningBaseUrl: (value: string) => void;
   openaiApiKey: string;
   setOpenaiApiKey: (key: string) => void;
+  openrouterApiKey: string;
+  setOpenrouterApiKey: (key: string) => void;
   anthropicApiKey: string;
   setAnthropicApiKey: (key: string) => void;
   geminiApiKey: string;
@@ -81,6 +313,8 @@ export default function ReasoningModelSelector({
   setCloudReasoningBaseUrl,
   openaiApiKey,
   setOpenaiApiKey,
+  openrouterApiKey,
+  setOpenrouterApiKey,
   anthropicApiKey,
   setAnthropicApiKey,
   geminiApiKey,
@@ -94,9 +328,130 @@ export default function ReasoningModelSelector({
   const [selectedMode, setSelectedMode] = useState<"cloud" | "local">("cloud");
   const [selectedCloudProvider, setSelectedCloudProvider] = useState("openai");
   const [selectedLocalProvider, setSelectedLocalProvider] = useState("qwen");
-  const [customModelOptions, setCustomModelOptions] = useState<CloudModelOption[]>([]);
+  const [customModelsCache, setCustomModelsCache] = useState<Record<string, CloudModelOption[]>>(
+    () => readStorageJson<Record<string, CloudModelOption[]>>(CUSTOM_MODELS_CACHE_KEY, {})
+  );
   const [customModelsLoading, setCustomModelsLoading] = useState(false);
   const [customModelsError, setCustomModelsError] = useState<string | null>(null);
+  const [providerModelsCache, setProviderModelsCache] = useState<Record<string, CloudModelOption[]>>(
+    () => readStorageJson<Record<string, CloudModelOption[]>>(PROVIDER_MODELS_CACHE_KEY, {})
+  );
+  const providerFetchState = useRef<Record<string, boolean | "done">>({});
+  const [providerLoading, setProviderLoading] = useState<Record<string, boolean>>({});
+  const [providerError, setProviderError] = useState<Record<string, string | null>>({});
+
+  const DEFAULT_PROVIDER_ENDPOINTS: Record<string, string> = useMemo(() => ({
+    openai: "https://api.openai.com/v1",
+    openrouter: "https://openrouter.ai/api/v1",
+    anthropic: "https://api.anthropic.com/v1",
+    gemini: "https://generativelanguage.googleapis.com/v1beta",
+    groq: "https://api.groq.com/openai/v1",
+    bedrock: "https://bedrock-runtime.us-east-1.amazonaws.com",
+  }), []);
+
+  const [providerEndpoints, setProviderEndpoints] = useState<Record<string, string>>(() => {
+    try {
+      const saved = localStorage.getItem("providerEndpoints");
+      if (saved) return { ...DEFAULT_PROVIDER_ENDPOINTS, ...JSON.parse(saved) };
+    } catch { /* ignore */ }
+    return { ...DEFAULT_PROVIDER_ENDPOINTS };
+  });
+
+  const [providerEndpointInputs, setProviderEndpointInputs] = useState<Record<string, string>>(() => ({
+    ...DEFAULT_PROVIDER_ENDPOINTS,
+    ...providerEndpoints,
+  }));
+
+  const updateProviderEndpoint = useCallback((providerId: string, value: string) => {
+    const normalized = normalizeBaseUrl(value) || value.trim();
+    setProviderEndpoints((prev) => {
+      const next = { ...prev, [providerId]: normalized };
+      try { localStorage.setItem("providerEndpoints", JSON.stringify(next)); } catch { /* ignore */ }
+      return next;
+    });
+    setProviderEndpointInputs((prev) => ({ ...prev, [providerId]: normalized }));
+    // Reset fetch state so next refresh uses new endpoint
+    providerFetchState.current[providerId] = false;
+  }, []);
+
+  // Bedrock-specific state
+  const [bedrockAccessKeyId, setBedrockAccessKeyId] = useState(() =>
+    localStorage.getItem("bedrockAccessKeyId") || ""
+  );
+  const [bedrockSecretAccessKey, setBedrockSecretAccessKey] = useState(() =>
+    localStorage.getItem("bedrockSecretAccessKey") || ""
+  );
+  const [bedrockRegion, setBedrockRegion] = useState(() =>
+    localStorage.getItem("bedrockRegion") || "us-east-1"
+  );
+
+  const saveBedrockCredential = useCallback((key: string, value: string) => {
+    localStorage.setItem(key, value);
+  }, []);
+
+  const loadBedrockModels = useCallback(async (force = false) => {
+    if (!bedrockAccessKeyId || !bedrockSecretAccessKey) return;
+    if (!force && providerFetchState.current.bedrock) return;
+    providerFetchState.current.bedrock = true;
+
+    setProviderLoading((prev) => ({ ...prev, bedrock: true }));
+    setProviderError((prev) => ({ ...prev, bedrock: null }));
+
+    try {
+      // Use Bedrock control plane to list foundation models
+      const bedrockRegionValue = bedrockRegion || "us-east-1";
+      const endpoint = `https://bedrock.${bedrockRegionValue}.amazonaws.com/foundation-models`;
+
+      const signed = await signRequest({
+        method: "GET",
+        url: endpoint,
+        region: bedrockRegionValue,
+        service: "bedrock",
+        accessKeyId: bedrockAccessKeyId,
+        secretAccessKey: bedrockSecretAccessKey,
+      });
+
+      const response = await fetch(signed.url, {
+        method: "GET",
+        headers: signed.headers,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => "");
+        throw new Error(`${response.status} ${errorText.slice(0, 200)}`);
+      }
+
+      const payload = await response.json();
+      const models = (payload.modelSummaries || [])
+        .filter((m: any) => m.inferenceTypesSupported?.includes("ON_DEMAND"))
+        .map((m: any) => ({
+          value: m.modelId,
+          label: m.modelId,
+          description: m.modelName || m.providerName || undefined,
+          icon: getProviderIcon("bedrock"),
+          _created: isRecord(m) ? extractReleaseTimestamp(m) : 0,
+        }));
+
+      // Newest release first when timestamps are available; fallback to version-aware ID sorting.
+      models.sort(compareModelsByRecency);
+
+      if (models.length > 0) {
+        setProviderModelsCache((prev) => ({ ...prev, bedrock: models }));
+        providerFetchState.current.bedrock = "done";
+      } else {
+        providerFetchState.current.bedrock = false;
+      }
+    } catch (error) {
+      providerFetchState.current.bedrock = false;
+      setProviderError((prev) => ({
+        ...prev,
+        bedrock: (error as Error).message || "Failed to load Bedrock models",
+      }));
+    } finally {
+      setProviderLoading((prev) => ({ ...prev, bedrock: false }));
+    }
+  }, [bedrockAccessKeyId, bedrockSecretAccessKey, bedrockRegion]);
+
   const [customBaseInput, setCustomBaseInput] = useState(cloudReasoningBaseUrl);
   const lastLoadedBaseRef = useRef<string | null>(null);
   const pendingBaseRef = useRef<string | null>(null);
@@ -111,6 +466,22 @@ export default function ReasoningModelSelector({
   useEffect(() => {
     setCustomBaseInput(cloudReasoningBaseUrl);
   }, [cloudReasoningBaseUrl]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(PROVIDER_MODELS_CACHE_KEY, JSON.stringify(providerModelsCache));
+    } catch {
+      /* ignore */
+    }
+  }, [providerModelsCache]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CUSTOM_MODELS_CACHE_KEY, JSON.stringify(customModelsCache));
+    } catch {
+      /* ignore */
+    }
+  }, [customModelsCache]);
 
   const defaultOpenAIBase = useMemo(() => normalizeBaseUrl(API_ENDPOINTS.OPENAI_BASE), []);
   const normalizedCustomReasoningBase = useMemo(
@@ -135,7 +506,6 @@ export default function ReasoningModelSelector({
         if (isMountedRef.current) {
           setCustomModelsLoading(false);
           setCustomModelsError(null);
-          setCustomModelOptions([]);
         }
         return;
       }
@@ -152,7 +522,6 @@ export default function ReasoningModelSelector({
       if (isMountedRef.current) {
         setCustomModelsLoading(true);
         setCustomModelsError(null);
-        setCustomModelOptions([]);
       }
 
       let apiKey: string | undefined;
@@ -195,33 +564,77 @@ export default function ReasoningModelSelector({
         }
 
         const payload = await response.json().catch(() => ({}));
-        const rawModels = Array.isArray(payload?.data)
-          ? payload.data
-          : Array.isArray(payload?.models)
-            ? payload.models
-            : [];
+        const payloadError = extractPayloadError(payload);
+        if (payloadError) {
+          throw new Error(payloadError);
+        }
 
-        const mappedModels = (rawModels as Array<Record<string, unknown>>)
+        const rawModels = extractModelEntries(payload);
+
+        const mappedModels = rawModels
           .map((item) => {
-            const value = (item?.id || item?.name) as string | undefined;
+            if (typeof item === "string") {
+              return {
+                value: item,
+                label: item,
+                description: undefined,
+                icon: undefined,
+                ownedBy: undefined,
+                invertInDark: false,
+              } as CloudModelOption;
+            }
+
+            if (!isRecord(item)) return null;
+
+            const value = pickFirstString(
+              item.id,
+              item.name,
+              item.model,
+              item.model_id,
+              item.slug,
+              item.value,
+              item.identifier,
+              item.modelName
+            );
             if (!value) return null;
-            const ownedBy = typeof item?.owned_by === "string" ? item.owned_by : undefined;
+            const ownedBy = pickFirstString(
+              item.owned_by,
+              item.ownedBy,
+              item.provider,
+              item.vendor,
+              item.organization
+            );
             const { icon, invertInDark } = resolveOwnedByIcon(ownedBy);
+            const humanName = pickFirstString(item.name, item.display_name, item.title);
+            const summary = pickFirstString(item.description, item.summary, item.details);
+            const descriptionParts = [
+              ...(humanName && humanName !== value ? [humanName] : []),
+              ...(summary && summary !== humanName ? [summary] : []),
+            ];
+
+            // Prefer provider-published timestamps when available.
+            const created = extractReleaseTimestamp(item);
+
             return {
               value,
-              label: (item?.id || item?.name || value) as string,
+              // For custom endpoints, always surface raw model ID as the primary text.
+              label: value,
               description:
-                (item?.description as string) ||
+                descriptionParts.join(" · ") ||
                 (ownedBy ? t("reasoning.custom.ownerLabel", { owner: ownedBy }) : undefined),
               icon,
               ownedBy,
               invertInDark,
-            } as CloudModelOption;
+              _created: created,
+            } as CloudModelOption & { _created: number };
           })
-          .filter(Boolean) as CloudModelOption[];
+          .filter(Boolean) as (CloudModelOption & { _created: number })[];
+
+        // Newest release first, with robust fallbacks for providers that don't expose timestamps.
+        mappedModels.sort(compareModelsByRecency);
 
         if (isMountedRef.current && latestReasoningBaseRef.current === normalizedBase) {
-          setCustomModelOptions(mappedModels);
+          setCustomModelsCache((prev) => ({ ...prev, [normalizedBase]: mappedModels }));
           if (
             reasoningModel &&
             mappedModels.length > 0 &&
@@ -241,7 +654,6 @@ export default function ReasoningModelSelector({
           } else {
             setCustomModelsError(message);
           }
-          setCustomModelOptions([]);
         }
       } finally {
         if (pendingBaseRef.current === normalizedBase) {
@@ -255,6 +667,11 @@ export default function ReasoningModelSelector({
     [cloudReasoningBaseUrl, customReasoningApiKey, reasoningModel, setReasoningModel, t]
   );
 
+  const customModelOptions = useMemo<CloudModelOption[]>(
+    () => (normalizedCustomReasoningBase ? customModelsCache[normalizedCustomReasoningBase] || [] : []),
+    [customModelsCache, normalizedCustomReasoningBase]
+  );
+
   const trimmedCustomBase = customBaseInput.trim();
   const hasSavedCustomBase = Boolean((cloudReasoningBaseUrl || "").trim());
   const isCustomBaseDirty = trimmedCustomBase !== (cloudReasoningBaseUrl || "").trim();
@@ -264,13 +681,15 @@ export default function ReasoningModelSelector({
     return customModelOptions;
   }, [isCustomBaseDirty, customModelOptions]);
 
-  const cloudProviderIds = ["openai", "anthropic", "gemini", "groq", "custom"];
+  const cloudProviderIds = ["openai", "openrouter", "anthropic", "gemini", "groq", "bedrock", "custom"];
   const cloudProviders = cloudProviderIds.map((id) => ({
     id,
     name:
       id === "custom"
         ? t("reasoning.custom.providerName")
-        : REASONING_PROVIDERS[id as keyof typeof REASONING_PROVIDERS]?.name || id,
+        : id === "bedrock"
+          ? "AWS Bedrock"
+          : REASONING_PROVIDERS[id as keyof typeof REASONING_PROVIDERS]?.name || id,
   }));
 
   const localProviders = useMemo<LocalProvider[]>(() => {
@@ -288,67 +707,233 @@ export default function ReasoningModelSelector({
     }));
   }, []);
 
-  const openaiModelOptions = useMemo<CloudModelOption[]>(() => {
-    const iconUrl = getProviderIcon("openai");
-    return REASONING_PROVIDERS.openai.models.map((model) => ({
-      ...model,
-      description: model.descriptionKey
-        ? t(model.descriptionKey, { defaultValue: model.description })
-        : model.description,
-      icon: iconUrl,
-      invertInDark: true,
-    }));
+  const getProviderModelsUrl = useCallback((providerId: string, apiKey?: string): string => {
+    const base = providerEndpoints[providerId] || DEFAULT_PROVIDER_ENDPOINTS[providerId] || "";
+    if (!base) return "";
+    if (providerId === "gemini") {
+      return `${base}/models${apiKey ? `?key=${apiKey}` : ""}`;
+    }
+    return `${base}/models`;
+  }, [providerEndpoints, DEFAULT_PROVIDER_ENDPOINTS]);
+
+  const loadBuiltInProviderModels = useCallback(async (providerId: string, apiKey: string, force = false) => {
+    if (!apiKey || providerId === "custom") return;
+    // Bedrock uses its own model loading path
+    if (providerId === "bedrock") return;
+
+    if (!force && providerFetchState.current[providerId]) return;
+    providerFetchState.current[providerId] = true;
+
+    if (isMountedRef.current) {
+      setProviderLoading((prev) => ({ ...prev, [providerId]: true }));
+      setProviderError((prev) => ({ ...prev, [providerId]: null }));
+    }
+
+    try {
+      const endpoint = getProviderModelsUrl(providerId, apiKey);
+      const headers: Record<string, string> = {};
+
+      if (providerId === "anthropic") {
+        headers["x-api-key"] = apiKey;
+        headers["anthropic-version"] = "2023-06-01";
+      } else if (providerId !== "gemini") {
+        // OpenAI, Groq, and other Bearer-token providers
+        headers.Authorization = `Bearer ${apiKey}`;
+      }
+
+      if (!endpoint) return;
+
+      const response = await fetch(endpoint, { headers });
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => "");
+        const summary = errorText
+          ? `${response.status} ${errorText.slice(0, 200)}`
+          : `${response.status} ${response.statusText}`;
+        throw new Error(summary.trim());
+      }
+
+      const payload = await response.json().catch(() => ({}));
+      const rawModels = extractModelEntries(payload);
+
+      const iconUrl = getProviderIcon(providerId);
+      const invertInDark = isMonochromeProvider(providerId);
+
+      const mappedModels = rawModels
+        .map((item) => {
+          if (typeof item === "string") return { value: item, label: item, icon: iconUrl, invertInDark, _created: 0 } as CloudModelOption & { _created: number };
+          if (!isRecord(item)) return null;
+
+          const value = pickFirstString(
+            item.id,
+            item.name,
+            item.model,
+            item.model_id,
+            item.slug,
+            item.value,
+            item.identifier,
+            item.modelName
+          );
+          if (!value) return null;
+
+          let displayValue = value;
+          if (providerId === "gemini" && displayValue.startsWith("models/")) {
+            displayValue = displayValue.replace("models/", "");
+          }
+
+          const humanName = pickFirstString(item.name, item.display_name, item.title, item.displayName);
+          const summary = pickFirstString(item.description, item.summary, item.details);
+          const descriptionParts = [
+            ...(humanName && humanName !== displayValue ? [humanName] : []),
+            ...(summary && summary !== humanName ? [summary] : []),
+          ];
+
+          // Prefer provider-published timestamps when available.
+          const created = extractReleaseTimestamp(item);
+
+          return {
+            value: displayValue,
+            label: displayValue,
+            description: descriptionParts.join(" · ") || undefined,
+            icon: iconUrl,
+            invertInDark,
+            _created: created,
+          } as CloudModelOption & { _created: number };
+        })
+        .filter(Boolean) as (CloudModelOption & { _created: number })[];
+
+      // Newest release first, with version/date token fallback for providers without explicit timestamps.
+      mappedModels.sort(compareModelsByRecency);
+
+      if (mappedModels.length > 0) {
+        if (isMountedRef.current) {
+          setProviderModelsCache((prev) => ({ ...prev, [providerId]: mappedModels }));
+          providerFetchState.current[providerId] = "done";
+          setProviderError((prev) => ({ ...prev, [providerId]: null }));
+        }
+      } else {
+        providerFetchState.current[providerId] = false;
+      }
+    } catch (error) {
+      providerFetchState.current[providerId] = false;
+      if (isMountedRef.current) {
+        const message = (error as Error).message || t("reasoning.custom.unableToLoadModels");
+        setProviderError((prev) => ({ ...prev, [providerId]: message }));
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setProviderLoading((prev) => ({ ...prev, [providerId]: false }));
+      }
+    }
   }, [t]);
 
+  const handleRefreshProviderModels = useCallback((providerId: string) => {
+    const keys: Record<string, string> = {
+      openai: openaiApiKey,
+      openrouter: openrouterApiKey,
+      anthropic: anthropicApiKey,
+      gemini: geminiApiKey,
+      groq: groqApiKey,
+    };
+    const key = keys[providerId] || "";
+    if (!key) return;
+    loadBuiltInProviderModels(providerId, key, true);
+  }, [openaiApiKey, openrouterApiKey, anthropicApiKey, geminiApiKey, groqApiKey, loadBuiltInProviderModels]);
+
+  const handleProviderEndpointBlur = useCallback((providerId: string) => {
+    const input = (providerEndpointInputs[providerId] || "").trim();
+    const current = providerEndpoints[providerId] || "";
+    if (input && input !== current) {
+      updateProviderEndpoint(providerId, input);
+    }
+  }, [providerEndpointInputs, providerEndpoints, updateProviderEndpoint]);
+
   const selectedCloudModels = useMemo<CloudModelOption[]>(() => {
-    if (selectedCloudProvider === "openai") return openaiModelOptions;
-    if (selectedCloudProvider === "custom") return displayedCustomModels;
+    if (selectedCloudProvider === "custom") {
+      const models = [...displayedCustomModels];
+      if (reasoningModel && !models.some((model) => model.value === reasoningModel)) {
+        models.unshift({
+          value: reasoningModel,
+          label: reasoningModel,
+          description: t("reasoning.custom.ownerLabel", { owner: t("reasoning.custom.providerName") }),
+        });
+      }
+      return prioritizeSelectedModel(models, reasoningModel);
+    }
 
-    const provider = REASONING_PROVIDERS[selectedCloudProvider as keyof typeof REASONING_PROVIDERS];
-    if (!provider?.models) return [];
-
+    const dynamicModels = providerModelsCache[selectedCloudProvider];
+    const hardcodedProvider = REASONING_PROVIDERS[selectedCloudProvider as keyof typeof REASONING_PROVIDERS];
     const iconUrl = getProviderIcon(selectedCloudProvider);
     const invertInDark = isMonochromeProvider(selectedCloudProvider);
-    return provider.models.map((model) => ({
-      ...model,
-      description: model.descriptionKey
-        ? t(model.descriptionKey, { defaultValue: model.description })
-        : model.description,
-      icon: iconUrl,
-      invertInDark,
-    }));
-  }, [selectedCloudProvider, openaiModelOptions, displayedCustomModels, t]);
 
-  const handleApplyCustomBase = useCallback(() => {
+    let baseModels: CloudModelOption[] = [];
+    if (dynamicModels && dynamicModels.length > 0) {
+      baseModels = [...dynamicModels];
+    } else if (hardcodedProvider?.models) {
+      baseModels = hardcodedProvider.models.map((model) => ({
+        ...model,
+        description: model.descriptionKey
+          ? t(model.descriptionKey, { defaultValue: model.description })
+          : model.description,
+        icon: iconUrl,
+        invertInDark,
+      }));
+    } else {
+      return [];
+    }
+
+    if (dynamicModels && dynamicModels.length > 0 && hardcodedProvider?.models) {
+      baseModels = baseModels.map((m) => {
+        const hardcoded = hardcodedProvider.models.find(hm => hm.value === m.value);
+        if (hardcoded && !m.description) {
+          return {
+            ...m,
+            description: hardcoded.descriptionKey ? t(hardcoded.descriptionKey, { defaultValue: hardcoded.description }) : hardcoded.description
+          };
+        }
+        return m;
+      });
+    }
+
+    // Always ensure the currently selected model is included so it doesn't break UI if missing
+    if (reasoningModel && !baseModels.some(m => m.value === reasoningModel)) {
+      baseModels.unshift({
+        value: reasoningModel,
+        label: reasoningModel,
+        description: t("reasoning.custom.ownerLabel", { owner: selectedCloudProvider }),
+        icon: iconUrl,
+        invertInDark
+      });
+    }
+
+    return prioritizeSelectedModel(baseModels, reasoningModel);
+  }, [selectedCloudProvider, displayedCustomModels, providerModelsCache, reasoningModel, t]);
+
+  const handleApplyCustomBase = useCallback((refresh = false) => {
     const trimmedBase = customBaseInput.trim();
     const normalized = trimmedBase ? normalizeBaseUrl(trimmedBase) : trimmedBase;
     setCustomBaseInput(normalized);
     setCloudReasoningBaseUrl(normalized);
     lastLoadedBaseRef.current = null;
-    loadRemoteModels(normalized, true);
+    pendingBaseRef.current = null;
+    if (refresh) {
+      loadRemoteModels(normalized, true);
+    }
   }, [customBaseInput, setCloudReasoningBaseUrl, loadRemoteModels]);
 
   const handleBaseUrlBlur = useCallback(() => {
     const trimmedBase = customBaseInput.trim();
     if (!trimmedBase) return;
 
-    // Auto-apply on blur if changed
     if (trimmedBase !== (cloudReasoningBaseUrl || "").trim()) {
-      handleApplyCustomBase();
+      handleApplyCustomBase(false);
     }
   }, [customBaseInput, cloudReasoningBaseUrl, handleApplyCustomBase]);
 
-  const handleResetCustomBase = useCallback(() => {
-    const defaultBase = API_ENDPOINTS.OPENAI_BASE;
-    setCustomBaseInput(defaultBase);
-    setCloudReasoningBaseUrl(defaultBase);
-    lastLoadedBaseRef.current = null;
-    loadRemoteModels(defaultBase, true);
-  }, [setCloudReasoningBaseUrl, loadRemoteModels]);
+
 
   const handleRefreshCustomModels = useCallback(() => {
     if (isCustomBaseDirty) {
-      handleApplyCustomBase();
+      handleApplyCustomBase(true);
       return;
     }
     if (!trimmedCustomBase) return;
@@ -365,24 +950,6 @@ export default function ReasoningModelSelector({
       setSelectedCloudProvider(localReasoningProvider);
     }
   }, [localProviders, localReasoningProvider]);
-
-  useEffect(() => {
-    if (selectedCloudProvider !== "custom") return;
-    if (!hasCustomBase) {
-      setCustomModelsError(null);
-      setCustomModelOptions([]);
-      setCustomModelsLoading(false);
-      lastLoadedBaseRef.current = null;
-      return;
-    }
-
-    const normalizedBase = normalizedCustomReasoningBase;
-    if (!normalizedBase) return;
-    if (pendingBaseRef.current === normalizedBase || lastLoadedBaseRef.current === normalizedBase)
-      return;
-
-    loadRemoteModels();
-  }, [selectedCloudProvider, hasCustomBase, normalizedCustomReasoningBase, loadRemoteModels]);
 
   const [downloadedModels, setDownloadedModels] = useState<Set<string>>(new Set());
 
@@ -421,8 +988,6 @@ export default function ReasoningModelSelector({
 
         if (customModelOptions.length > 0) {
           setReasoningModel(customModelOptions[0].value);
-        } else if (hasCustomBase) {
-          loadRemoteModels();
         }
         return;
       }
@@ -452,21 +1017,41 @@ export default function ReasoningModelSelector({
     setSelectedCloudProvider(provider);
     setLocalReasoningProvider(provider);
 
-    if (provider === "custom") {
+    const lastModel = localStorage.getItem(`chordvox_last_model_${provider}`);
+
+      if (provider === "custom") {
       setCustomBaseInput(cloudReasoningBaseUrl);
       lastLoadedBaseRef.current = null;
       pendingBaseRef.current = null;
 
-      if (customModelOptions.length > 0) {
+      if (lastModel) {
+        setReasoningModel(lastModel);
+      } else if (customModelOptions.length > 0) {
         setReasoningModel(customModelOptions[0].value);
-      } else if (hasCustomBase) {
-        loadRemoteModels();
       }
       return;
     }
 
+    if (provider === "bedrock") {
+      const cachedModels = providerModelsCache.bedrock;
+      if (lastModel) {
+        setReasoningModel(lastModel);
+      } else if (cachedModels?.length > 0) {
+        setReasoningModel(cachedModels[0].value);
+      }
+      return;
+    }
+
+    if (lastModel) {
+      setReasoningModel(lastModel);
+      return;
+    }
+
     const providerData = REASONING_PROVIDERS[provider as keyof typeof REASONING_PROVIDERS];
-    if (providerData?.models?.length > 0) {
+    const cachedModels = providerModelsCache[provider];
+    if (cachedModels?.length > 0) {
+      setReasoningModel(cachedModels[0].value);
+    } else if (providerData?.models?.length > 0) {
       setReasoningModel(providerData.models[0].value);
     }
   };
@@ -474,18 +1059,38 @@ export default function ReasoningModelSelector({
   const handleLocalProviderChange = async (providerId: string) => {
     setSelectedLocalProvider(providerId);
     setLocalReasoningProvider(providerId);
+
     const downloaded = await loadDownloadedModels();
     const provider = localProviders.find((p) => p.id === providerId);
     const models = provider?.models ?? [];
+
+    const lastModel = localStorage.getItem(`chordvox_last_model_local_${providerId}`);
+
     if (models.length > 0) {
-      const firstDownloaded = models.find((m) => downloaded.has(m.id));
-      if (firstDownloaded) {
-        setReasoningModel(firstDownloaded.id);
+      if (lastModel && models.some(m => m.id === lastModel && downloaded.has(m.id))) {
+        setReasoningModel(lastModel);
       } else {
-        setReasoningModel("");
+        const firstDownloaded = models.find((m) => downloaded.has(m.id));
+        if (firstDownloaded) {
+          setReasoningModel(firstDownloaded.id);
+        } else {
+          setReasoningModel("");
+        }
       }
     }
   };
+
+  const handleModelSelect = useCallback(
+    (modelId: string) => {
+      setReasoningModel(modelId);
+      if (selectedMode === "cloud") {
+        localStorage.setItem(`chordvox_last_model_${selectedCloudProvider}`, modelId);
+      } else {
+        localStorage.setItem(`chordvox_last_model_local_${selectedLocalProvider}`, modelId);
+      }
+    },
+    [setReasoningModel, selectedMode, selectedCloudProvider, selectedLocalProvider]
+  );
 
   const MODE_TABS = [
     { id: "cloud", name: t("reasoning.mode.cloud") },
@@ -508,14 +1113,12 @@ export default function ReasoningModelSelector({
         </div>
         <button
           onClick={() => setUseReasoningModel(!useReasoningModel)}
-          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ${
-            useReasoningModel ? "bg-primary" : "bg-muted-foreground/25"
-          }`}
+          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ${useReasoningModel ? "bg-primary" : "bg-muted-foreground/25"
+            }`}
         >
           <span
-            className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 ${
-              useReasoningModel ? "translate-x-4.5" : "translate-x-0.75"
-            }`}
+            className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 ${useReasoningModel ? "translate-x-4.5" : "translate-x-0.75"
+              }`}
           />
         </button>
       </div>
@@ -578,7 +1181,7 @@ export default function ReasoningModelSelector({
                         </h4>
                         <ApiKeyInput
                           apiKey={customReasoningApiKey}
-                          setApiKey={setCustomReasoningApiKey || (() => {})}
+                          setApiKey={setCustomReasoningApiKey || (() => { })}
                           label=""
                           helpText={t("reasoning.custom.apiKeyHelp")}
                         />
@@ -590,33 +1193,22 @@ export default function ReasoningModelSelector({
                           <h4 className="text-sm font-medium text-foreground">
                             {t("reasoning.availableModels")}
                           </h4>
-                          <div className="flex gap-2">
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              onClick={handleResetCustomBase}
-                              className="text-xs"
-                            >
-                              {t("common.reset")}
-                            </Button>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              onClick={handleRefreshCustomModels}
-                              disabled={
-                                customModelsLoading || (!trimmedCustomBase && !hasSavedCustomBase)
-                              }
-                              className="text-xs"
-                            >
-                              {customModelsLoading
-                                ? t("common.loading")
-                                : isCustomBaseDirty
-                                  ? t("reasoning.custom.applyAndRefresh")
-                                  : t("common.refresh")}
-                            </Button>
-                          </div>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={handleRefreshCustomModels}
+                            disabled={
+                              customModelsLoading || (!trimmedCustomBase && !hasSavedCustomBase)
+                            }
+                            className="text-xs"
+                          >
+                            {customModelsLoading
+                              ? t("common.loading")
+                              : isCustomBaseDirty
+                                ? t("reasoning.custom.applyAndRefresh")
+                                : t("common.refresh")}
+                          </Button>
                         </div>
                         <p className="text-xs text-muted-foreground">
                           {t("reasoning.custom.queryPrefix")}{" "}
@@ -657,9 +1249,108 @@ export default function ReasoningModelSelector({
                           </>
                         )}
                         <ModelCardList
+                          key={`cloud-models-${selectedCloudProvider}`}
                           models={selectedCloudModels}
                           selectedModel={reasoningModel}
-                          onModelSelect={setReasoningModel}
+                          onModelSelect={handleModelSelect}
+                          enableSearch
+                          noSearchResultsText={t("common.noMatchingModels")}
+                        />
+                      </div>
+                    </>
+                  ) : selectedCloudProvider === "bedrock" ? (
+                    <>
+                      {/* Bedrock: Access Key ID */}
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium text-foreground">Access Key ID</h4>
+                        <Input
+                          type="password"
+                          value={bedrockAccessKeyId}
+                          onChange={(e) => {
+                            setBedrockAccessKeyId(e.target.value);
+                            saveBedrockCredential("bedrockAccessKeyId", e.target.value);
+                          }}
+                          placeholder="AKIA..."
+                          className="text-sm"
+                        />
+                      </div>
+
+                      {/* Bedrock: Secret Access Key */}
+                      <div className="space-y-2 pt-2">
+                        <h4 className="text-sm font-medium text-foreground">Secret Access Key</h4>
+                        <Input
+                          type="password"
+                          value={bedrockSecretAccessKey}
+                          onChange={(e) => {
+                            setBedrockSecretAccessKey(e.target.value);
+                            saveBedrockCredential("bedrockSecretAccessKey", e.target.value);
+                          }}
+                          placeholder="wJalr..."
+                          className="text-sm"
+                        />
+                      </div>
+
+                      {/* Bedrock: Region */}
+                      <div className="space-y-2 pt-2">
+                        <h4 className="text-sm font-medium text-foreground">Region</h4>
+                        <Input
+                          value={bedrockRegion}
+                          onChange={(e) => {
+                            setBedrockRegion(e.target.value);
+                            saveBedrockCredential("bedrockRegion", e.target.value);
+                          }}
+                          placeholder="us-east-1"
+                          className="text-sm"
+                        />
+                      </div>
+
+                      {/* Bedrock: Endpoint URL */}
+                      <div className="pt-3 space-y-2">
+                        <h4 className="text-sm font-medium text-foreground">
+                          {t("reasoning.custom.endpointTitle")}
+                        </h4>
+                        <Input
+                          value={providerEndpointInputs.bedrock || ""}
+                          onChange={(e) => setProviderEndpointInputs((prev) => ({ ...prev, bedrock: e.target.value }))}
+                          onBlur={() => handleProviderEndpointBlur("bedrock")}
+                          placeholder={`https://bedrock-runtime.${bedrockRegion || "us-east-1"}.amazonaws.com`}
+                          className="text-sm"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          {t("reasoning.custom.bedrockEndpointHint")}
+                        </p>
+                      </div>
+
+                      {/* Bedrock: Model Selection */}
+                      <div className="pt-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium text-foreground">
+                            {t("reasoning.availableModels")}
+                          </h4>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => loadBedrockModels(true)}
+                            disabled={providerLoading.bedrock || !bedrockAccessKeyId || !bedrockSecretAccessKey}
+                            className="text-xs"
+                          >
+                            {providerLoading.bedrock ? t("common.loading") : t("common.refresh")}
+                          </Button>
+                        </div>
+                        {providerLoading.bedrock && (
+                          <p className="text-xs text-primary">{t("reasoning.custom.fetchingModels")}</p>
+                        )}
+                        {providerError.bedrock && (
+                          <p className="text-xs text-destructive">{providerError.bedrock}</p>
+                        )}
+                        <ModelCardList
+                          key={`cloud-models-${selectedCloudProvider}`}
+                          models={selectedCloudModels}
+                          selectedModel={reasoningModel}
+                          onModelSelect={handleModelSelect}
+                          enableSearch
+                          noSearchResultsText={t("common.noMatchingModels")}
                         />
                       </div>
                     </>
@@ -685,6 +1376,30 @@ export default function ReasoningModelSelector({
                           <ApiKeyInput
                             apiKey={openaiApiKey}
                             setApiKey={setOpenaiApiKey}
+                            label=""
+                            helpText=""
+                          />
+                        </div>
+                      )}
+
+                      {selectedCloudProvider === "openrouter" && (
+                        <div className="space-y-2">
+                          <div className="flex items-baseline justify-between">
+                            <h4 className="font-medium text-foreground">{t("common.apiKey")}</h4>
+                            <a
+                              href="https://openrouter.ai/settings/keys"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={createExternalLinkHandler("https://openrouter.ai/settings/keys")}
+                              className="text-xs text-link underline decoration-link/30 hover:decoration-link/60 cursor-pointer transition-colors"
+                            >
+                              {t("reasoning.getApiKey")}
+                            </a>
+                          </div>
+                          <ApiKeyInput
+                            apiKey={openrouterApiKey}
+                            setApiKey={setOpenrouterApiKey}
+                            placeholder="sk-or-..."
                             label=""
                             helpText=""
                           />
@@ -767,15 +1482,70 @@ export default function ReasoningModelSelector({
                         </div>
                       )}
 
-                      {/* 2. Model Selection - BOTTOM */}
+                      {/* 2. Endpoint URL */}
                       <div className="pt-3 space-y-2">
                         <h4 className="text-sm font-medium text-foreground">
-                          {t("reasoning.selectModel")}
+                          {t("reasoning.custom.endpointTitle")}
                         </h4>
+                        <Input
+                          value={providerEndpointInputs[selectedCloudProvider] || ""}
+                          onChange={(e) => setProviderEndpointInputs((prev) => ({ ...prev, [selectedCloudProvider]: e.target.value }))}
+                          onBlur={() => handleProviderEndpointBlur(selectedCloudProvider)}
+                          placeholder={DEFAULT_PROVIDER_ENDPOINTS[selectedCloudProvider] || ""}
+                          className="text-sm"
+                        />
+                      </div>
+
+                      {/* 3. Model Selection - BOTTOM */}
+                      <div className="pt-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium text-foreground">
+                            {t("reasoning.availableModels")}
+                          </h4>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleRefreshProviderModels(selectedCloudProvider)}
+                            disabled={
+                              providerLoading[selectedCloudProvider] ||
+                              !{
+                                openai: openaiApiKey,
+                                openrouter: openrouterApiKey,
+                                anthropic: anthropicApiKey,
+                                gemini: geminiApiKey,
+                                groq: groqApiKey,
+                              }[selectedCloudProvider]
+                            }
+                            className="text-xs"
+                          >
+                            {providerLoading[selectedCloudProvider]
+                              ? t("common.loading")
+                              : t("common.refresh")}
+                          </Button>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {t("reasoning.custom.queryPrefix")}{" "}
+                          <code>{getProviderModelsUrl(selectedCloudProvider)}</code>{" "}
+                          {t("reasoning.custom.querySuffix")}
+                        </p>
+                        {providerLoading[selectedCloudProvider] && (
+                          <p className="text-xs text-primary">
+                            {t("reasoning.custom.fetchingModels")}
+                          </p>
+                        )}
+                        {providerError[selectedCloudProvider] && (
+                          <p className="text-xs text-destructive">
+                            {providerError[selectedCloudProvider]}
+                          </p>
+                        )}
                         <ModelCardList
+                          key={`cloud-models-${selectedCloudProvider}`}
                           models={selectedCloudModels}
                           selectedModel={reasoningModel}
-                          onModelSelect={setReasoningModel}
+                          onModelSelect={handleModelSelect}
+                          enableSearch
+                          noSearchResultsText={t("common.noMatchingModels")}
                         />
                       </div>
                     </>
@@ -788,7 +1558,7 @@ export default function ReasoningModelSelector({
               providers={localProviders}
               selectedModel={reasoningModel}
               selectedProvider={selectedLocalProvider}
-              onModelSelect={setReasoningModel}
+              onModelSelect={handleModelSelect}
               onProviderSelect={handleLocalProviderChange}
               modelType="llm"
               colorScheme="purple"

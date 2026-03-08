@@ -56,6 +56,36 @@ class ParakeetManager {
     return path.join(this.getModelsDir(), modelName);
   }
 
+  isLikelyCustomModelPath(value) {
+    const raw = String(value || "").trim();
+    if (!raw) return false;
+    return raw.includes("/") || raw.includes("\\");
+  }
+
+  resolveModelSelection(modelOrPath = "parakeet-tdt-0.6b-v3", explicitModelPath = "") {
+    const directPath = String(explicitModelPath || "").trim();
+    const raw = String(modelOrPath || "").trim() || "parakeet-tdt-0.6b-v3";
+    const rawPath = directPath || (this.isLikelyCustomModelPath(raw) ? raw : "");
+
+    if (rawPath) {
+      const resolvedPath = path.resolve(rawPath);
+      return {
+        modelName: null,
+        modelPath: resolvedPath,
+        modelKey: `path:${resolvedPath.toLowerCase()}`,
+        modelLabel: path.basename(resolvedPath),
+      };
+    }
+
+    this.validateModelName(raw);
+    return {
+      modelName: raw,
+      modelPath: this.getModelPath(raw),
+      modelKey: raw,
+      modelLabel: raw,
+    };
+  }
+
   async initializeAtStartup(settings = {}) {
     const startTime = Date.now();
 
@@ -68,30 +98,34 @@ class ParakeetManager {
 
       const { localTranscriptionProvider, parakeetModel } = settings;
 
-      if (
-        localTranscriptionProvider === "nvidia" &&
-        parakeetModel &&
-        this.serverManager.isAvailable()
-      ) {
-        if (this.serverManager.isModelDownloaded(parakeetModel)) {
-          debugLogger.info("Pre-warming parakeet server", { model: parakeetModel });
+      if (localTranscriptionProvider === "nvidia" && parakeetModel && this.serverManager.isAvailable()) {
+        const selection = this.resolveModelSelection(parakeetModel);
+        const modelPath = selection.modelPath;
+
+        if (!selection.modelName) {
+          debugLogger.debug("Skipping parakeet server pre-warm: custom model path configured", {
+            modelPath,
+          });
+        } else if (this.serverManager.isModelDownloaded(selection.modelName)) {
+          debugLogger.info("Pre-warming parakeet server", { model: selection.modelLabel });
 
           try {
             const serverStartTime = Date.now();
-            await this.serverManager.startServer(parakeetModel);
+            await this.serverManager.startServer(selection.modelName);
             debugLogger.info("Parakeet server pre-warmed successfully", {
-              model: parakeetModel,
+              model: selection.modelLabel,
               startupTimeMs: Date.now() - serverStartTime,
             });
           } catch (err) {
             debugLogger.warn("Parakeet server pre-warm failed (will start on first use)", {
               error: err.message,
-              model: parakeetModel,
+              model: selection.modelLabel,
             });
           }
         } else {
           debugLogger.debug("Skipping parakeet server pre-warm: model not downloaded", {
-            model: parakeetModel,
+            model: selection.modelLabel,
+            modelPath,
           });
         }
       } else {
@@ -192,11 +226,15 @@ class ParakeetManager {
       );
     }
 
-    const model = options.model || "parakeet-tdt-0.6b-v3";
+    const selection = this.resolveModelSelection(options.model, options.modelPath);
+    const modelPath = selection.modelPath;
+    const modelLabel = selection.modelLabel;
 
-    if (!this.serverManager.isModelDownloaded(model)) {
+    if (!this.serverManager.isModelDirectoryValid(modelPath)) {
       throw new Error(
-        `Parakeet model "${model}" not downloaded. Please download it from Settings.`
+        selection.modelName
+          ? `Parakeet model "${selection.modelName}" not downloaded. Please download it from Settings.`
+          : `Parakeet model directory not found or invalid: ${modelPath}`
       );
     }
 
@@ -221,12 +259,17 @@ class ParakeetManager {
 
     debugLogger.logSTTPipeline("transcribeLocalParakeet - processing", {
       bufferSize: audioBuffer.length,
-      model,
+      model: modelLabel,
+      modelPath,
     });
 
     const startTime = Date.now();
     const language = options.language || "auto";
-    const result = await this.serverManager.transcribe(audioBuffer, { modelName: model, language });
+    const result = await this.serverManager.transcribe(audioBuffer, {
+      modelName: selection.modelKey,
+      modelPath,
+      language,
+    });
     const elapsed = Date.now() - startTime;
 
     debugLogger.logSTTPipeline("transcribeLocalParakeet - completed", {
@@ -468,15 +511,23 @@ class ParakeetManager {
     return { success: false, error: "No active download to cancel" };
   }
 
-  async checkModelStatus(modelName) {
-    const modelPath = this.getModelPath(modelName);
+  async checkModelStatus(modelName, explicitModelPath = "") {
+    let selection;
+    try {
+      selection = this.resolveModelSelection(modelName, explicitModelPath);
+    } catch {
+      return { model: modelName, downloaded: false, success: true };
+    }
 
-    if (this.serverManager.isModelDownloaded(modelName)) {
+    const modelPath = selection.modelPath;
+    const modelLabel = selection.modelName || selection.modelLabel;
+
+    if (this.serverManager.isModelDirectoryValid(modelPath)) {
       try {
         const encoderPath = path.join(modelPath, "encoder.int8.onnx");
         const stats = fs.statSync(encoderPath);
         return {
-          model: modelName,
+          model: modelLabel,
           downloaded: true,
           path: modelPath,
           size_bytes: stats.size,
@@ -484,11 +535,11 @@ class ParakeetManager {
           success: true,
         };
       } catch {
-        return { model: modelName, downloaded: false, success: true };
+        return { model: modelLabel, downloaded: false, success: true };
       }
     }
 
-    return { model: modelName, downloaded: false, success: true };
+    return { model: modelLabel, downloaded: false, success: true };
   }
 
   async listParakeetModels() {

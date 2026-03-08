@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import "./index.css";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { useToast } from "./components/ui/Toast";
 import { LoadingDots } from "./components/ui/LoadingDots";
 import { useHotkey } from "./hooks/useHotkey";
@@ -88,6 +88,8 @@ export default function App() {
     () => localStorage.getItem("floatingIconAutoHide") === "true"
   );
   const prevAutoHideRef = useRef(floatingIconAutoHide);
+  const prevSuccessFeedbackRef = useRef(false);
+  const skipNextIdleAutoHideRef = useRef(false);
 
   const setWindowInteractivity = React.useCallback((shouldCapture) => {
     window.electronAPI?.setMainWindowInteractivity?.(shouldCapture);
@@ -152,6 +154,8 @@ export default function App() {
   const {
     isRecording,
     isProcessing,
+    micFeedbackState,
+    isSuccessFeedback,
     toggleListening,
     cancelRecording,
     cancelProcessing,
@@ -159,6 +163,7 @@ export default function App() {
   } = useAudioRecording(toast, {
     onToggle: handleDictationToggle,
   });
+  const isPastePending = micFeedbackState === "pasting";
 
   // Trigger streaming warmup when user signs in (covers first-time account creation).
   // Pass isSignedIn directly to bypass the localStorage race condition where
@@ -177,11 +182,42 @@ export default function App() {
     return () => unsubscribe?.();
   }, []);
 
+  // When success feedback ends, hide immediately (no gray idle flash) if auto-hide is enabled.
+  useLayoutEffect(() => {
+    const transitionedFromSuccess = prevSuccessFeedbackRef.current && !isSuccessFeedback;
+    prevSuccessFeedbackRef.current = isSuccessFeedback;
+
+    if (
+      transitionedFromSuccess &&
+      floatingIconAutoHide &&
+      !isRecording &&
+      !isProcessing &&
+      !isPastePending &&
+      toastCount === 0
+    ) {
+      skipNextIdleAutoHideRef.current = true;
+      window.electronAPI?.hideWindow?.();
+    }
+  }, [isSuccessFeedback, floatingIconAutoHide, isRecording, isProcessing, isPastePending, toastCount]);
+
   // Auto-hide the floating icon when idle (setting enabled or dictation cycle completed)
   useEffect(() => {
     let hideTimeout;
 
-    if (floatingIconAutoHide && !isRecording && !isProcessing && toastCount === 0) {
+    if (skipNextIdleAutoHideRef.current) {
+      skipNextIdleAutoHideRef.current = false;
+      prevAutoHideRef.current = floatingIconAutoHide;
+      return undefined;
+    }
+
+    if (
+      floatingIconAutoHide &&
+      !isRecording &&
+      !isProcessing &&
+      !isPastePending &&
+      !isSuccessFeedback &&
+      toastCount === 0
+    ) {
       // Delay briefly so processing can start after recording stops without a flash
       hideTimeout = setTimeout(() => {
         window.electronAPI?.hideWindow?.();
@@ -192,7 +228,7 @@ export default function App() {
 
     prevAutoHideRef.current = floatingIconAutoHide;
     return () => clearTimeout(hideTimeout);
-  }, [isRecording, isProcessing, floatingIconAutoHide, toastCount]);
+  }, [isRecording, isProcessing, isPastePending, isSuccessFeedback, floatingIconAutoHide, toastCount]);
 
   const handleClose = () => {
     window.electronAPI.hideWindow();
@@ -236,6 +272,8 @@ export default function App() {
   // Determine current mic state
   const getMicState = () => {
     if (isRecording) return "recording";
+    if (micFeedbackState === "success") return "success";
+    if (micFeedbackState === "pasting") return "processing";
     if (isProcessing) return "processing";
     if (isHovered && !isRecording && !isProcessing) return "hover";
     return "idle";
@@ -261,8 +299,17 @@ export default function App() {
         };
       case "processing":
         return {
-          className: `${baseClasses} bg-accent cursor-not-allowed`,
+          className:
+            `${baseClasses} cursor-not-allowed border-white/80 ` +
+            "bg-[radial-gradient(circle_at_25%_20%,#8ec5ff_0%,#7f7cf8_30%,#8b5cf6_65%,#6d28d9_100%)]",
           tooltip: t("app.mic.processing"),
+        };
+      case "success":
+        return {
+          className:
+            `${baseClasses} mic-success-shell border-white/80 ` +
+            "bg-[radial-gradient(circle_at_25%_20%,#8ec5ff_0%,#7f7cf8_30%,#c76eff_60%,#ff73c4_100%)]",
+          tooltip: t("app.mic.clickToSpeak"),
         };
       default:
         return {
@@ -383,6 +430,8 @@ export default function App() {
                 <LoadingDots />
               ) : micState === "processing" ? (
                 <VoiceWaveIndicator isListening={true} />
+              ) : micState === "success" ? (
+                <Check size={15} strokeWidth={3} className="text-white mic-success-icon" />
               ) : null}
 
               {/* State indicator ring for recording */}
@@ -393,6 +442,11 @@ export default function App() {
               {/* State indicator ring for processing */}
               {micState === "processing" && (
                 <div className="absolute inset-0 rounded-full border-2 border-primary/30 opacity-50"></div>
+              )}
+
+              {/* State indicator ring for success */}
+              {micState === "success" && (
+                <div className="absolute inset-0 rounded-full border-2 border-white/70 mic-success-ring"></div>
               )}
             </button>
           </Tooltip>
