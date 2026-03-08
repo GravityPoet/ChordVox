@@ -49,6 +49,22 @@
 
 ---
 
+### 下载与安装
+
+👉 **[前往 GitHub Releases 页面下载最新版本](https://github.com/GravityPoet/ChordVox/releases/latest)**
+
+> [!IMPORTANT]
+> **macOS 必看：首次启动请解除系统限制**
+> 
+> 由于本应用为开源软件未进行苹果开发者证书签名，macOS 首次运行通常会被系统自动拦截。请在将下载的 `ChordVox.app` 拖入`应用程序 (Applications)`文件夹后，**务必打开「终端 (Terminal)」执行下方命令为应用放行**（该操作只需执行一次）：
+> 
+> ```bash
+> xattr -dr com.apple.quarantine /Applications/ChordVox.app
+> open /Applications/ChordVox.app
+> ```
+
+---
+
 ### 运行机制
 
 ```
@@ -65,20 +81,6 @@
 
 ---
 
-### 下载
-
-您可以前往 [GitHub Releases](https://github.com/GravityPoet/ChordVox/releases/latest) 页面下载适合您操作系统的最新版本。
-
-#### macOS 首次启动
-
-版本非APP Store下载可能被 Gatekeeper 拦截，执行以下命令解除：
-
-```bash
-xattr -dr com.apple.quarantine /Applications/ChordVox.app
-open /Applications/ChordVox.app
-```
-
----
 
 ### 快速链接
 

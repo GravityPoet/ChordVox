@@ -57,6 +57,22 @@
 
 ---
 
+### Download & Install
+
+👉 **[Go to GitHub Releases to download the latest version](https://github.com/GravityPoet/ChordVox/releases/latest)**
+
+> [!IMPORTANT]
+> **macOS Users: Required First-Launch Unlock**
+> 
+> Because this open-source app is not self-signed with an Apple Developer certificate, macOS Gatekeeper will block it on the first run. After dragging `ChordVox.app` to your `Applications ` folder, **you must open your `Terminal` and run this command once to unlock the app**:
+> 
+> ```bash
+> xattr -dr com.apple.quarantine /Applications/ChordVox.app
+> open /Applications/ChordVox.app
+> ```
+
+---
+
 ### How It Works
 
 ```
@@ -73,20 +89,6 @@
 
 ---
 
-### Download
-
-You can always find the latest format specific to your operating system on the [GitHub Releases](https://github.com/GravityPoet/ChordVox/releases/latest) page.
-
-#### macOS First Launch
-
-Unsigned builds may trigger Gatekeeper. Fix with:
-
-```bash
-xattr -dr com.apple.quarantine /Applications/ChordVox.app
-open /Applications/ChordVox.app
-```
-
----
 
 ### Quick Links
 
