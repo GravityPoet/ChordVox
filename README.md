@@ -2,7 +2,14 @@
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
-  <strong>Still typing manually or fixing speech-to-text typos? Try this entirely local AI dictation app. Speak and instantly get polished text, auto-pasted in one go. Your privacy is in your hands—no registration required, ready to use out of the box. Your mouth is the fastest keyboard.</strong>
+  <strong>Still typing by hand or fixing speech recognition errors?</strong>
+</p>
+
+<h3 align="center">Your voice is the fastest keyboard.</h3>
+
+<p align="center">
+  Fully local AI voice input — speak and get polished text in seconds, auto-pasted in one shot.<br/>
+  Your privacy stays in your hands. No sign-up, works out of the box.
 </p>
 
 <p align="center">
@@ -18,53 +25,36 @@
 
 ---
 
-### One-liner
+### Pain Points Solved
 
-> **An AI dictation app: speak to input, let AI refine, and auto-paste in one go. We push privacy, efficiency, and AI refinement to the extreme, letting you say goodbye to tedious typing and fixing. No cloud account needed, ready out of the box.**
-
----
-
-### How Can This App Help You?
-
-| Pain Point | How We Solve It |
+| 😩 Pain Point | ✅ ChordVox Solution |
 |---|---|
-| **"Typing is too slow, I lose my train of thought."** | Just say whatever is on your mind. Even if you stutter, it'll spit out a beautiful, coherent text in under 2 seconds. |
-| **"I'm afraid to upload meeting notes or papers for fear of leaks."** | **Unplug the internet and use it anyway.** We've embedded a powerful local AI brain directly into the app. Your trade secrets rot safely on your hard drive. |
-| **"Dictation apps make too many typos, I still have to fix them."** | Built-in top-tier AI grammar correction. Say filler words or use Yoda syntax—the LLM automatically straightens it into proper formal writing, complete with correct punctuation and formatting. |
-| **"I have to copy the transcribed text and switch windows."** | As simple as sending a WhatsApp voice note. Hold a hotkey to speak in any input box; release it, and the polished text is **automatically pasted at your cursor**. No mouse needed. |
-| **"My industry has jargon, the AI always gets it wrong."** | Custom dictionaries. Throw your client names and industry jargon in there, and it'll never spell them wrong again. |
+| Typing is slow — thoughts race ahead of your fingers | Speak naturally → polished text in under 2 seconds |
+| Cloud voice tools send recordings to unknown servers | Local STT — audio never leaves your machine |
+| Raw transcription is messy, punctuation is chaotic | AI polish auto-fixes grammar, punctuation & formatting |
+| Constant window-switching between dictation app and editor | Paste directly at cursor, zero interruption |
+| Specialized terms (medical / legal / code) get misrecognized | Custom dictionary guides the model toward your domain vocabulary |
+| Different tasks need different AI quality levels | Dual hotkey profiles: fast draft (Groq) / polished output (GPT-5 / Claude) |
 
 ---
 
-### Killer Features That Will Change How You Work
+### Key Features
 
-- 🔒 **100% Local, Hardcore Privacy Protection** — No messing around with complex Python setups. Download the app, double-click, and open it. Even with a microscope, no one could find your audio leaving this machine.
+- 🔒 **Privacy-First, Runs Locally** — Built-in STT engines (whisper.cpp · NVIDIA Parakeet · SenseVoice). Audio never leaves your machine. No Python needed, native binaries work out of the box.
 
-- 🧠 **AI Refinement (Eradicate Typos and Grammar Errors)** — Top-tier text polishing pipeline. The raw transcript isn't just slapped onto your screen; it is refined through an LLM. Tie it to OpenAI / Claude / Gemini, or run a local model to handle auto-formatting.
+- 🧠 **AI Polish Pipeline** — Raw speech → polished text. Connect to OpenAI / Anthropic / Gemini / Groq / any endpoint, or run local GGUF models via bundled llama.cpp. Auto-fixes grammar, context, and formatting.
 
-- ⌨️ **Walkie-Talkie-Like Immersive Experience** — We use low-level system hooks to catch your global hotkeys. Whether you're in Word, WhatsApp, or a browser, hold your hotkey to speak, and the text is automatically typed for you. This is the ultimate "seamless typing."
+- ⌨️ **Paste at Cursor** — One hotkey: record → transcribe → polish → paste at your active cursor. Native Globe/Fn key support on macOS, true Push-to-Talk via keyboard hooks on all platforms.
 
-- 🎯 **Not Just Dictation, Give Commands Too** — Setup a name for your assistant and tell it: "Hey ChordVox, write a polite salary raise request..." Boom, a perfectly crafted petition appears instantly on your screen.
+- 🎯 **Assistant Name & Command Mode** — Give your AI assistant a custom name. Say "Hi ChordVox, draft a reply to that email…" and it instantly switches from typing mode to intelligent assistant mode.
 
-- 🔄 **Switch Workflows with Ease** — We provide dual hotkey setups. Map one hotkey for quick drafts (fastest transcription) and the other for highly rigorous formal documents (using your strongest reasoning LLM)—without interfering with each other.
+- 📖 **Custom Dictionary** — Add your own names, jargon, and abbreviations. Dramatically improve accuracy for medical, legal, coding, and other specialized domains.
 
----
+- 🌍 **58 Languages · 10 UI Locales** — Auto-detect or manually lock language. Fully localized UI: EN / ZH-CN / ZH-TW / JA / DE / FR / ES / PT / IT / RU.
 
-### Download & Install
+- 🔄 **Dual-Profile Hotkeys** — Two independent hotkeys bound to different STT engines, AI models, and polish strategies. Switch workflows in a single keystroke.
 
-👉 **[Go to GitHub Releases to download the latest version](https://github.com/GravityPoet/ChordVox/releases/latest)**
-
-> [!IMPORTANT]
-> **macOS Users: Required First-Launch Unlock**
-> 
-> Because this is an open-source app and not downloaded from the Mac App Store, macOS may block it on its first run. After installing the app for the first time, please open your `Terminal` and run the following command to remove this restriction (this only needs to be done once):
-> 
-> ```bash
-> xattr -dr com.apple.quarantine /Applications/ChordVox.app
-> open /Applications/ChordVox.app
-> ```
-> 
-> The code for this software is entirely transparent and open source. You can feel safe running it.
+- 🧹 **Storage Management** — One-click cleanup of downloaded Whisper / GGUF model caches to free up disk space.
 
 ---
 
@@ -72,7 +62,7 @@
 
 ```
 ┌─────────────┐    ┌──────────────────────────┐    ┌─────────────────┐    ┌──────────────┐
-│  Hotkey      │───▶│  Audio Capture           │───▶│  STT Engine     │───▶│  AI Refine   │───▶ Paste
+│  Hotkey      │───▶│  Audio Capture           │───▶│  STT Engine     │───▶│  AI Polish   │───▶ Paste
 │  (Globe/Fn/  │    │  MediaRecorder → IPC     │    │  whisper.cpp    │    │  GPT / Claude│    at
 │   Custom)    │    │  → temp .wav file        │    │  Parakeet       │    │  Gemini/Groq │    Cursor
 └─────────────┘    └──────────────────────────┘    │  SenseVoice     │    │  Local GGUF  │
@@ -84,9 +74,32 @@
 
 ---
 
+### Download
+
+Latest release: [Release Page](https://github.com/GravityPoet/ChordVox/releases/latest)
+
+| System | Format | Link |
+|---|---|---|
+| macOS (Apple Silicon) | .dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+| macOS (Intel) | .dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+| Windows | .exe | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+| Linux | .AppImage / .deb | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+
+> 30-day full-feature free trial, no registration needed.
+
+#### macOS First Launch
+
+Non-App Store downloads may trigger Gatekeeper. Fix with:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/ChordVox.app && open /Applications/ChordVox.app
+```
+
+---
 
 ### Quick Links
 
+- 🌐 [Website chordvox.com](https://chordvox.com)
 - 📦 [All Releases](https://github.com/GravityPoet/ChordVox/releases)
 - 📖 [Legacy Technical README](docs/README_LEGACY.md)
 - 📬 Contact: `gravitypoet@icloud.com`
