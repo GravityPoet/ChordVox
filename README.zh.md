@@ -81,14 +81,6 @@
 
 最新版本：[Release 页面](https://github.com/GravityPoet/ChordVox/releases/latest)
 
-| 系统 | 格式 | 下载 |
-|---|---|---|
-| macOS (Apple Silicon) | .dmg | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| macOS (Intel) | .dmg | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| Windows | .exe | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| Linux | .AppImage / .deb | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/latest) |
-
-> 30 天全功能免费试用，无需注册。
 
 #### macOS 首次启动
 
