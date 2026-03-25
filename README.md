@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="ChordVox" width="128" />
+  <img src="assets/icon.png" alt="ChordVox" width="128" />
 </p>
 
 
@@ -13,7 +13,7 @@
 
 <p align="center">
   Fully local AI voice input — speak and get polished text in seconds, auto-pasted in one shot.<br/>
-  Your privacy stays in your hands. No sign-up, works out of the box.
+  Your privacy stays in your hands. Free forever local speech-to-text.
 </p>
 
 <p align="center">
@@ -62,24 +62,6 @@
 
 ---
 
-### Download & Install
-
-👉 **[Go to GitHub Releases to download the latest version](https://github.com/GravityPoet/ChordVox/releases/latest)**
-
-> [!IMPORTANT]
-> **macOS Users: Required First-Launch Unlock**
-> 
-> Because this is an open-source app and not downloaded from the Mac App Store, macOS may block it on its first run. After installing the app for the first time, please open your Terminal and run the following command to remove this restriction (this only needs to be done once):
-> 
-> ```
-> xattr -dr com.apple.quarantine /Applications/ChordVox.app
-> open /Applications/ChordVox.app
-> ```
-> 
-> **The code for this software is entirely transparent and open source. You can feel safe running it.**
-
----
-
 ### How It Works
 
 ```
@@ -96,7 +78,26 @@
 
 ---
 
+### Download
 
+Latest release: [Release Page](https://github.com/GravityPoet/ChordVox/releases/latest)
+
+| System | Format | Link |
+|---|---|---|
+| macOS (Apple Silicon) | .dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+| macOS (Intel) | .dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+| Windows | .exe | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+| Linux | .AppImage / .deb | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+
+> Free forever local speech-to-text. AI enhancement, file transcription, BYOK, and advanced workflows are optional with Pro.
+
+#### macOS First Launch
+
+Non-App Store downloads may trigger Gatekeeper. Fix with:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/ChordVox.app && open /Applications/ChordVox.app
+```
 
 ---
 
