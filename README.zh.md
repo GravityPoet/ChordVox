@@ -2,7 +2,7 @@
   <img src="assets/logo.png" alt="ChordVox" width="128" />
 </p>
 
-<h1 align="center">ChordVox IME</h1>
+<h1 align="center">ChordVox AI 语音输入法</h1>
 
 <p align="center">
   <strong>还在手动打字 or 改语音识别的错别字？</strong>
