@@ -80,14 +80,14 @@
 
 ### Download
 
-Latest release: [Release Page](https://github.com/GravityPoet/ChordVox/releases/latest)
+Latest release: [`v1.5.68`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.68)
 
 | System | Format | Link |
 |---|---|---|
-| macOS (Apple Silicon) | .dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| macOS (Intel) | .dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| Windows | .exe | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| Linux | .AppImage / .deb | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/latest) |
+| macOS (Apple Silicon) | .dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.68/ChordVox-1.5.68-arm64.dmg) |
+| macOS (Intel) | .dmg | Coming soon |
+| Windows | .exe | Coming soon |
+| Linux | .AppImage / .deb | Coming soon |
 
 > Free forever local speech-to-text. AI enhancement, file transcription, BYOK, and advanced workflows are optional with Pro.
 
