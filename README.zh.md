@@ -79,14 +79,14 @@
 
 ### 下载
 
-最新版本：[Release 页面](https://github.com/GravityPoet/ChordVox/releases/latest)
+当前稳定版：[`v1.5.68`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.68)
 
 | 系统 | 格式 | 下载 |
 |---|---|---|
-| macOS (Apple Silicon) | .dmg | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| macOS (Intel) | .dmg | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| Windows | .exe | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/latest) |
-| Linux | .AppImage / .deb | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/latest) |
+| macOS (Apple Silicon) | .dmg | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.68/ChordVox-1.5.68-arm64.dmg) |
+| macOS (Intel) | .dmg | 即将上线 |
+| Windows | .exe | 即将上线 |
+| Linux | .AppImage / .deb | 即将上线 |
 
 > 永久免费本地语音转文字。AI 文本增强、文件转录、BYOK 和高级工作流可选 Pro。
 
