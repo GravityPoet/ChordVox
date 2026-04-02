@@ -1,0 +1,565 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 1.5.0)"
+        required: true
+        type: string
+      source_sha:
+        description: "Source commit SHA from ChordVox-Pro/main (40 chars)"
+        required: true
+        type: string
+      windows_delivery:
+        description: "How to deliver Windows assets to GitHub release"
+        required: false
+        default: "actions"
+        type: choice
+        options:
+          - actions
+          - utm-manual
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref || github.event.inputs.version }}
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+  PUBLIC_RELEASE_REPO: ${{ vars.PUBLIC_RELEASE_REPO != '' && vars.PUBLIC_RELEASE_REPO || 'GravityPoet/ChordVox' }}
+
+jobs:
+  resolve-release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      tag: ${{ steps.meta.outputs.tag }}
+      source_sha: ${{ steps.meta.outputs.source_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release version/tag
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            SOURCE_SHA="${{ github.event.inputs.source_sha }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+            SOURCE_SHA="${GITHUB_SHA}"
+          fi
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$ ]]; then
+            echo "Invalid version: $VERSION"
+            exit 1
+          fi
+          if ! [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid source SHA: $SOURCE_SHA"
+            exit 1
+          fi
+
+          git fetch origin main --depth=1
+          git cat-file -e "${SOURCE_SHA}^{commit}" || {
+            echo "Source SHA does not exist in repository: $SOURCE_SHA"
+            exit 1
+          }
+          if ! git merge-base --is-ancestor "$SOURCE_SHA" "origin/main"; then
+            echo "Source SHA is not on origin/main: $SOURCE_SHA"
+            exit 1
+          fi
+
+          TAG="v${VERSION}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "source_sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "Resolved release: $TAG from source SHA: $SOURCE_SHA"
+
+      - name: Ensure public release exists
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ steps.meta.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.meta.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ steps.meta.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          VERSION="${RELEASE_VERSION}"
+          SOURCE_SHA="${RELEASE_SOURCE_SHA}"
+
+          cat > release-notes.md <<EOF
+          # ChordVox v${VERSION}
+
+          Automated release from private build pipeline.
+
+          - Source repo: \`GravityPoet/ChordVox-Pro\`
+          - Source sha: \`${SOURCE_SHA}\`
+
+          ## macOS First Launch
+
+          macOS first launch may require permission because the app is distributed outside the App Store. If Gatekeeper blocks the app, run:
+
+          \`\`\`bash
+          xattr -dr com.apple.quarantine /Applications/ChordVox.app
+          open /Applications/ChordVox.app
+          \`\`\`
+
+          EOF
+
+          if gh release view "$TAG" -R "$REPO" >/dev/null 2>&1; then
+            gh release edit "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
+          else
+            gh release create "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
+          fi
+
+  build-linux:
+    needs: resolve-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Verify checked out source SHA
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          if [ "$ACTUAL_SHA" != "$EXPECTED_SOURCE_SHA" ]; then
+            echo "Source SHA mismatch. expected=$EXPECTED_SOURCE_SHA actual=$ACTUAL_SHA"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: linux-x64-bin-${{ hashFiles('scripts/download-*.js') }}
+
+      - name: Download whisper.cpp binaries
+        run: node scripts/download-whisper-cpp.js --current
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download llama-server binaries
+        run: node scripts/download-llama-server.js --current
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download sherpa-onnx binaries
+        run: node scripts/download-sherpa-onnx.js --current
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron
+          key: linux-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: linux-electron-
+
+      - name: Install Linux packaging dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+
+      - name: Build Linux artifacts
+        run: >
+          npm run build:linux -- --publish never
+          --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }}
+        env:
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+
+      - name: Generate Linux release manifest
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          MANIFEST="dist/release-manifest-linux.json"
+          mapfile -t FILES < <(find dist -maxdepth 1 -type f \( -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" -o -name "*.tar.gz" -o -name "latest-linux.yml" \) | sort)
+          if [ "${#FILES[@]}" -eq 0 ]; then
+            echo "No Linux assets found for manifest generation"
+            exit 1
+          fi
+
+          {
+            echo "{"
+            echo "  \"tag\": \"${RELEASE_TAG}\","
+            echo "  \"version\": \"${RELEASE_VERSION}\","
+            echo "  \"sourceSha\": \"${RELEASE_SOURCE_SHA}\","
+            echo "  \"platform\": \"linux-x64\","
+            echo "  \"generatedAt\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\","
+            echo "  \"assets\": ["
+            for i in "${!FILES[@]}"; do
+              file="${FILES[$i]}"
+              name="$(basename "$file")"
+              size="$(wc -c < "$file" | tr -d '[:space:]')"
+              sha="$(sha256sum "$file" | awk '{print $1}')"
+              comma=","
+              if [ "$i" -eq "$((${#FILES[@]} - 1))" ]; then
+                comma=""
+              fi
+              echo "    {\"name\":\"${name}\",\"sha256\":\"${sha}\",\"sizeBytes\":${size}}${comma}"
+            done
+            echo "  ]"
+            echo "}"
+          } > "$MANIFEST"
+
+      - name: Publish Linux artifacts directly
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          shopt -s nullglob
+          ASSETS=(dist/*.AppImage dist/*.deb dist/*.rpm dist/*.tar.gz dist/latest-linux.yml dist/release-manifest-linux.json)
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No Linux assets found in dist/"
+            exit 1
+          fi
+          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
+
+  build-windows:
+    if: ${{ github.event.inputs.windows_delivery != 'utm-manual' }}
+    needs: resolve-release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Verify checked out source SHA
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          if [ "$ACTUAL_SHA" != "$EXPECTED_SOURCE_SHA" ]; then
+            echo "Source SHA mismatch. expected=$EXPECTED_SOURCE_SHA actual=$ACTUAL_SHA"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: windows-x64-bin-${{ hashFiles('scripts/download-*.js') }}
+
+      - name: Download whisper.cpp binaries
+        run: node scripts/download-whisper-cpp.js --current
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download llama-server binaries
+        run: node scripts/download-llama-server.js --current
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download sherpa-onnx binaries
+        run: node scripts/download-sherpa-onnx.js --current
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download nircmd.exe
+        run: node scripts/download-nircmd.js
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/AppData/Local/electron/Cache
+          key: windows-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: windows-electron-
+
+      - name: Build Windows artifacts
+        run: >
+          npm run build:win -- --publish never
+          --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }}
+        env:
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+
+      - name: Generate Windows release manifest
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          $patterns = @("*.exe", "*.zip", "*.blockmap", "latest.yml")
+          $files = @()
+          foreach ($pattern in $patterns) {
+            $files += Get-ChildItem -Path dist -Filter $pattern -File -ErrorAction SilentlyContinue
+          }
+          $files = $files | Sort-Object Name -Unique
+          if ($files.Count -eq 0) {
+            Write-Error "No Windows assets found for manifest generation"
+            exit 1
+          }
+
+          $assets = @()
+          foreach ($file in $files) {
+            $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLower()
+            $assets += [ordered]@{
+              name = $file.Name
+              sha256 = $hash
+              sizeBytes = $file.Length
+            }
+          }
+
+          $manifest = [ordered]@{
+            tag = "$env:RELEASE_TAG"
+            version = "$env:RELEASE_VERSION"
+            sourceSha = "$env:RELEASE_SOURCE_SHA"
+            platform = "windows-x64"
+            generatedAt = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+            assets = $assets
+          }
+
+          $manifest | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 dist/release-manifest-windows.json
+
+      - name: Publish Windows artifacts directly
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          shopt -s nullglob
+          ASSETS=(dist/*.exe dist/*.zip dist/*.blockmap dist/latest.yml dist/release-manifest-windows.json)
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No Windows assets found in dist/"
+            exit 1
+          fi
+          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
+
+  build-macos:
+    needs: resolve-release
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Verify checked out source SHA
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          if [ "$ACTUAL_SHA" != "$EXPECTED_SOURCE_SHA" ]; then
+            echo "Source SHA mismatch. expected=$EXPECTED_SOURCE_SHA actual=$ACTUAL_SHA"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: macos-${{ matrix.arch }}-bin-${{ hashFiles('scripts/download-*.js', 'scripts/build-globe-listener.js', 'resources/macos-globe-listener.swift') }}
+
+      - name: Download whisper.cpp binaries
+        run: node scripts/download-whisper-cpp.js --current --platform darwin --arch ${{ matrix.arch }}
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download llama-server binaries
+        run: node scripts/download-llama-server.js --current --platform darwin --arch ${{ matrix.arch }}
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download sherpa-onnx binaries
+        run: node scripts/download-sherpa-onnx.js --current --platform darwin --arch ${{ matrix.arch }}
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron
+          key: macos-${{ matrix.arch }}-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: macos-${{ matrix.arch }}-electron-
+
+      - name: Detect macOS signing readiness
+        id: signing
+        shell: bash
+        run: |
+          if [ -n "${{ secrets.APPLE_CERTIFICATE_BASE64 }}" ] && \
+             [ -n "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" ] && \
+             [ -n "${{ secrets.APPLE_API_KEY_BASE64 }}" ] && \
+             [ -n "${{ secrets.APPLE_API_KEY_ID }}" ] && \
+             [ -n "${{ secrets.APPLE_API_ISSUER }}" ] && \
+             [ -n "${{ secrets.APPLE_TEAM_ID }}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Signing secrets not configured. Building unsigned macOS artifacts."
+          fi
+
+      - name: Setup macOS Code Signing
+        if: steps.signing.outputs.enabled == 'true'
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY_BASE64 }}
+        run: |
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          API_KEY_PATH=$RUNNER_TEMP/api_key.p8
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          echo "$APPLE_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
+          echo "$APPLE_API_KEY_BASE64" | base64 --decode > "$API_KEY_PATH"
+
+          security create-keychain -p "runner" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "runner" "$KEYCHAIN_PATH"
+
+          security import "$CERTIFICATE_PATH" -P "$APPLE_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -s -k "runner" "$KEYCHAIN_PATH"
+
+          echo "APPLE_API_KEY=$API_KEY_PATH" >> "$GITHUB_ENV"
+
+      - name: Require signed macOS release inputs
+        if: steps.signing.outputs.enabled != 'true'
+        shell: bash
+        run: |
+          echo "macOS customer releases must use the official signed/notarized pipeline."
+          echo "Missing one or more required Apple signing secrets."
+          exit 1
+
+      - name: Build macOS artifacts (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build:mac:customer -- --${{ matrix.arch }} --publish never \
+            --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }} \
+        env:
+          TARGET_ARCH: ${{ matrix.arch }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+          CSC_IDENTITY_AUTO_DISCOVERY: ${{ steps.signing.outputs.enabled == 'true' && 'true' || 'false' }}
+          CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Generate macOS release manifest (${{ matrix.arch }})
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          MANIFEST="dist/release-manifest-macos-${{ matrix.arch }}.json"
+          mapfile -t FILES < <(find dist -maxdepth 1 -type f \( -name "*.dmg" -o -name "*.zip" -o -name "*.zip.blockmap" -o -name "*.dmg.blockmap" -o -name "latest-mac.yml" \) | sort)
+          if [ "${#FILES[@]}" -eq 0 ]; then
+            echo "No macOS assets found for manifest generation"
+            exit 1
+          fi
+
+          {
+            echo "{"
+            echo "  \"tag\": \"${RELEASE_TAG}\","
+            echo "  \"version\": \"${RELEASE_VERSION}\","
+            echo "  \"sourceSha\": \"${RELEASE_SOURCE_SHA}\","
+            echo "  \"platform\": \"macos-${{ matrix.arch }}\","
+            echo "  \"generatedAt\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\","
+            echo "  \"assets\": ["
+            for i in "${!FILES[@]}"; do
+              file="${FILES[$i]}"
+              name="$(basename "$file")"
+              size="$(wc -c < "$file" | tr -d '[:space:]')"
+              sha="$(shasum -a 256 "$file" | awk '{print $1}')"
+              comma=","
+              if [ "$i" -eq "$((${#FILES[@]} - 1))" ]; then
+                comma=""
+              fi
+              echo "    {\"name\":\"${name}\",\"sha256\":\"${sha}\",\"sizeBytes\":${size}}${comma}"
+            done
+            echo "  ]"
+            echo "}"
+          } > "$MANIFEST"
+
+      - name: Publish macOS artifacts directly (${{ matrix.arch }})
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          shopt -s nullglob
+          ASSETS=(dist/*.dmg dist/*.zip dist/*.zip.blockmap dist/*.dmg.blockmap)
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            ASSETS+=(dist/latest-mac.yml)
+          fi
+          ASSETS+=(dist/release-manifest-macos-${{ matrix.arch }}.json)
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No macOS assets found in dist/"
+            exit 1
+          fi
+          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
+
+      - name: Cleanup Certificates
+        if: always() && steps.signing.outputs.enabled == 'true'
+        run: |
+          security delete-keychain "$RUNNER_TEMP/app-signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/build_certificate.p12"
+          rm -f "$RUNNER_TEMP/api_key.p8"

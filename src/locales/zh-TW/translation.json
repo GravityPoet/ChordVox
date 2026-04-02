@@ -1,0 +1,1731 @@
+{
+  "app": {
+    "name": "ChordVox",
+    "loading": "正在載入 ChordVox...",
+    "oauth": {
+      "redirectTitle": "正在導向 ChordVox",
+      "closeTab": "你可以關閉此分頁"
+    },
+    "buttons": {
+      "cancelRecording": "取消錄音",
+      "cancelProcessing": "取消處理"
+    },
+    "mic": {
+      "hotkeyToSpeak": "[{{hotkey}}] 開始說話",
+      "recording": "錄音中...",
+      "processing": "處理中...",
+      "clickToSpeak": "點擊開始說話",
+      "status": {
+        "recording": "錄音中",
+        "transcribing": "辨識中",
+        "polishing": "潤色中",
+        "completed": "已完成"
+      },
+      "placeholder": {
+        "listening": "正在聽你說話…",
+        "transcribing": "正在辨識你剛剛說的內容…",
+        "polishing": "正在潤色並整理文字…",
+        "completed": "這次語音輸入已完成"
+      }
+    },
+    "toasts": {
+      "hotkeyChanged": {
+        "title": "快捷鍵已變更"
+      },
+      "hotkeyUnavailable": {
+        "title": "快捷鍵無法使用",
+        "description": "無法註冊快捷鍵。請在設定中選擇其他快捷鍵。"
+      }
+    },
+    "commandMenu": {
+      "startListening": "開始聆聽",
+      "stopListening": "停止聆聽",
+      "hideForNow": "暫時隱藏"
+    },
+    "trialExpiredModal": {
+      "title": "此功能需要 Pro",
+      "description": "免費本機轉錄仍可繼續使用。升級 Pro 後即可解鎖 AI 文字增強、檔案轉錄、BYOK、提示詞工作室與進階工作流程。",
+      "valueBullets": "永久免費本機轉錄 · AI 文字增強 · 檔案轉錄 · BYOK 與進階工作流程",
+      "actions": {
+        "buyNow": "查看 Pro 方案",
+        "haveKey": "我已有授權碼",
+        "later": "繼續使用免費版"
+      }
+    }
+  },
+  "settings": {
+    "language": {
+      "sectionTitle": "語言",
+      "sectionDescription": "分別設定介面語言和轉錄語言",
+      "uiLabel": "介面語言",
+      "uiDescription": "選擇 ChordVox 介面使用的語言",
+      "transcriptionLabel": "轉錄語言",
+      "transcriptionDescription": "選擇你說話的語言，以提高轉錄準確度",
+      "uiOption": {
+        "en": "English",
+        "es": "Espanol",
+        "fr": "Francais",
+        "de": "Deutsch",
+        "pt": "Portugues",
+        "it": "Italiano",
+        "zh-CN": "简体中文",
+        "zh-TW": "繁體中文",
+        "ru": "Русский",
+        "ja": "日本語"
+      }
+    }
+  },
+  "tray": {
+    "toggleDictation": {
+      "show": "顯示語音輸入面板",
+      "hide": "隱藏語音輸入面板"
+    },
+    "openControlPanel": "開啟控制面板",
+    "quit": "結束 ChordVox",
+    "tooltip": "ChordVox - 語音輸入"
+  },
+  "menu": {
+    "appLabel": "ChordVox",
+    "quit": "結束 ChordVox",
+    "speech": "語音",
+    "help": "說明",
+    "learnMore": "瞭解更多",
+    "file": "檔案",
+    "closeWindow": "關閉視窗"
+  },
+  "window": {
+    "voiceRecorderTitle": "錄音器",
+    "controlPanelTitle": "控制面板"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "無法開啟連結",
+      "message": "無法在瀏覽器中開啟連結：\n{{url}}\n\n錯誤：{{error}}"
+    },
+    "loadFailure": {
+      "title": "ChordVox 載入失敗",
+      "message": "ChordVox 無法載入介面。",
+      "detail": {
+        "window": "視窗：{{windowName}}",
+        "error": "錯誤 {{errorCode}}：{{errorDescription}}",
+        "url": "URL：{{url}}",
+        "hint": "請嘗試重新安裝應用程式，或使用 --log-level=debug 啟動。"
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ChordVox 啟動錯誤",
+      "message": "應用程式啟動失敗：\n\n{{error}}\n\n請回報此問題。"
+    },
+    "globeHotkey": {
+      "title": "Globe 快捷鍵無法使用",
+      "message": "ChordVox 無法啟用 Globe 鍵快捷鍵。",
+      "details": {
+        "unknown": "啟動 Globe 監聽程式時發生未知錯誤。",
+        "fallback": "Globe 鍵快捷鍵將維持停用狀態；現有的鍵盤快捷鍵仍可正常使用。",
+        "devHint": "執行 `npm run compile:globe` 並重新建置應用程式以重新產生監聽程式。",
+        "reinstallHint": "請嘗試重新安裝 ChordVox，或聯絡客服。"
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "設定快捷鍵需要回呼函式",
+      "globeOnlyMac": "Globe 鍵僅在 macOS 上可用。",
+      "alreadyRegistered": "\"{{hotkey}}\" 已被其他應用程式註冊。",
+      "osReserved": "\"{{hotkey}}\" 可能被你的作業系統保留。",
+      "registrationFailed": "無法註冊「{{hotkey}}」。可能已被其他應用程式使用。",
+      "trySuggestions": "試試看：{{suggestions}}"
+    }
+  },
+  "systemSettings": {
+    "microphone": "請開啟系統設定來配置麥克風權限。",
+    "sound": "請開啟系統音效設定（例如 pavucontrol）。",
+    "accessibility": "此平台不支援輔助使用設定。"
+  },
+  "titleBar": {
+    "quitTitle": "結束 ChordVox",
+    "quitConfirmTitle": "確定要結束 ChordVox？",
+    "quitConfirmDescription": "這將關閉 ChordVox 並停止背景程序。",
+    "quit": "結束",
+    "cancel": "取消"
+  },
+  "upgradePrompt": {
+    "paymentFailed": "我們未能續費你的 Pro 方案",
+    "weeklyLimit": "你已達到託管 AI 使用上限",
+    "pastDueDescription": "免費本機轉錄仍可繼續使用。更新付款方式後即可恢復 Pro 功能與無限制託管用量。",
+    "limitDescription": "本週已使用 {{used}} / {{limit}} 個託管詞數。\n本機轉錄永久免費。你可以升級 Pro、使用自己的 API Key，或切回本機模式。",
+    "updatePayment": "更新付款方式",
+    "updatePaymentDescription": "恢復 Pro 功能與無限制託管用量。",
+    "upgradeToPro": "升級至 Pro",
+    "upgradeDescription": "解鎖 AI 文字增強、檔案轉錄、BYOK、提示詞工作室與進階工作流程。",
+    "useApiKey": "使用你自己的 API Key",
+    "useApiKeyDescription": "接入你自己的供應商與 API Key 來運行 AI 增強。",
+    "switchToLocal": "切換至本機模式",
+    "switchToLocalDescription": "繼續使用免費的本機轉錄。",
+    "rollingWeeklyLimit": "託管用量按滾動週計算"
+  },
+  "windowControls": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "還原",
+    "close": "關閉"
+  },
+  "windows": {
+    "pttUnavailable": "按住說話原生監聽程式無法使用"
+  },
+  "common": {
+    "back": "返回",
+    "next": "下一步",
+    "skip": "跳過",
+    "complete": "完成",
+    "reset": "重設",
+    "refresh": "重新整理",
+    "download": "下載",
+    "cancel": "取消",
+    "chooseFolder": "選擇目錄",
+    "working": "處理中",
+    "ready": "已就緒",
+    "recommended": "推薦",
+    "active": "使用中",
+    "cloud": "雲端",
+    "local": "本機",
+    "apiKey": "API Key",
+    "model": "模型",
+    "loading": "載入中...",
+    "unknown": "未知",
+    "availableModels": "可用模型",
+    "fast": "快速",
+    "hold": "按住",
+    "less": "更少",
+    "more": "更多",
+    "noMatchingModels": "未找到符合條件的模型",
+    "private": "私密",
+    "tap": "點按",
+    "openSystemSettings": "打開系統設定",
+    "delete": "刪除",
+    "deleteAll": "全部刪除",
+    "downloading": "下載中",
+    "installing": "安裝中",
+    "deleting": "刪除中",
+    "clearing": "清空中",
+    "downloadRequired": "需下載"
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "歡迎",
+      "language": "語言",
+      "setup": "設定",
+      "permissions": "權限",
+      "activation": "啟用",
+      "complete": "完成"
+    },
+    "hotkey": {
+      "couldNotRegisterTitle": "無法註冊該快捷鍵",
+      "couldNotRegisterDescription": "該組合鍵可能已被使用。請嘗試其他組合。"
+    },
+    "setup": {
+      "title": "設定",
+      "description": "預設推薦本地轉錄，先把隱私與可用性設定好",
+      "language": "語言",
+      "localPrivacyTitle": "預設推薦本地轉錄",
+      "localPrivacyDescription": "語音與文字會優先留在你的裝置上，更適合重視隱私的場景。需要時你也可以再切到雲端。"
+    },
+    "permissions": {
+      "title": "權限",
+      "microphoneTitle": "麥克風",
+      "microphoneDescription": "用於擷取你的語音",
+      "grant": "授權",
+      "accessibilityTitle": "輔助使用",
+      "accessibilityDescription": "用於將文字貼入應用程式",
+      "testAndGrant": "測試並授權",
+      "requiredForApp": "ChordVox 運作所需",
+      "microphoneRequired": "需要麥克風存取權限"
+    },
+    "transcription": {
+      "title": "轉錄設定",
+      "description": "先選一條可以直接開始使用的轉錄方式",
+      "preferredLanguage": "偏好語言"
+    },
+    "activation": {
+      "title": "先試說一句",
+      "description": "設定好快捷鍵後，先跑一條真實聽寫，確認懸浮窗與貼上流程都正常。",
+      "hotkey": "快捷鍵",
+      "hotkeyHint": "先設定一個你每次都能順手按到的快捷鍵。",
+      "mode": "模式",
+      "tapDescription": "按一下開始/停止",
+      "holdDescription": "按住時說話",
+      "test": "測試",
+      "testDescription": "先點下方輸入框，再直接使用快捷鍵開始試說。懸浮窗會自動出現。",
+      "hotkeyToStartStop": "{{hotkey}} 開始/停止",
+      "holdHotkey": "按住 {{hotkey}}",
+      "textareaPlaceholder": "點擊這裡，然後使用快捷鍵開始語音輸入...",
+      "focusInput": "點一下輸入框",
+      "manualFallbackHint": "如果現在還不能試說，也可以先手動輸入一點文字再繼續。",
+      "stepFocusInput": "先點一下下方輸入框",
+      "stepSeeCompleted": "看到「已完成」後繼續",
+      "successTitle": "試說完成",
+      "successDescription": "懸浮窗、快捷鍵與貼上流程都已經跑通了。",
+      "lastTranscriptLabel": "剛才辨識到：",
+      "completeHint": "先完成一次真實試說，確認懸浮窗能正常辨識並貼上，再進入下一步。"
+    },
+    "streamingModelPicker": {
+      "currentFolderLabel": "目前模型目錄",
+      "currentFolderHint": "如果這個目錄裡已經有流式模型，向導會直接辨識，不需要重新下載。",
+      "readyDescription": "本機即時模型已就緒，快捷鍵聽寫會預設使用它。"
+    },
+    "completion": {
+      "title": "準備好了",
+      "description": "本地隱私、權限、快捷鍵與第一次試說都已完成。現在可以開始正式使用 ChordVox。",
+      "summaryTitle": "這台裝置已完成",
+      "localReady": "本地轉錄已就緒：預設優先留在這台裝置上。",
+      "cloudReady": "雲端轉錄已就緒：目前會透過你選擇的服務商完成轉錄。",
+      "hotkeyReady": "{{hotkey}} 已設定完成，隨時可以開始聽寫。",
+      "tryReady": "你已完成一次真實試說，懸浮窗與貼上流程都正常。",
+      "firstResultLabel": "第一次試說結果"
+    }
+  },
+  "controlPanel": {
+    "update": {
+      "readyTitle": "更新已準備就緒",
+      "readyDescription": "點擊「安裝更新」以重新啟動並套用最新版本。",
+      "problemTitle": "更新遇到問題",
+      "problemDescription": "無法完成更新。請稍後再試。",
+      "installTitle": "安裝更新",
+      "installDescription": "ChordVox 將重新啟動以套用更新。進行中的工作會自動儲存。",
+      "couldNotInstallTitle": "無法安裝更新",
+      "couldNotInstallDescription": "發生錯誤，請再試一次。",
+      "couldNotDownloadTitle": "無法下載更新",
+      "couldNotDownloadDescription": "請檢查你的網路連線後再試一次。",
+      "installing": "安裝中...",
+      "installButton": "安裝更新",
+      "availableButton": "有可用更新"
+    },
+    "limit": {
+      "weeklyTitle": "已達每週使用上限",
+      "weeklyDescription": "免費本機轉錄仍可繼續使用。升級 Pro 或改用你自己的 API Key，即可繼續使用 AI 增強與其他進階工作流程。"
+    },
+    "billing": {
+      "pastDueTitle": "我們無法處理你的付款",
+      "pastDueDescription": "免費本機轉錄仍可繼續使用。請在設定中更新付款方式以恢復 Pro。",
+      "bannerDescription": "你目前仍在免費方案中，本週還有 {{limit}} 個託管詞數可用。更新付款方式即可恢復 Pro。",
+      "updatePayment": "更新付款"
+    },
+    "history": {
+      "title": "轉錄記錄",
+      "couldNotLoadTitle": "無法載入歷史記錄",
+      "couldNotLoadDescription": "載入轉錄記錄時發生錯誤。請嘗試關閉並重新開啟應用程式。",
+      "copiedTitle": "已複製！",
+      "copiedDescription": "文字已複製到剪貼簿",
+      "couldNotCopyTitle": "無法複製",
+      "couldNotCopyDescription": "複製到剪貼簿時發生錯誤。請再試一次。",
+      "clearTitle": "清除歷史記錄",
+      "clearDescription": "這將移除你的所有轉錄記錄。此操作無法復原。",
+      "clearedTitle": "歷史記錄已清除",
+      "clearedDescription": "已移除 {{count}} 筆轉錄記錄",
+      "clearedDescription_other": "已移除 {{count}} 筆轉錄記錄",
+      "couldNotClearTitle": "無法清除歷史記錄",
+      "couldNotClearDescription": "發生錯誤，請再試一次。",
+      "deleteTitle": "刪除轉錄記錄",
+      "deleteDescription": "這筆轉錄記錄將被永久移除。",
+      "couldNotDeleteTitle": "無法刪除",
+      "couldNotDeleteDescription": "這筆轉錄記錄可能已被移除。",
+      "couldNotDeleteDescriptionGeneric": "發生錯誤，請再試一次。",
+      "clear": "清除",
+      "transcribeFile": "轉錄檔案",
+      "transcribeFileProcessing": "轉錄中...",
+      "transcribedFileTitle": "檔案轉錄完成",
+      "transcribedFileDescription": "已將 {{name}} 加入轉錄記錄。",
+      "couldNotTranscribeFileTitle": "無法轉錄檔案",
+      "couldNotTranscribeFileDescription": "轉錄這個檔案時發生問題。請換一個檔案或模型後再試一次。",
+      "fileTranscriptionRequiresProTitle": "檔案轉錄需要 Pro",
+      "fileTranscriptionRequiresProDescription": "升級到 Pro 後，才能在 ChordVox 內轉錄音訊或影片檔案。免費本機即時聽寫仍可繼續使用。",
+      "emptyFileDescription": "所選檔案是空的。請選擇有效的音訊或影片檔案。",
+      "selectedFileFallback": "所選檔案",
+      "empty": "目前沒有轉錄記錄",
+      "press": "按下",
+      "toStart": "開始",
+      "transcribeFileProgress": "轉錄中 {{progress}}%...",
+      "clearedDescription_one": "已移除 {{count}} 筆轉錄記錄",
+      "clearedDescription_few": "已移除 {{count}} 筆轉錄記錄",
+      "clearedDescription_many": "已移除 {{count}} 筆轉錄記錄"
+    },
+    "cloudMigration": {
+      "title": "你的 Pro 設定已就緒",
+      "description": "ChordVox Cloud 已啟用，可用於託管轉錄與 AI 工作流程。你之前的設定已儲存，也可以隨時在設定中切換服務商。",
+      "viewSettings": "查看設定"
+    },
+    "aiCta": {
+      "title": "用 AI 增強你的轉錄品質",
+      "description": "說話時自動修正文法、標點和格式。",
+      "enable": "啟用 AI 增強"
+    },
+    "loading": "載入中..."
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "雲端",
+      "local": "本機",
+      "localDescription": "在你的裝置上執行。完全私密，可離線使用。",
+      "cloudDescription": "透過 API 使用進階模型。快速且強大，需要網路。"
+    },
+    "enableTitle": "啟用 AI 文字增強",
+    "enableDescription": "使用 AI 自動提升轉錄品質",
+    "custom": {
+      "endpointWithProtocol": "請輸入包含通訊協定的完整 URL。既支援基礎 URL（例如 https://server/v1），也支援直接端點（例如 https://server/v1/chat/completions）。",
+      "httpsRequired": "需使用 HTTPS（僅限本機網路可使用 HTTP）。",
+      "endpointUnauthorized": "端點拒絕了請求（401/403）。請新增 API Key 或調整伺服器驗證設定。",
+      "endpointTitle": "端點 URL",
+      "endpointExamples": "範例：",
+      "ollama": "（Ollama）",
+      "localAi": "（LocalAI）",
+      "apiKeyOptional": "API Key（選填）",
+      "apiKeyHelp": "選填。作為 Bearer token 傳送以進行驗證。這與你的 OpenAI API Key 無關。",
+      "protocolTitle": "協定",
+      "protocolAuto": "自動（建議）",
+      "protocolChat": "Chat Completions",
+      "protocolResponses": "Responses",
+      "protocolHelp": "自動模式會依端點記住可用協定。只有在供應商確實需要時，才強制指定 Chat Completions 或 Responses。",
+      "detectedProtocolHelp": "自動模式目前記住這個端點使用 {{protocol}}。",
+      "resetDetectedProtocol": "重設自動偵測協定",
+      "applyAndRefresh": "套用並重新整理",
+      "queryPrefix": "我們將查詢",
+      "querySuffix": "以取得可用模型。",
+      "modelsReloadHint": "離開 URL 欄位或點擊「套用並重新整理」後，模型清單將重新載入。",
+      "enterEndpoint": "請在上方輸入端點 URL 以載入模型。",
+      "fetchingModels": "正在從端點取得模型清單...",
+      "noModels": "沒有取得任何模型。請檢查端點 URL。",
+      "providerName": "自訂",
+      "ownerLabel": "擁有者：{{owner}}",
+      "unableToLoadModels": "無法從端點載入模型。",
+      "bedrockEndpointHint": "預設會從區域自動產生。對 VPC 終端節點和類似設定使用自訂終端節點。"
+    },
+    "getApiKey": "不知道怎麼設定？查看教學 ->",
+    "selectModel": "選擇模型",
+    "availableModels": "可用模型"
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "刪除模型",
+      "description": "確定要刪除此模型嗎？如果之後要使用，需要重新下載。"
+    },
+    "parakeet": {
+      "multilingual": "25 個歐洲語言",
+      "english": "英文"
+    },
+    "apiKeyOptional": "API Key（選填）",
+    "getKey": "不知道怎麼設定？查看教學 ->",
+    "endpointUrl": "端點 URL",
+    "customProvider": "自訂",
+    "fallback": {
+      "whisperModelDescription": "模型",
+      "parakeetModelDescription": "NVIDIA Parakeet 模型"
+    },
+    "whisperModels": "Whisper 模型",
+    "browse": "瀏覽",
+    "whisperLocalHelp": "Whisper 模型會統一存放在模型儲存位置下。你可以在這裡下載官方模型，或使用自己的本地 `.bin` 模型檔案。",
+    "whisperModelFileLabel": "Whisper 模型（.bin）",
+    "parakeetLocalHelp": "Parakeet 模型會統一存放在模型儲存位置下。你可以在這裡下載官方模型，或選擇本地模型目錄。當前這條 NVIDIA 線不支援中文。",
+    "parakeetModelDirectoryLabel": "Parakeet 模型目錄",
+    "senseVoiceLocalHelp": "SenseVoice 模型會統一存放在模型儲存位置下。SenseVoice Small 仍透過 GGUF + sense-voice-main 執行。",
+    "senseVoiceModelFileLabel": "SenseVoice 模型路徑",
+    "senseVoiceBinaryLabel": "SenseVoice 執行時（僅 SenseVoice Small 需要）",
+    "fireRedRuntime": {
+      "title": "FireRed 執行時",
+      "description": "FireRedASR2-AED 需要獨立的本地 Python 執行時。在這裡安裝或修復後，這台機器就能直接使用 FireRed 模型轉錄。",
+      "modelUnavailable": "FireRed 模型目錄暫時不可用。請先確認模型檔案已完整下載，再重新檢查執行時。",
+      "modelErrorLabel": "模型檢查：",
+      "ready": "已就緒",
+      "installNeeded": "需要安裝",
+      "repairNeeded": "需要修復",
+      "checking": "檢查中...",
+      "installAction": "安裝執行時",
+      "repairAction": "修復執行時",
+      "recheckAction": "重新檢查",
+      "currentPathLabel": "目前執行時路徑",
+      "managedPathLabel": "應用代管安裝路徑",
+      "sourceLabel": "來源：",
+      "bootstrapLabel": "安裝 Python：",
+      "available": "可用",
+      "pythonMissing": "缺少 Python 3.11+",
+      "missingModules": "缺少模組：",
+      "installSuccess": "FireRed 執行時已安裝",
+      "repairSuccess": "FireRed 執行時已修復",
+      "installFailed": "FireRed 執行時安裝失敗",
+      "checkFailed": "FireRed 執行時檢查失敗",
+      "sourceValues": {
+        "env": "環境變數覆寫",
+        "managed": "應用代管",
+        "sibling": "模型目錄旁",
+        "legacy": "舊版本地路徑",
+        "none": "未找到"
+      }
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorTitles": {
+        "sessionExpired": "工作階段已過期",
+        "offline": "你目前離線",
+        "dailyLimitReached": "已達每日上限"
+      },
+      "fallback": {
+        "title": "備援模式",
+        "description": "本機 Whisper 失敗，已改用 OpenAI API。"
+      },
+      "noAudio": {
+        "title": "未偵測到音訊",
+        "description": "錄音中未偵測到聲音。請再試一次。"
+      }
+    },
+    "clipboard": {
+      "pasteFailed": {
+        "title": "剪貼簿貼上失敗",
+        "description": "無權限自動貼上。可先手動貼上。修復：請到系統設定裡檢查 ChordVox 是否已取得所需權限。",
+        "macosDescription": "無權限自動貼上。可先手動按 Cmd+V 貼上。修復：請先到「系統設定 -> 隱私權與安全性 -> 輔助使用」裡確認已允許 ChordVox；再到「輸入監控」裡檢查是否也已授權。",
+        "windowsDescription": "無權限自動貼上。可先手動按 Ctrl+V 貼上。修復：請打開 Windows 設定，檢查隱私、安全設定或安全軟體限制，確認 ChordVox 沒有被阻擋鍵盤輸入、剪貼簿存取或輔助控制。",
+        "linuxDescription": "無權限自動貼上。可先手動按 Ctrl+V 貼上。修復：請檢查目前桌面環境的權限限制，並確認自動貼上所需工具（如 xdotool、wtype、ydotool）已正確安裝且可用。"
+      },
+      "accessibilityDialog": {
+        "standard": {
+          "title": "需要輔助使用權限",
+          "message": "ChordVox 需要輔助使用權限，才能將文字貼到其他應用程式。",
+          "detail": "目前狀態：複製到剪貼簿正常，但貼上（模擬 Cmd+V）失敗。\n\n修復方法：\n1. 打開「系統設定」（舊版 macOS 為「系統偏好設定」）\n2. 前往「隱私權與安全性 -> 輔助使用」\n3. 點擊左下角鎖頭並輸入密碼\n4. 將 ChordVox 加到清單中並啟用\n5. 重新啟動 ChordVox\n\n若沒有這個權限，語音輸入的文字只會複製到剪貼簿，不會自動貼上。"
+        },
+        "stuck": {
+          "title": "重設輔助使用權限",
+          "message": "ChordVox 可能仍在使用舊版本殘留的輔助使用權限。",
+          "detail": "常見情況：重新建置或重新安裝 ChordVox 後，macOS 可能仍保留舊權限，導致新應用程式無法正常取得授權。\n\n修復方法：\n1. 打開「系統設定 -> 隱私權與安全性 -> 輔助使用」\n2. 刪除所有舊的「ChordVox」項目\n3. 也刪除「Electron」或名稱不明確的舊項目\n4. 點擊「+」重新加入目前的 ChordVox 應用程式\n5. 確認核取方塊已啟用\n6. 重新啟動 ChordVox\n\n若沒有這個權限，文字只會複製到剪貼簿，不會自動貼上。"
+        }
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "invalidHotkey": "無效的快捷鍵",
+        "notRegistered": "快捷鍵未註冊",
+        "saved": "快捷鍵已儲存",
+        "error": "快捷鍵錯誤"
+      },
+      "errors": {
+        "enterValidHotkey": "請輸入有效的快捷鍵",
+        "unsupportedShortcut": "不支援此快捷鍵。",
+        "couldNotRegister": "無法註冊此按鍵。請選擇其他按鍵。",
+        "failedToRegister": "快捷鍵註冊失敗。請再試一次。"
+      },
+      "messages": {
+        "nowUsing": "現在使用 {{hotkey}} 進行語音輸入"
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "下載逾時。請檢查網路連線後再試。",
+        "notFound": "無法連線到下載伺服器。請檢查你的網路連線。",
+        "corrupted": "下載不完整或檔案損毀。請再試一次。",
+        "rateLimited": "下載伺服器正在限制流量。請稍候幾分鐘後再試。",
+        "server": "伺服器錯誤（{{error}}）。請稍後再試。",
+        "generic": "下載失敗：{{error}}",
+        "extractionFailed": "模型已下載，但安裝失敗。點擊下載可重試安裝，無需重新下載。",
+        "unknown": "未知錯誤"
+      },
+      "downloadFailed": {
+        "title": "下載失敗"
+      },
+      "installationFailed": {
+        "title": "安裝失敗"
+      },
+      "downloadInProgress": {
+        "title": "下載進行中",
+        "description": "請等待目前的下載完成，或先取消它。"
+      },
+      "modelDeleted": {
+        "title": "模型已刪除",
+        "descriptionWithSpace": "模型已成功刪除！釋放了 {{sizeMb}}MB 的磁碟空間。",
+        "description": "模型已成功刪除！"
+      },
+      "deleteFailed": {
+        "title": "刪除失敗",
+        "description": "無法刪除模型：{{error}}"
+      },
+      "downloadCancelled": {
+        "title": "下載已取消",
+        "description": "下載已被取消。"
+      }
+    },
+    "permissions": {
+      "paths": {
+        "windowsMicrophone": "設定 -> 隱私權 -> 麥克風",
+        "linuxSound": "你的系統音效設定",
+        "defaultSound": "系統設定 -> 聲音 -> 輸入",
+        "linuxPrivacy": "你的系統隱私權設定",
+        "defaultPrivacy": "系統設定 -> 隱私權與安全性 -> 麥克風"
+      },
+      "micErrors": {
+        "accessFailed": "麥克風存取失敗。請再試一次。",
+        "noMicrophones": "未偵測到麥克風。請在 {{settingsPath}} 中連接或選擇麥克風。",
+        "permissionDenied": "權限被拒絕。請開啟 {{privacyPath}} 並允許 ChordVox。",
+        "couldNotStart": "無法啟動所選的麥克風。請在 {{settingsPath}} 中選擇輸入裝置後重新測試。",
+        "noActiveInput": "找不到有效的音訊輸入。請在 {{settingsPath}} 中選擇麥克風。",
+        "unknown": "麥克風存取失敗：{{error}}。請選擇其他輸入裝置後再試。",
+        "unknownFallback": "未知錯誤"
+      },
+      "settingsTitles": {
+        "microphone": "麥克風設定",
+        "sound": "音效設定",
+        "accessibility": "輔助使用設定"
+      },
+      "settingsErrors": {
+        "unableToOpenMicrophone": "無法開啟麥克風設定。請手動開啟系統設定。",
+        "unableToOpenSound": "無法開啟音效設定。請手動開啟系統設定。",
+        "unableToOpenAccessibility": "無法開啟輔助使用設定。請手動開啟系統設定。"
+      },
+      "micUnavailable": "此環境中無法使用麥克風 API。請重新啟動應用程式。",
+      "titles": {
+        "microphoneUnavailable": "麥克風無法使用",
+        "microphonePermissionRequired": "需要麥克風權限",
+        "accessibilityNeeded": "需要輔助使用權限",
+        "readyToGo": "準備就緒！",
+        "waylandClipboardMode": "Wayland 剪貼簿模式",
+        "optionalPasteTool": "選用：安裝貼上工具"
+      },
+      "descriptions": {
+        "accessibilityNeeded": "請打開「系統設定 -> 隱私權與安全性 -> 輔助使用」，允許 ChordVox 控制其他應用程式後再重試自動貼上。若快捷鍵或按鍵模擬在 macOS 上仍異常，再檢查「輸入監控」。",
+        "windowsReady": "Windows 不需要特殊權限即可自動貼上。一切就緒！",
+        "linuxReadyWithMethod": "已使用 {{method}} 啟用自動貼上。一切就緒！",
+        "waylandClipboardMode": "此 Wayland 工作階段不支援自動貼上。ChordVox 會將文字複製到剪貼簿，你可以使用 Ctrl+V 貼上。",
+        "optionalPasteTool": "如需自動貼上，請安裝 {{tool}}：\n\n{{installCmd}}{{waylandNote}}\n\n沒有安裝也可以使用 ChordVox，文字會複製到剪貼簿，你可以使用 Ctrl+V 貼上。"
+      },
+      "alerts": {
+        "accessibilityNeeded": "需要輔助使用權限！請到「系統設定 -> 隱私權與安全性 -> 輔助使用」裡授權 ChordVox；若快捷鍵仍異常，再檢查「輸入監控」。"
+      },
+      "notes": {
+        "waylandWtype": "\n\n注意：XWayland 應用程式也可使用 xdotool。",
+        "waylandXwaylandOnly": "\n\n注意：自動貼上僅適用於 XWayland 應用程式。"
+      },
+      "labels": {
+        "defaultPasteTool": "xdotool",
+        "xdotoolXwayland": "xdotool（XWayland 應用程式）"
+      },
+      "accessibilityTestText": "ChordVox 輔助使用測試",
+      "warning": {
+        "messages": {
+          "macos": "請檢查聲音設定以選擇輸入裝置",
+          "windows": "請檢查 Windows 設定以選擇輸入裝置",
+          "linux": "請檢查系統音效設定以選擇輸入裝置"
+        },
+        "soundLabel": "聲音",
+        "privacyLabel": "隱私權"
+      }
+    }
+  },
+  "auth": {
+    "cloudNotConfigured": "雲端未設定",
+    "common": {
+      "back": "返回",
+      "continue": "繼續",
+      "or": "或"
+    },
+    "emailStep": {
+      "continueWithEmail": "使用電子郵件繼續",
+      "continueWithoutAccount": "不建立帳號繼續",
+      "emailPlaceholder": "you@example.com"
+    },
+    "errors": {
+      "accountExistsSignIn": "此電子郵件已有帳號。請直接登入。",
+      "accountNotFoundCreate": "找不到此電子郵件的帳號。請建立帳號。",
+      "authNotConfigured": "尚未設定驗證功能",
+      "createAccountFailed": "建立帳號失敗",
+      "failedProviderSignIn": "無法透過 {{provider}} 登入",
+      "failedUserCheck": "無法檢查使用者帳號",
+      "generic": "發生錯誤，請再試一次。",
+      "invalidCredentials": "電子郵件或密碼不正確",
+      "plusAliasUnsupported": "不支援含「+」的電子郵件別名"
+    },
+    "getStarted": "開始使用",
+    "legal": {
+      "and": "和",
+      "prefix": "繼續即表示你同意我們的",
+      "privacy": "隱私權政策",
+      "suffix": "",
+      "terms": "服務條款"
+    },
+    "passwordForm": {
+      "createAccount": "建立帳號",
+      "createAccountButton": "建立帳號",
+      "createAccountLink": "建立帳號",
+      "createPasswordPlaceholder": "建立密碼",
+      "creatingAccount": "正在建立帳號...",
+      "enterPasswordPlaceholder": "輸入你的密碼",
+      "forgotPassword": "忘記密碼？",
+      "fullNamePlaceholder": "姓名",
+      "haveAccount": "已經有帳號了？",
+      "newHere": "第一次來？",
+      "passwordMinLength": "密碼至少需要 8 個字元",
+      "signIn": "登入",
+      "signInLink": "登入",
+      "signingIn": "登入中...",
+      "welcomeBack": "歡迎回來"
+    },
+    "signedIn": {
+      "ready": "準備就緒",
+      "welcomeBack": "歡迎回來",
+      "welcomeBackName": "歡迎回來，{{name}}"
+    },
+    "social": {
+      "completeInBrowser": "請在瀏覽器中完成登入",
+      "continueWithGoogle": "使用 Google 繼續"
+    },
+    "welcomeSubtitle": "本地優先的隱私語音輸入",
+    "welcomeTitle": "歡迎使用 ChordVox",
+    "localPrivacyHint": "預設推薦本地轉錄，語音與文字會優先留在你的裝置上，更適合重視隱私的場景。需要時再切到雲端。"
+  },
+  "cleanupPrompt": "文字整理",
+  "developerSection": {
+    "currentLogFile": "目前的記錄檔",
+    "debugMode": {
+      "disabledDescription": "啟用後會記錄下列除錯內容，幫助排查問題",
+      "enabledDescription": "正在記錄下列除錯內容，幫助排查問題",
+      "label": "Debug 模式"
+    },
+    "description": "擷取詳細記錄以協助診斷問題",
+    "openLogsFolder": "開啟記錄檔資料夾",
+    "performanceNote": {
+      "description": "Debug 記錄會持續寫入磁碟，可能略微影響效能。不需要除錯時請停用。",
+      "label": "注意"
+    },
+    "title": "Debug 記錄",
+    "toasts": {
+      "copied": {
+        "description": "記錄檔路徑已複製到剪貼簿",
+        "title": "已複製"
+      },
+      "copyFailed": {
+        "description": "複製到剪貼簿時發生錯誤。",
+        "title": "無法複製"
+      },
+      "debugDisabled": {
+        "description": "Debug 記錄已關閉",
+        "title": "Debug 記錄已停用"
+      },
+      "debugEnabled": {
+        "description": "正在將詳細記錄寫入磁碟",
+        "title": "Debug 記錄已啟用"
+      },
+      "loadFailed": {
+        "description": "發生錯誤。請嘗試重新開啟設定。",
+        "title": "無法載入 Debug 設定"
+      },
+      "openLogsFailed": {
+        "description": "開啟記錄檔目錄時發生錯誤。",
+        "title": "無法開啟記錄檔資料夾"
+      },
+      "updateFailed": {
+        "description": "發生錯誤，請再試一次。",
+        "title": "無法更新 Debug 記錄設定"
+      }
+    },
+    "whatGetsLogged": {
+      "items": {
+        "apiRequests": "API 請求",
+        "audioProcessing": "音訊處理",
+        "errorDetails": "錯誤詳情",
+        "ffmpegOperations": "FFmpeg 操作",
+        "systemDiagnostics": "系統診斷",
+        "transcriptionPipeline": "轉錄流程"
+      },
+      "title": "記錄的項目"
+    },
+    "localOnlyNotice": "日誌儲存在該裝置本機，並且永遠不會自動上傳。",
+    "trace": {
+      "clear": "清除",
+      "description": "詳細執行記錄已移到「調用記錄」。這裡保留精簡的除錯摘要與清理操作。",
+      "emptyEvents": "選擇左側的運行以查看詳細事件",
+      "emptySessions": "還沒有通話痕跡",
+      "errorPrefix": "錯誤",
+      "eventLabel": "活動詳情",
+      "models": {
+        "reasoning": "細化模型",
+        "transcription": "轉錄模型"
+      },
+      "phases": {
+        "paste": "貼上",
+        "reasoning": "細化",
+        "recording": "記錄",
+        "session": "會議",
+        "transcription": "轉錄"
+      },
+      "refresh": "重新整理",
+      "runId": "運行ID",
+      "profileLabel": "Pro文件",
+      "sessionLabel": "呼叫軌跡",
+      "showingLatest": "顯示最近 {{count}} 次運行",
+      "startedAt": "開始",
+      "profiles": {
+        "primary": "Pro檔 1",
+        "secondary": "Pro檔 2"
+      },
+      "status": {
+        "cancelled": "取消",
+        "error": "失敗的",
+        "skipped": "跳過",
+        "start": "進行中",
+        "success": "成功",
+        "unknown": "未知"
+      },
+      "title": "呼叫診斷",
+      "toasts": {
+        "clearFailed": {
+          "description": "清除通话痕迹失败。請再試一次。",
+          "title": "清除失敗"
+        },
+        "cleared": {
+          "description": "通話痕跡已從本地記憶體中清除。",
+          "title": "通話痕跡已清除"
+        },
+        "loadFailed": {
+          "description": "請稍後重試。",
+          "title": "無法載入呼叫追蹤"
+        }
+      },
+      "updatedAt": "最後更新",
+      "summary": {
+        "overviewTitle": "執行概覽",
+        "timelineTitle": "階段記錄",
+        "recordingDuration": "錄音時長",
+        "transcriptionDuration": "轉錄用時",
+        "reasoningDuration": "AI 用時",
+        "totalDuration": "處理總耗時",
+        "flowDuration": "全流程歷時",
+        "failedAt": "失敗階段",
+        "recentRuns": "最近記錄",
+        "failedRuns": "失敗記錄",
+        "lastUpdated": "最近更新",
+        "latestFailure": "最近失敗",
+        "noRecentFailures": "最近沒有失敗記錄",
+        "callRecordsHint": "如需查看更易讀的每次執行詳情，請前往 AI 模型下方的「調用記錄」。"
+      }
+    }
+  },
+  "dictionarySuffix": "字典後綴",
+  "emailVerification": {
+    "checkEmailDescription": "我們已寄送驗證連結至",
+    "checkEmailTitle": "請查看你的電子郵件",
+    "errors": {
+      "resendFailed": "無法重新寄送驗證信。請再試一次。",
+      "serverUnreachable": "無法連線到伺服器。請檢查你的網路連線後再試。"
+    },
+    "resendButton": "重新寄送驗證信",
+    "resendIn": "{{seconds}} 秒後可重新寄送",
+    "verifiedDescription": "你的帳號已設定完成。",
+    "verifiedTitle": "電子郵件已驗證",
+    "waiting": "等待驗證中..."
+  },
+  "errorBoundary": {
+    "description": "發生意外錯誤。請重新載入後再試。",
+    "reload": "重新載入",
+    "title": "發生錯誤"
+  },
+  "forgotPassword": {
+    "back": "返回",
+    "backToSignIn": "返回登入",
+    "emailPlaceholder": "輸入你的電子郵件",
+    "goBack": "返回",
+    "notConfigured": "尚未設定驗證功能。",
+    "sendResetLink": "寄送重設連結",
+    "sending": "寄送中...",
+    "subtitle": "輸入你的電子郵件，我們會寄送重設連結給你",
+    "success": {
+      "description": "我們已寄送密碼重設連結至",
+      "help": "沒收到信？請檢查垃圾郵件資料夾，或再試一次。",
+      "title": "請查看你的電子郵件",
+      "tryAnother": "嘗試其他電子郵件"
+    },
+    "title": "重設你的密碼"
+  },
+  "fullPrompt": "完整提示詞",
+  "hotkeyGuidance": {
+    "blockedDescription": "這些快捷鍵已被封鎖，因為它們通常是系統保留的。",
+    "blockedTitle": "已封鎖的快捷鍵",
+    "description": "參考這些平台規則來選擇不會與系統衝突的快捷鍵。",
+    "examplesTitle": "有效範例",
+    "platforms": {
+      "linux": "Linux",
+      "macos": "macOS",
+      "windows": "Windows"
+    },
+    "recommended": {
+      "linux": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Super+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Ctrl+Shift+J",
+        "4": "Alt+Space"
+      },
+      "macos": {
+        "0": "⌥Space",
+        "1": "⌃⌥S",
+        "2": "⌃⌥D",
+        "3": "Fn",
+        "4": "⌘⇧J"
+      },
+      "windows": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Ctrl+Shift+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Win+Alt+K"
+      }
+    },
+    "recommendedTitle": "推薦的快捷鍵",
+    "rulesTitle": "快捷鍵規則",
+    "showAll": "顯示全部",
+    "showFewer": "顯示較少",
+    "title": "快捷鍵指南",
+    "validationRules": {
+      "0": "必須使用至少一個修飾鍵（Ctrl、Alt、Shift 等）",
+      "1": "不可使用系統保留的快捷鍵",
+      "2": "不允許單獨使用單一按鍵",
+      "3": "部分組合可能與其他應用程式衝突"
+    }
+  },
+  "hotkeyInput": {
+    "ariaLabel": "按下按鍵組合以設定快捷鍵",
+    "clickToChange": "點擊以變更",
+    "clickToChangeLower": "點擊以變更",
+    "clickToSet": "點擊以設定快捷鍵",
+    "fnCaptureHint": "按下按鍵組合，或放開以設為 Globe",
+    "fnHeldHint": "+ 按鍵，或放開以設為 Globe",
+    "globe": "Globe",
+    "hotkeyLabel": "快捷鍵",
+    "keyHint": "+ 按鍵",
+    "listening": "聆聽中...",
+    "pressAnyKey": "按下任意按鍵或 Ctrl+Shift+K",
+    "pressAnyKeyMac": "按下任意按鍵或 ⌘⇧K",
+    "recording": "記錄中",
+    "tryShortcut": "試試 Ctrl+Shift+K",
+    "tryShortcutMac": "試試 ⌘⇧K"
+  },
+  "languageSelector": {
+    "noLanguagesFound": "找不到語言",
+    "searchPlaceholder": "搜尋..."
+  },
+  "microphoneSettings": {
+    "builtIn": "（內建）",
+    "errors": {
+      "unableToAccess": "無法存取麥克風。請檢查權限設定。"
+    },
+    "helpText": "選擇特定的麥克風，或使用系統預設裝置。",
+    "inputDevice": "輸入裝置",
+    "noBuiltInDetected": "未偵測到內建麥克風。使用系統預設裝置。",
+    "preferBuiltIn": {
+      "description": "外接麥克風可能造成延遲或降低轉錄品質",
+      "label": "優先使用內建麥克風"
+    },
+    "selectPlaceholder": "選擇麥克風",
+    "systemDefault": "系統預設",
+    "unknownDevice": "未知裝置",
+    "using": "使用中："
+  },
+  "pasteToolsInfo": {
+    "checking": "正在檢查系統功能...",
+    "installCommands": {
+      "archLinux": "# Arch Linux",
+      "debianUbuntu": "# Debian / Ubuntu",
+      "debianUbuntuMint": "# Debian / Ubuntu / Mint",
+      "fedoraRhel": "# Fedora / RHEL"
+    },
+    "installPrefix": "如需自動貼上文字，請安裝",
+    "methodReady": "用於自動貼上文字",
+    "noteXwaylandAlso": "注意：XWayland 應用程式也可使用 xdotool。",
+    "noteXwaylandOnly": "注意：自動貼上僅適用於 XWayland 應用程式。",
+    "optionalEnableTitle": "選用：啟用自動貼上",
+    "readyTitle": "自動貼上已就緒",
+    "recheck": "重新檢查",
+    "recheckChecking": "檢查中...",
+    "title": "自動貼上",
+    "usingMethodPrefix": "使用",
+    "waylandClipboardDescription": "此 Wayland 工作階段不支援自動貼上。ChordVox 會將文字複製到剪貼簿，你可以使用 Ctrl+V 手動貼上。",
+    "waylandClipboardTitle": "Wayland 剪貼簿模式",
+    "windowsReady": "Windows 內建支援自動貼上。不需要額外設定！",
+    "withoutToolPrefix": "若未安裝此工具，ChordVox 會將文字複製到剪貼簿。你可以使用 Ctrl+V 手動貼上。",
+    "xwaylandAppsOnly": "自動貼上僅適用於 XWayland 應用程式"
+  },
+  "promptStudio": {
+    "common": {
+      "copied": "已複製",
+      "copy": "複製",
+      "reset": "重設",
+      "save": "儲存"
+    },
+    "defaultTestInput": "嘿 Chord，今天天氣怎麼樣？",
+    "dialogs": {
+      "reset": {
+        "description": "提示詞已重設為預設值。",
+        "title": "重設完成"
+      },
+      "saved": {
+        "description": "你的自訂提示詞將用於所有後續的 AI 處理。",
+        "title": "提示詞已儲存"
+      }
+    },
+    "edit": {
+      "agentNameLabel": "助理名稱：",
+      "cautionLabel": "注意",
+      "cautionTextPrefix": "修改此提示詞可能影響轉錄品質。",
+      "cautionTextSuffix": "請保留 {{agentName}} 佔位符以維持助理偵測功能。",
+      "placeholder": "輸入你的自訂系統提示詞..."
+    },
+    "tabs": {
+      "customize": "自訂",
+      "test": "測試",
+      "view": "檢視"
+    },
+    "test": {
+      "addressHint": "試試對「{{agentName}}」說話以測試指令模式",
+      "aiModels": "AI 模型",
+      "baseUrlMissing": "缺少 {{provider}} 的 URL。請在 AI 模型設定中新增。",
+      "cleanup": "文字整理",
+      "disabledInSettingsPrefix": "AI 文字增強已停用。",
+      "disabledInSettingsSuffix": "請在 AI 模型中啟用以測試提示詞。",
+      "disabledReasoning": "AI 文字增強已停用。請在 AI 模型中啟用以測試提示詞。",
+      "failed": "測試失敗：{{error}}",
+      "inputLabel": "輸入",
+      "inputPlaceholder": "輸入文字進行測試...",
+      "instruction": "指令",
+      "modelLabel": "模型",
+      "noModelSelected": "未選擇模型",
+      "none": "無",
+      "outputLabel": "輸出",
+      "processing": "處理中...",
+      "chordvoxCloud": "ChordVox Cloud",
+      "providerLabel": "供應商",
+      "run": "執行測試"
+    },
+    "view": {
+      "customPrompt": "自訂提示詞",
+      "defaultPrompt": "預設提示詞",
+      "modes": {
+        "agent": {
+          "description": "由「{{agentName}}」觸發——執行指令、回答問題、撰寫內容",
+          "label": "助理"
+        },
+        "cleanup": {
+          "description": "快速處理——移除語助詞，修正文法和標點",
+          "label": "文字整理"
+        }
+      },
+      "modified": "已修改"
+    }
+  },
+  "resetPassword": {
+    "backToSignIn": "返回登入",
+    "confirmPasswordPlaceholder": "確認新密碼",
+    "continue": "繼續",
+    "errors": {
+      "passwordMinLength": "密碼至少需要 8 個字元",
+      "passwordsDoNotMatch": "密碼不一致"
+    },
+    "goBack": "返回",
+    "newPasswordPlaceholder": "新密碼",
+    "notConfigured": "尚未設定驗證功能。",
+    "passwordMinLength": "密碼至少需要 8 個字元",
+    "resetButton": "重設密碼",
+    "resetting": "重設中...",
+    "subtitle": "請在下方輸入你的新密碼",
+    "success": {
+      "description": "你的密碼已更新。你現在已登入。",
+      "title": "密碼重設成功"
+    },
+    "title": "建立新密碼"
+  },
+  "settingsModal": {
+    "groups": {
+      "app": "應用程式",
+      "intelligence": "智慧功能",
+      "profile": "個人檔案",
+      "speech": "語音",
+      "system": "系統"
+    },
+    "sections": {
+      "account": {
+        "description": "授權與方案",
+        "label": "帳號"
+      },
+      "agentConfig": {
+        "description": "語音助理設定",
+        "label": "助理"
+      },
+      "aiModels": {
+        "description": "Pro AI 增強與 BYOK",
+        "label": "AI 模型"
+      },
+      "developer": {
+        "description": "記錄、診斷與資料",
+        "label": "開發者"
+      },
+      "dictionary": {
+        "description": "自訂詞彙和片語",
+        "label": "字典"
+      },
+      "general": {
+        "description": "外觀、快捷鍵與啟動",
+        "label": "偏好設定"
+      },
+      "permissions": {
+        "description": "麥克風與輔助使用",
+        "label": "權限"
+      },
+      "privacy": {
+        "description": "雲端備份與分析",
+        "label": "隱私權"
+      },
+      "prompts": {
+        "description": "系統提示詞工作室",
+        "label": "提示詞"
+      },
+      "transcription": {
+        "description": "語音轉文字引擎",
+        "label": "轉錄"
+      },
+      "fileTranscription": {
+        "label": "檔案轉錄",
+        "description": "轉錄音訊或影片檔案"
+      },
+      "hotkeys": {
+        "label": "快捷鍵",
+        "description": "主快捷鍵、方案 2 與啟用方式"
+      },
+      "callRecords": {
+        "label": "調用記錄",
+        "description": "查看 AI 呼叫、失敗原因與各階段耗時"
+      }
+    },
+    "title": "設定"
+  },
+  "settingsPage": {
+    "account": {
+      "badges": {
+        "free": "免費",
+        "limitReached": "已達上限",
+        "pastDue": "款項逾期",
+        "pro": "Pro",
+        "trial": "Pro 試用"
+      },
+      "billing": {
+        "couldNotOpenDescription": "開啟帳單頁面時發生問題。請再試一次。",
+        "couldNotOpenTitle": "無法開啟帳單頁面",
+        "manageBilling": "管理帳單",
+        "opening": "開啟中...",
+        "updatePaymentMethod": "更新付款方式"
+      },
+      "checkout": {
+        "couldNotOpenDescription": "開啟結帳頁面時發生問題。請再試一次。",
+        "couldNotOpenTitle": "無法開啟結帳頁面",
+        "opening": "開啟中...",
+        "upgradeToPro": "升級至 Pro"
+      },
+      "disabled": "已停用",
+      "featuresDisabled": "帳號功能已停用",
+      "featuresDisabledDescription": "請在 .env 檔案中設定 VITE_NEON_AUTH_URL 以啟用帳號功能。",
+      "notConfigured": "尚未設定驗證功能",
+      "notSignedIn": "免費版已啟用",
+      "notSignedInDescription": "無需登入即可使用本機轉錄。若要解鎖 AI 文字增強、檔案轉錄、提示詞工作室與進階工作流程，請在上方購買或啟用 Pro。",
+      "offline": "免費",
+      "pastDue": {
+        "description": "免費本機轉錄仍可繼續使用。更新付款方式即可恢復 Pro。",
+        "title": "我們無法處理你的付款"
+      },
+      "planDescriptions": {
+        "freeUsage": "本週已使用 {{used}} / {{limit}} 個託管詞數",
+        "nextBilling": "下次扣款日：{{date}}",
+        "pastDue": "本週 {{used}} / {{limit}} 個託管詞數——更新付款方式以恢復 Pro",
+        "trial": "Pro 試用還剩 {{days}} 天",
+        "unlimited": "無限"
+      },
+      "planLabels": {
+        "free": "免費",
+        "pro": "Pro",
+        "trial": "Pro 試用"
+      },
+      "planTitle": "方案",
+      "rollingWeeklyLimit": "滾動式每週額度",
+      "signOut": {
+        "failedDescription": "登出時發生錯誤。請再試一次。",
+        "failedTitle": "無法登出",
+        "signOut": "登出",
+        "signingOut": "登出中..."
+      },
+      "signedIn": "已登入",
+      "title": "帳號",
+      "toasts": {
+        "approachingLimit": {
+          "description": "你本週已使用 {{used}} / {{limit}} 個託管詞數。免費本機轉錄不受影響；升級 Pro 可獲得更多進階能力。",
+          "title": "即將達到每週上限"
+        }
+      },
+      "trialCta": {
+        "button": "開始 7 天試用",
+        "description": "點擊下方即可開始 7 天試用，體驗 AI 文字增強、檔案轉錄、提示詞測試、BYOK 與雙熱鍵。到期後免費本機語音轉文字仍可繼續使用。",
+        "title": "永久免費語音轉文字，可免費試用 7 天 Pro 功能"
+      },
+      "user": "使用者",
+      "wordsRemaining": "剩餘 {{remaining}} 字",
+      "trialReminder": {
+        "title": "你的 Pro 試用還剩 {{days}} 天",
+        "description": "免費本機轉錄會繼續可用。購買 Pro 後可繼續使用 AI 文字增強、檔案轉錄、提示詞工作室與進階工作流程。",
+        "button": "查看 Pro 方案"
+      },
+      "desktopLicense": {
+        "title": "桌面許可證",
+        "descriptionConfigured": "此版本使用桌面授權來解鎖該裝置上的 Pro 功能。",
+        "descriptionNotConfigured": "免費的本地轉錄仍然有效。如果您需要 Pro 激活，請聯絡支援人員。",
+        "currentStatusLabel": "目前狀態",
+        "currentStatusDescription": "提供免費本地轉錄。使用付費許可證金鑰解鎖此裝置上的 Pro 功能。",
+        "currentStatusActiveDescription": "Pro 在此設備上處於作用中狀態。",
+        "currentStatusTrialDescription": "Pro 試用期正在進行中。 AI 增強和其他付費功能還剩 {{days}} 天。",
+        "currentStatusTrialExpiredDescription": "仍然可以使用免費的本地轉錄。輸入 Pro 許可證金鑰以再次解鎖付費功能。",
+        "currentStatusNotConfigured": "Creem 許可證中繼尚未在此版本上準備就緒。請聯絡支援人員。",
+        "licenseApiUrlLabel": "許可證 API URL",
+        "licenseApiUrlPlaceholder": "https://license.你的網域.com",
+        "licenseApiUrlDescription": "如果您透過自己的中繼路由 Creem 許可證檢查，請設定一次。",
+        "inputPlaceholder": "輸入許可證密鑰",
+        "activatedHint": "該設備已啟動。僅在更換許可證時使用「更改密​​鑰」。",
+        "actions": {
+          "activate": "啟用設定",
+          "activating": "啟用設定",
+          "validate": "證實",
+          "checking": "檢查",
+          "clear": "清除",
+          "changeKey": "更改密鑰",
+          "save": "節省",
+          "saving": "儲存"
+        },
+        "statusLabels": {
+          "active": "積極的",
+          "trial": "Pro 試用",
+          "offlineGrace": "離線 恩典",
+          "expired": "已到期",
+          "invalid": "無效的",
+          "notActivated": "未啟用"
+        },
+        "meta": {
+          "plan": "計畫：{{plan}}",
+          "expires": "過期時間：{{date}}",
+          "expiresPermanent": "過期時間：永久",
+          "lastCheck": "最後檢查：{{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "刪除已儲存的授權？",
+          "removeDescription": "該設備將返回未經許可的模式，直到您再次啟動。",
+          "removeConfirm": "消除"
+        },
+        "toasts": {
+          "keyRequiredTitle": "需要許可證密鑰",
+          "keyRequiredDescription": "啟動前輸入您的許可證密鑰。",
+          "activatedTitle": "許可證已激活",
+          "activatedDescription": "該設備現已啟動。",
+          "activationFailedTitle": "啟動失敗",
+          "activationFailedDescription": "無法啟動許可證密鑰。",
+          "activationLimitDescription": "此許可證密鑰僅支援一台設備。若要切換設備，請聯絡支援人員以重置先前的啟動。",
+          "serverNotReadyDescription": "許可證服務尚未準備好。請聯絡支援人員。",
+          "deviceNotActivatedDescription": "該許可證密鑰未在此裝置上啟用。",
+          "revokedDescription": "該許可證密鑰已被撤銷。請聯絡支援人員。",
+          "expiredDescription": "該許可證密鑰已過期。",
+          "notActiveDescription": "該許可證密鑰目前未啟動。",
+          "activationUnexpectedError": "啟動許可證時出現意外錯誤。",
+          "validatedTitle": "許可證已驗證",
+          "validateFailedTitle": "許可證檢查失敗",
+          "validatedDescription": "許可證有效。",
+          "invalidDescription": "許可證無效。",
+          "validateUnexpectedError": "檢查許可證狀態時發生意外錯誤。",
+          "removedTitle": "許可證已刪除",
+          "removedDescription": "已儲存的許可證狀態已清除。",
+          "removeFailedTitle": "無法刪除許可證",
+          "removeFailedDescription": "刪除已儲存的許可證時發生意外錯誤。",
+          "licenseApiSavedTitle": "許可證 API 已儲存",
+          "licenseApiSavedDescription": "許可證啟動現在使用新的 API URL。",
+          "licenseApiSaveFailedTitle": "無法儲存許可證 API",
+          "licenseApiSaveFailedDescription": "請檢查 URL 並重試。",
+          "validatingTitle": "正在驗證授權",
+          "validatingDescription": "正在聯絡授權伺服器，可能需要幾秒鐘。"
+        }
+      },
+      "trialStartDialog": {
+        "title": "開始 7 天 Pro 試用？",
+        "description": "試用期間可體驗 AI 文字增強、檔案轉錄、BYOK、雙熱鍵與進階提示詞工作流程。到期後免費本機語音轉文字仍可繼續使用。",
+        "confirm": "開始 7 天試用",
+        "cancel": "稍後再說",
+        "startedTitle": "7 天 Pro 試用已開始",
+        "startedDescription": "現在可以體驗 AI 文字增強、檔案轉錄、BYOK、雙熱鍵與進階提示詞工作流程。"
+      }
+    },
+    "agentConfig": {
+      "agentName": "助理名稱",
+      "cleanupExample": "文字整理",
+      "cleanupMode": "文字整理模式",
+      "description": "為你的 AI 助理取個名字，這樣你可以在語音輸入時直接呼叫它",
+      "dialogs": {
+        "updatedDescription": "你的助理現在叫做「{{name}}」。說「Hi {{name}}」加上你的指令即可使用。",
+        "updatedTitle": "助理名稱已更新"
+      },
+      "examplesTitle": "範例",
+      "helper": "選個簡短、自然、好說的名字",
+      "howItWorksDescription": "當你說「Hi {{agentName}}」加上一個指令時，AI 會從文字整理模式切換到指令模式。沒有觸發語的時候，它只會整理你的語音輸入。",
+      "howItWorksTitle": "運作方式",
+      "instructionMode": "指令",
+      "placeholder": "例如 Chord、Nova、Atlas...",
+      "save": "儲存",
+      "title": "語音助理"
+    },
+    "aiModels": {
+      "customSetup": "自訂設定",
+      "customSetupDescription": "使用你自己的供應商和 API Key。真正執行 AI 增強時仍需要 Pro。",
+      "description": "免費本機語音轉文字仍可繼續使用。本頁用於設定 AI 文字增強、BYOK 與整理品質；首次真正使用相關 Pro 功能時可免費開始 7 天試用。",
+      "enableTextCleanup": "啟用文字整理",
+      "enableTextCleanupDescription": "Pro 功能：用 AI 提升轉錄品質",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "由 ChordVox 託管，適合想少設定直接使用的情境。",
+      "title": "AI 文字增強",
+      "trialHint": "首次啟用 AI 文字增強時可免費開始 7 天 Pro 試用。",
+      "toasts": {
+        "switchedCloud": {
+          "description": "文字增強將使用 ChordVox 雲端服務。",
+          "title": "已切換至 ChordVox Cloud"
+        },
+        "switchedCustom": {
+          "description": "設定你自己的供應商和 API Key。",
+          "title": "已切換至自訂設定"
+        }
+      }
+    },
+    "developer": {
+      "clearCache": "清除快取",
+      "dataManagementDescription": "管理快取的模型和應用程式資料",
+      "dataManagementTitle": "資料管理",
+      "modelCache": "模型快取",
+      "open": "開啟",
+      "removeModels": {
+        "confirmText": "刪除模型",
+        "description": "這將刪除所有本機快取的 Whisper 模型（{{path}}），並釋放磁碟空間。你可以從模型選擇器重新下載。",
+        "failedDescription": "移除模型時發生錯誤。請再試一次。",
+        "failedDescriptionShort": "無法移除快取的模型。",
+        "failedTitle": "無法移除模型",
+        "successDescription": "所有快取的模型已移除。",
+        "successTitle": "模型已移除",
+        "title": "要移除已下載的模型嗎？"
+      },
+      "removing": "移除中...",
+      "resetAll": {
+        "confirmText": "刪除所有資料",
+        "description": "這將永久刪除所有設定、轉錄記錄和快取資料。重設後應用程式將重新載入。",
+        "failedDescription": "發生錯誤。請再試一次或重新安裝應用程式。",
+        "failedTitle": "無法重設",
+        "successDescription": "所有資料已重設。應用程式即將重新載入。",
+        "successTitle": "完成",
+        "title": "重設所有應用程式資料"
+      },
+      "resetAppData": "重設應用程式資料",
+      "resetAppDataDescription": "永久刪除所有設定、轉錄記錄和快取資料",
+      "settingsTransfer": {
+        "description": "將目前設定匯出到文件，或從文件恢復設定。",
+        "export": "匯出設定",
+        "exportFailedDescription": "匯出設定失敗。請再試一次。",
+        "exportFailedTitle": "匯出失敗",
+        "exportSuccessDescription": "設定匯出到：{{path}}",
+        "exportSuccessTitle": "匯出成功",
+        "import": "導入設定",
+        "importConfirmButton": "導入並覆蓋",
+        "importConfirmDescription": "這將覆蓋當前設定並在完成後重新啟動應用程式。",
+        "importConfirmTitle": "現在導入設定嗎？",
+        "importFailedDescription": "導入設定失敗。請驗證文件格式。",
+        "importFailedTitle": "導入失敗",
+        "importSuccessDescription": "已導入設定。該應用程式現在將重新啟動。",
+        "importSuccessTitle": "導入成功",
+        "title": "設定備份"
+      }
+    },
+    "dictionary": {
+      "add": "新增",
+      "addWordOrPhrase": "新增詞彙或片語",
+      "agentNameAutoManaged": "助理名稱（自動管理）",
+      "clearAll": "清除全部",
+      "clearDictionaryDescription": "這將移除自訂字典中的所有詞彙。此操作無法復原。",
+      "clearDictionaryTitle": "確定要清除字典？",
+      "description": "新增詞彙、姓名或專業術語以提高轉錄準確度",
+      "howItWorksDescription": "你新增的詞彙會包含在 AI 提示詞中，讓模型在轉錄整理時能辨識並保留這些詞彙。",
+      "howItWorksTitle": "運作方式",
+      "noWords": "尚未新增任何詞彙",
+      "placeholder": "例如 Chord、Kubernetes、Dr. Martinez...",
+      "pressEnterToAdd": "按 Enter 新增",
+      "removeWord": "移除詞彙",
+      "tipDescription": "新增專有名詞、專業術語，或任何可能被轉錄錯誤的詞彙。",
+      "tipLabel": "小提示",
+      "title": "自訂字典",
+      "wordsAppearHere": "你新增的詞彙會顯示在這裡",
+      "yourWords": "你的詞彙"
+    },
+    "general": {
+      "appearance": {
+        "auto": "自動",
+        "dark": "深色",
+        "description": "控制 ChordVox 的外觀",
+        "light": "淺色",
+        "theme": "主題",
+        "themeDescription": "選擇淺色、深色或跟隨系統",
+        "title": "外觀"
+      },
+      "floatingIcon": {
+        "recordingAnimation": "錄音動效",
+        "recordingAnimationDescription": "選擇錄音與處理中在懸浮條上顯示的回饋動效",
+        "animationStyles": {
+          "line": "線條",
+          "particles": "粒子雲",
+          "level": "電平"
+        },
+        "description": "控制語音輸入圖示在畫面上的顯示時機",
+        "title": "浮動圖示"
+      },
+      "hotkey": {
+        "activationMode": "啟用模式",
+        "description": "用來開始和停止語音輸入的組合鍵",
+        "title": "語音輸入快捷鍵",
+        "secondary": {
+          "title": "Profile 2 熱鍵（獨立模型/最佳化）",
+          "profileSavedState": "Pro檔案 2 設定已儲存",
+          "profileUnsavedState": "Profile 2 設定未儲存（先設定型號，然後點選按鈕）",
+          "saveCurrentAsProfile2": "將目前檔案另存為 Profile 2",
+          "savedTitle": "輔助熱鍵已儲存",
+          "savedDescription": "Profile 2 熱鍵已更新。",
+          "profileSavedTitle": "Pro檔案 2 已儲存",
+          "profileSavedDescription": "目前轉錄和 AI 優化設定已儲存到 Profile 2。",
+          "profileSavedVerifiedAt": "已驗證儲存於{{time}}",
+          "profileSavedTranscriptionSummary": "轉錄：{{provider}} / {{model}}",
+          "profileSavedReasoningSummary": "細化：{{provider}} / {{model}}",
+          "profileSavedReasoningDisabled": "細化：禁用",
+          "profileSaveFailedTitle": "Pro檔案 2 儲存失敗",
+          "profileSaveFailed": "無法儲存 Profile 2 設定。請再試一次。",
+          "registerFailed": "無法註冊輔助熱鍵。請選擇其他快捷方式。",
+          "registerRetry": "無法註冊輔助熱鍵。請再試一次。",
+          "requiresProTitle": "Pro檔案 2 需要 Pro",
+          "requiresProDescription": "方案 2 快捷鍵與已儲存的副方案工作流程僅在 Pro 中可用；首次使用相關 Pro 功能時可免費開始 7 天試用。",
+          "globeNotSupported": "輔助熱鍵不支援 Globe/Fn 鍵。",
+          "rightModifierNotSupported": "輔助熱鍵不支援右側單一修飾符。",
+          "modifiersOnlyNotSupported": "輔助熱鍵不支援僅修飾符組合。"
+        }
+      },
+      "microphone": {
+        "description": "選擇用於語音輸入的輸入裝置",
+        "title": "麥克風"
+      },
+      "soundEffects": {
+        "dictationSounds": "語音輸入音效",
+        "dictationSoundsDescription": "選擇錄音開始和結束時播放的提示音",
+        "cueStyles": {
+          "off": "關閉",
+          "electronic": "電子提示音",
+          "droplet1": "水滴 1",
+          "droplet2": "水滴 2"
+        },
+        "title": "音效"
+      },
+      "startup": {
+        "launchAtLogin": "登入時啟動",
+        "launchAtLoginDescription": "登入時自動啟動 ChordVox",
+        "autoCheckUpdate": "自動檢查更新",
+        "autoCheckUpdateDescription": "啟動時自動偵測並下載最新版本（不會自動安裝）",
+        "title": "啟動"
+      },
+      "updates": {
+        "badges": {
+          "dev": "Dev",
+          "latest": "最新",
+          "update": "更新"
+        },
+        "checkForUpdates": "檢查更新",
+        "checking": "檢查中...",
+        "currentVersion": "目前版本",
+        "devMode": "正在開發模式中執行",
+        "dialogs": {
+          "almostThere": {
+            "description": "更新即將完成。請稍候。",
+            "title": "即將完成"
+          },
+          "checkFailed": {
+            "description": "檢查更新時發生問題，請稍後再試。{{message}}",
+            "title": "無法檢查更新"
+          },
+          "downloadFailed": {
+            "description": "下載更新時發生問題。請再試一次。",
+            "title": "無法下載更新"
+          },
+          "installFailed": {
+            "description": "安裝更新時發生問題。請再試一次。",
+            "title": "無法安裝更新"
+          },
+          "installUpdate": {
+            "confirmText": "安裝並重新啟動",
+            "description": "ChordVox 將重新啟動以套用更新。",
+            "title": "安裝更新"
+          },
+          "noUpdates": {
+            "description": "你使用的是最新版本。",
+            "title": "沒有更新"
+          },
+          "updateAvailable": {
+            "description": "有可用更新：v{{version}}",
+            "title": "有可用更新"
+          },
+          "updateError": {
+            "description": "更新時發生錯誤。請再試一次。",
+            "title": "更新錯誤"
+          },
+          "manualUpdateAvailable": {
+            "confirmText": "開啟下載頁面",
+            "description": "版本 v{{version}} 可用。此環境不支援自動下載，請開啟Release頁面進行更新。",
+            "title": "可用更新"
+          }
+        },
+        "downloadUpdate": "下載更新 {{version}}",
+        "downloading": "下載中... {{progress}}%",
+        "installAndRestart": "安裝並重新啟動",
+        "latestVersion": "你使用的是最新版本",
+        "newVersion": "有更新的版本可用",
+        "newVersionAvailable": "有新版本可用",
+        "restarting": "重新啟動中...",
+        "title": "更新",
+        "versionPlaceholder": "—",
+        "whatsNew": "v{{version}} 的新功能",
+        "openReleasePage": "開啟下載頁面"
+      }
+    },
+    "permissions": {
+      "accessibilityDescription": "轉錄後自動貼上文字所需的權限",
+      "accessibilityTitle": "輔助使用",
+      "description": "測試和管理 ChordVox 正常運作所需的系統權限",
+      "microphoneDescription": "錄音和語音輸入所需的權限",
+      "microphoneTitle": "麥克風",
+      "systemDescription": "檢查 ChordVox 在錄音、語音輸入與自動貼上時所需的核心系統權限。",
+      "systemTitle": "系統權限",
+      "resetAccessibility": {
+        "description": "這將從輔助使用權限中移除 ChordVox。你需要在「系統設定 > 隱私權與安全性 > 輔助使用」中重新授權。",
+        "label": "重設輔助使用權限",
+        "rowDescription": "重新安裝或重新建置應用程式後，透過在系統設定中移除並重新加入 ChordVox 來修復問題",
+        "title": "重設輔助使用權限"
+      },
+      "test": "測試",
+      "testAndGrant": "測試並授權",
+      "title": "權限",
+      "troubleshoot": "疑難排解",
+      "troubleshootingTitle": "疑難排解"
+    },
+    "privacy": {
+      "cloudBackup": "雲端備份",
+      "cloudBackupDescription": "將轉錄記錄儲存至雲端，確保不會遺失。",
+      "description": "控制哪些資料會離開你的裝置。預設全部關閉。",
+      "title": "隱私權",
+      "usageAnalytics": "使用分析",
+      "usageAnalyticsDescription": "分享匿名的效能指標，協助我們改善 ChordVox。我們絕不會傳送轉錄內容——只有計時和錯誤資料。",
+      "transcriptionHistory": "保存轉錄歷史記錄",
+      "transcriptionHistoryDescription": "停用後，ChordVox 仍會轉錄和貼上，但不會儲存新的歷史記錄條目。"
+    },
+    "prompts": {
+      "description": "檢視、自訂和測試用於文字整理和指令偵測的統一系統提示詞",
+      "requiresProDescription": "提示詞可以免費編輯；執行測試、實際呼叫 AI 模型時可免費開始 7 天 Pro 試用。",
+      "requiresProTitle": "提示詞測試需要 Pro",
+      "title": "提示詞工作室"
+    },
+    "transcription": {
+      "customSetup": "自訂設定",
+      "customSetupDescription": "使用你自己的供應商和 API Key。",
+      "description": "選擇 ChordVox 轉錄語音的方式",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "即開即用，無需設定。",
+      "title": "語音轉文字",
+      "toasts": {
+        "switchedCloud": {
+          "description": "轉錄將使用 ChordVox 雲端服務。",
+          "title": "已切換至 ChordVox Cloud"
+        },
+        "switchedCustom": {
+          "description": "設定你自己的供應商和 API Key。",
+          "title": "已切換至自訂設定"
+        }
+      },
+      "storageLocation": {
+        "label": "模型儲存位置",
+        "description": "統一管理流式、Whisper、Parakeet 和 SenseVoice 的本機模型目錄。"
+      },
+      "streaming": {
+        "currentFolderLabel": "目前流式模型目錄",
+        "currentFolderHint": "流式模型會自動存放在統一模型目錄下的 streaming-models 子目錄。",
+        "folderAutoInstallHint": "如果不手動選擇目錄，預設會安裝到統一模型目錄下的 streaming-models 子目錄。",
+        "clearAllButton": "清空全部模型",
+        "models": {
+          "zipformerSmall": {
+            "name": "極速輕量",
+            "description": "低配設備 / 快速輸入"
+          },
+          "zipformerBalanced": {
+            "name": "均衡",
+            "description": "純中文，兼顧速度與精度"
+          },
+          "zipformerHighAccuracy": {
+            "name": "高精度（中文）",
+            "description": "追求最高中文精度"
+          },
+          "paraformerBilingual": {
+            "name": "推薦（中英雙語）",
+            "description": "預設推薦 · 中英文都能直接用"
+          }
+        },
+        "toasts": {
+          "downloadInProgressTitle": "已有下載任務進行中",
+          "downloadInProgressDescription": "請等待目前模型下載完成後再試。",
+          "modelReadyTitle": "模型已就緒",
+          "modelReadyDescription": "流式模型下載並安裝完成。",
+          "downloadFailedTitle": "模型下載失敗",
+          "downloadFailedDescription": "流式模型下載失敗，請稍後重試。",
+          "downloadCancelledTitle": "已取消下載",
+          "downloadCancelledDescription": "目前流式模型下載已取消。",
+          "deleteDialogTitle": "刪除流式模型",
+          "deleteDialogDescription": "確定刪除「{{model}}」嗎？刪除後需要重新下載才能繼續使用。",
+          "deleteSuccessTitle": "模型已刪除",
+          "deleteSuccessDescription": "已刪除「{{model}}」。",
+          "deleteFailedTitle": "刪除失敗",
+          "deleteFailedDescription": "刪除流式模型失敗，請稍後重試。",
+          "clearFailedTitle": "清空失敗",
+          "clearFailedDescription": "清空流式模型失敗，請稍後重試。"
+        }
+      }
+    },
+    "fileTranscription": {
+      "title": "檔案轉錄",
+      "description": "轉錄單個音訊或影片檔案，並將結果儲存到歷史記錄。首次使用檔案轉錄時可免費開始 7 天 Pro 試用。",
+      "chooseFile": "選擇檔案",
+      "chooseFileDescription": "選擇一個音訊或影片檔案，直接在 ChordVox 中轉錄。",
+      "route": {
+        "label": "目前路線",
+        "provider": "轉錄引擎",
+        "model": "目前模型",
+        "syncBadge": "嚴格跟隨目前選擇",
+        "streamingProvider": "本機流式模型",
+        "streamingTitle": "本機流式轉錄",
+        "streamingDescription": "檔案轉錄會嚴格跟隨你目前選中的即時轉錄模型，不會自動切換到高精度路線。",
+        "localTitle": "本機轉錄",
+        "localDescription": "檔案轉錄會沿用你在「轉錄」頁裡選擇的本機模型與設定。",
+        "cloudTitle": "雲端 / BYOK 轉錄",
+        "cloudDescription": "檔案轉錄會沿用你在「轉錄」頁裡選擇的雲端服務商與模型。",
+        "currentRouteHint": "目前檔案轉錄路線：{{provider}} / {{model}}"
+      },
+      "supportedFormats": "支援 mp3、wav、m4a、mp4、mov、webm 等常見音訊與影片格式。",
+      "currentFile": "目前檔案",
+      "historyButton": "開啟歷史記錄",
+      "progressLabel": "目前進度",
+      "progressTitle": "任務進度",
+      "progressDescription": "顯示目前檔案、整體進度與目前處理階段。",
+      "stages": {
+        "idle": "選擇檔案後將自動開始轉錄。",
+        "preparing": "正在準備檔案...",
+        "transcribing": "正在轉錄檔案...",
+        "enhancing": "正在進行 AI 文字增強...",
+        "saving": "正在儲存結果...",
+        "complete": "檔案轉錄完成。",
+        "short": {
+          "idle": "待開始",
+          "preparing": "準備中",
+          "transcribing": "轉錄中",
+          "enhancing": "增強中",
+          "saving": "儲存中",
+          "complete": "已完成"
+        }
+      },
+      "trialHint": "首次使用檔案轉錄時可免費開始 7 天 Pro 試用。"
+    }
+  },
+  "models": {
+    "descriptions": {
+      "parakeet": {
+        "parakeet_tdt_0_6b_v3": "快速歐洲語言 ASR，自動語言偵測（25 個歐洲語言，不支援中文）"
+      },
+      "whisper": {
+        "tiny": "最快速，品質較低",
+        "base": "均衡表現",
+        "small": "品質更佳，速度較慢",
+        "medium": "高品質",
+        "large": "最佳品質，速度最慢",
+        "turbo": "速度快且品質佳"
+      },
+      "transcription": {
+        "openai_gpt_4o_mini_transcribe": "快速且準確的轉錄",
+        "openai_gpt_4o_transcribe": "最高準確度的轉錄",
+        "openai_whisper_1": "Whisper 舊版 API 模型",
+        "groq_whisper_large_v3": "Groq 上品質最高的 Whisper 模型",
+        "groq_whisper_large_v3_turbo": "216 倍即時速度",
+        "mistral_voxtral_mini_latest": "快速多語言轉錄"
+      },
+      "cloud": {
+        "openai_gpt_5_2": "最新旗艦推理模型",
+        "openai_gpt_5_mini": "快速且經濟實惠",
+        "openai_gpt_5_nano": "超快速，低延遲",
+        "openai_gpt_4_1": "穩健基礎，1M 上下文",
+        "openai_gpt_4_1_mini": "較小的 GPT-4.1 模型",
+        "openai_gpt_4_1_nano": "最低延遲的 GPT-4.1",
+        "anthropic_claude_sonnet_4_5": "均衡表現",
+        "anthropic_claude_haiku_4_5": "快速且接近頂尖智慧",
+        "anthropic_claude_opus_4_5": "最強大的 Claude 模型",
+        "gemini_gemini_3_pro_preview": "新一代旗艦模型，擅長複雜推理",
+        "gemini_gemini_3_flash_preview": "超快速、高性能的新一代模型",
+        "gemini_gemini_2_5_flash_lite": "最低延遲和成本",
+        "groq_qwen_qwen3_32b": "強大推理模型，131K 上下文",
+        "groq_openai_gpt_oss_120b": "OpenAI 開源旗艦，500 T/sec",
+        "groq_openai_gpt_oss_20b": "快速開源模型，1000 T/sec",
+        "groq_llama_3_3_70b_versatile": "Meta 多功能模型，280 T/sec",
+        "groq_llama_3_1_8b_instant": "超快速 560 T/sec，131K 上下文",
+        "groq_mixtral_8x7b_32768": "32K 上下文，混合專家架構",
+        "groq_gemma2_9b_it": "Google 高效模型"
+      },
+      "local": {
+        "qwen_qwen3_8b_q4_k_m": "最新 Qwen3，支援思考模式",
+        "qwen_qwen3_8b_q5_k_m": "更高品質 Qwen3，支援思考模式",
+        "qwen_qwen3_4b_q4_k_m": "精巧 Qwen3，具推理能力",
+        "qwen_qwen3_1_7b_q8_0": "小巧但有能力的 Qwen3 模型",
+        "qwen_qwen3_0_6b_q8_0": "極小型 Qwen3，適合邊緣裝置",
+        "qwen_qwen3_32b_q4_k_m": "最強大的本機 Qwen3，深度推理",
+        "qwen_qwen2_5_0_5b_instruct_q5_k_m": "最小型模型，快速但能力有限",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "小型模型，適合基本任務",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "均衡模型，通用型",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "大型模型，高品質（Q4_K_M）",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "大型模型，高品質推理（Q5_K_M）",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "快速且高效的指令模型",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "更高品質的指令模型",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "極小型模型，適合邊緣裝置",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "小巧但有能力的多語言模型",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "強大的高效能模型",
+        "openai_oss_gpt_oss_20b_mxfp4": "OpenAI 開放權重模型，適用於消費級硬體"
+      }
+    }
+  },
+  "transcriptionModes": {
+    "realTime": {
+      "label": "即時轉錄",
+      "cardDescription": "邊說邊出字 · 本機 · 低延遲 · 隱私安全",
+      "switchedTitle": "已切換到即時轉錄",
+      "switchedDescription": "邊說邊出字，本機處理，低延遲",
+      "modelsLabel": "即時轉錄模型",
+      "clearModelsTitle": "清空即時轉錄模型",
+      "clearModelsDescription": "確定刪除所有已下載的即時轉錄模型嗎？刪除後需要重新下載。",
+      "clearedModelsTitle": "已清空即時轉錄模型",
+      "clearedModelsDescription": "所有已下載的即時轉錄模型都已刪除。",
+      "downloadHint": "開始即時轉錄前，請先下載一個本機模型。",
+      "defaultEnabledTitle": "即時轉錄已預設啟用",
+      "defaultEnabledDescription": "快捷鍵錄音會預設走本機即時轉錄。預設模型是「{{defaultModelName}}」。下方可依需求設定高精度轉錄。"
+    },
+    "highAccuracy": {
+      "label": "高精度轉錄",
+      "optionalLabel": "高精度轉錄（可選）",
+      "cardDescription": "錄完再轉，精度更高但更慢 · 雲端 API / 本機模型可選",
+      "switchedTitle": "已切換到高精度轉錄",
+      "switchedDescription": "錄完整段後轉錄，精度更高但更慢",
+      "onboardingDescription": "適合長段落和會議整理，精度更高但速度更慢；可選雲端 API 或本機模型。"
+    }
+  }
+}

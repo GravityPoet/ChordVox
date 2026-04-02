@@ -1,0 +1,1090 @@
+@import "tailwindcss";
+
+@theme {
+  /* ChordVox Theme — registers color tokens with Tailwind v4.
+     These are the light-mode defaults; .dark overrides them below. */
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #171717;
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #737373;
+  --color-accent: oklch(0.55 0.22 285);
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e5e5e5;
+  --color-input: #f9f6f1;
+  --color-ring: #2563eb;
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-card: #ffffff;
+  --color-card-foreground: #171717;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #171717;
+  --color-link: #2563eb;
+  --color-success: #16a34a;
+  --color-success-foreground: #ffffff;
+  --color-warning: #d97706;
+  --color-warning-foreground: #ffffff;
+  --color-info: #2563eb;
+  --color-info-foreground: #ffffff;
+
+  /* Surface hierarchy — light mode equivalents */
+  --color-surface-0: #ffffff;
+  --color-surface-1: #fafafa;
+  --color-surface-2: #ffffff;
+  --color-surface-3: #f5f5f5;
+  --color-surface-raised: #f0f0f0;
+
+  /* Border states — light mode equivalents */
+  --color-border-subtle: #e5e5e5;
+  --color-border-hover: #d4d4d4;
+  --color-border-active: #2563eb;
+}
+
+:root {
+  /* Typography */
+  --font-family-sans:
+    "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+
+  /* Opacities */
+  --opacity-subtle: 0.1;
+  --opacity-medium: 0.5;
+  --opacity-high: 0.9;
+
+  /* Border Radius — ultra-tight, premium macOS-style rounding */
+  --radius: 0.375rem; /* 6px - default for buttons, inputs */
+  --radius-sm: 0.25rem; /* 4px - minimal rounding */
+  --radius-md: 0.375rem; /* 6px - standard */
+  --radius-lg: 0.5rem; /* 8px - cards, panels */
+  --radius-xl: 0.5rem; /* 8px - large cards (reduced from 10px) */
+
+  /* Custom Light Mode Brand Colors (Parchment Theme) */
+  --color-parchment-bg: #f9f6f1;
+  --color-parchment-border: #ddd4c7;
+  --color-parchment-text: #2b1f14;
+  --color-parchment-accent: #c0a77d;
+  --color-brand-primary: #2b1f14;
+  --color-brand-accent: #4b2e2b;
+  --color-brand-highlight: #c0a77d;
+  --color-brand-link: #2e3659;
+  --color-pattern: #e7e5e4;
+
+  /* Model picker premium effects (light mode) */
+  --shadow-metallic-light: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover-subtle: 0 2px 8px -2px rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  /* Dark mode — clear surface hierarchy: bg < muted < card < popover */
+  --color-background: oklch(0.1 0.005 270);
+  --color-foreground: oklch(0.95 0 0);
+  --color-card: oklch(0.15 0.008 270);
+  --color-card-foreground: oklch(0.95 0 0);
+  --color-popover: oklch(0.17 0.008 270);
+  --color-popover-foreground: oklch(0.95 0 0);
+  --color-primary: oklch(0.62 0.22 260);
+  --color-primary-foreground: oklch(0.99 0 0);
+  --color-secondary: oklch(0.18 0.005 270);
+  --color-secondary-foreground: oklch(0.92 0 0);
+  --color-muted: oklch(0.13 0.005 270);
+  --color-muted-foreground: oklch(0.55 0 0);
+  --color-accent: oklch(0.68 0.2 285);
+  --color-accent-foreground: oklch(0.99 0 0);
+  --color-destructive: oklch(0.6 0.25 25);
+  --color-destructive-foreground: oklch(0.99 0 0);
+  --color-border: oklch(0.23 0.005 270);
+  --color-input: oklch(0.12 0.005 270);
+  --color-ring: oklch(0.62 0.22 260);
+  --color-success: oklch(0.7 0.18 145);
+  --color-success-foreground: oklch(0.99 0 0);
+  --color-warning: oklch(0.75 0.15 70);
+  --color-warning-foreground: oklch(0.15 0 0);
+  --color-info: oklch(0.68 0.2 240);
+  --color-info-foreground: oklch(0.99 0 0);
+
+  /* Surface hierarchy — layered depth system */
+  --color-surface-0: oklch(0.1 0.005 270);
+  --color-surface-1: oklch(0.13 0.006 270);
+  --color-surface-2: oklch(0.155 0.008 270);
+  --color-surface-3: oklch(0.18 0.01 270);
+  --color-surface-raised: oklch(0.2 0.012 270);
+
+  /* Border states */
+  --color-border-subtle: oklch(0.2 0.004 270);
+  --color-border-hover: oklch(0.28 0.01 270);
+  --color-border-active: oklch(0.45 0.15 260);
+  --color-link: oklch(0.64 0.09 250);
+
+  /* Card depth shadows — no glow, clean depth only */
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.25);
+  --shadow-card-hover: 0 2px 8px oklch(0 0 0 / 0.35);
+  --shadow-elevated: 0 8px 24px oklch(0 0 0 / 0.4);
+  --shadow-modal: 0 24px 48px -12px oklch(0 0 0 / 0.5);
+
+  /* Model picker premium effects */
+  --shadow-metallic-dark: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-selected-glow:
+    inset 0 0 0 1px oklch(0.62 0.22 260 / 0.15), 0 0 16px -4px oklch(0.62 0.22 260 / 0.25);
+  --shadow-card-hover-subtle: 0 2px 8px -2px rgba(0, 0, 0, 0.15);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family-sans);
+    font-feature-settings:
+      "liga" 1,
+      "kern" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Electron specific styles */
+  html,
+  body {
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  /* Make dictation window (App) transparent, but keep control panel solid */
+  html:has(body .dictation-window),
+  body:has(.dictation-window),
+  body:has(.dictation-window) #root {
+    background: transparent !important;
+  }
+}
+
+/* ChordVox Brand Typography */
+.brand-heading {
+  font-family: var(--font-family-sans);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.brand-body {
+  font-family: var(--font-family-sans);
+  line-height: 1.6;
+}
+
+.brand-script {
+  font-family: var(--font-family-sans);
+  font-style: italic;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-sans);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* Modern Button Styling - handled by button component */
+button {
+  font-family: var(--font-family-sans);
+  cursor: pointer;
+}
+
+/* Ensure all interactive elements have pointer cursor */
+button:hover,
+[role="button"]:hover,
+.cursor-pointer:hover,
+svg:hover,
+[data-icon]:hover,
+.icon:hover {
+  cursor: pointer;
+}
+
+/* Premium input styling with subtle depth */
+input,
+textarea {
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  font-family: var(--font-family-sans);
+  box-shadow: inset 0 1px 2px oklch(from var(--color-foreground) l c h / 0.06);
+}
+
+/* Light mode inputs - embossed parchment */
+:root input,
+:root textarea {
+  background-color: var(--color-parchment-bg);
+  border: 1px solid var(--color-parchment-border);
+  color: var(--color-parchment-text);
+}
+
+:root input:focus,
+:root textarea:focus {
+  border-color: var(--color-parchment-accent);
+  box-shadow:
+    0 0 0 2px oklch(from var(--color-parchment-accent) l c h / 0.2),
+    inset 0 1px 3px oklch(from var(--color-parchment-text) l c h / var(--opacity-subtle));
+  background-color: var(--color-background);
+}
+
+/* Dark mode inputs — flat, no embossed shadow */
+.dark input,
+.dark textarea {
+  background-color: var(--color-input);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  box-shadow: none;
+}
+
+.dark input:focus,
+.dark textarea:focus {
+  border-color: var(--color-border-active);
+  box-shadow: 0 0 0 2px oklch(from var(--color-ring) l c h / 0.15);
+}
+
+/* Card styling - elevated parchment */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card, 0 1px 3px oklch(from var(--color-foreground) l c h / 0.08));
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover, 0 4px 12px oklch(from var(--color-foreground) l c h / 0.1));
+  transform: translateY(-1px);
+}
+
+/* Dark mode cards — grounded, no lift, subtle border glow */
+.dark .card {
+  border-color: var(--color-border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.dark .card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: none;
+  border-color: var(--color-border-hover);
+}
+
+/* Link styling */
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+a:hover {
+  color: var(--color-link);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* Status indicators */
+.status-active {
+  color: var(--color-brand-accent);
+  font-weight: 600;
+}
+
+.text-brand-primary {
+  color: var(--color-brand-primary);
+}
+
+.text-brand-accent {
+  color: var(--color-brand-accent);
+}
+
+.text-brand-highlight {
+  color: var(--color-brand-highlight);
+}
+
+.text-brand-link {
+  color: var(--color-brand-link);
+}
+
+/* ---- Premium UI Utilities ---- */
+
+/* Section panel — grouped settings container */
+.section-panel {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+}
+
+/* Gradient accent bar — top border highlight for panels */
+.accent-bar {
+  position: relative;
+}
+
+.dark .accent-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    oklch(0.62 0.22 260 / 0.5),
+    oklch(0.7 0.18 280 / 0.3),
+    transparent 80%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Monochrome icon theming - explicit light/dark handling */
+.icon-monochrome {
+  filter: none;
+  transition: filter 150ms ease;
+}
+
+.dark .icon-monochrome {
+  filter: invert(1);
+}
+
+/* Toast — opaque dark HUD surface, same in light & dark mode */
+.toast-surface {
+  background: oklch(0.13 0.005 270);
+  border: 1px solid oklch(0.22 0.005 270);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.04),
+    0 8px 24px -4px oklch(0 0 0 / 0.5),
+    0 2px 8px -2px oklch(0 0 0 / 0.3);
+}
+
+@keyframes toast-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Model picker LED pulse animation */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 6px oklch(0.62 0.22 260 / 0.4);
+    opacity: 0.8;
+  }
+  50% {
+    box-shadow: 0 0 8px oklch(0.62 0.22 260 / 0.6);
+    opacity: 1;
+  }
+}
+
+/* Spinner rotation for downloading state */
+@keyframes spinner-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scale-in animation for completion */
+@keyframes scale-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Floating mic success feedback */
+@keyframes mic-success-pop {
+  0% {
+    transform: scale(0.72) rotate(-8deg);
+    opacity: 0;
+  }
+  65% {
+    transform: scale(1.08) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes mic-success-glow {
+  0% {
+    box-shadow: inset 0 0 0 rgba(255, 255, 255, 0);
+  }
+  45% {
+    box-shadow: inset 0 0 28px rgba(126, 146, 255, 0.14);
+  }
+  100% {
+    box-shadow: inset 0 0 12px rgba(126, 146, 255, 0.08);
+  }
+}
+
+.mic-success-shell {
+  animation: mic-success-glow 1.2s ease-out both;
+}
+
+.mic-success-icon {
+  animation: mic-success-pop 220ms cubic-bezier(0.2, 0.85, 0.3, 1.1) both;
+}
+
+@keyframes dictation-pill-dot-recording {
+  0%,
+  100% {
+    transform: scale(0.95);
+    opacity: 0.72;
+    box-shadow: 0 0 0 rgba(255, 82, 82, 0);
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+    box-shadow: 0 0 16px rgba(255, 82, 82, 0.5);
+  }
+}
+
+@keyframes dictation-pill-dot-processing {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+}
+
+@keyframes dictation-pill-live-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes dictation-wave-processing {
+  0%,
+  100% {
+    transform: scaleY(var(--scale-start, 0.28));
+    opacity: calc(var(--bar-opacity, 0.55) - 0.08);
+  }
+  50% {
+    transform: scaleY(var(--scale-peak, 0.72));
+    opacity: var(--bar-opacity, 0.68);
+  }
+}
+
+@keyframes dictation-wave-success {
+  0%,
+  100% {
+    transform: scaleY(var(--scale-start, 0.3));
+    opacity: calc(var(--bar-opacity, 0.5) - 0.1);
+  }
+  40% {
+    transform: scaleY(var(--scale-peak, 0.62));
+    opacity: var(--bar-opacity, 0.64);
+  }
+}
+
+@keyframes dictation-sparkle-float {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--spark-x, 0px), var(--spark-y, 0px), 0) scale(var(--spark-scale, 1));
+  }
+  18% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(
+        calc(var(--spark-x, 0px) + var(--spark-drift-x, 0px)),
+        calc(var(--spark-y, 0px) - var(--spark-rise, 20px)),
+        0
+      )
+      scale(calc(var(--spark-scale, 1) * 1.22));
+  }
+}
+
+.dictation-pill-shell {
+  --shell-left-rgb: 154, 141, 255;
+  --shell-mid-rgb: 126, 146, 255;
+  --shell-right-rgb: 99, 186, 247;
+  width: var(--dictation-pill-width, fit-content);
+  flex-shrink: 0;
+  min-width: 452px;
+  max-width: 452px;
+  min-height: 80px;
+  height: 80px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  background:
+    radial-gradient(circle at 18% 50%, rgba(var(--shell-left-rgb), 0.045), transparent 15%),
+    radial-gradient(circle at 82% 50%, rgba(var(--shell-right-rgb), 0.05), transparent 16%),
+    linear-gradient(135deg, rgba(15, 15, 24, 0.98), rgba(8, 8, 14, 0.96));
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 0 24px rgba(var(--shell-mid-rgb), 0.03);
+  backdrop-filter: blur(24px) saturate(135%);
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 320ms ease,
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dictation-window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.dictation-window__overlay {
+  position: relative;
+  z-index: 50;
+  overflow: visible;
+  box-sizing: border-box;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.dictation-window__overlay--full {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.dictation-window__overlay--compact {
+  display: inline-flex;
+  width: max-content;
+  height: max-content;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+  padding: 0;
+}
+
+.dictation-window__chrome {
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.dictation-floating-close {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(10, 10, 18, 0.88);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+  color: rgba(255, 255, 255, 0.98);
+}
+
+.group:hover .dictation-floating-close {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dictation-floating-close:hover {
+  background: rgba(18, 18, 30, 0.96);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.dictation-floating-close__icon {
+  color: rgba(255, 255, 255, 0.98);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.38));
+}
+
+.dictation-window button {
+  outline: none;
+}
+
+.dictation-window button:focus,
+.dictation-window button:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.dictation-pill-shell--recording {
+  --shell-left-rgb: 255, 122, 92;
+  --shell-mid-rgb: 255, 73, 183;
+  --shell-right-rgb: 156, 104, 255;
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 0 28px rgba(var(--shell-mid-rgb), 0.06);
+}
+
+.dictation-pill-shell--neutral {
+  --shell-left-rgb: 154, 141, 255;
+  --shell-mid-rgb: 126, 146, 255;
+  --shell-right-rgb: 99, 186, 247;
+}
+
+.dictation-pill-shell__texture {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.14), transparent 26%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 34%),
+    radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.06), transparent 55%);
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.dictation-pill-shell__surface {
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+}
+
+.dictation-pill-shell__noise {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    radial-gradient(circle at 20% 24%, rgba(255, 255, 255, 0.08) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 76% 58%, rgba(255, 255, 255, 0.05) 0 1px, transparent 1.3px);
+  background-size:
+    18px 18px,
+    24px 24px;
+  mix-blend-mode: soft-light;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.dictation-pill-shell__beam {
+  position: absolute;
+  inset: 16px 42px 16px 72px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--shell-left-rgb), 0.02),
+    rgba(var(--shell-mid-rgb), 0.05),
+    rgba(var(--shell-right-rgb), 0.02)
+  );
+  filter: blur(12px);
+  opacity: 0.42;
+  pointer-events: none;
+  transition:
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dictation-pill-shell--recording .dictation-pill-shell__beam {
+  opacity: 0.7;
+  transform: scaleX(1.02);
+}
+
+.dictation-pill-shell--neutral .dictation-pill-shell__beam {
+  opacity: 0.38;
+}
+
+.dictation-pill-shell__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px 12px 12px;
+  width: 100%;
+}
+
+.dictation-pill-orb {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.08), transparent 32%),
+    rgba(10, 10, 16, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 14px 30px rgba(0, 0, 0, 0.36);
+  transition:
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dictation-pill-orb--recording {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 30px rgba(0, 0, 0, 0.36),
+    0 0 0 1px rgba(var(--shell-mid-rgb), 0.16);
+}
+
+.dictation-pill-orb--neutral {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 30px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(var(--shell-right-rgb), 0.1);
+}
+
+.dictation-pill-orb__halo {
+  position: absolute;
+  inset: 8px;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(var(--shell-mid-rgb), 0.18), transparent 70%);
+  filter: blur(10px);
+  opacity: 0.7;
+  transition:
+    opacity 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dictation-pill-orb--recording .dictation-pill-orb__halo {
+  opacity: 1;
+  animation: dictation-pill-dot-recording 2.4s ease-in-out infinite;
+}
+
+.dictation-pill-orb--neutral .dictation-pill-orb__halo {
+  opacity: 0.56;
+  animation: dictation-pill-dot-processing 2.6s ease-in-out infinite;
+}
+
+.dictation-pill-orb__icon {
+  position: relative;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.92);
+  filter: drop-shadow(0 0 12px rgba(var(--shell-mid-rgb), 0.28));
+}
+
+.dictation-pill-main {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.dictation-pill__signal-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+  flex-shrink: 1;
+}
+
+.dictation-pill__text {
+  min-width: 150px;
+  width: var(--dictation-text-width, 150px);
+  max-width: var(--dictation-text-width, 150px);
+  flex: 0 0 var(--dictation-text-width, 150px);
+  color: rgba(245, 248, 255, 0.78);
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+  text-align: left;
+}
+
+.dictation-wave-cluster {
+  position: relative;
+  width: var(--wave-width, 178px);
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.premium-wave {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: var(--wave-width, 178px);
+}
+
+.premium-wave__aurora {
+  position: absolute;
+  inset: 8px -6px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(var(--shell-left-rgb), 0.22), transparent 24%),
+    radial-gradient(circle at 50% 50%, rgba(var(--shell-mid-rgb), 0.18), transparent 26%),
+    radial-gradient(circle at 80% 50%, rgba(var(--shell-right-rgb), 0.2), transparent 24%);
+  filter: blur(10px);
+  opacity: 0.2;
+  transition:
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-wave--recording .premium-wave__aurora {
+  opacity: 0.38;
+}
+
+.premium-wave--neutral .premium-wave__aurora {
+  opacity: 0.16;
+}
+
+.premium-wave__bars {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: 100%;
+}
+
+.premium-wave--line {
+  gap: 0;
+}
+
+.premium-wave--level {
+  gap: 0;
+}
+
+.premium-wave--particles {
+  gap: 0;
+}
+
+.premium-wave--line .premium-wave__bars {
+  gap: 4px;
+}
+
+.premium-wave--level .premium-wave__bars {
+  gap: 5px;
+}
+
+.premium-wave--particles .premium-wave__bars {
+  gap: 4px;
+}
+
+.premium-wave__bar {
+  display: block;
+  height: 34px;
+  border-radius: 999px;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.premium-wave__bar--processing {
+  animation: dictation-wave-processing 1.5s ease-in-out infinite;
+}
+
+.premium-wave__bar--success {
+  animation: dictation-wave-success 1.7s ease-in-out infinite;
+}
+
+.dictation-sparkles {
+  display: none;
+}
+
+.dictation-command-menu-shell {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  background: transparent;
+  padding: 0;
+}
+
+.dictation-command-menu {
+  width: 188px;
+  padding: 8px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(20, 20, 30, 0.96), rgba(12, 12, 18, 0.94));
+  box-shadow:
+    0 18px 32px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(22px) saturate(130%);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dictation-command-menu__item {
+  width: 100%;
+  min-height: 38px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(245, 248, 255, 0.86);
+  background: transparent;
+  transition:
+    background-color 140ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 140ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 140ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dictation-command-menu__item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dictation-command-menu__item:active {
+  transform: scale(0.985);
+}
+
+.dictation-command-menu__item--primary {
+  color: rgba(255, 255, 255, 0.94);
+  background: linear-gradient(90deg, rgba(126, 146, 255, 0.16), rgba(99, 186, 247, 0.12));
+}
+
+.dictation-command-menu__item--primary:hover {
+  background: linear-gradient(90deg, rgba(126, 146, 255, 0.22), rgba(99, 186, 247, 0.16));
+}
+
+@media (max-width: 640px) {
+  .dictation-pill-shell {
+    min-width: 430px;
+    max-width: 430px;
+    min-height: 78px;
+    height: 78px;
+    max-width: calc(100vw - 8px);
+  }
+
+  .dictation-window__overlay--compact {
+    padding: 0;
+  }
+
+  .dictation-pill-shell__content {
+    gap: 10px;
+    padding: 10px 12px 10px 10px;
+  }
+
+  .dictation-pill-shell__beam {
+    inset: 14px 38px 14px 62px;
+  }
+
+  .dictation-pill-orb {
+    width: 48px;
+    height: 48px;
+  }
+
+  .dictation-pill__signal-row {
+    gap: 10px;
+  }
+
+  .dictation-pill__text {
+    font-size: 14px;
+    min-width: 138px;
+  }
+}
+
+/* Indeterminate progress bar sweep */
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+:hover::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
+
+:hover::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

@@ -1,0 +1,1798 @@
+{
+  "app": {
+    "name": "ChordVox",
+    "loading": "正在加载 ChordVox...",
+    "oauth": {
+      "redirectTitle": "正在跳转到 ChordVox",
+      "closeTab": "你可以关闭此标签页"
+    },
+    "buttons": {
+      "cancelRecording": "取消录音",
+      "cancelProcessing": "取消处理"
+    },
+    "mic": {
+      "hotkeyToSpeak": "[{{hotkey}}] 开始说话",
+      "starting": "正在准备录音…",
+      "recording": "录音中...",
+      "processing": "处理中...",
+      "clickToSpeak": "点击开始说话",
+      "status": {
+        "starting": "准备中",
+        "recording": "录音中",
+        "transcribing": "识别中",
+        "polishing": "润色中",
+        "completed": "已完成"
+      },
+      "placeholder": {
+        "starting": "正在准备麦克风与模型…",
+        "listening": "正在听你说话…",
+        "transcribing": "正在识别你刚才的内容…",
+        "polishing": "正在润色并整理文本…",
+        "completed": "本次听写已完成"
+      }
+    },
+    "toasts": {
+      "hotkeyChanged": {
+        "title": "快捷键已更改"
+      },
+      "hotkeyUnavailable": {
+        "title": "快捷键不可用",
+        "description": "无法注册快捷键，请在设置中选择其他快捷键。"
+      }
+    },
+    "commandMenu": {
+      "startListening": "开始听写",
+      "stopListening": "停止听写",
+      "hideForNow": "暂时隐藏"
+    },
+    "trialExpiredModal": {
+      "title": "此功能需要 Pro",
+      "description": "免费本地输入法永久可用。升级 Pro 后即可解锁 AI 文本增强、文件转录、BYOK、提示词工作室和高级工作流。",
+      "valueBullets": "免费本地输入法永久可用 · AI 文本增强 · 文件转录 · BYOK 与高级工作流",
+      "actions": {
+        "buyNow": "查看 Pro 方案",
+        "haveKey": "我已有授权码",
+        "later": "继续使用免费版"
+      }
+    }
+  },
+  "settings": {
+    "language": {
+      "sectionTitle": "语言",
+      "sectionDescription": "分别设置界面语言和转录语言",
+      "uiLabel": "界面语言",
+      "uiDescription": "选择 ChordVox 界面使用的语言",
+      "transcriptionLabel": "转录语言",
+      "transcriptionDescription": "选择你说话的语言，以提高转录准确率",
+      "uiOption": {
+        "en": "English",
+        "es": "Espanol",
+        "fr": "Francais",
+        "de": "Deutsch",
+        "pt": "Portugues",
+        "it": "Italiano",
+        "zh-CN": "简体中文",
+        "zh-TW": "繁體中文",
+        "ru": "Русский",
+        "ja": "日本語"
+      }
+    }
+  },
+  "tray": {
+    "toggleDictation": {
+      "show": "显示听写面板",
+      "hide": "隐藏听写面板"
+    },
+    "openControlPanel": "打开控制面板",
+    "quit": "退出 ChordVox",
+    "tooltip": "ChordVox - 语音听写"
+  },
+  "menu": {
+    "appLabel": "ChordVox",
+    "quit": "退出 ChordVox",
+    "speech": "语音",
+    "help": "帮助",
+    "learnMore": "了解更多",
+    "file": "文件",
+    "closeWindow": "关闭窗口"
+  },
+  "window": {
+    "voiceRecorderTitle": "录音器",
+    "controlPanelTitle": "控制面板"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "无法打开链接",
+      "message": "无法在浏览器中打开该链接：\n{{url}}\n\n错误：{{error}}"
+    },
+    "loadFailure": {
+      "title": "ChordVox 加载失败",
+      "message": "ChordVox 无法加载其界面。",
+      "detail": {
+        "window": "窗口：{{windowName}}",
+        "error": "错误 {{errorCode}}：{{errorDescription}}",
+        "url": "URL：{{url}}",
+        "hint": "请尝试重新安装应用或使用 --log-level=debug 参数启动。"
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ChordVox 启动错误",
+      "message": "应用启动失败：\n\n{{error}}\n\n请反馈此问题。"
+    },
+    "globeHotkey": {
+      "title": "Globe 快捷键不可用",
+      "message": "ChordVox 无法激活 Globe 键快捷键。",
+      "details": {
+        "unknown": "启动 Globe 监听器时发生未知错误。",
+        "fallback": "Globe 键快捷键将保持禁用状态；现有的键盘快捷键仍可正常使用。",
+        "devHint": "运行 `npm run compile:globe` 并重新构建应用以重新生成监听器。",
+        "reinstallHint": "请尝试重新安装 ChordVox，如果问题仍然存在请联系技术支持。"
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "设置快捷键需要回调函数",
+      "globeOnlyMac": "Globe 键仅在 macOS 上可用。",
+      "alreadyRegistered": "\"{{hotkey}}\" 已被其他应用注册。",
+      "osReserved": "\"{{hotkey}}\" 可能被系统保留。",
+      "registrationFailed": "无法注册 \"{{hotkey}}\"，该快捷键可能已被其他应用占用。",
+      "trySuggestions": "建议尝试：{{suggestions}}"
+    }
+  },
+  "systemSettings": {
+    "microphone": "请打开系统设置以配置麦克风权限。",
+    "sound": "请打开系统声音设置（例如 pavucontrol）。",
+    "accessibility": "此平台不支持辅助功能设置。"
+  },
+  "titleBar": {
+    "quitTitle": "退出 ChordVox",
+    "quitConfirmTitle": "确定退出 ChordVox？",
+    "quitConfirmDescription": "这将关闭 ChordVox 并停止后台进程。",
+    "quit": "退出",
+    "cancel": "取消"
+  },
+  "upgradePrompt": {
+    "paymentFailed": "我们未能续费你的 Pro 方案",
+    "weeklyLimit": "你已达到托管 AI 使用上限",
+    "pastDueDescription": "免费本地输入法永久可用。更新支付方式后即可恢复 Pro 功能和无限制托管用量。",
+    "limitDescription": "本周已使用 {{used}} / {{limit}} 个托管词数。\n免费本地输入法永久可用。你可以升级 Pro、使用自己的 API Key，或切回本地模式。",
+    "updatePayment": "更新支付方式",
+    "updatePaymentDescription": "恢复 Pro 功能和无限制托管用量。",
+    "upgradeToPro": "升级到 Pro",
+    "upgradeDescription": "解锁 AI 文本增强、文件转录、BYOK、提示词工作室和高级工作流。",
+    "useApiKey": "使用自己的 API Key",
+    "useApiKeyDescription": "接入你自己的服务商与 API Key 来运行 AI 增强。",
+    "switchToLocal": "切换到本地模式",
+    "switchToLocalDescription": "继续使用免费的本地输入法。",
+    "rollingWeeklyLimit": "托管用量按滚动周计算"
+  },
+  "windowControls": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "还原",
+    "close": "关闭"
+  },
+  "windows": {
+    "pttUnavailable": "按住说话原生监听器不可用"
+  },
+  "common": {
+    "back": "返回",
+    "next": "下一步",
+    "skip": "跳过",
+    "complete": "完成",
+    "reset": "重置",
+    "refresh": "刷新",
+    "download": "下载",
+    "cancel": "取消",
+    "chooseFolder": "选择目录",
+    "working": "处理中",
+    "ready": "已就绪",
+    "recommended": "推荐",
+    "active": "已激活",
+    "cloud": "云端",
+    "local": "本地",
+    "apiKey": "API Key",
+    "model": "模型",
+    "loading": "加载中...",
+    "unknown": "未知",
+    "availableModels": "可用模型",
+    "fast": "快速",
+    "hold": "按住",
+    "less": "收起",
+    "more": "展开",
+    "noMatchingModels": "未找到匹配的模型",
+    "private": "隐私",
+    "tap": "点按",
+    "openSystemSettings": "打开系统设置",
+    "delete": "删除",
+    "deleteAll": "全部删除",
+    "downloading": "下载中",
+    "installing": "安装中",
+    "deleting": "删除中",
+    "clearing": "清空中",
+    "downloadRequired": "需下载"
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "欢迎",
+      "language": "语言",
+      "setup": "设置",
+      "permissions": "权限",
+      "activation": "激活",
+      "complete": "完成"
+    },
+    "hotkey": {
+      "couldNotRegisterTitle": "无法注册该快捷键",
+      "couldNotRegisterDescription": "该组合键可能已被占用，请尝试其他组合。"
+    },
+    "setup": {
+      "title": "设置",
+      "description": "默认推荐本地转录，先把隐私和可用性配好",
+      "language": "语言",
+      "localPrivacyTitle": "默认推荐本地转录",
+      "localPrivacyDescription": "语音与文本优先留在你的设备上，更适合隐私敏感场景。需要时你也可以再切到云端。"
+    },
+    "permissions": {
+      "title": "权限",
+      "microphoneTitle": "麦克风",
+      "microphoneDescription": "用于捕捉你的声音",
+      "grant": "授权",
+      "accessibilityTitle": "辅助功能",
+      "accessibilityDescription": "用于将文本粘贴到应用中",
+      "testAndGrant": "测试并授权",
+      "requiredForApp": "ChordVox 运行所必需的权限",
+      "microphoneRequired": "需要麦克风访问权限"
+    },
+    "transcription": {
+      "title": "转录设置",
+      "description": "先选一个能直接开始使用的转录方式",
+      "preferredLanguage": "首选语言"
+    },
+    "activation": {
+      "title": "快捷键",
+      "description": "设置快捷键并试说一句，确认可以正常使用。",
+      "hotkey": "快捷键",
+      "hotkeyHint": "先设一个顺手的快捷键。",
+      "mode": "模式",
+      "tapDescription": "按一次开始，再按一次结束",
+      "holdDescription": "按住说话，松开结束",
+      "test": "测试",
+      "testDescription": "点输入框，再按快捷键试说一句。",
+      "hotkeyToStartStop": "{{hotkey}} 开始/停止",
+      "holdHotkey": "按住 {{hotkey}}",
+      "textareaPlaceholder": "点这里，再用快捷键试说一句...",
+      "focusInput": "点一下输入框",
+      "manualFallbackHint": "如果现在不能试说，也可以先手动输入后继续。",
+      "stepFocusInput": "点一下下方输入框",
+      "stepSeeCompleted": "看到“已完成”后继续",
+      "successTitle": "试说完成",
+      "successDescription": "快捷键、悬浮窗和粘贴都正常。",
+      "lastTranscriptLabel": "刚才识别到：",
+      "completeHint": "先完成一次试说，再继续下一步。"
+    },
+    "streamingModelPicker": {
+      "currentFolderLabel": "当前模型目录",
+      "currentFolderHint": "如果这个目录里已经有流式模型，向导会直接识别，不需要重复下载。",
+      "readyDescription": "本地实时模型已就绪，快捷键听写会默认使用它。"
+    },
+    "completion": {
+      "title": "准备好了",
+      "description": "快捷键和第一次测试都已完成，现在可以开始使用 ChordVox。",
+      "summaryTitle": "本次设备初始化",
+      "localReady": "本地转录已就绪：默认优先留在这台设备上。",
+      "cloudReady": "云端转录已就绪：当前会通过你选择的服务商完成转录。",
+      "hotkeyReady": "{{hotkey}} 已设置好，随时可以开始听写。",
+      "tryReady": "你已经完成一次真实试说，悬浮窗与粘贴流程都正常。",
+      "firstResultLabel": "第一次试说结果"
+    }
+  },
+  "controlPanel": {
+    "update": {
+      "readyTitle": "更新已准备就绪",
+      "readyDescription": "点击“安装更新”以重启并安装最新版本。",
+      "problemTitle": "更新遇到问题",
+      "problemDescription": "无法完成更新，请稍后再试。",
+      "installTitle": "安装更新",
+      "installDescription": "ChordVox 将重启以应用更新。当前进行中的工作将被保存。",
+      "couldNotInstallTitle": "无法安装更新",
+      "couldNotInstallDescription": "出了点问题，请重试。",
+      "couldNotDownloadTitle": "无法下载更新",
+      "couldNotDownloadDescription": "请检查网络连接后重试。",
+      "installing": "正在安装...",
+      "installButton": "安装更新",
+      "availableButton": "有可用更新"
+    },
+    "limit": {
+      "weeklyTitle": "已达到周限额",
+      "weeklyDescription": "免费本地输入法永久可用。升级 Pro 或改用你自己的 API Key，即可继续使用 AI 增强和其他高级工作流。"
+    },
+    "billing": {
+      "pastDueTitle": "我们无法处理你的付款",
+      "pastDueDescription": "免费本地输入法永久可用。请在设置中更新付款方式以恢复 Pro。",
+      "bannerDescription": "你当前仍在免费版中，本周还有 {{limit}} 个托管词数可用。更新付款方式即可恢复 Pro。",
+      "updatePayment": "更新支付方式"
+    },
+    "history": {
+      "title": "转录记录",
+      "couldNotLoadTitle": "无法加载历史记录",
+      "couldNotLoadDescription": "加载转录记录时出错，请尝试关闭并重新打开应用。",
+      "copiedTitle": "已复制！",
+      "copiedDescription": "文本已复制到剪贴板",
+      "couldNotCopyTitle": "无法复制",
+      "couldNotCopyDescription": "复制到剪贴板时出错，请重试。",
+      "clearTitle": "清除历史记录",
+      "clearDescription": "这将删除你的所有转录记录，此操作无法撤销。",
+      "clearedTitle": "历史记录已清除",
+      "clearedDescription": "已删除 {{count}} 条转录记录",
+      "clearedDescription_other": "已删除 {{count}} 条转录记录",
+      "couldNotClearTitle": "无法清除历史记录",
+      "couldNotClearDescription": "出了点问题，请重试。",
+      "deleteTitle": "删除转录记录",
+      "deleteDescription": "此转录记录将被永久删除。",
+      "couldNotDeleteTitle": "无法删除",
+      "couldNotDeleteDescription": "此转录记录可能已被删除。",
+      "couldNotDeleteDescriptionGeneric": "出了点问题，请重试。",
+      "clear": "清除",
+      "transcribeFile": "转录文件",
+      "transcribeFileProcessing": "正在转录...",
+      "transcribedFileTitle": "文件转录完成",
+      "transcribedFileDescription": "已将 {{name}} 添加到转录记录。",
+      "couldNotTranscribeFileTitle": "无法转录文件",
+      "couldNotTranscribeFileDescription": "转录这个文件时出了点问题。请换一个文件或模型后重试。",
+      "fileTranscriptionRequiresProTitle": "文件转录需要 Pro",
+      "fileTranscriptionRequiresProDescription": "升级到 Pro 后，才能在 ChordVox 里转录音频或视频文件。免费本地输入法仍可继续使用。",
+      "emptyFileDescription": "所选文件为空。请选择有效的音频或视频文件。",
+      "selectedFileFallback": "所选文件",
+      "empty": "暂无转录记录",
+      "press": "按下",
+      "toStart": "开始",
+      "transcribeFileProgress": "正在转录 {{progress}}%...",
+      "clearedDescription_one": "已删除 {{count}} 条转录记录",
+      "clearedDescription_few": "已删除 {{count}} 条转录记录",
+      "clearedDescription_many": "已删除 {{count}} 条转录记录"
+    },
+    "cloudMigration": {
+      "title": "你的 Pro 配置已就绪",
+      "description": "ChordVox Cloud 已启用，可用于托管转录和 AI 工作流。你之前的设置已保存，也可以随时在设置中切换服务商。",
+      "viewSettings": "查看设置"
+    },
+    "streamingFallback": {
+      "title": "本地流式启动失败",
+      "description": "已自动切换到普通录音模式。原因：{{reason}}"
+    },
+    "aiCta": {
+      "title": "用 AI 提升你的转录质量",
+      "description": "在你说话的同时，自动修正语法、标点和格式。",
+      "enable": "启用 AI 增强"
+    },
+    "loading": "加载中..."
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "云端",
+      "local": "本地",
+      "localDescription": "在你的设备上运行，完全隐私，离线可用。",
+      "cloudDescription": "通过 API 使用高级模型，快速且强大，需要联网。"
+    },
+    "enableTitle": "启用 AI 文本增强",
+    "enableDescription": "使用 AI 自动提升转录质量",
+    "custom": {
+      "endpointWithProtocol": "请输入包含协议的完整 URL。既支持基础 URL（例如 https://server/v1），也支持直接端点（例如 https://server/v1/chat/completions）。",
+      "httpsRequired": "需要 HTTPS（仅本地网络允许 HTTP）。",
+      "endpointUnauthorized": "端点拒绝了请求（401/403）。请添加 API Key 或调整服务器认证设置。",
+      "endpointTitle": "端点 URL",
+      "endpointExamples": "示例：",
+      "ollama": "（Ollama）",
+      "localAi": "（LocalAI）",
+      "apiKeyOptional": "API Key（可选）",
+      "apiKeyHelp": "可选。作为 Bearer token 用于身份验证，与 OpenAI API Key 无关。",
+      "protocolTitle": "协议",
+      "protocolAuto": "自动（推荐）",
+      "protocolChat": "Chat Completions",
+      "protocolResponses": "Responses",
+      "protocolHelp": "自动模式会按端点记住可用协议。只有当你的供应商需要时，才强制指定 Chat Completions 或 Responses。",
+      "detectedProtocolHelp": "自动模式当前记住这个端点使用 {{protocol}}。",
+      "resetDetectedProtocol": "重置自动探测协议",
+      "applyAndRefresh": "应用并刷新",
+      "queryPrefix": "我们将查询",
+      "querySuffix": "获取可用模型。",
+      "modelsReloadHint": "当你离开 URL 输入框或点击“应用并刷新”时，模型列表将重新加载。",
+      "bedrockEndpointHint": "默认根据 Region 自动生成，自定义端点可用于 VPC Endpoint 等场景。",
+      "enterEndpoint": "请在上方输入端点 URL 以加载模型。",
+      "fetchingModels": "正在从端点获取模型列表...",
+      "noModels": "未返回任何模型，请检查端点 URL。",
+      "providerName": "自定义",
+      "ownerLabel": "所有者：{{owner}}",
+      "unableToLoadModels": "无法从端点加载模型。"
+    },
+    "getApiKey": "不知道怎么配置？查看教程 ->",
+    "selectModel": "选择模型",
+    "availableModels": "可用模型"
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "删除模型",
+      "description": "确定要删除此模型吗？如果需要再次使用，你需要重新下载。"
+    },
+    "parakeet": {
+      "multilingual": "25 个欧洲语言",
+      "english": "英语"
+    },
+    "apiKeyOptional": "API Key（可选）",
+    "getKey": "不知道怎么配置？查看教程 ->",
+    "endpointUrl": "端点 URL",
+    "customProvider": "自定义",
+    "fallback": {
+      "whisperModelDescription": "模型",
+      "parakeetModelDescription": "NVIDIA Parakeet 模型"
+    },
+    "whisperModels": "Whisper 模型",
+    "browse": "浏览",
+    "whisperLocalHelp": "Whisper 模型会统一存放在模型存储位置下。你可以在这里下载官方模型，或使用自己的本地 `.bin` 模型文件。",
+    "whisperModelFileLabel": "Whisper 模型（.bin）",
+    "parakeetLocalHelp": "Parakeet 模型会统一存放在模型存储位置下。你可以在这里下载官方模型，或选择本地模型目录。当前这条 NVIDIA 线不支持中文。",
+    "parakeetModelDirectoryLabel": "Parakeet 模型目录",
+    "senseVoiceLocalHelp": "SenseVoice 模型会统一存放在模型存储位置下。SenseVoice Small 继续通过 GGUF + sense-voice-main 运行。",
+    "senseVoiceModelFileLabel": "SenseVoice 模型路径",
+    "senseVoiceBinaryLabel": "SenseVoice 运行时（仅 SenseVoice Small 需要）",
+    "fireRedRuntime": {
+      "title": "FireRed 运行时",
+      "description": "FireRedASR2-AED 需要单独的本地 Python 运行时。安装或修复后，这台机器就能直接使用 FireRed 模型转录。",
+      "modelUnavailable": "FireRed 模型目录暂时不可用。请先确认模型文件已经下载完整，再检查运行时状态。",
+      "modelErrorLabel": "模型检查：",
+      "ready": "已就绪",
+      "installNeeded": "需要安装",
+      "repairNeeded": "需要修复",
+      "checking": "检查中...",
+      "installAction": "安装运行时",
+      "repairAction": "修复运行时",
+      "recheckAction": "重新检查",
+      "currentPathLabel": "当前运行时路径",
+      "managedPathLabel": "应用托管安装路径",
+      "sourceLabel": "来源：",
+      "bootstrapLabel": "安装 Python：",
+      "available": "可用",
+      "pythonMissing": "缺少 Python 3.11+",
+      "missingModules": "缺少模块：",
+      "installSuccess": "FireRed 运行时已安装",
+      "repairSuccess": "FireRed 运行时已修复",
+      "installFailed": "FireRed 运行时安装失败",
+      "checkFailed": "FireRed 运行时检查失败",
+      "sourceValues": {
+        "env": "环境变量覆盖",
+        "managed": "应用托管",
+        "sibling": "模型目录旁边",
+        "legacy": "旧版本地路径",
+        "none": "未找到"
+      }
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorTitles": {
+        "sessionExpired": "会话已过期",
+        "offline": "你已离线",
+        "dailyLimitReached": "已达到每日上限"
+      },
+      "fallback": {
+        "title": "回退模式",
+        "description": "本地 Whisper 失败，已改用 OpenAI API。"
+      },
+      "noAudio": {
+        "title": "未检测到音频",
+        "description": "录音中未检测到音频，请重试。"
+      }
+    },
+    "clipboard": {
+      "pasteFailed": {
+        "title": "剪贴板粘贴失败",
+        "description": "无权限自动粘贴。可先手动粘贴。修复：请到系统设置里检查 ChordVox 是否已获得所需权限。",
+        "macosDescription": "无权限自动粘贴。可先手动按 Cmd+V 粘贴。修复：请先到“系统设置 -> 隐私与安全性 -> 辅助功能”里确认已允许 ChordVox；再到“输入监控”里检查是否也已授权。",
+        "windowsDescription": "无权限自动粘贴。可先手动按 Ctrl+V 粘贴。修复：请打开 Windows 设置，检查隐私、安全设置或安全软件限制，确认 ChordVox 没有被拦截键盘输入、剪贴板访问或辅助控制。",
+        "linuxDescription": "无权限自动粘贴。可先手动按 Ctrl+V 粘贴。修复：请检查当前桌面环境的权限限制，并确认自动粘贴所需工具（如 xdotool、wtype、ydotool）已正确安装并可用。"
+      },
+      "accessibilityDialog": {
+        "standard": {
+          "title": "需要辅助功能权限",
+          "message": "ChordVox 需要辅助功能权限，才能将文本粘贴到其他应用中。",
+          "detail": "当前状态：复制到剪贴板正常，但粘贴（模拟 Cmd+V）失败。\n\n修复方法：\n1. 打开“系统设置”（旧版 macOS 为“系统偏好设置”）\n2. 前往“隐私与安全性 -> 辅助功能”\n3. 点击左下角锁图标并输入密码\n4. 将 ChordVox 添加到列表中并启用\n5. 重启 ChordVox\n\n如果没有这个权限，听写文本只会复制到剪贴板，不会自动粘贴。"
+        },
+        "stuck": {
+          "title": "重置辅助功能权限",
+          "message": "ChordVox 可能仍在使用旧版本残留的辅助功能权限。",
+          "detail": "常见情况：重新构建或重新安装 ChordVox 后，macOS 可能仍保留旧权限，导致新应用无法正常获得授权。\n\n修复方法：\n1. 打开“系统设置 -> 隐私与安全性 -> 辅助功能”\n2. 删除所有旧的“ChordVox”条目\n3. 也删除“Electron”或名称不明确的旧条目\n4. 点击“+”重新添加当前的 ChordVox 应用\n5. 确认复选框已启用\n6. 重启 ChordVox\n\n如果没有这个权限，文本只会复制到剪贴板，不会自动粘贴。"
+        }
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "invalidHotkey": "无效的快捷键",
+        "notRegistered": "快捷键未注册",
+        "saved": "快捷键已保存",
+        "error": "快捷键错误"
+      },
+      "errors": {
+        "enterValidHotkey": "请输入有效的快捷键",
+        "unsupportedShortcut": "不支持该快捷方式。",
+        "couldNotRegister": "无法注册此按键，请选择其他按键。",
+        "failedToRegister": "注册快捷键失败，请重试。"
+      },
+      "messages": {
+        "nowUsing": "现在使用 {{hotkey}} 进行听写"
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "下载超时，请检查网络连接后重试。",
+        "notFound": "无法连接到下载服务器，请检查网络连接。",
+        "corrupted": "下载不完整或已损坏，请重试。",
+        "rateLimited": "下载服务器正在限流，请等待几分钟后重试。",
+        "server": "服务器错误（{{error}}），请稍后重试。",
+        "generic": "下载失败：{{error}}",
+        "extractionFailed": "模型已下载但安装失败。点击下载以重新安装，无需重新下载。",
+        "unknown": "未知错误"
+      },
+      "downloadFailed": {
+        "title": "下载失败"
+      },
+      "installationFailed": {
+        "title": "安装失败"
+      },
+      "downloadInProgress": {
+        "title": "下载进行中",
+        "description": "请等待当前下载完成或先取消它。"
+      },
+      "modelDeleted": {
+        "title": "模型已删除",
+        "descriptionWithSpace": "模型删除成功！释放了 {{sizeMb}}MB 磁盘空间。",
+        "description": "模型删除成功！"
+      },
+      "deleteFailed": {
+        "title": "删除失败",
+        "description": "删除模型失败：{{error}}"
+      },
+      "downloadCancelled": {
+        "title": "下载已取消",
+        "description": "下载已被取消。"
+      }
+    },
+    "permissions": {
+      "paths": {
+        "windowsMicrophone": "设置 -> 隐私 -> 麦克风",
+        "linuxSound": "系统声音设置",
+        "defaultSound": "系统设置 -> 声音 -> 输入",
+        "linuxPrivacy": "系统隐私设置",
+        "defaultPrivacy": "系统设置 -> 隐私与安全 -> 麦克风"
+      },
+      "micErrors": {
+        "accessFailed": "麦克风访问失败，请重试。",
+        "noMicrophones": "未检测到麦克风。请在 {{settingsPath}} 中连接或选择麦克风。",
+        "permissionDenied": "权限被拒绝。请打开 {{privacyPath}} 并允许 ChordVox。",
+        "couldNotStart": "无法启动所选麦克风。请在 {{settingsPath}} 中选择输入设备，然后重新测试。",
+        "noActiveInput": "未找到活跃的音频输入。请在 {{settingsPath}} 中选择麦克风。",
+        "unknown": "麦克风访问失败：{{error}}。请选择其他输入设备后重试。",
+        "unknownFallback": "未知错误"
+      },
+      "settingsTitles": {
+        "microphone": "麦克风设置",
+        "sound": "声音设置",
+        "accessibility": "辅助功能设置"
+      },
+      "settingsErrors": {
+        "unableToOpenMicrophone": "无法打开麦克风设置，请手动打开系统设置。",
+        "unableToOpenSound": "无法打开声音设置，请手动打开系统设置。",
+        "unableToOpenAccessibility": "无法打开辅助功能设置，请手动打开系统设置。"
+      },
+      "micUnavailable": "此环境中麦克风 API 不可用，请重启应用。",
+      "titles": {
+        "microphoneUnavailable": "麦克风不可用",
+        "microphonePermissionRequired": "需要麦克风权限",
+        "accessibilityNeeded": "需要辅助功能权限",
+        "accessibilityRefreshNeeded": "刷新辅助功能权限",
+        "readyToGo": "准备就绪！",
+        "waylandClipboardMode": "Wayland 上的剪贴板模式",
+        "optionalPasteTool": "可选：安装粘贴工具"
+      },
+      "descriptions": {
+        "accessibilityNeeded": "请打开“系统设置 -> 隐私与安全性 -> 辅助功能”，允许 ChordVox 控制其他应用后再重试自动粘贴。如果快捷键或按键模拟在 macOS 上仍异常，再检查“输入监控”。",
+        "accessibilityRefreshNeeded": "如果你之前已经给过辅助功能权限，更新后可能需要在“系统设置 -> 隐私与安全性 -> 辅助功能”里删除旧的 ChordVox 授权，再重新授权一次。",
+        "windowsReady": "Windows 无需特殊权限即可自动粘贴，一切就绪！",
+        "linuxReadyWithMethod": "可使用 {{method}} 进行自动粘贴，一切就绪！",
+        "waylandClipboardMode": "此 Wayland 会话不支持自动粘贴。ChordVox 会将文本复制到剪贴板，你可以使用 Ctrl+V 粘贴。",
+        "optionalPasteTool": "如需自动粘贴功能，请安装 {{tool}}：\n\n{{installCmd}}{{waylandNote}}\n\n即使不安装，你仍然可以使用 ChordVox——文本会被复制到剪贴板，你可以使用 Ctrl+V 粘贴。"
+      },
+      "alerts": {
+        "accessibilityNeeded": "需要辅助功能权限！请到“系统设置 -> 隐私与安全性 -> 辅助功能”里给 ChordVox 授权；如果快捷键仍异常，再检查“输入监控”。",
+        "accessibilityRefreshNeeded": "如果辅助功能之前已经开启，但更新后仍失效，请删除旧的 ChordVox 授权后重新授权一次。"
+      },
+      "notes": {
+        "waylandWtype": "\n\n注意：对于 XWayland 应用，xdotool 也适用。",
+        "waylandXwaylandOnly": "\n\n注意：自动粘贴仅适用于 XWayland 应用。"
+      },
+      "labels": {
+        "defaultPasteTool": "xdotool",
+        "xdotoolXwayland": "xdotool（XWayland 应用）"
+      },
+      "accessibilityTestText": "ChordVox 辅助功能测试",
+      "warning": {
+        "messages": {
+          "macos": "请检查声音设置以选择输入设备",
+          "windows": "请检查 Windows 设置以选择输入设备",
+          "linux": "请检查系统声音设置以选择输入设备"
+        },
+        "soundLabel": "声音",
+        "privacyLabel": "隐私"
+      }
+    }
+  },
+  "auth": {
+    "cloudNotConfigured": "云端未配置",
+    "common": {
+      "back": "返回",
+      "continue": "继续",
+      "or": "或"
+    },
+    "emailStep": {
+      "continueWithEmail": "使用邮箱继续",
+      "continueWithoutAccount": "不登录继续",
+      "emailPlaceholder": "you@example.com"
+    },
+    "errors": {
+      "accountExistsSignIn": "此邮箱已注册账户，请直接登录。",
+      "accountNotFoundCreate": "未找到此邮箱的账户，请先注册。",
+      "authNotConfigured": "身份验证未配置",
+      "createAccountFailed": "创建账户失败",
+      "failedProviderSignIn": "使用 {{provider}} 登录失败",
+      "failedUserCheck": "检查用户账户失败",
+      "generic": "出了点问题，请重试。",
+      "invalidCredentials": "邮箱或密码无效",
+      "plusAliasUnsupported": "不支持包含“+”的邮箱别名"
+    },
+    "getStarted": "开始使用",
+    "legal": {
+      "and": "和",
+      "prefix": "继续即表示你同意我们的",
+      "privacy": "隐私政策",
+      "suffix": "",
+      "terms": "服务条款"
+    },
+    "passwordForm": {
+      "createAccount": "创建账户",
+      "createAccountButton": "创建账户",
+      "createAccountLink": "创建账户",
+      "createPasswordPlaceholder": "创建密码",
+      "creatingAccount": "正在创建账户...",
+      "enterPasswordPlaceholder": "输入密码",
+      "forgotPassword": "忘记密码？",
+      "fullNamePlaceholder": "姓名",
+      "haveAccount": "已有账户？",
+      "newHere": "新用户？",
+      "passwordMinLength": "密码至少需要 8 个字符",
+      "signIn": "登录",
+      "signInLink": "登录",
+      "signingIn": "正在登录...",
+      "welcomeBack": "欢迎回来"
+    },
+    "signedIn": {
+      "ready": "就绪",
+      "welcomeBack": "欢迎回来",
+      "welcomeBackName": "欢迎回来，{{name}}"
+    },
+    "social": {
+      "completeInBrowser": "在浏览器中完成登录",
+      "continueWithGoogle": "使用 Google 继续"
+    },
+    "welcomeSubtitle": "本地优先的隐私语音输入",
+    "welcomeTitle": "欢迎使用 ChordVox",
+    "localPrivacyHint": "默认推荐本地转录，语音与文本优先留在你的设备上，更适合隐私敏感场景。需要时再切到云端。"
+  },
+  "cleanupPrompt": "文本整理",
+  "developerSection": {
+    "currentLogFile": "当前日志文件",
+    "debugMode": {
+      "description": "记录系统运行详细数据，辅助定位与排查问题。",
+      "label": "诊断日志"
+    },
+    "description": "捕获详细日志以帮助诊断问题",
+    "localOnlyNotice": "日志仅保存在本机，不会自动上传。",
+    "openLogsFolder": "打开日志文件夹",
+    "performanceNote": {
+      "description": "Debug 日志会持续写入磁盘，可能略微影响性能。不排查问题时请关闭。",
+      "label": "注意"
+    },
+    "trace": {
+      "clear": "清空",
+      "description": "详细运行记录已移到“调用记录”。这里保留精简调试摘要和清理操作。",
+      "emptyEvents": "选择左侧一条记录查看详细事件",
+      "emptySessions": "暂无调用记录",
+      "errorPrefix": "错误",
+      "eventLabel": "事件详情",
+      "models": {
+        "reasoning": "润色模型",
+        "transcription": "转录模型"
+      },
+      "phases": {
+        "paste": "粘贴",
+        "reasoning": "润色",
+        "recording": "录音",
+        "session": "会话",
+        "transcription": "转录"
+      },
+      "refresh": "刷新",
+      "runId": "运行ID",
+      "profileLabel": "方案",
+      "sessionLabel": "调用记录",
+      "showingLatest": "最多显示最近 {{count}} 条记录",
+      "startedAt": "开始时间",
+      "profiles": {
+        "primary": "方案 1",
+        "secondary": "方案 2"
+      },
+      "status": {
+        "cancelled": "已取消",
+        "error": "失败",
+        "skipped": "已跳过",
+        "start": "进行中",
+        "success": "成功",
+        "unknown": "未知"
+      },
+      "title": "调用诊断",
+      "toasts": {
+        "clearFailed": {
+          "description": "调用记录清空失败，请重试。",
+          "title": "清空失败"
+        },
+        "cleared": {
+          "description": "调用记录已从本地内存清除。",
+          "title": "已清空调用记录"
+        },
+        "loadFailed": {
+          "description": "请稍后重试。",
+          "title": "无法加载调用记录"
+        }
+      },
+      "updatedAt": "最近更新时间",
+      "summary": {
+        "overviewTitle": "运行概览",
+        "timelineTitle": "阶段记录",
+        "recordingDuration": "录音时长",
+        "transcriptionDuration": "转录用时",
+        "reasoningDuration": "AI 用时",
+        "totalDuration": "总耗时",
+        "flowDuration": "全流程历时",
+        "failedAt": "失败阶段",
+        "recentRuns": "最近记录",
+        "failedRuns": "失败记录",
+        "lastUpdated": "最近更新",
+        "latestFailure": "最近失败",
+        "noRecentFailures": "最近没有失败记录",
+        "callRecordsHint": "如需查看更易读的每次运行详情，请前往 AI 模型下方的“调用记录”。"
+      }
+    },
+    "title": "输入统计",
+    "toasts": {
+      "copied": {
+        "description": "日志文件路径已复制到剪贴板",
+        "title": "已复制"
+      },
+      "copyFailed": {
+        "description": "复制到剪贴板时出错。",
+        "title": "无法复制"
+      },
+      "debugDisabled": {
+        "description": "Debug 日志已关闭",
+        "title": "Debug 日志已禁用"
+      },
+      "debugEnabled": {
+        "description": "详细日志正在写入磁盘",
+        "title": "Debug 日志已启用"
+      },
+      "loadFailed": {
+        "description": "出了点问题，请尝试重新打开设置。",
+        "title": "无法加载 Debug 设置"
+      },
+      "openLogsFailed": {
+        "description": "打开日志目录时出错。",
+        "title": "无法打开日志文件夹"
+      },
+      "updateFailed": {
+        "description": "出了点问题，请重试。",
+        "title": "无法更新 Debug 日志设置"
+      }
+    },
+    "whatGetsLogged": {
+      "items": {
+        "apiRequests": "API 请求",
+        "audioProcessing": "音频处理",
+        "errorDetails": "错误详情",
+        "ffmpegOperations": "FFmpeg 操作",
+        "systemDiagnostics": "系统诊断",
+        "transcriptionPipeline": "转录管道"
+      },
+      "title": "记录的内容"
+    }
+  },
+  "dictionarySuffix": "词典后缀",
+  "emailVerification": {
+    "checkEmailDescription": "我们已向以下邮箱发送了验证链接",
+    "checkEmailTitle": "查看你的邮箱",
+    "errors": {
+      "resendFailed": "无法重新发送邮件，请重试。",
+      "serverUnreachable": "无法连接到服务器，请检查网络连接后重试。"
+    },
+    "resendButton": "重新发送验证邮件",
+    "resendIn": "{{seconds}} 秒后可重新发送",
+    "verifiedDescription": "你的账户已准备就绪。",
+    "verifiedTitle": "邮箱已验证",
+    "waiting": "正在等待验证..."
+  },
+  "errorBoundary": {
+    "description": "发生了意外错误，请重新加载后重试。",
+    "reload": "重新加载",
+    "title": "出了点问题"
+  },
+  "forgotPassword": {
+    "back": "返回",
+    "backToSignIn": "返回登录",
+    "emailPlaceholder": "输入你的邮箱",
+    "goBack": "返回",
+    "notConfigured": "身份验证尚未配置。",
+    "sendResetLink": "发送重置链接",
+    "sending": "正在发送...",
+    "subtitle": "输入你的邮箱，我们将发送重置链接",
+    "success": {
+      "description": "我们已将密码重置链接发送至",
+      "help": "没有收到邮件？请检查垃圾邮件文件夹或重试。",
+      "title": "查看你的邮箱",
+      "tryAnother": "尝试其他邮箱"
+    },
+    "title": "重置密码"
+  },
+  "fullPrompt": "完整提示词",
+  "hotkeyGuidance": {
+    "blockedDescription": "以下快捷方式已被屏蔽，因为它们是常用的系统快捷键。",
+    "blockedTitle": "被屏蔽的快捷方式",
+    "description": "使用以下平台规则来选择不会与系统冲突的快捷键。",
+    "examplesTitle": "有效示例",
+    "platforms": {
+      "linux": "Linux",
+      "macos": "macOS",
+      "windows": "Windows"
+    },
+    "recommended": {
+      "linux": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Super+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Ctrl+Shift+J",
+        "4": "Alt+Space"
+      },
+      "macos": {
+        "0": "⌥Space",
+        "1": "⌃⌥S",
+        "2": "⌃⌥D",
+        "3": "Fn",
+        "4": "⌘⇧J"
+      },
+      "windows": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Ctrl+Shift+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Win+Alt+K"
+      }
+    },
+    "recommendedTitle": "推荐快捷键",
+    "rulesTitle": "快捷键规则",
+    "showAll": "显示全部",
+    "showFewer": "收起",
+    "title": "快捷键指南",
+    "validationRules": {
+      "0": "必须使用至少一个修饰键（Ctrl、Alt、Shift 等）",
+      "1": "不能使用系统保留的快捷键",
+      "2": "不允许单独使用单个按键",
+      "3": "某些组合可能与其他应用冲突"
+    }
+  },
+  "hotkeyInput": {
+    "ariaLabel": "按下组合键以设置快捷键",
+    "clickToChange": "点击更改",
+    "clickToChangeLower": "点击更改",
+    "clickToSet": "点击设置快捷键",
+    "fnCaptureHint": "按下一个键进行组合，或松开以使用 Globe",
+    "fnHeldHint": "+ 按键，或松开以使用 Globe",
+    "globe": "Globe",
+    "hotkeyLabel": "快捷键",
+    "keyHint": "+ 按键",
+    "listening": "正在监听...",
+    "pressAnyKey": "按任意键或 Ctrl+Shift+K",
+    "pressAnyKeyMac": "按任意键或 ⌘⇧K",
+    "recording": "录制中",
+    "tryShortcut": "试试 Ctrl+Shift+K",
+    "tryShortcutMac": "试试 ⌘⇧K"
+  },
+  "languageSelector": {
+    "noLanguagesFound": "未找到匹配的语言",
+    "searchPlaceholder": "搜索..."
+  },
+  "microphoneSettings": {
+    "builtIn": "（内置）",
+    "errors": {
+      "unableToAccess": "无法访问麦克风，请检查权限设置。"
+    },
+    "helpText": "选择特定的麦克风或使用系统默认设置。",
+    "inputDevice": "输入设备",
+    "noBuiltInDetected": "未检测到内置麦克风，正在使用系统默认设备。",
+    "preferBuiltIn": {
+      "description": "外接麦克风可能导致延迟或降低转录质量",
+      "label": "优先使用内置麦克风"
+    },
+    "selectPlaceholder": "选择麦克风",
+    "systemDefault": "系统默认",
+    "unknownDevice": "未知设备",
+    "using": "当前使用："
+  },
+  "pasteToolsInfo": {
+    "checking": "正在检查系统功能...",
+    "installCommands": {
+      "archLinux": "# Arch Linux",
+      "debianUbuntu": "# Debian / Ubuntu",
+      "debianUbuntuMint": "# Debian / Ubuntu / Mint",
+      "fedoraRhel": "# Fedora / RHEL"
+    },
+    "installPrefix": "如需自动粘贴文本，请安装",
+    "methodReady": "用于自动粘贴文本",
+    "noteXwaylandAlso": "注意：对于 XWayland 应用，xdotool 也适用。",
+    "noteXwaylandOnly": "注意：自动粘贴仅适用于 XWayland 应用。",
+    "optionalEnableTitle": "可选：启用自动粘贴",
+    "readyTitle": "自动粘贴已就绪",
+    "recheck": "重新检查",
+    "recheckChecking": "检查中...",
+    "title": "自动粘贴",
+    "usingMethodPrefix": "使用",
+    "waylandClipboardDescription": "此 Wayland 会话不支持自动粘贴。ChordVox 会将文本复制到剪贴板，你可以使用 Ctrl+V 手动粘贴。",
+    "waylandClipboardTitle": "Wayland 上的剪贴板模式",
+    "windowsReady": "Windows 原生支持自动粘贴，无需额外设置！",
+    "withoutToolPrefix": "如果不安装此工具，ChordVox 会将文本复制到剪贴板，你可以使用 Ctrl+V 手动粘贴。",
+    "xwaylandAppsOnly": "自动粘贴仅适用于 XWayland 应用"
+  },
+  "promptStudio": {
+    "common": {
+      "copied": "已复制",
+      "copy": "复制",
+      "reset": "重置",
+      "save": "保存"
+    },
+    "defaultTestInput": "你好 Chord，今天天气怎么样？",
+    "dialogs": {
+      "reset": {
+        "description": "提示词已重置为默认值。",
+        "title": "重置完成"
+      },
+      "saved": {
+        "description": "你的自定义提示词将用于所有后续的 AI 处理。",
+        "title": "提示词已保存"
+      }
+    },
+    "edit": {
+      "agentNameLabel": "助手名称：",
+      "cautionLabel": "注意",
+      "cautionTextPrefix": "修改此提示词可能影响转录质量。",
+      "cautionTextSuffix": "保留 {{agentName}} 占位符以确保助手识别功能正常。",
+      "placeholder": "输入你的自定义系统提示词..."
+    },
+    "tabs": {
+      "customize": "自定义",
+      "test": "测试",
+      "view": "查看"
+    },
+    "test": {
+      "addressHint": "试试说“{{agentName}}”来测试指令模式",
+      "aiModels": "AI 模型",
+      "baseUrlMissing": "{{provider}} 的 URL 缺失，请在 AI 模型设置中添加。",
+      "cleanup": "文本整理",
+      "disabledInSettingsPrefix": "AI 文本增强已禁用。",
+      "disabledInSettingsSuffix": "请在 AI 模型中启用以测试提示词。",
+      "disabledReasoning": "AI 文本增强已禁用，请在 AI 模型中启用以测试提示词。",
+      "failed": "测试失败：{{error}}",
+      "inputLabel": "输入",
+      "inputPlaceholder": "输入要测试的文本...",
+      "instruction": "指令",
+      "modelLabel": "模型",
+      "noModelSelected": "未选择模型",
+      "none": "无",
+      "outputLabel": "输出",
+      "processing": "处理中...",
+      "chordvoxCloud": "ChordVox Cloud",
+      "providerLabel": "服务商",
+      "run": "运行测试"
+    },
+    "view": {
+      "customPrompt": "自定义提示词",
+      "defaultPrompt": "默认提示词",
+      "modes": {
+        "agent": {
+          "description": "通过“{{agentName}}”触发——执行命令、回答问题、撰写内容",
+          "label": "语音助手"
+        },
+        "cleanup": {
+          "description": "快速通道——去除语气词，修正语法和标点",
+          "label": "文本整理"
+        }
+      },
+      "modified": "已修改"
+    }
+  },
+  "resetPassword": {
+    "backToSignIn": "返回登录",
+    "confirmPasswordPlaceholder": "确认新密码",
+    "continue": "继续",
+    "errors": {
+      "passwordMinLength": "密码至少需要 8 个字符",
+      "passwordsDoNotMatch": "两次输入的密码不一致"
+    },
+    "goBack": "返回",
+    "newPasswordPlaceholder": "新密码",
+    "notConfigured": "身份验证未配置。",
+    "passwordMinLength": "密码至少需要 8 个字符",
+    "resetButton": "重置密码",
+    "resetting": "正在重置...",
+    "subtitle": "在下方输入你的新密码",
+    "success": {
+      "description": "密码已更新，你现在已登录。",
+      "title": "密码重置成功"
+    },
+    "title": "创建新密码"
+  },
+  "settingsModal": {
+    "groups": {
+      "app": "应用",
+      "intelligence": "智能",
+      "profile": "个人资料",
+      "speech": "语音",
+      "system": "系统"
+    },
+    "sections": {
+      "account": {
+        "description": "授权与方案",
+        "label": "账户"
+      },
+      "agentConfig": {
+        "description": "语音助手设置",
+        "label": "语音助手"
+      },
+      "aiModels": {
+        "description": "Pro AI 增强与 BYOK",
+        "label": "AI 模型"
+      },
+      "developer": {
+        "description": "日志、诊断与数据",
+        "label": "开发者"
+      },
+      "dictionary": {
+        "description": "自定义词汇和短语",
+        "label": "词典"
+      },
+      "general": {
+        "description": "外观、快捷键与启动",
+        "label": "偏好设置"
+      },
+      "permissions": {
+        "description": "麦克风与辅助功能",
+        "label": "权限"
+      },
+      "privacy": {
+        "description": "云端备份与分析",
+        "label": "隐私"
+      },
+      "prompts": {
+        "description": "系统提示词工作室",
+        "label": "提示词"
+      },
+      "transcription": {
+        "description": "语音转文字引擎",
+        "label": "转录"
+      },
+      "fileTranscription": {
+        "label": "文件转录",
+        "description": "转录音频或视频文件"
+      },
+      "hotkeys": {
+        "label": "快捷键",
+        "description": "主快捷键、方案 2 与激活方式"
+      },
+      "callRecords": {
+        "label": "调用记录",
+        "description": "查看 AI 调用、失败原因与阶段耗时"
+      }
+    },
+    "title": "设置"
+  },
+  "settingsPage": {
+    "account": {
+      "badges": {
+        "free": "免费版",
+        "limitReached": "已达上限",
+        "pastDue": "逾期未付",
+        "pro": "Pro",
+        "trial": "Pro 试用"
+      },
+      "billing": {
+        "couldNotOpenDescription": "打开账单页面时出错，请重试。",
+        "couldNotOpenTitle": "无法打开账单",
+        "manageBilling": "管理账单",
+        "opening": "正在打开...",
+        "updatePaymentMethod": "更新支付方式"
+      },
+      "checkout": {
+        "couldNotOpenDescription": "打开结账页面时出错，请重试。",
+        "couldNotOpenTitle": "无法打开结账页",
+        "opening": "正在打开...",
+        "upgradeToPro": "升级到 Pro"
+      },
+      "disabled": "已禁用",
+      "featuresDisabled": "账户功能已禁用",
+      "featuresDisabledDescription": "在 .env 文件中设置 VITE_NEON_AUTH_URL 以启用账户功能。",
+      "notConfigured": "身份验证未配置",
+      "notSignedIn": "免费版已启用",
+      "notSignedInDescription": "无需登录即可使用免费本地输入法。若要解锁 AI 文本增强、文件转录、提示词工作室和高级工作流，请在上方购买或激活 Pro。",
+      "offline": "免费",
+      "pastDue": {
+        "description": "免费本地输入法永久可用。更新支付方式即可恢复 Pro。",
+        "title": "我们无法处理你的付款"
+      },
+      "planDescriptions": {
+        "freeUsage": "本周已使用 {{used}} / {{limit}} 个托管词数",
+        "nextBilling": "下次扣费：{{date}}",
+        "pastDue": "本周 {{used}} / {{limit}} 个托管词数——更新支付方式以恢复 Pro",
+        "trial": "Pro 试用还剩 {{days}} 天",
+        "unlimited": "无限制"
+      },
+      "planLabels": {
+        "free": "免费版",
+        "pro": "Pro",
+        "trial": "Pro 试用"
+      },
+      "planTitle": "套餐",
+      "rollingWeeklyLimit": "滚动周限额",
+      "signOut": {
+        "failedDescription": "退出登录时出错，请重试。",
+        "failedTitle": "无法退出登录",
+        "signOut": "退出登录",
+        "signingOut": "正在退出..."
+      },
+      "signedIn": "已登录",
+      "title": "账户",
+      "toasts": {
+        "approachingLimit": {
+          "description": "本周已使用 {{used}} / {{limit}} 个托管词数。免费本地输入法不受影响；升级 Pro 可获得更多高级能力。",
+          "title": "即将达到周限额"
+        }
+      },
+      "trialCta": {
+        "button": "开始 7 天试用",
+        "description": "点击下方即可开始 7 天试用，体验 AI 文本增强、文件转录、提示词测试、BYOK 和双热键。到期后免费本地输入法仍可继续使用。",
+        "title": "免费本地输入法永久可用，可免费试用 7 天 Pro 功能"
+      },
+      "desktopLicense": {
+        "title": "桌面授权",
+        "descriptionConfigured": "当前构建通过桌面授权来解锁此设备上的 Pro 功能。",
+        "descriptionNotConfigured": "免费本地输入法永久可用；如需激活 Pro，请联系技术支持。",
+        "currentStatusLabel": "当前状态",
+        "currentStatusDescription": "免费本地输入法已可用。输入付费授权码即可在此设备上解锁 Pro 功能。",
+        "currentStatusActiveDescription": "此设备上的 Pro 已激活。",
+        "currentStatusTrialDescription": "Pro 试用中，还剩 {{days}} 天可继续使用 AI 增强和其他付费能力。",
+        "currentStatusTrialExpiredDescription": "免费本地输入法永久可用。输入 Pro 授权码即可重新解锁付费功能。",
+        "currentStatusNotConfigured": "当前版本尚未连接 Creem 授权中继，请联系技术支持。",
+        "licenseApiUrlLabel": "授权 API 地址",
+        "licenseApiUrlPlaceholder": "https://license.your-domain.com",
+        "licenseApiUrlDescription": "如果你通过自己的中继代理 Creem 授权校验，可在这里配置一次。",
+        "inputPlaceholder": "输入授权密钥",
+        "activatedHint": "当前设备已激活。仅在需要更换授权码时点击“更换授权码”。",
+        "actions": {
+          "activate": "激活",
+          "activating": "激活中",
+          "validate": "校验",
+          "checking": "检查中",
+          "clear": "清除",
+          "changeKey": "更换授权码",
+          "save": "保存",
+          "saving": "保存中"
+        },
+        "statusLabels": {
+          "active": "已激活",
+          "trial": "Pro 试用",
+          "offlineGrace": "离线宽限",
+          "expired": "已过期",
+          "invalid": "无效",
+          "notActivated": "未激活"
+        },
+        "meta": {
+          "plan": "计划：{{plan}}",
+          "expires": "到期时间：{{date}}",
+          "expiresPermanent": "到期时间：永久",
+          "lastCheck": "上次检查：{{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "移除已保存的授权？",
+          "removeDescription": "移除后本机会回到未授权状态，直到你再次激活。",
+          "removeConfirm": "移除"
+        },
+        "toasts": {
+          "keyRequiredTitle": "需要授权密钥",
+          "keyRequiredDescription": "请先输入授权密钥再激活。",
+          "activatedTitle": "授权已激活",
+          "activatedDescription": "这台设备已完成激活。",
+          "activationFailedTitle": "激活失败",
+          "activationFailedDescription": "该授权密钥无法激活。",
+          "activationLimitDescription": "该授权码仅支持 1 台设备。如需换机，请联系技术支持重置旧设备激活。",
+          "serverNotReadyDescription": "授权服务尚未就绪，请联系技术支持。",
+          "deviceNotActivatedDescription": "该授权码尚未在本机激活。",
+          "revokedDescription": "该授权码已被撤销，请联系技术支持。",
+          "expiredDescription": "该授权码已过期。",
+          "notActiveDescription": "该授权码当前未激活。",
+          "activationUnexpectedError": "激活授权时发生未知错误。",
+          "validatedTitle": "授权校验通过",
+          "validateFailedTitle": "授权校验失败",
+          "validatedDescription": "授权有效。",
+          "invalidDescription": "授权无效。",
+          "validateUnexpectedError": "检查授权状态时发生未知错误。",
+          "removedTitle": "授权已移除",
+          "removedDescription": "已清除本机保存的授权状态。",
+          "removeFailedTitle": "无法移除授权",
+          "removeFailedDescription": "移除本机授权时发生未知错误。",
+          "licenseApiSavedTitle": "授权 API 已保存",
+          "licenseApiSavedDescription": "后续授权激活将使用新的 API 地址。",
+          "licenseApiSaveFailedTitle": "无法保存授权 API",
+          "licenseApiSaveFailedDescription": "请检查地址后重试。",
+          "validatingTitle": "正在校验授权",
+          "validatingDescription": "正在联系授权服务器，可能需要几秒钟。"
+        }
+      },
+      "user": "用户",
+      "wordsRemaining": "剩余 {{remaining}} 个词",
+      "trialReminder": {
+        "title": "你的 Pro 试用还剩 {{days}} 天",
+        "description": "免费本地输入法永久可用。购买 Pro 后可继续使用 AI 文本增强、文件转录、提示词工作室和高级工作流。",
+        "button": "查看 Pro 方案"
+      },
+      "trialStartDialog": {
+        "title": "开始 7 天 Pro 试用？",
+        "description": "试用期间可体验 AI 文本增强、文件转录、BYOK、双热键和高级提示词工作流。到期后免费本地输入法仍可继续使用。",
+        "confirm": "开始 7 天试用",
+        "cancel": "稍后再说",
+        "startedTitle": "7 天 Pro 试用已开始",
+        "startedDescription": "现在可以体验 AI 文本增强、文件转录、BYOK、双热键和高级提示词工作流。"
+      }
+    },
+    "agentConfig": {
+      "agentName": "助手名称",
+      "cleanupExample": "文本整理",
+      "cleanupMode": "整理模式",
+      "description": "为你的 AI 助手取个名字，这样你就能在听写时直接呼唤它",
+      "dialogs": {
+        "updatedDescription": "你的助手已命名为“{{name}}”。说“Hi {{name}}”然后说出指令即可使用。",
+        "updatedTitle": "助手名称已更新"
+      },
+      "examplesTitle": "示例",
+      "helper": "选一个简短、说起来自然的名字",
+      "howItWorksDescription": "当你说“Hi {{agentName}}”并跟上指令时，AI 会从整理模式切换到指令模式。没有触发短语时，它只会整理你的听写内容。",
+      "howItWorksTitle": "工作原理",
+      "instructionMode": "指令",
+      "placeholder": "例如 Chord、Nova、Atlas...",
+      "save": "保存",
+      "title": "语音助手"
+    },
+    "aiModels": {
+      "customSetup": "自定义设置",
+      "customSetupDescription": "使用你自己的服务商和 API Key。真正运行 AI 增强时仍需要 Pro。",
+      "description": "免费本地输入法永久可用。本页用于配置 AI 文本增强、BYOK 和整理质量；首次真正使用相关 Pro 功能时可免费开始 7 天试用。",
+      "enableTextCleanup": "启用文本整理",
+      "enableTextCleanupDescription": "Pro 功能：用 AI 提升转录质量",
+      "chordvoxCloud": "ChordVox 云端",
+      "chordvoxCloudDescription": "由 ChordVox 托管，适合想少配置直接使用的场景。",
+      "title": "AI 文本增强",
+      "trialHint": "首次启用 AI 文本增强时可免费开始 7 天 Pro 试用。",
+      "toasts": {
+        "switchedCloud": {
+          "description": "文本增强将使用 ChordVox 云端服务。",
+          "title": "已切换到 ChordVox 云端"
+        },
+        "switchedCustom": {
+          "description": "请配置你的服务商和 API Key。",
+          "title": "已切换到自定义设置"
+        }
+      }
+    },
+    "developer": {
+      "hotkeyDiagnostics": {
+        "title": "热键诊断",
+        "description": "查看当前热键后端、注册状态与推荐默认键位。",
+        "runtimeState": "运行时状态",
+        "runtimeDescription": "如果热键看起来已保存但没有反应，先看这里确认主进程实际用了哪条注册链。",
+        "refresh": "刷新",
+        "platform": "平台",
+        "sessionType": "会话类型",
+        "desktopSession": "桌面会话",
+        "backend": "热键后端",
+        "primaryHotkey": "主快捷键",
+        "secondaryHotkey": "副快捷键",
+        "primaryStatus": "主快捷键状态",
+        "secondaryStatus": "副快捷键状态",
+        "registered": "已注册",
+        "notRegistered": "未注册",
+        "recommendedTitle": "推荐默认键位",
+        "recommendedDescription": "当前平台更稳的默认键位是 {{hotkey}}。首次安装和自动回退都会优先使用它。",
+        "warnings": {
+          "linuxSuper": "当前 Linux 快捷键仍包含 Super/Meta，桌面环境很可能会抢占它。",
+          "windowsSuper": "当前 Windows 快捷键仍包含 Win/Super，系统快捷键冲突概率较高。"
+        },
+        "backends": {
+          "globe": "macOS Globe",
+          "globalShortcut": "Electron globalShortcut",
+          "windows-native": "Windows 原生监听器",
+          "gnome-wayland": "GNOME Wayland 原生快捷键",
+          "native-modifier": "原生修饰键监听"
+        }
+      },
+      "clearCache": "清除缓存",
+      "dataManagementDescription": "管理缓存模型和应用数据",
+      "dataManagementTitle": "数据管理",
+      "modelCache": "模型缓存",
+      "open": "打开",
+      "removeModels": {
+        "confirmText": "删除模型",
+        "description": "这将删除所有本地缓存的 Whisper 模型（{{path}}）并释放磁盘空间。你可以从模型选择器中重新下载。",
+        "failedDescription": "删除模型时出错，请重试。",
+        "failedDescriptionShort": "无法删除缓存的模型。",
+        "failedTitle": "无法删除模型",
+        "successDescription": "所有缓存的模型已删除。",
+        "successTitle": "模型已删除",
+        "title": "删除已下载的模型？"
+      },
+      "removing": "正在删除...",
+      "settingsTransfer": {
+        "description": "导出当前配置到文件，或从文件恢复配置",
+        "export": "导出设置",
+        "exportFailedDescription": "导出配置失败，请重试。",
+        "exportFailedTitle": "导出失败",
+        "exportSuccessDescription": "配置已导出到：{{path}}",
+        "exportSuccessTitle": "导出成功",
+        "import": "导入设置",
+        "importConfirmButton": "导入并覆盖",
+        "importConfirmDescription": "这会覆盖当前设置，并在完成后自动重启应用。",
+        "importConfirmTitle": "确认导入设置？",
+        "importFailedDescription": "导入配置失败，请确认文件格式正确。",
+        "importFailedTitle": "导入失败",
+        "importSuccessDescription": "配置已导入，应用即将重启。",
+        "importSuccessTitle": "导入成功",
+        "title": "设置备份"
+      },
+      "resetAll": {
+        "confirmText": "删除所有数据",
+        "description": "这将永久删除所有设置、转录记录和缓存数据。重置后应用将重新加载。",
+        "failedDescription": "出了点问题，请重试或重新安装应用。",
+        "failedTitle": "无法重置",
+        "successDescription": "所有数据已重置，应用将立即重新加载。",
+        "successTitle": "全部完成",
+        "title": "重置所有应用数据"
+      },
+      "resetAppData": "重置应用数据",
+      "resetAppDataDescription": "永久删除所有设置、转录记录和缓存数据"
+    },
+    "dictionary": {
+      "add": "添加",
+      "addWordOrPhrase": "添加词汇或短语",
+      "agentNameAutoManaged": "助手名称（自动管理）",
+      "clearAll": "全部清除",
+      "clearDictionaryDescription": "这将删除自定义词典中的所有词汇，此操作无法撤销。",
+      "clearDictionaryTitle": "清除词典？",
+      "description": "添加词汇、姓名或专业术语以提高转录准确率",
+      "howItWorksDescription": "你添加的词汇会被包含在 AI 提示词中，以便模型在转录整理时能够识别并保留这些词汇。",
+      "howItWorksTitle": "工作原理",
+      "noWords": "尚未添加任何词汇",
+      "placeholder": "例如 Chord、Kubernetes、张医生...",
+      "pressEnterToAdd": "按回车键添加",
+      "removeWord": "删除词汇",
+      "tipDescription": "添加专有名词、专业术语或任何可能被错误转录的词汇。",
+      "tipLabel": "提示",
+      "title": "自定义词典",
+      "wordsAppearHere": "你添加的词汇将显示在这里",
+      "yourWords": "你的词汇"
+    },
+    "general": {
+      "appearance": {
+        "auto": "自动",
+        "dark": "深色",
+        "description": "控制 ChordVox 的外观",
+        "light": "浅色",
+        "theme": "主题",
+        "themeDescription": "选择浅色、深色或跟随系统",
+        "title": "外观"
+      },
+      "floatingIcon": {
+        "recordingAnimation": "录音动效",
+        "recordingAnimationDescription": "选择悬浮条在录音与处理中的视觉反馈",
+        "animationStyles": {
+          "line": "线条",
+          "particles": "粒子云",
+          "level": "电平"
+        },
+        "description": "控制听写图标在屏幕上的显示",
+        "title": "悬浮图标"
+      },
+      "hotkey": {
+        "activationMode": "激活模式",
+        "description": "用于开始和停止语音听写的组合键",
+        "diagnostics": {
+          "title": "热键诊断",
+          "description": "查看当前热键后端、注册状态，并直接测试唤醒链。",
+          "refresh": "刷新",
+          "testWake": "测试唤醒链",
+          "platform": "平台",
+          "backend": "热键后端",
+          "primaryHotkey": "主快捷键",
+          "secondaryHotkey": "副快捷键",
+          "primaryStatus": "主快捷键状态",
+          "secondaryStatus": "副快捷键状态",
+          "registered": "已注册",
+          "notRegistered": "未注册",
+          "recommendedTitle": "推荐默认键位",
+          "recommendedDescription": "当前平台更稳的默认键位是 {{hotkey}}。首次安装和自动回退都会优先使用它。",
+          "warnings": {
+            "linuxSuper": "当前 Linux 快捷键仍包含 Super/Meta，桌面环境很可能会抢占它。",
+            "windowsSuper": "当前 Windows 快捷键仍包含 Win/Super，系统快捷键冲突概率较高。",
+            "macosCommandSpace": "Command+Space 很容易被 macOS Spotlight 或输入法切换抢走。"
+          },
+          "backends": {
+            "globe": "macOS Globe",
+            "globalShortcut": "Electron globalShortcut",
+            "windows-native": "Windows 原生监听器",
+            "gnome-wayland": "GNOME Wayland 原生快捷键",
+            "native-modifier": "原生修饰键监听"
+          }
+        },
+        "secondary": {
+          "title": "方案 2 快捷键（独立模型/润色）",
+          "profileSavedState": "已保存方案 2 配置",
+          "profileUnsavedState": "未保存方案 2 配置（先调好模型，再点右侧按钮）",
+          "saveCurrentAsProfile2": "保存当前为方案 2",
+          "savedTitle": "副快捷键已保存",
+          "savedDescription": "方案 2 的快捷键已更新。",
+          "profileSavedTitle": "方案 2 已保存",
+          "profileSavedDescription": "当前转写与 AI 润色配置已保存到副快捷键方案。",
+          "profileSavedVerifiedAt": "已验证保存成功（{{time}}）",
+          "profileSavedTranscriptionSummary": "转写：{{provider}} / {{model}}",
+          "profileSavedReasoningSummary": "润色：{{provider}} / {{model}}",
+          "profileSavedReasoningDisabled": "润色：已关闭",
+          "profileSaveFailedTitle": "方案 2 保存失败",
+          "profileSaveFailed": "未能保存方案 2 配置，请重试。",
+          "registerFailed": "副快捷键注册失败，请更换一个快捷键。",
+          "registerRetry": "副快捷键注册失败，请重试。",
+          "requiresProTitle": "方案 2 需要 Pro",
+          "requiresProDescription": "方案 2 快捷键和已保存的副方案工作流仅在 Pro 中可用；首次使用相关 Pro 功能时可免费开始 7 天试用。",
+          "globeNotSupported": "副快捷键暂不支持 Globe/Fn 键。",
+          "rightModifierNotSupported": "副快捷键暂不支持右侧单修饰键。",
+          "modifiersOnlyNotSupported": "副快捷键暂不支持纯修饰键组合。"
+        },
+        "title": "听写快捷键"
+      },
+      "microphone": {
+        "description": "选择用于听写的输入设备",
+        "title": "麦克风"
+      },
+      "soundEffects": {
+        "dictationSounds": "听写音效",
+        "dictationSoundsDescription": "选择录音开始和停止时播放的提示音",
+        "cueStyles": {
+          "off": "关闭",
+          "electronic": "电子提示音",
+          "droplet1": "水滴 1",
+          "droplet2": "水滴 2"
+        },
+        "title": "音效"
+      },
+      "startup": {
+        "launchAtLogin": "登录时启动",
+        "launchAtLoginDescription": "登录时自动启动 ChordVox",
+        "autoCheckUpdate": "自动检查更新",
+        "autoCheckUpdateDescription": "启动时自动检测并下载新版本（不会自动安装）",
+        "title": "启动"
+      },
+      "updates": {
+        "badges": {
+          "dev": "开发版",
+          "latest": "最新",
+          "update": "更新"
+        },
+        "checkForUpdates": "检查更新",
+        "checking": "检查中...",
+        "currentVersion": "当前版本",
+        "devMode": "正在开发模式下运行",
+        "dialogs": {
+          "almostThere": {
+            "description": "更新即将就绪，请稍候。",
+            "title": "即将完成"
+          },
+          "checkFailed": {
+            "description": "检查更新时出错，请稍后重试。{{message}}",
+            "title": "无法检查更新"
+          },
+          "downloadFailed": {
+            "description": "下载更新时出错，请重试。",
+            "title": "无法下载更新"
+          },
+          "installFailed": {
+            "description": "安装更新时出错，请重试。",
+            "title": "无法安装更新"
+          },
+          "installUpdate": {
+            "confirmText": "安装并重启",
+            "description": "ChordVox 将重启以应用更新。",
+            "title": "安装更新"
+          },
+          "noUpdates": {
+            "description": "你已经是最新版本。",
+            "title": "无可用更新"
+          },
+          "manualUpdateAvailable": {
+            "confirmText": "打开下载页面",
+            "description": "检测到新版本 v{{version}}。当前环境无法自动下载安装，请打开 Release 页面手动下载。",
+            "title": "检测到新版本"
+          },
+          "updateAvailable": {
+            "description": "有可用更新：v{{version}}",
+            "title": "有可用更新"
+          },
+          "updateError": {
+            "description": "更新出错，请重试。",
+            "title": "更新错误"
+          }
+        },
+        "downloadUpdate": "下载更新 {{version}}",
+        "downloading": "下载中... {{progress}}%",
+        "openReleasePage": "打开下载页面",
+        "installAndRestart": "安装并重启",
+        "latestVersion": "你已经是最新版本",
+        "newVersion": "有更新的版本可用",
+        "newVersionAvailable": "有新版本可用",
+        "restarting": "正在重启...",
+        "title": "更新",
+        "versionPlaceholder": "—",
+        "whatsNew": "v{{version}} 更新内容"
+      }
+    },
+    "permissions": {
+      "accessibilityDescription": "转录后自动粘贴需要此权限",
+      "accessibilityTitle": "辅助功能",
+      "description": "测试和管理 ChordVox 正常运行所需的系统权限",
+      "microphoneDescription": "语音录制和听写需要此权限",
+      "microphoneTitle": "麦克风",
+      "systemDescription": "检查 ChordVox 在录音、听写和自动粘贴时所需的核心系统权限。",
+      "systemTitle": "系统权限",
+      "resetAccessibility": {
+        "description": "这将从辅助功能权限中移除 ChordVox。你需要在系统设置 > 隐私与安全 > 辅助功能中重新授权。",
+        "label": "重置辅助功能权限",
+        "rowDescription": "重新安装或重新构建应用后，通过在系统设置中移除并重新添加 ChordVox 来解决问题",
+        "title": "重置辅助功能权限"
+      },
+      "test": "测试",
+      "testAndGrant": "测试并授权",
+      "title": "权限",
+      "troubleshoot": "排查问题",
+      "troubleshootingTitle": "问题排查"
+    },
+    "privacy": {
+      "cloudBackup": "云端备份",
+      "cloudBackupDescription": "将转录记录保存到云端，确保永不丢失。",
+      "description": "控制日志、转录记录和分析行为。你可以随时按需关闭。",
+      "transcriptionHistory": "保存转录记录",
+      "transcriptionHistoryDescription": "关闭后仅执行转写与粘贴，不再保存到转录记录列表。",
+      "title": "隐私",
+      "usageAnalytics": "使用分析",
+      "usageAnalyticsDescription": "当前版本未启用远程使用分析。该开关仅保存在本机，不会上传任何转录或性能数据。"
+    },
+    "prompts": {
+      "description": "查看、自定义和测试用于文本整理和指令识别的统一系统提示词",
+      "requiresProDescription": "提示词可以免费编辑；运行测试、实际调用 AI 模型时可免费开始 7 天 Pro 试用。",
+      "requiresProTitle": "提示词测试需要 Pro",
+      "title": "提示词工作室"
+    },
+    "transcription": {
+      "customSetup": "自定义设置",
+      "customSetupDescription": "使用你自己的服务商和 API Key。",
+      "description": "选择 ChordVox 转录语音的方式",
+      "chordvoxCloud": "ChordVox 云端",
+      "chordvoxCloudDescription": "开箱即用，无需配置。",
+      "title": "语音转文字",
+      "toasts": {
+        "switchedCloud": {
+          "description": "转录将使用 ChordVox 云端服务。",
+          "title": "已切换到 ChordVox 云端"
+        },
+        "switchedCustom": {
+          "description": "请配置你的服务商和 API Key。",
+          "title": "已切换到自定义设置"
+        }
+      },
+      "storageLocation": {
+        "label": "模型存储位置",
+        "description": "统一管理流式、Whisper、Parakeet 和 SenseVoice 的本地模型目录。"
+      },
+      "streaming": {
+        "currentFolderLabel": "当前流式模型目录",
+        "currentFolderHint": "流式模型会自动存放在统一模型目录下的 streaming-models 子目录。",
+        "folderAutoInstallHint": "如果不手动选择目录，默认会安装到统一模型目录下的 streaming-models 子目录。",
+        "clearAllButton": "清空全部模型",
+        "models": {
+          "zipformerSmall": {
+            "name": "极速轻量",
+            "description": "低配设备 / 快速输入"
+          },
+          "zipformerBalanced": {
+            "name": "均衡",
+            "description": "纯中文，兼顾速度与精度"
+          },
+          "zipformerHighAccuracy": {
+            "name": "高精度（中文）",
+            "description": "追求最高中文精度"
+          },
+          "paraformerBilingual": {
+            "name": "推荐（中英双语）",
+            "description": "默认推荐 · 中英文都能直接用"
+          }
+        },
+        "toasts": {
+          "downloadInProgressTitle": "已有下载任务进行中",
+          "downloadInProgressDescription": "请等待当前模型下载完成后再试。",
+          "modelReadyTitle": "模型已就绪",
+          "modelReadyDescription": "流式模型下载并安装完成。",
+          "downloadFailedTitle": "模型下载失败",
+          "downloadFailedDescription": "流式模型下载失败，请稍后重试。",
+          "downloadCancelledTitle": "已取消下载",
+          "downloadCancelledDescription": "当前流式模型下载已取消。",
+          "deleteDialogTitle": "删除流式模型",
+          "deleteDialogDescription": "确定删除「{{model}}」吗？删除后需要重新下载才能继续使用。",
+          "deleteSuccessTitle": "模型已删除",
+          "deleteSuccessDescription": "已删除「{{model}}」。",
+          "deleteFailedTitle": "删除失败",
+          "deleteFailedDescription": "删除流式模型失败，请稍后重试。",
+          "clearFailedTitle": "清空失败",
+          "clearFailedDescription": "清空流式模型失败，请稍后重试。"
+        }
+      }
+    },
+    "fileTranscription": {
+      "title": "文件转录",
+      "description": "转录单个音频或视频文件，并将结果保存到历史记录。首次使用文件转录时可免费开始 7 天 Pro 试用。",
+      "chooseFile": "选择文件",
+      "chooseFileDescription": "选择一个音频或视频文件，在 ChordVox 里直接转录。",
+      "route": {
+        "label": "当前线路",
+        "provider": "转录引擎",
+        "model": "当前模型",
+        "syncBadge": "与转录设置同步",
+        "streamingProvider": "本地流式模型",
+        "streamingTitle": "本地流式转录",
+        "streamingDescription": "文件转录会严格跟随你当前选中的实时转录模型，不会自动切换到高精度线路。",
+        "localTitle": "本地转录",
+        "localDescription": "文件转录会沿用你在“转录”页里选择的本地模型与设置。",
+        "cloudTitle": "云端 / BYOK 转录",
+        "cloudDescription": "文件转录会沿用你在“转录”页里选择的云端服务商与模型。",
+        "currentRouteHint": "当前文件转录线路：{{provider}} / {{model}}"
+      },
+      "supportedFormats": "支持 mp3、wav、m4a、mp4、mov、webm 等常见音频和视频格式。",
+      "currentFile": "当前文件",
+      "historyButton": "打开历史记录",
+      "progressLabel": "当前进度",
+      "progressTitle": "任务进度",
+      "progressDescription": "显示当前文件、整体进度与当前处理阶段。",
+      "stages": {
+        "idle": "选择文件后将自动开始转录。",
+        "preparing": "正在准备文件...",
+        "transcribing": "正在转录文件...",
+        "enhancing": "正在进行 AI 文本增强...",
+        "saving": "正在保存结果...",
+        "complete": "文件转录完成。",
+        "short": {
+          "idle": "待开始",
+          "preparing": "准备中",
+          "transcribing": "转录中",
+          "enhancing": "增强中",
+          "saving": "保存中",
+          "complete": "已完成"
+        }
+      },
+      "trialHint": "首次使用文件转录时可免费开始 7 天 Pro 试用。"
+    }
+  },
+  "models": {
+    "descriptions": {
+      "parakeet": {
+        "parakeet_tdt_0_6b_v3": "快速欧洲语言语音识别，自动语言检测（25 个欧洲语言，不支持中文）"
+      },
+      "whisper": {
+        "tiny": "最快速度，较低质量",
+        "base": "平衡之选",
+        "small": "更好质量，较慢速度",
+        "medium": "高质量",
+        "large": "最佳质量，最慢速度",
+        "turbo": "快速且质量良好"
+      },
+      "transcription": {
+        "openai_gpt_4o_mini_transcribe": "快速且准确的转录",
+        "openai_gpt_4o_transcribe": "最准确的转录",
+        "openai_whisper_1": "Whisper 旧版 API 模型",
+        "groq_whisper_large_v3": "Groq 上质量最高的 Whisper 模型",
+        "groq_whisper_large_v3_turbo": "216 倍实时速度",
+        "mistral_voxtral_mini_latest": "快速多语言转录"
+      },
+      "cloud": {
+        "openai_gpt_5_2": "最新旗舰推理模型",
+        "openai_gpt_5_mini": "快速且经济",
+        "openai_gpt_5_nano": "超快速、低延迟",
+        "openai_gpt_4_1": "稳定基准，1M 上下文",
+        "openai_gpt_4_1_mini": "精简版 GPT-4.1",
+        "openai_gpt_4_1_nano": "最低延迟 GPT-4.1",
+        "anthropic_claude_sonnet_4_5": "均衡性能",
+        "anthropic_claude_haiku_4_5": "快速且接近前沿水平",
+        "anthropic_claude_opus_4_5": "最强大的 Claude 模型",
+        "gemini_gemini_3_pro_preview": "新一代旗舰模型，擅长复杂推理",
+        "gemini_gemini_3_flash_preview": "超快速、高能力的新一代模型",
+        "gemini_gemini_2_5_flash_lite": "最低延迟和成本",
+        "groq_qwen_qwen3_32b": "强大的推理模型，131K 上下文",
+        "groq_openai_gpt_oss_120b": "OpenAI 开源旗舰，500 T/秒",
+        "groq_openai_gpt_oss_20b": "快速开源模型，1000 T/秒",
+        "groq_llama_3_3_70b_versatile": "Meta 多功能模型，280 T/秒",
+        "groq_llama_3_1_8b_instant": "超快 560 T/秒，131K 上下文",
+        "groq_mixtral_8x7b_32768": "32K 上下文，混合专家模型",
+        "groq_gemma2_9b_it": "Google 高效模型"
+      },
+      "local": {
+        "qwen_qwen3_8b_q4_k_m": "最新 Qwen3，支持思维模式",
+        "qwen_qwen3_8b_q5_k_m": "更高质量 Qwen3，支持思维模式",
+        "qwen_qwen3_4b_q4_k_m": "紧凑型 Qwen3，具备推理能力",
+        "qwen_qwen3_1_7b_q8_0": "小而强的 Qwen3 模型",
+        "qwen_qwen3_0_6b_q8_0": "超小 Qwen3，适用于边缘设备",
+        "qwen_qwen3_32b_q4_k_m": "最强大的本地 Qwen3，深度推理",
+        "qwen_qwen2_5_0_5b_instruct_q5_k_m": "最小模型，快速但能力有限",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "小型模型，适合基础任务",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "均衡模型，通用场景",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "大型模型，高质量（Q4_K_M）",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "大型模型，高质量推理（Q5_K_M）",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "快速高效的指令模型",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "更高质量的指令模型",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "超小模型，适用于边缘设备",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "小而强的多语言模型",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "强大模型，性能出色",
+        "openai_oss_gpt_oss_20b_mxfp4": "OpenAI 开源模型，适用于消费级硬件"
+      }
+    }
+  },
+  "transcriptionModes": {
+    "realTime": {
+      "label": "实时转录",
+      "cardDescription": "边说边出字 · 本地 · 低延迟 · 隐私安全",
+      "switchedTitle": "已切换到实时转录",
+      "switchedDescription": "边说边出字，本地处理，低延迟",
+      "modelsLabel": "实时转录模型",
+      "clearModelsTitle": "清空实时转录模型",
+      "clearModelsDescription": "确定删除所有已下载的实时转录模型吗？删除后需要重新下载。",
+      "clearedModelsTitle": "已清空实时转录模型",
+      "clearedModelsDescription": "所有已下载的实时转录模型都已删除。",
+      "downloadHint": "开始实时转录前，请先下载一个本地模型。",
+      "defaultEnabledTitle": "实时转录已默认启用",
+      "defaultEnabledDescription": "快捷键录音会默认走本地实时转录。默认模型是「{{defaultModelName}}」。下方可按需配置高精度转录。"
+    },
+    "highAccuracy": {
+      "label": "高精度转录",
+      "optionalLabel": "高精度转录（可选）",
+      "cardDescription": "录完再转，精度更高但更慢 · 云端 API / 本地模型可选",
+      "switchedTitle": "已切换到高精度转录",
+      "switchedDescription": "录完整段后转录，精度更高但更慢",
+      "onboardingDescription": "适合长段落和会议整理，精度更高但速度更慢；可选云端 API 或本地模型。"
+    }
+  }
+}
