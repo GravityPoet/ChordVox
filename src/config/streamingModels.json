@@ -1,0 +1,51 @@
+[
+  {
+    "id": "zipformer-small-ctc-zh",
+    "name": "极速轻量",
+    "nameEn": "Ultra Fast",
+    "size": "25MB",
+    "sizeBytes": 26214400,
+    "dirName": "sherpa-onnx-streaming-zipformer-small-ctc-zh-int8-2025-04-01",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-small-ctc-zh-int8-2025-04-01.tar.bz2",
+    "modelType": "zipformer2Ctc",
+    "language": "zh",
+    "tier": "fast"
+  },
+  {
+    "id": "zipformer-ctc-zh",
+    "name": "均衡",
+    "nameEn": "Balanced",
+    "size": "155MB",
+    "sizeBytes": 162529280,
+    "dirName": "sherpa-onnx-streaming-zipformer-ctc-zh-int8-2025-06-30",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-ctc-zh-int8-2025-06-30.tar.bz2",
+    "modelType": "zipformer2Ctc",
+    "language": "zh",
+    "tier": "balanced"
+  },
+  {
+    "id": "zipformer-ctc-zh-xlarge",
+    "name": "高精度（中文）",
+    "nameEn": "High Accuracy (Chinese)",
+    "size": "728MB",
+    "sizeBytes": 763363328,
+    "dirName": "sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30.tar.bz2",
+    "modelType": "zipformer2Ctc",
+    "language": "zh",
+    "tier": "accurate"
+  },
+  {
+    "id": "paraformer-bilingual-zh-en",
+    "name": "推荐（中英双语）",
+    "nameEn": "Recommended (Bilingual)",
+    "size": "~1GB",
+    "sizeBytes": 1073741824,
+    "dirName": "sherpa-onnx-streaming-paraformer-bilingual-zh-en",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-paraformer-bilingual-zh-en.tar.bz2",
+    "modelType": "paraformer",
+    "language": "zh-en",
+    "tier": "bilingual",
+    "default": true
+  }
+]

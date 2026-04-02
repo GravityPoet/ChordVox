@@ -1,0 +1,1798 @@
+{
+  "app": {
+    "name": "ChordVox",
+    "loading": "Loading ChordVox...",
+    "oauth": {
+      "redirectTitle": "Redirecting to ChordVox",
+      "closeTab": "You can close this tab"
+    },
+    "buttons": {
+      "cancelRecording": "Cancel recording",
+      "cancelProcessing": "Cancel processing"
+    },
+    "mic": {
+      "hotkeyToSpeak": "[{{hotkey}}] to speak",
+      "starting": "Preparing dictation…",
+      "recording": "Recording...",
+      "processing": "Processing...",
+      "clickToSpeak": "Click to speak",
+      "status": {
+        "starting": "Starting",
+        "recording": "Recording",
+        "transcribing": "Transcribing",
+        "polishing": "Polishing",
+        "completed": "Completed"
+      },
+      "placeholder": {
+        "starting": "Preparing the microphone and model…",
+        "listening": "Listening to you…",
+        "transcribing": "Transcribing what you just said…",
+        "polishing": "Polishing and organizing the text…",
+        "completed": "This dictation is complete"
+      }
+    },
+    "toasts": {
+      "hotkeyChanged": {
+        "title": "Hotkey Changed"
+      },
+      "hotkeyUnavailable": {
+        "title": "Hotkey Unavailable",
+        "description": "Could not register hotkey. Please set a different hotkey in Settings."
+      }
+    },
+    "commandMenu": {
+      "startListening": "Start listening",
+      "stopListening": "Stop listening",
+      "hideForNow": "Hide this for now"
+    },
+    "trialExpiredModal": {
+      "title": "This feature requires Pro",
+      "description": "Free local transcription stays available. Upgrade to Pro to unlock AI text enhancement, file transcription, BYOK, Prompt Studio, and advanced workflows.",
+      "valueBullets": "Free forever local transcription · AI text enhancement · File transcription · BYOK & advanced workflows",
+      "actions": {
+        "buyNow": "View Pro Plans",
+        "haveKey": "I Have a License Key",
+        "later": "Keep Using Free"
+      }
+    }
+  },
+  "settings": {
+    "language": {
+      "sectionTitle": "Language",
+      "sectionDescription": "Set interface and transcription languages independently",
+      "uiLabel": "Interface language",
+      "uiDescription": "Choose the language used throughout ChordVox's interface",
+      "transcriptionLabel": "Transcription language",
+      "transcriptionDescription": "Choose the language you speak for more accurate transcription",
+      "uiOption": {
+        "en": "English",
+        "es": "Espanol",
+        "fr": "Francais",
+        "de": "Deutsch",
+        "pt": "Portugues",
+        "it": "Italiano",
+        "zh-CN": "简体中文",
+        "zh-TW": "繁體中文",
+        "ru": "Русский",
+        "ja": "日本語"
+      }
+    }
+  },
+  "tray": {
+    "toggleDictation": {
+      "show": "Show Dictation Panel",
+      "hide": "Hide Dictation Panel"
+    },
+    "openControlPanel": "Open Control Panel",
+    "quit": "Quit ChordVox",
+    "tooltip": "ChordVox - Voice Dictation"
+  },
+  "menu": {
+    "appLabel": "ChordVox",
+    "quit": "Quit ChordVox",
+    "speech": "Speech",
+    "help": "Help",
+    "learnMore": "Learn More",
+    "file": "File",
+    "closeWindow": "Close Window"
+  },
+  "window": {
+    "voiceRecorderTitle": "Voice Recorder",
+    "controlPanelTitle": "Control Panel"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "Unable to Open Link",
+      "message": "Failed to open the link in your browser:\n{{url}}\n\nError: {{error}}"
+    },
+    "loadFailure": {
+      "title": "ChordVox failed to load",
+      "message": "ChordVox could not load its UI.",
+      "detail": {
+        "window": "Window: {{windowName}}",
+        "error": "Error {{errorCode}}: {{errorDescription}}",
+        "url": "URL: {{url}}",
+        "hint": "Try reinstalling the app or launching with --log-level=debug."
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ChordVox Startup Error",
+      "message": "Failed to start the application:\n\n{{error}}\n\nPlease report this issue."
+    },
+    "globeHotkey": {
+      "title": "Globe Hotkey Unavailable",
+      "message": "ChordVox could not activate the Globe key hotkey.",
+      "details": {
+        "unknown": "Unknown error occurred while starting the Globe listener.",
+        "fallback": "The Globe key shortcut will remain disabled; existing keyboard shortcuts continue to work.",
+        "devHint": "Run `npm run compile:globe` and rebuild the app to regenerate the listener binary.",
+        "reinstallHint": "Try reinstalling ChordVox or contact support if the issue persists."
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "Callback function is required for hotkey setup",
+      "globeOnlyMac": "The Globe key is only available on macOS.",
+      "alreadyRegistered": "\"{{hotkey}}\" is already registered by another application.",
+      "osReserved": "\"{{hotkey}}\" may be reserved by your desktop environment.",
+      "registrationFailed": "Could not register \"{{hotkey}}\". It may be in use by another application.",
+      "trySuggestions": "Try: {{suggestions}}"
+    }
+  },
+  "systemSettings": {
+    "microphone": "Please open your system settings to configure microphone permissions.",
+    "sound": "Please open your system sound settings (for example, pavucontrol).",
+    "accessibility": "Accessibility settings are not available on this platform."
+  },
+  "titleBar": {
+    "quitTitle": "Quit ChordVox",
+    "quitConfirmTitle": "Quit ChordVox?",
+    "quitConfirmDescription": "This will close ChordVox and stop background processes.",
+    "quit": "Quit",
+    "cancel": "Cancel"
+  },
+  "upgradePrompt": {
+    "paymentFailed": "We couldn't renew your Pro plan",
+    "weeklyLimit": "You've reached the hosted AI limit",
+    "pastDueDescription": "Free local transcription still works. Update your payment method to restore Pro features and unlimited hosted usage.",
+    "limitDescription": "You've used {{used}} of {{limit}} hosted words this week.\nLocal transcription stays free forever. Upgrade to Pro, use your own API key, or switch to local.",
+    "updatePayment": "Update payment method",
+    "updatePaymentDescription": "Restore Pro features and unlimited hosted usage.",
+    "upgradeToPro": "Upgrade to Pro",
+    "upgradeDescription": "Unlock AI enhancement, file transcription, BYOK, Prompt Studio, and advanced workflows.",
+    "useApiKey": "Use your own API key",
+    "useApiKeyDescription": "Bring your own provider and API key for AI enhancement.",
+    "switchToLocal": "Switch to local",
+    "switchToLocalDescription": "Keep dictating with free local transcription.",
+    "rollingWeeklyLimit": "Hosted weekly limit"
+  },
+  "windowControls": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "restore": "Restore",
+    "close": "Close"
+  },
+  "windows": {
+    "pttUnavailable": "Push-to-Talk native listener not available"
+  },
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "skip": "Skip",
+    "complete": "Complete",
+    "reset": "Reset",
+    "refresh": "Refresh",
+    "download": "Download",
+    "cancel": "Cancel",
+    "chooseFolder": "Choose Folder",
+    "working": "Working",
+    "ready": "Ready",
+    "recommended": "Recommended",
+    "active": "Active",
+    "cloud": "Cloud",
+    "local": "Local",
+    "apiKey": "API Key",
+    "model": "Model",
+    "loading": "Loading...",
+    "unknown": "Unknown",
+    "availableModels": "Available Models",
+    "fast": "Fast",
+    "hold": "Hold",
+    "less": "Less",
+    "more": "More",
+    "noMatchingModels": "No matching models found",
+    "private": "Private",
+    "tap": "Tap",
+    "openSystemSettings": "Open System Settings",
+    "delete": "Delete",
+    "deleteAll": "Delete All",
+    "downloading": "Downloading",
+    "installing": "Installing",
+    "deleting": "Deleting",
+    "clearing": "Clearing",
+    "downloadRequired": "Download required"
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "Welcome",
+      "language": "Language",
+      "setup": "Setup",
+      "permissions": "Permissions",
+      "activation": "Activation",
+      "complete": "Complete"
+    },
+    "hotkey": {
+      "couldNotRegisterTitle": "Couldn't register that hotkey",
+      "couldNotRegisterDescription": "That key combination might already be in use. Try a different one."
+    },
+    "setup": {
+      "title": "Setup",
+      "description": "Start with local transcription so privacy and usability are ready first",
+      "language": "Language",
+      "localPrivacyTitle": "Local-first by default",
+      "localPrivacyDescription": "We recommend local transcription first so your voice and text stay on your device. You can still switch to cloud later if you need it."
+    },
+    "permissions": {
+      "title": "Permissions",
+      "microphoneTitle": "Microphone",
+      "microphoneDescription": "To capture your voice",
+      "grant": "Grant",
+      "accessibilityTitle": "Accessibility",
+      "accessibilityDescription": "To paste text into apps",
+      "testAndGrant": "Test & Grant",
+      "requiredForApp": "Required for ChordVox to work",
+      "microphoneRequired": "Microphone access required"
+    },
+    "transcription": {
+      "title": "Transcription Setup",
+      "description": "Pick the transcription path that gets you speaking fastest",
+      "preferredLanguage": "Preferred Language"
+    },
+    "activation": {
+      "title": "Hotkey",
+      "description": "Set your hotkey and try one short dictation to confirm it works.",
+      "hotkey": "Hotkey",
+      "hotkeyHint": "Pick a shortcut you can reach comfortably.",
+      "mode": "Mode",
+      "tapDescription": "Press to start/stop",
+      "holdDescription": "Hold while speaking",
+      "test": "Test",
+      "testDescription": "Click the input below, then use your hotkey to dictate one short line.",
+      "hotkeyToStartStop": "{{hotkey}} to start/stop",
+      "holdHotkey": "Hold {{hotkey}}",
+      "textareaPlaceholder": "Click here and use your hotkey to dictate...",
+      "focusInput": "Focus input",
+      "manualFallbackHint": "If dictation is not available yet, type a short line here and continue.",
+      "stepFocusInput": "Click into the input below",
+      "stepSeeCompleted": "Wait for “Completed”",
+      "successTitle": "Test dictation complete",
+      "successDescription": "Your hotkey, floating bar, and paste flow are working.",
+      "lastTranscriptLabel": "Detected just now:",
+      "completeHint": "Finish one short dictation before continuing."
+    },
+    "streamingModelPicker": {
+      "currentFolderLabel": "Current model folder",
+      "currentFolderHint": "If this folder already contains streaming models, onboarding will reuse them without downloading again.",
+      "readyDescription": "Your local real-time model is ready. Hotkey dictation will use it by default."
+    },
+    "completion": {
+      "title": "You are ready",
+      "description": "Your hotkey and first dictation test are ready. You can start using ChordVox now.",
+      "summaryTitle": "What is ready on this device",
+      "localReady": "Local transcription is ready. Your speech stays on this device by default.",
+      "cloudReady": "Cloud transcription is ready. Dictation will use the provider you selected.",
+      "hotkeyReady": "{{hotkey}} is ready whenever you want to dictate.",
+      "tryReady": "You already completed one real dictation test, so the floating bar and paste flow are working.",
+      "firstResultLabel": "Your first test result"
+    }
+  },
+  "controlPanel": {
+    "update": {
+      "readyTitle": "Update ready to install",
+      "readyDescription": "Click 'Install Update' to restart with the latest version.",
+      "problemTitle": "Update ran into a problem",
+      "problemDescription": "We couldn't complete the update. Please try again later.",
+      "installTitle": "Install Update",
+      "installDescription": "ChordVox will restart to apply the update. Any in-progress work will be saved.",
+      "couldNotInstallTitle": "Couldn't install update",
+      "couldNotInstallDescription": "Something went wrong. Please try again.",
+      "couldNotDownloadTitle": "Couldn't download update",
+      "couldNotDownloadDescription": "Check your internet connection and try again.",
+      "installing": "Installing...",
+      "installButton": "Install Update",
+      "availableButton": "Update Available"
+    },
+    "limit": {
+      "weeklyTitle": "Weekly limit reached",
+      "weeklyDescription": "Free local transcription still works. Upgrade to Pro or use your own API key to keep AI enhancement and other advanced workflows running."
+    },
+    "billing": {
+      "pastDueTitle": "We couldn't process your payment",
+      "pastDueDescription": "Free local transcription still works. Update your payment in Settings to restore Pro.",
+      "bannerDescription": "You're on the free plan for now and still get {{limit}} hosted words per week. Update your payment to restore Pro.",
+      "updatePayment": "Update Payment"
+    },
+    "history": {
+      "title": "Transcriptions",
+      "couldNotLoadTitle": "Couldn't load your history",
+      "couldNotLoadDescription": "Something went wrong loading your transcriptions. Try closing and reopening the app.",
+      "copiedTitle": "Copied!",
+      "copiedDescription": "Text copied to your clipboard",
+      "couldNotCopyTitle": "Couldn't copy",
+      "couldNotCopyDescription": "Something went wrong copying to your clipboard. Try again.",
+      "clearTitle": "Clear History",
+      "clearDescription": "This will remove all your transcriptions. You can't undo this.",
+      "clearedTitle": "History cleared",
+      "clearedDescription": "{{count}} transcription removed",
+      "clearedDescription_other": "{{count}} transcriptions removed",
+      "couldNotClearTitle": "Couldn't clear history",
+      "couldNotClearDescription": "Something went wrong. Please try again.",
+      "deleteTitle": "Delete Transcription",
+      "deleteDescription": "This transcription will be permanently removed.",
+      "couldNotDeleteTitle": "Couldn't delete",
+      "couldNotDeleteDescription": "This transcription may have already been removed.",
+      "couldNotDeleteDescriptionGeneric": "Something went wrong. Please try again.",
+      "clear": "Clear",
+      "transcribeFile": "Transcribe File",
+      "transcribeFileProcessing": "Transcribing...",
+      "transcribedFileTitle": "File transcribed",
+      "transcribedFileDescription": "{{name}} has been added to your history.",
+      "couldNotTranscribeFileTitle": "Couldn't transcribe file",
+      "couldNotTranscribeFileDescription": "Something went wrong while transcribing this file. Please try another file or model.",
+      "fileTranscriptionRequiresProTitle": "File transcription requires Pro",
+      "fileTranscriptionRequiresProDescription": "Upgrade to Pro to transcribe audio or video files inside ChordVox. Free local real-time transcription stays available.",
+      "emptyFileDescription": "The selected file is empty. Please choose a valid audio or video file.",
+      "selectedFileFallback": "Your file",
+      "empty": "No transcriptions yet",
+      "press": "Press",
+      "toStart": "to start",
+      "transcribeFileProgress": "Transcribing {{progress}}%...",
+      "clearedDescription_one": "{{count}} transcription removed",
+      "clearedDescription_few": "{{count}} transcriptions removed",
+      "clearedDescription_many": "{{count}} transcriptions removed"
+    },
+    "cloudMigration": {
+      "title": "Your Pro setup is ready",
+      "description": "ChordVox Cloud is now enabled for hosted transcription and AI workflows. Your previous settings are saved, and you can switch providers anytime in Settings.",
+      "viewSettings": "View Settings"
+    },
+    "streamingFallback": {
+      "title": "Local streaming failed to start",
+      "description": "ChordVox switched to standard recording mode automatically. Reason: {{reason}}"
+    },
+    "aiCta": {
+      "title": "Enhance your transcriptions with AI",
+      "description": "Automatically fix grammar, punctuation, and formatting as you speak.",
+      "enable": "Enable AI Enhancement"
+    },
+    "loading": "Loading..."
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "Cloud",
+      "local": "Local",
+      "localDescription": "Runs on your device. Complete privacy, works offline.",
+      "cloudDescription": "Advanced models via API. Fast and capable, requires internet."
+    },
+    "enableTitle": "Enable AI Text Enhancement",
+    "enableDescription": "Use AI to automatically improve transcription quality",
+    "custom": {
+      "endpointWithProtocol": "Enter a full URL including protocol. Both a base URL (for example, https://server/v1) and a direct endpoint (for example, https://server/v1/chat/completions) are supported.",
+      "httpsRequired": "HTTPS required (HTTP allowed for local network only).",
+      "endpointUnauthorized": "Endpoint rejected the request (401/403). Add an API key or adjust server auth settings.",
+      "endpointTitle": "Endpoint URL",
+      "endpointExamples": "Examples:",
+      "ollama": "(Ollama)",
+      "localAi": "(LocalAI)",
+      "apiKeyOptional": "API Key (Optional)",
+      "apiKeyHelp": "Optional. Sent as a Bearer token for authentication. This is separate from your OpenAI API key.",
+      "protocolTitle": "Protocol",
+      "protocolAuto": "Auto (Recommended)",
+      "protocolChat": "Chat Completions",
+      "protocolResponses": "Responses",
+      "protocolHelp": "Auto remembers which protocol works for each endpoint. Force Chat Completions or Responses only when a provider needs it.",
+      "detectedProtocolHelp": "Auto currently remembers {{protocol}} for this endpoint.",
+      "resetDetectedProtocol": "Reset detected protocol",
+      "applyAndRefresh": "Apply & Refresh",
+      "queryPrefix": "We'll query",
+      "querySuffix": "for available models.",
+      "modelsReloadHint": "Models will reload when you click away from the URL field or click \"Apply & Refresh\".",
+      "bedrockEndpointHint": "Auto-generated from Region by default. Use a custom endpoint for VPC Endpoints and similar setups.",
+      "enterEndpoint": "Enter an endpoint URL above to load models.",
+      "fetchingModels": "Fetching model list from endpoint...",
+      "noModels": "No models returned. Check your endpoint URL.",
+      "providerName": "Custom",
+      "ownerLabel": "Owner: {{owner}}",
+      "unableToLoadModels": "Unable to load models from endpoint."
+    },
+    "getApiKey": "Not sure how to set this up? View guide ->",
+    "selectModel": "Select Model",
+    "availableModels": "Available Models"
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "Delete Model",
+      "description": "Are you sure you want to delete this model? You'll need to re-download it if you want to use it again."
+    },
+    "parakeet": {
+      "multilingual": "25 European languages",
+      "english": "English"
+    },
+    "apiKeyOptional": "API Key (Optional)",
+    "getKey": "Not sure how to set this up? View guide ->",
+    "endpointUrl": "Endpoint URL",
+    "customProvider": "Custom",
+    "fallback": {
+      "whisperModelDescription": "Model",
+      "parakeetModelDescription": "NVIDIA Parakeet Model"
+    },
+    "whisperModels": "Whisper Models",
+    "browse": "Browse",
+    "whisperLocalHelp": "Whisper models are managed under your model storage location. Download an official model here, or use your own local `.bin` file.",
+    "whisperModelFileLabel": "Whisper Model (.bin)",
+    "parakeetLocalHelp": "Parakeet models are managed under your model storage location. Download an official model here, or choose a local model directory. This NVIDIA track does not support Chinese.",
+    "parakeetModelDirectoryLabel": "Parakeet Model Directory",
+    "senseVoiceLocalHelp": "SenseVoice models are managed under your model storage location. SenseVoice Small still runs through GGUF + sense-voice-main.",
+    "senseVoiceModelFileLabel": "SenseVoice Model Path",
+    "senseVoiceBinaryLabel": "SenseVoice Runtime (SenseVoice Small only)",
+    "fireRedRuntime": {
+      "title": "FireRed runtime",
+      "description": "FireRedASR2-AED needs a separate local Python runtime. Install or repair it here to make this model work on this machine.",
+      "modelUnavailable": "The FireRed model directory is not ready yet. Make sure the model files are downloaded completely, then check the runtime again.",
+      "modelErrorLabel": "Model check:",
+      "ready": "Ready",
+      "installNeeded": "Install required",
+      "repairNeeded": "Repair required",
+      "checking": "Checking...",
+      "installAction": "Install runtime",
+      "repairAction": "Repair runtime",
+      "recheckAction": "Re-check",
+      "currentPathLabel": "Current runtime path",
+      "managedPathLabel": "Managed install path",
+      "sourceLabel": "Source:",
+      "bootstrapLabel": "Setup Python:",
+      "available": "Available",
+      "pythonMissing": "Python 3.11+ required",
+      "missingModules": "Missing modules:",
+      "installSuccess": "FireRed runtime installed",
+      "repairSuccess": "FireRed runtime repaired",
+      "installFailed": "FireRed runtime setup failed",
+      "checkFailed": "Failed to check FireRed runtime",
+      "sourceValues": {
+        "env": "Environment override",
+        "managed": "App-managed",
+        "sibling": "Beside model directory",
+        "legacy": "Legacy local path",
+        "none": "Not found"
+      }
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorTitles": {
+        "sessionExpired": "Session Expired",
+        "offline": "You're Offline",
+        "dailyLimitReached": "Daily Limit Reached"
+      },
+      "fallback": {
+        "title": "Fallback Mode",
+        "description": "Local Whisper failed. Used OpenAI API instead."
+      },
+      "noAudio": {
+        "title": "No Audio Detected",
+        "description": "The recording contained no detectable audio. Please try again."
+      }
+    },
+    "clipboard": {
+      "pasteFailed": {
+        "title": "Clipboard Paste Failed",
+        "description": "Automatic paste is unavailable. You can paste manually first. Then check whether ChordVox has the required permissions in your system settings.",
+        "macosDescription": "Automatic paste is unavailable. You can paste manually with Cmd+V first. Fix: open System Settings -> Privacy & Security -> Accessibility and confirm ChordVox is allowed; then check Input Monitoring and make sure it is also authorized.",
+        "windowsDescription": "Automatic paste is unavailable. You can paste manually with Ctrl+V first. Fix: open Windows Settings and check privacy, security, or security software restrictions to make sure ChordVox is not blocked from keyboard input, clipboard access, or assistive control.",
+        "linuxDescription": "Automatic paste is unavailable. You can paste manually with Ctrl+V first. Fix: check your desktop environment restrictions and confirm the required auto-paste tools, such as xdotool, wtype, or ydotool, are installed and working."
+      },
+      "accessibilityDialog": {
+        "standard": {
+          "title": "Accessibility Permissions Needed",
+          "message": "ChordVox needs Accessibility permissions to paste text into other applications.",
+          "detail": "Current status: Clipboard copy works, but pasting (Cmd+V simulation) fails.\n\nTo fix this:\n1. Open System Settings (or System Preferences on older macOS)\n2. Go to Privacy & Security -> Accessibility\n3. Click the lock icon and enter your password\n4. Add ChordVox to the list and enable it\n5. Restart ChordVox\n\nWithout this permission, dictated text will only be copied to clipboard and will not paste automatically."
+        },
+        "stuck": {
+          "title": "Reset Accessibility Permissions",
+          "message": "ChordVox may still be using old Accessibility permissions from a previous version.",
+          "detail": "Common issue: after rebuilding or reinstalling ChordVox, macOS can keep stale permissions that block the new app.\n\nTo fix this:\n1. Open System Settings -> Privacy & Security -> Accessibility\n2. Remove any old \"ChordVox\" entries\n3. Also remove entries such as \"Electron\" or unclear old app names\n4. Click the + button and add the current ChordVox app again\n5. Make sure the checkbox is enabled\n6. Restart ChordVox\n\nWithout this permission, text will only be copied to clipboard and will not paste automatically."
+        }
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "invalidHotkey": "Invalid Hotkey",
+        "notRegistered": "Hotkey Not Registered",
+        "saved": "Hotkey Saved",
+        "error": "Hotkey Error"
+      },
+      "errors": {
+        "enterValidHotkey": "Please enter a valid hotkey",
+        "unsupportedShortcut": "That shortcut is not supported.",
+        "couldNotRegister": "This key could not be registered. Please choose a different key.",
+        "failedToRegister": "Failed to register hotkey. Please try again."
+      },
+      "messages": {
+        "nowUsing": "Now using {{hotkey}} for dictation"
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "Download timed out. Check your internet connection and try again.",
+        "notFound": "Could not reach the download server. Check your internet connection.",
+        "corrupted": "Download was incomplete or corrupted. Please try again.",
+        "rateLimited": "Download server is rate limiting. Please wait a few minutes and try again.",
+        "server": "Server error ({{error}}). Please try again later.",
+        "generic": "Download failed: {{error}}",
+        "extractionFailed": "Model downloaded but installation failed. Click download to retry installation without re-downloading.",
+        "unknown": "Unknown error"
+      },
+      "downloadFailed": {
+        "title": "Download Failed"
+      },
+      "installationFailed": {
+        "title": "Installation Failed"
+      },
+      "downloadInProgress": {
+        "title": "Download in Progress",
+        "description": "Please wait for the current download to complete or cancel it first."
+      },
+      "modelDeleted": {
+        "title": "Model Deleted",
+        "descriptionWithSpace": "Model deleted successfully! Freed {{sizeMb}}MB of disk space.",
+        "description": "Model deleted successfully!"
+      },
+      "deleteFailed": {
+        "title": "Delete Failed",
+        "description": "Failed to delete model: {{error}}"
+      },
+      "downloadCancelled": {
+        "title": "Download Cancelled",
+        "description": "The download has been cancelled."
+      }
+    },
+    "permissions": {
+      "paths": {
+        "windowsMicrophone": "Settings -> Privacy -> Microphone",
+        "linuxSound": "your system sound settings",
+        "defaultSound": "System Settings -> Sound -> Input",
+        "linuxPrivacy": "your system privacy settings",
+        "defaultPrivacy": "System Settings -> Privacy & Security -> Microphone"
+      },
+      "micErrors": {
+        "accessFailed": "Microphone access failed. Please try again.",
+        "noMicrophones": "No microphones were detected. Connect or select a microphone in {{settingsPath}}.",
+        "permissionDenied": "Permission was denied. Open {{privacyPath}} and allow ChordVox.",
+        "couldNotStart": "Could not start the selected microphone. Choose an input device in {{settingsPath}}, then rerun the test.",
+        "noActiveInput": "No active audio input was found. Pick a microphone in {{settingsPath}}.",
+        "unknown": "Microphone access failed: {{error}}. Select a different input device and try again.",
+        "unknownFallback": "Unknown error"
+      },
+      "settingsTitles": {
+        "microphone": "Microphone Settings",
+        "sound": "Sound Settings",
+        "accessibility": "Accessibility Settings"
+      },
+      "settingsErrors": {
+        "unableToOpenMicrophone": "Unable to open microphone settings. Please open your system settings manually.",
+        "unableToOpenSound": "Unable to open sound settings. Please open your system settings manually.",
+        "unableToOpenAccessibility": "Unable to open accessibility settings. Please open your system settings manually."
+      },
+      "micUnavailable": "Microphone APIs are unavailable in this environment. Please restart the app.",
+      "titles": {
+        "microphoneUnavailable": "Microphone Unavailable",
+        "microphonePermissionRequired": "Microphone Permission Required",
+        "accessibilityNeeded": "Accessibility Permissions Needed",
+        "accessibilityRefreshNeeded": "Refresh Accessibility Permission",
+        "readyToGo": "Ready to Go!",
+        "waylandClipboardMode": "Clipboard Mode on Wayland",
+        "optionalPasteTool": "Optional: Install Paste Tool"
+      },
+      "descriptions": {
+        "accessibilityNeeded": "Open System Settings -> Privacy & Security -> Accessibility, allow ChordVox to control other apps, then try automatic pasting again. If hotkeys or simulated keystrokes still fail on macOS, also check Input Monitoring.",
+        "accessibilityRefreshNeeded": "If ChordVox was already allowed in Accessibility before the update, you may need to remove the old permission entry in System Settings -> Privacy & Security -> Accessibility and grant it again.",
+        "windowsReady": "Windows does not require special permissions for automatic pasting. You're all set!",
+        "linuxReadyWithMethod": "Automatic pasting is available using {{method}}. You are all set!",
+        "waylandClipboardMode": "Automatic pasting is not available on this Wayland session. ChordVox will copy text to your clipboard and you can paste with Ctrl+V.",
+        "optionalPasteTool": "For automatic pasting, install {{tool}}:\n\n{{installCmd}}{{waylandNote}}\n\nWithout this, you can still use ChordVox - text will be copied to your clipboard and you can paste with Ctrl+V."
+      },
+      "alerts": {
+        "accessibilityNeeded": "Accessibility permissions needed. Go to System Settings -> Privacy & Security -> Accessibility and allow ChordVox. If hotkeys still fail on macOS, also review Input Monitoring.",
+        "accessibilityRefreshNeeded": "If Accessibility was already enabled before the update but still does not work, remove the old ChordVox permission entry and grant it again."
+      },
+      "notes": {
+        "waylandWtype": "\n\nNote: For XWayland apps, xdotool also works.",
+        "waylandXwaylandOnly": "\n\nNote: Automatic pasting works for XWayland apps only."
+      },
+      "labels": {
+        "defaultPasteTool": "xdotool",
+        "xdotoolXwayland": "xdotool (XWayland apps)"
+      },
+      "accessibilityTestText": "ChordVox accessibility test",
+      "warning": {
+        "messages": {
+          "macos": "Check Sound settings to select your input device",
+          "windows": "Check Windows Settings to select your input device",
+          "linux": "Check system sound settings to select your input device"
+        },
+        "soundLabel": "Sound",
+        "privacyLabel": "Privacy"
+      }
+    }
+  },
+  "auth": {
+    "cloudNotConfigured": "Cloud Not Configured",
+    "common": {
+      "back": "Back",
+      "continue": "Continue",
+      "or": "or"
+    },
+    "emailStep": {
+      "continueWithEmail": "Continue with email",
+      "continueWithoutAccount": "Continue without account",
+      "emailPlaceholder": "you@example.com"
+    },
+    "errors": {
+      "accountExistsSignIn": "An account with this email already exists. Please sign in.",
+      "accountNotFoundCreate": "No account found with this email. Please create an account.",
+      "authNotConfigured": "Authentication is not configured",
+      "createAccountFailed": "Failed to create account",
+      "failedProviderSignIn": "Failed to sign in with {{provider}}",
+      "failedUserCheck": "Failed to check user account",
+      "generic": "Something went wrong. Please try again.",
+      "invalidCredentials": "Invalid email or password",
+      "plusAliasUnsupported": "Email aliases with '+' are not supported"
+    },
+    "getStarted": "Get Started",
+    "legal": {
+      "and": "and",
+      "prefix": "By continuing, you agree to our",
+      "privacy": "Privacy Policy",
+      "suffix": "",
+      "terms": "Terms of Service"
+    },
+    "passwordForm": {
+      "createAccount": "Create an account",
+      "createAccountButton": "Create Account",
+      "createAccountLink": "Create account",
+      "createPasswordPlaceholder": "Create a password",
+      "creatingAccount": "Creating account...",
+      "enterPasswordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot password?",
+      "fullNamePlaceholder": "Full name",
+      "haveAccount": "Already have an account?",
+      "newHere": "New here?",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "signIn": "Sign In",
+      "signInLink": "Sign in",
+      "signingIn": "Signing in...",
+      "welcomeBack": "Welcome back"
+    },
+    "signedIn": {
+      "ready": "Ready",
+      "welcomeBack": "Welcome back",
+      "welcomeBackName": "Welcome back, {{name}}"
+    },
+    "social": {
+      "completeInBrowser": "Complete sign-in in your browser",
+      "continueWithGoogle": "Continue with Google"
+    },
+    "welcomeSubtitle": "Private-first voice dictation, local by default",
+    "welcomeTitle": "Welcome to ChordVox",
+    "localPrivacyHint": "We recommend local transcription first so your voice and text stay on this device by default. Switch to cloud later only if you need it."
+  },
+  "cleanupPrompt": "Cleanup",
+  "developerSection": {
+    "currentLogFile": "Current log file",
+    "debugMode": {
+      "description": "Record detailed runtime data to help diagnose and troubleshoot issues.",
+      "label": "Diagnostic Logs"
+    },
+    "description": "Capture detailed logs to help diagnose issues",
+    "localOnlyNotice": "Logs are stored locally on this device and are never uploaded automatically.",
+    "openLogsFolder": "Open Logs Folder",
+    "performanceNote": {
+      "description": "Debug logging writes to disk continuously and may slightly affect performance. Disable when not troubleshooting.",
+      "label": "Note"
+    },
+    "trace": {
+      "clear": "Clear",
+      "description": "Detailed run history has moved to Call Records. This section now keeps a compact debug summary and cleanup actions.",
+      "emptyEvents": "Select a run on the left to view detailed events",
+      "emptySessions": "No call traces yet",
+      "errorPrefix": "Error",
+      "eventLabel": "Event details",
+      "models": {
+        "reasoning": "Refinement model",
+        "transcription": "Transcription model"
+      },
+      "phases": {
+        "paste": "Paste",
+        "reasoning": "Refinement",
+        "recording": "Recording",
+        "session": "Session",
+        "transcription": "Transcription"
+      },
+      "refresh": "Refresh",
+      "runId": "Run ID",
+      "profileLabel": "Profile",
+      "sessionLabel": "Call traces",
+      "showingLatest": "Showing up to {{count}} recent runs",
+      "startedAt": "Started",
+      "profiles": {
+        "primary": "Profile 1",
+        "secondary": "Profile 2"
+      },
+      "status": {
+        "cancelled": "Cancelled",
+        "error": "Failed",
+        "skipped": "Skipped",
+        "start": "In progress",
+        "success": "Success",
+        "unknown": "Unknown"
+      },
+      "title": "Call Diagnostics",
+      "toasts": {
+        "clearFailed": {
+          "description": "Failed to clear call traces. Please try again.",
+          "title": "Clear failed"
+        },
+        "cleared": {
+          "description": "Call traces were cleared from local memory.",
+          "title": "Call traces cleared"
+        },
+        "loadFailed": {
+          "description": "Please try again in a moment.",
+          "title": "Couldn't load call traces"
+        }
+      },
+      "updatedAt": "Last updated",
+      "summary": {
+        "overviewTitle": "Run overview",
+        "timelineTitle": "Stage timeline",
+        "recordingDuration": "Recording time",
+        "transcriptionDuration": "Transcription time",
+        "reasoningDuration": "AI time",
+        "totalDuration": "Total time",
+        "flowDuration": "Full run time",
+        "failedAt": "Failed at",
+        "recentRuns": "Recent runs",
+        "failedRuns": "Failed runs",
+        "lastUpdated": "Last updated",
+        "latestFailure": "Latest failure",
+        "noRecentFailures": "No recent failures",
+        "callRecordsHint": "For readable per-run details, open Call Records below AI Models."
+      }
+    },
+    "title": "Input Stats",
+    "toasts": {
+      "copied": {
+        "description": "Log file path copied to clipboard",
+        "title": "Copied"
+      },
+      "copyFailed": {
+        "description": "Something went wrong copying to clipboard.",
+        "title": "Couldn't copy"
+      },
+      "debugDisabled": {
+        "description": "Debug logging has been turned off",
+        "title": "Debug Logging Disabled"
+      },
+      "debugEnabled": {
+        "description": "Detailed logs are now being written to disk",
+        "title": "Debug Logging Enabled"
+      },
+      "loadFailed": {
+        "description": "Something went wrong. Try reopening Settings.",
+        "title": "Couldn't load debug settings"
+      },
+      "openLogsFailed": {
+        "description": "Something went wrong opening the logs directory.",
+        "title": "Couldn't open logs folder"
+      },
+      "updateFailed": {
+        "description": "Something went wrong. Please try again.",
+        "title": "Couldn't update debug logging"
+      }
+    },
+    "whatGetsLogged": {
+      "items": {
+        "apiRequests": "API requests",
+        "audioProcessing": "Audio processing",
+        "errorDetails": "Error details",
+        "ffmpegOperations": "FFmpeg operations",
+        "systemDiagnostics": "System diagnostics",
+        "transcriptionPipeline": "Transcription pipeline"
+      },
+      "title": "What gets logged"
+    }
+  },
+  "dictionarySuffix": "Dictionary Suffix",
+  "emailVerification": {
+    "checkEmailDescription": "We sent a verification link to",
+    "checkEmailTitle": "Check your email",
+    "errors": {
+      "resendFailed": "We couldn't resend the email. Please try again.",
+      "serverUnreachable": "Couldn't reach the server. Check your connection and try again."
+    },
+    "resendButton": "Resend verification email",
+    "resendIn": "Resend in {{seconds}}s",
+    "verifiedDescription": "Your account is all set.",
+    "verifiedTitle": "Email verified",
+    "waiting": "Waiting for verification..."
+  },
+  "errorBoundary": {
+    "description": "An unexpected error occurred. Please reload to try again.",
+    "reload": "Reload",
+    "title": "Something went wrong"
+  },
+  "forgotPassword": {
+    "back": "Back",
+    "backToSignIn": "Back to sign in",
+    "emailPlaceholder": "Enter your email",
+    "goBack": "Go Back",
+    "notConfigured": "Authentication isn't set up yet.",
+    "sendResetLink": "Send Reset Link",
+    "sending": "Sending...",
+    "subtitle": "Enter your email and we'll send you a reset link",
+    "success": {
+      "description": "We sent a password reset link to",
+      "help": "Didn't receive the email? Check your spam folder or try again.",
+      "title": "Check your email",
+      "tryAnother": "Try another email"
+    },
+    "title": "Reset your password"
+  },
+  "fullPrompt": "Full Prompt",
+  "hotkeyGuidance": {
+    "blockedDescription": "These shortcuts are blocked because they are commonly used by the system.",
+    "blockedTitle": "Blocked shortcuts",
+    "description": "Use these platform rules to choose a shortcut that won't conflict with your system.",
+    "examplesTitle": "Valid examples",
+    "platforms": {
+      "linux": "Linux",
+      "macos": "macOS",
+      "windows": "Windows"
+    },
+    "recommended": {
+      "linux": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Super+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Ctrl+Shift+J",
+        "4": "Alt+Space"
+      },
+      "macos": {
+        "0": "⌥Space",
+        "1": "⌃⌥S",
+        "2": "⌃⌥D",
+        "3": "Fn",
+        "4": "⌘⇧J"
+      },
+      "windows": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Ctrl+Shift+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Win+Alt+K"
+      }
+    },
+    "recommendedTitle": "Recommended shortcuts",
+    "rulesTitle": "Shortcut rules",
+    "showAll": "Show all",
+    "showFewer": "Show fewer",
+    "title": "Shortcut Guide",
+    "validationRules": {
+      "0": "Must use at least one modifier (Ctrl, Alt, Shift, etc.)",
+      "1": "Cannot use reserved system shortcuts",
+      "2": "Single keys alone are not allowed",
+      "3": "Some combinations may conflict with other apps"
+    }
+  },
+  "hotkeyInput": {
+    "ariaLabel": "Press a key combination to set hotkey",
+    "clickToChange": "Click to change",
+    "clickToChangeLower": "click to change",
+    "clickToSet": "Click to set hotkey",
+    "fnCaptureHint": "Press a key to combine, or release for Globe",
+    "fnHeldHint": "+ key or release for Globe",
+    "globe": "Globe",
+    "hotkeyLabel": "Hotkey",
+    "keyHint": "+ key",
+    "listening": "Listening...",
+    "pressAnyKey": "Press any key or Ctrl+Shift+K",
+    "pressAnyKeyMac": "Press any key or ⌘⇧K",
+    "recording": "Recording",
+    "tryShortcut": "Try Ctrl+Shift+K",
+    "tryShortcutMac": "Try ⌘⇧K"
+  },
+  "languageSelector": {
+    "noLanguagesFound": "No languages found",
+    "searchPlaceholder": "Search..."
+  },
+  "microphoneSettings": {
+    "builtIn": "(Built-in)",
+    "errors": {
+      "unableToAccess": "Unable to access microphone. Please check permissions."
+    },
+    "helpText": "Select a specific microphone or use the system default setting.",
+    "inputDevice": "Input Device",
+    "noBuiltInDetected": "No built-in microphone detected. Using system default.",
+    "preferBuiltIn": {
+      "description": "External microphones may cause latency or reduced transcription quality",
+      "label": "Prefer Built-in Microphone"
+    },
+    "selectPlaceholder": "Select a microphone",
+    "systemDefault": "System Default",
+    "unknownDevice": "Unknown Device",
+    "using": "Using:"
+  },
+  "pasteToolsInfo": {
+    "checking": "Checking system capabilities...",
+    "installCommands": {
+      "archLinux": "# Arch Linux",
+      "debianUbuntu": "# Debian / Ubuntu",
+      "debianUbuntuMint": "# Debian / Ubuntu / Mint",
+      "fedoraRhel": "# Fedora / RHEL"
+    },
+    "installPrefix": "For automatic text pasting, install",
+    "methodReady": "for automatic text pasting",
+    "noteXwaylandAlso": "Note: For XWayland apps, xdotool also works.",
+    "noteXwaylandOnly": "Note: automatic pasting works for XWayland apps only.",
+    "optionalEnableTitle": "Optional: Enable Automatic Pasting",
+    "readyTitle": "Automatic Pasting Ready",
+    "recheck": "Re-check",
+    "recheckChecking": "Checking...",
+    "title": "Automatic Pasting",
+    "usingMethodPrefix": "Using",
+    "waylandClipboardDescription": "Automatic pasting isn't available on this Wayland session. ChordVox will copy text to your clipboard so you can paste manually with Ctrl+V.",
+    "waylandClipboardTitle": "Clipboard Mode on Wayland",
+    "windowsReady": "Windows supports automatic pasting out of the box. No setup required!",
+    "withoutToolPrefix": "Without this tool, ChordVox will copy text to your clipboard. You can then paste manually with Ctrl+V.",
+    "xwaylandAppsOnly": "automatic pasting works for XWayland apps only"
+  },
+  "promptStudio": {
+    "common": {
+      "copied": "Copied",
+      "copy": "Copy",
+      "reset": "Reset",
+      "save": "Save"
+    },
+    "defaultTestInput": "Hi Chord, what's the weather like today?",
+    "dialogs": {
+      "reset": {
+        "description": "Prompt has been reset to the default value.",
+        "title": "Reset Complete"
+      },
+      "saved": {
+        "description": "Your custom prompt will be used for all future AI processing.",
+        "title": "Prompt Saved"
+      }
+    },
+    "edit": {
+      "agentNameLabel": "Agent name:",
+      "cautionLabel": "Caution",
+      "cautionTextPrefix": "Modifying this prompt may affect transcription quality.",
+      "cautionTextSuffix": "Keep the {{agentName}} placeholder to preserve agent detection.",
+      "placeholder": "Enter your custom system prompt..."
+    },
+    "tabs": {
+      "customize": "Customize",
+      "test": "Test",
+      "view": "View"
+    },
+    "test": {
+      "addressHint": "Try addressing \"{{agentName}}\" to test instruction mode",
+      "aiModels": "AI Models",
+      "baseUrlMissing": "{{provider}} base URL missing. Add it in AI Models settings.",
+      "cleanup": "Cleanup",
+      "disabledInSettingsPrefix": "AI text enhancement is disabled.",
+      "disabledInSettingsSuffix": "Enable it in AI Models to test prompts.",
+      "disabledReasoning": "AI text enhancement is disabled. Enable it in AI Models to test prompts.",
+      "failed": "Test failed: {{error}}",
+      "inputLabel": "Input",
+      "inputPlaceholder": "Enter text to test...",
+      "instruction": "Instruction",
+      "modelLabel": "Model",
+      "noModelSelected": "No model selected",
+      "none": "None",
+      "outputLabel": "Output",
+      "processing": "Processing...",
+      "chordvoxCloud": "ChordVox Cloud",
+      "providerLabel": "Provider",
+      "run": "Run Test"
+    },
+    "view": {
+      "customPrompt": "Custom prompt",
+      "defaultPrompt": "Default prompt",
+      "modes": {
+        "agent": {
+          "description": "Triggered by \"{{agentName}}\" - executes commands, answers questions, composes content",
+          "label": "Agent"
+        },
+        "cleanup": {
+          "description": "Fast path — removes filler words, fixes grammar and punctuation",
+          "label": "Cleanup"
+        }
+      },
+      "modified": "Modified"
+    }
+  },
+  "resetPassword": {
+    "backToSignIn": "Back to sign in",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "continue": "Continue",
+    "errors": {
+      "passwordMinLength": "Password must be at least 8 characters",
+      "passwordsDoNotMatch": "Passwords do not match"
+    },
+    "goBack": "Go Back",
+    "newPasswordPlaceholder": "New password",
+    "notConfigured": "Authentication is not configured.",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "resetButton": "Reset Password",
+    "resetting": "Resetting...",
+    "subtitle": "Enter your new password below",
+    "success": {
+      "description": "Your password has been updated. You're now signed in.",
+      "title": "Password reset successful"
+    },
+    "title": "Create new password"
+  },
+  "settingsModal": {
+    "groups": {
+      "app": "App",
+      "intelligence": "Intelligence",
+      "profile": "Profile",
+      "speech": "Speech",
+      "system": "System"
+    },
+    "sections": {
+      "account": {
+        "description": "License & plan",
+        "label": "Account"
+      },
+      "agentConfig": {
+        "description": "Voice agent setup",
+        "label": "Agent"
+      },
+      "aiModels": {
+        "description": "Pro AI enhancement & BYOK",
+        "label": "AI Models"
+      },
+      "developer": {
+        "description": "Logs, diagnostics & data",
+        "label": "Developer"
+      },
+      "dictionary": {
+        "description": "Custom words & phrases",
+        "label": "Dictionary"
+      },
+      "general": {
+        "description": "Appearance, hotkey & startup",
+        "label": "Preferences"
+      },
+      "permissions": {
+        "description": "Microphone & accessibility",
+        "label": "Permissions"
+      },
+      "privacy": {
+        "description": "Cloud backup & analytics",
+        "label": "Privacy"
+      },
+      "prompts": {
+        "description": "System prompt studio",
+        "label": "Prompts"
+      },
+      "transcription": {
+        "description": "Speech-to-text engine",
+        "label": "Transcription"
+      },
+      "fileTranscription": {
+        "label": "File Transcription",
+        "description": "Transcribe audio or video files"
+      },
+      "hotkeys": {
+        "label": "Hotkeys",
+        "description": "Primary hotkey, Profile 2 & activation"
+      },
+      "callRecords": {
+        "label": "Call Records",
+        "description": "Transparent AI calls, failures & timings"
+      }
+    },
+    "title": "Settings"
+  },
+  "settingsPage": {
+    "account": {
+      "badges": {
+        "free": "Free",
+        "limitReached": "Limit reached",
+        "pastDue": "Past due",
+        "pro": "Pro",
+        "trial": "Pro Trial"
+      },
+      "billing": {
+        "couldNotOpenDescription": "We had trouble opening the billing page. Please try again.",
+        "couldNotOpenTitle": "Couldn't open billing",
+        "manageBilling": "Manage Billing",
+        "opening": "Opening...",
+        "updatePaymentMethod": "Update Payment Method"
+      },
+      "checkout": {
+        "couldNotOpenDescription": "We had trouble opening the checkout page. Please try again.",
+        "couldNotOpenTitle": "Couldn't open checkout",
+        "opening": "Opening...",
+        "upgradeToPro": "Upgrade to Pro"
+      },
+      "disabled": "Disabled",
+      "featuresDisabled": "Account Features Disabled",
+      "featuresDisabledDescription": "Set VITE_NEON_AUTH_URL in your .env file to enable account features.",
+      "notConfigured": "Authentication is not configured",
+      "notSignedIn": "Free mode active",
+      "notSignedInDescription": "Local transcription works without sign-in. Buy or activate Pro above to unlock AI enhancement, file transcription, Prompt Studio, and advanced workflows.",
+      "offline": "Free",
+      "pastDue": {
+        "description": "Free local transcription still works. Update your payment method to restore Pro.",
+        "title": "We couldn't process your payment"
+      },
+      "planDescriptions": {
+        "freeUsage": "{{used}} / {{limit}} hosted words this week",
+        "nextBilling": "Next billing: {{date}}",
+        "pastDue": "{{used}} / {{limit}} hosted words this week - update payment to restore Pro",
+        "trial": "Pro trial: {{days}} day(s) left",
+        "unlimited": "Unlimited"
+      },
+      "planLabels": {
+        "free": "Free",
+        "pro": "Pro",
+        "trial": "Pro Trial"
+      },
+      "planTitle": "Plan",
+      "rollingWeeklyLimit": "Rolling weekly limit",
+      "signOut": {
+        "failedDescription": "Something went wrong signing out. Please try again.",
+        "failedTitle": "Couldn't sign out",
+        "signOut": "Sign Out",
+        "signingOut": "Signing out..."
+      },
+      "signedIn": "Signed in",
+      "title": "Account",
+      "toasts": {
+        "approachingLimit": {
+          "description": "You've used {{used}} of {{limit}} hosted words this week. Free local transcription is unaffected; upgrade to Pro for more.",
+          "title": "Approaching weekly limit"
+        }
+      },
+      "trialCta": {
+        "button": "Start 7-Day Trial",
+        "description": "Start a 7-day Pro trial below to try AI enhancement, file transcription, Prompt Studio testing, BYOK, and dual hotkeys. Free local speech-to-text stays available the whole time.",
+        "title": "Free forever speech-to-text, plus a free 7-day trial of Pro"
+      },
+      "desktopLicense": {
+        "title": "Desktop License",
+        "descriptionConfigured": "This build uses desktop licenses to unlock Pro features on this device.",
+        "descriptionNotConfigured": "Free local transcription still works. Contact support if you need Pro activation.",
+        "currentStatusLabel": "Current status",
+        "currentStatusDescription": "Free local transcription is available. Use a paid license key to unlock Pro features on this device.",
+        "currentStatusActiveDescription": "Pro is active on this device.",
+        "currentStatusTrialDescription": "Pro trial is active. {{days}} day(s) remaining for AI enhancement and other paid features.",
+        "currentStatusTrialExpiredDescription": "Free local transcription remains available. Enter a Pro license key to unlock paid features again.",
+        "currentStatusNotConfigured": "The Creem license relay is not ready on this build yet. Please contact support.",
+        "licenseApiUrlLabel": "License API URL",
+        "licenseApiUrlPlaceholder": "https://license.your-domain.com",
+        "licenseApiUrlDescription": "Set this once if you route Creem license checks through your own relay.",
+        "inputPlaceholder": "Enter license key",
+        "activatedHint": "This device is activated. Use \"Change key\" only when replacing the license.",
+        "actions": {
+          "activate": "Activate",
+          "activating": "Activating",
+          "validate": "Validate",
+          "checking": "Checking",
+          "clear": "Clear",
+          "changeKey": "Change key",
+          "save": "Save",
+          "saving": "Saving"
+        },
+        "statusLabels": {
+          "active": "Active",
+          "trial": "Pro Trial",
+          "offlineGrace": "Offline Grace",
+          "expired": "Expired",
+          "invalid": "Invalid",
+          "notActivated": "Not Activated"
+        },
+        "meta": {
+          "plan": "Plan: {{plan}}",
+          "expires": "Expires: {{date}}",
+          "expiresPermanent": "Expires: Permanent",
+          "lastCheck": "Last check: {{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "Remove saved license?",
+          "removeDescription": "This device will return to unlicensed mode until you activate again.",
+          "removeConfirm": "Remove"
+        },
+        "toasts": {
+          "keyRequiredTitle": "License key required",
+          "keyRequiredDescription": "Enter your license key before activating.",
+          "activatedTitle": "License activated",
+          "activatedDescription": "This device is now activated.",
+          "activationFailedTitle": "Activation failed",
+          "activationFailedDescription": "The license key could not be activated.",
+          "activationLimitDescription": "This license key supports only one device. To switch devices, contact support to reset the previous activation.",
+          "serverNotReadyDescription": "License service is not ready yet. Please contact support.",
+          "deviceNotActivatedDescription": "This license key is not activated on this device.",
+          "revokedDescription": "This license key has been revoked. Please contact support.",
+          "expiredDescription": "This license key has expired.",
+          "notActiveDescription": "This license key is currently not active.",
+          "activationUnexpectedError": "Unexpected error while activating the license.",
+          "validatedTitle": "License validated",
+          "validateFailedTitle": "License check failed",
+          "validatedDescription": "License is valid.",
+          "invalidDescription": "License is invalid.",
+          "validateUnexpectedError": "Unexpected error while checking license status.",
+          "removedTitle": "License removed",
+          "removedDescription": "Saved license state was cleared.",
+          "removeFailedTitle": "Could not remove license",
+          "removeFailedDescription": "Unexpected error while removing the saved license.",
+          "licenseApiSavedTitle": "License API saved",
+          "licenseApiSavedDescription": "License activation now uses the new API URL.",
+          "licenseApiSaveFailedTitle": "Could not save License API",
+          "licenseApiSaveFailedDescription": "Please check the URL and try again.",
+          "validatingTitle": "Checking license",
+          "validatingDescription": "Contacting the license server. This may take a few seconds."
+        }
+      },
+      "user": "User",
+      "wordsRemaining": "{{remaining}} remaining",
+      "trialReminder": {
+        "title": "Your Pro trial ends in {{days}} day(s)",
+        "description": "Free local transcription will keep working. Buy Pro to keep AI enhancement, file transcription, Prompt Studio, and advanced workflows unlocked.",
+        "button": "View Pro Plans"
+      },
+      "trialStartDialog": {
+        "title": "Start your 7-day Pro trial?",
+        "description": "Your trial includes AI enhancement, file transcription, BYOK, dual hotkeys, and advanced prompt workflows. Free local speech-to-text will still be available after it ends.",
+        "confirm": "Start 7-Day Trial",
+        "cancel": "Maybe Later",
+        "startedTitle": "7-day Pro trial started",
+        "startedDescription": "You can now try AI enhancement, file transcription, BYOK, dual hotkeys, and advanced prompt workflows."
+      }
+    },
+    "agentConfig": {
+      "agentName": "Agent Name",
+      "cleanupExample": "Cleanup",
+      "cleanupMode": "Cleanup Mode",
+      "description": "Name your AI assistant so you can address it directly during dictation",
+      "dialogs": {
+        "updatedDescription": "Your agent is now named \"{{name}}\". Address it by saying \"Hi {{name}}\" followed by your instructions.",
+        "updatedTitle": "Agent Name Updated"
+      },
+      "examplesTitle": "Examples",
+      "helper": "Pick something short and natural to say aloud",
+      "howItWorksDescription": "When you say \"Hi {{agentName}}\" followed by an instruction, the AI switches from cleanup mode to instruction mode. Without the trigger phrase, it simply cleans up your dictation.",
+      "howItWorksTitle": "How it works",
+      "instructionMode": "Instruction",
+      "placeholder": "e.g. Chord, Nova, Atlas...",
+      "save": "Save",
+      "title": "Voice Agent"
+    },
+    "aiModels": {
+      "customSetup": "Custom Setup",
+      "customSetupDescription": "Use your own provider and API key. Pro is required when you actually run AI enhancement.",
+      "description": "Free local speech-to-text stays available. Configure AI enhancement, BYOK, and cleanup quality here; your first real Pro action can start a free 7-day trial.",
+      "enableTextCleanup": "Enable text cleanup",
+      "enableTextCleanupDescription": "Pro feature: AI improves transcription quality",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "Hosted by ChordVox for minimal setup.",
+      "title": "AI Text Enhancement",
+      "trialHint": "Your first AI enhancement can start a free 7-day Pro trial.",
+      "toasts": {
+        "switchedCloud": {
+          "description": "Text enhancement will use ChordVox's cloud service.",
+          "title": "Switched to ChordVox Cloud"
+        },
+        "switchedCustom": {
+          "description": "Configure your own provider and API key.",
+          "title": "Switched to Custom Setup"
+        }
+      }
+    },
+    "developer": {
+      "hotkeyDiagnostics": {
+        "title": "Hotkey diagnostics",
+        "description": "Inspect the current hotkey backend, registration state, and safer platform defaults.",
+        "runtimeState": "Runtime state",
+        "runtimeDescription": "If a hotkey looks saved but does nothing, check which registration path the main process is actually using.",
+        "refresh": "Refresh",
+        "platform": "Platform",
+        "sessionType": "Session type",
+        "desktopSession": "Desktop session",
+        "backend": "Hotkey backend",
+        "primaryHotkey": "Primary hotkey",
+        "secondaryHotkey": "Secondary hotkey",
+        "primaryStatus": "Primary status",
+        "secondaryStatus": "Secondary status",
+        "registered": "Registered",
+        "notRegistered": "Not registered",
+        "recommendedTitle": "Recommended default",
+        "recommendedDescription": "{{hotkey}} is now the safer default on this platform. First install and fallback flows will prefer it.",
+        "warnings": {
+          "linuxSuper": "The current Linux hotkey still includes Super/Meta, which desktop shortcuts often intercept.",
+          "windowsSuper": "The current Windows hotkey still includes Win/Super, which has a high chance of conflicting with system shortcuts."
+        },
+        "backends": {
+          "globe": "macOS Globe",
+          "globalShortcut": "Electron globalShortcut",
+          "windows-native": "Windows native listener",
+          "gnome-wayland": "GNOME Wayland native shortcut",
+          "native-modifier": "Native modifier listener"
+        }
+      },
+      "clearCache": "Clear Cache",
+      "dataManagementDescription": "Manage cached models and app data",
+      "dataManagementTitle": "Data Management",
+      "modelCache": "Model cache",
+      "open": "Open",
+      "removeModels": {
+        "confirmText": "Delete Models",
+        "description": "This deletes all locally cached Whisper models ({{path}}) and frees disk space. You can download them again from the model picker.",
+        "failedDescription": "Something went wrong removing the models. Please try again.",
+        "failedDescriptionShort": "Could not remove cached models.",
+        "failedTitle": "Couldn't remove models",
+        "successDescription": "All cached models have been removed.",
+        "successTitle": "Models removed",
+        "title": "Remove downloaded models?"
+      },
+      "removing": "Removing...",
+      "settingsTransfer": {
+        "description": "Export current settings to a file, or restore settings from a file.",
+        "export": "Export Settings",
+        "exportFailedDescription": "Failed to export settings. Please try again.",
+        "exportFailedTitle": "Export failed",
+        "exportSuccessDescription": "Settings exported to: {{path}}",
+        "exportSuccessTitle": "Export successful",
+        "import": "Import Settings",
+        "importConfirmButton": "Import & Overwrite",
+        "importConfirmDescription": "This will overwrite current settings and restart the app when done.",
+        "importConfirmTitle": "Import settings now?",
+        "importFailedDescription": "Failed to import settings. Please verify the file format.",
+        "importFailedTitle": "Import failed",
+        "importSuccessDescription": "Settings imported. The app will restart now.",
+        "importSuccessTitle": "Import successful",
+        "title": "Settings Backup"
+      },
+      "resetAll": {
+        "confirmText": "Delete Everything",
+        "description": "This will permanently delete all settings, transcriptions, and cached data. The app will reload after reset.",
+        "failedDescription": "Something went wrong. Please try again or reinstall the app.",
+        "failedTitle": "Couldn't reset",
+        "successDescription": "Everything has been reset. The app will reload now.",
+        "successTitle": "All done",
+        "title": "Reset All App Data"
+      },
+      "resetAppData": "Reset app data",
+      "resetAppDataDescription": "Permanently delete all settings, transcriptions, and cached data"
+    },
+    "dictionary": {
+      "add": "Add",
+      "addWordOrPhrase": "Add a word or phrase",
+      "agentNameAutoManaged": "Agent name (auto-managed)",
+      "clearAll": "Clear all",
+      "clearDictionaryDescription": "This will remove all words from your custom dictionary. This action cannot be undone.",
+      "clearDictionaryTitle": "Clear dictionary?",
+      "description": "Add words, names, or technical terms to improve transcription accuracy",
+      "howItWorksDescription": "Words you add are included in the AI prompt so the model knows to look for and preserve these terms during transcription cleanup.",
+      "howItWorksTitle": "How it works",
+      "noWords": "No words added yet",
+      "placeholder": "e.g. Chord, Kubernetes, Dr. Martinez...",
+      "pressEnterToAdd": "Press Enter to add",
+      "removeWord": "Remove word",
+      "tipDescription": "Add proper nouns, technical terms, or any word that might be transcribed incorrectly.",
+      "tipLabel": "Tip",
+      "title": "Custom Dictionary",
+      "wordsAppearHere": "Words you add will appear here",
+      "yourWords": "Your words"
+    },
+    "general": {
+      "appearance": {
+        "auto": "Auto",
+        "dark": "Dark",
+        "description": "Control how ChordVox looks",
+        "light": "Light",
+        "theme": "Theme",
+        "themeDescription": "Choose light, dark, or match your system",
+        "title": "Appearance"
+      },
+      "floatingIcon": {
+        "recordingAnimation": "Recording animation",
+        "recordingAnimationDescription": "Choose the floating bar feedback shown while recording and processing",
+        "animationStyles": {
+          "line": "Lines",
+          "particles": "Particle cloud",
+          "level": "Level meter"
+        },
+        "description": "Control when the dictation icon is visible on your screen",
+        "title": "Floating Icon"
+      },
+      "hotkey": {
+        "activationMode": "Activation Mode",
+        "description": "The key combination that starts and stops voice dictation",
+        "diagnostics": {
+          "title": "Hotkey diagnostics",
+          "description": "Confirm the active hotkey backend, registration state, and test the wake chain directly.",
+          "refresh": "Refresh",
+          "testWake": "Test wake chain",
+          "platform": "Platform",
+          "backend": "Hotkey backend",
+          "primaryHotkey": "Primary hotkey",
+          "secondaryHotkey": "Secondary hotkey",
+          "primaryStatus": "Primary status",
+          "secondaryStatus": "Secondary status",
+          "registered": "Registered",
+          "notRegistered": "Not registered",
+          "recommendedTitle": "Recommended default",
+          "recommendedDescription": "{{hotkey}} is the safer default on this platform. First install and automatic fallback flows now prefer it.",
+          "warnings": {
+            "linuxSuper": "The current Linux hotkey still includes Super/Meta, which desktop shortcuts often intercept.",
+            "windowsSuper": "The current Windows hotkey still includes Win/Super, which has a high chance of conflicting with system shortcuts.",
+            "macosCommandSpace": "Command+Space is commonly intercepted by Spotlight or input-source switching on macOS."
+          },
+          "backends": {
+            "globe": "macOS Globe",
+            "globalShortcut": "Electron globalShortcut",
+            "windows-native": "Windows native listener",
+            "gnome-wayland": "GNOME Wayland native shortcut",
+            "native-modifier": "Native modifier listener"
+          }
+        },
+        "secondary": {
+          "title": "Profile 2 Hotkey (Independent model/refine)",
+          "profileSavedState": "Profile 2 settings saved",
+          "profileUnsavedState": "Profile 2 settings not saved (set models first, then click the button)",
+          "saveCurrentAsProfile2": "Save current as Profile 2",
+          "savedTitle": "Secondary hotkey saved",
+          "savedDescription": "Profile 2 hotkey was updated.",
+          "profileSavedTitle": "Profile 2 saved",
+          "profileSavedDescription": "Current transcription and AI refine settings were saved to Profile 2.",
+          "profileSavedVerifiedAt": "Save verified at {{time}}",
+          "profileSavedTranscriptionSummary": "Transcription: {{provider}} / {{model}}",
+          "profileSavedReasoningSummary": "Refine: {{provider}} / {{model}}",
+          "profileSavedReasoningDisabled": "Refine: disabled",
+          "profileSaveFailedTitle": "Profile 2 save failed",
+          "profileSaveFailed": "Could not save Profile 2 settings. Please try again.",
+          "registerFailed": "Failed to register secondary hotkey. Please choose another shortcut.",
+          "registerRetry": "Failed to register secondary hotkey. Please try again.",
+          "requiresProTitle": "Profile 2 requires Pro",
+          "requiresProDescription": "Secondary hotkeys and saved secondary workflows are part of Pro. Your first related Pro action can start a free 7-day trial.",
+          "globeNotSupported": "Secondary hotkey does not support the Globe/Fn key.",
+          "rightModifierNotSupported": "Secondary hotkey does not support right-side single modifiers.",
+          "modifiersOnlyNotSupported": "Secondary hotkey does not support modifiers-only combinations."
+        },
+        "title": "Dictation Hotkey"
+      },
+      "microphone": {
+        "description": "Select which input device to use for dictation",
+        "title": "Microphone"
+      },
+      "soundEffects": {
+        "dictationSounds": "Dictation sounds",
+        "dictationSoundsDescription": "Choose the cue played when recording starts and stops",
+        "cueStyles": {
+          "off": "Off",
+          "electronic": "Electronic",
+          "droplet1": "Droplet 1",
+          "droplet2": "Droplet 2"
+        },
+        "title": "Sound Effects"
+      },
+      "startup": {
+        "launchAtLogin": "Launch at login",
+        "launchAtLoginDescription": "Start ChordVox automatically when you log in",
+        "autoCheckUpdate": "Auto Check for Updates",
+        "autoCheckUpdateDescription": "Automatically check for and download new versions when ChordVox starts (no auto-install)",
+        "title": "Startup"
+      },
+      "updates": {
+        "badges": {
+          "dev": "Dev",
+          "latest": "Latest",
+          "update": "Update"
+        },
+        "checkForUpdates": "Check for Updates",
+        "checking": "Checking...",
+        "currentVersion": "Current version",
+        "devMode": "Running in development mode",
+        "dialogs": {
+          "almostThere": {
+            "description": "The update is almost ready. Please wait a moment.",
+            "title": "Almost there"
+          },
+          "checkFailed": {
+            "description": "We had trouble checking for updates. Please try again later. {{message}}",
+            "title": "Couldn't check for updates"
+          },
+          "downloadFailed": {
+            "description": "We had trouble downloading the update. Please try again.",
+            "title": "Couldn't download update"
+          },
+          "installFailed": {
+            "description": "We had trouble installing the update. Please try again.",
+            "title": "Couldn't install update"
+          },
+          "installUpdate": {
+            "confirmText": "Install & Restart",
+            "description": "ChordVox will restart to apply the update.",
+            "title": "Install Update"
+          },
+          "noUpdates": {
+            "description": "You're on the latest version.",
+            "title": "No Updates"
+          },
+          "manualUpdateAvailable": {
+            "confirmText": "Open download page",
+            "description": "Version v{{version}} is available. Automatic download isn't available in this environment, so please open the Release page to update.",
+            "title": "Update available"
+          },
+          "updateAvailable": {
+            "description": "Update available: v{{version}}",
+            "title": "Update Available"
+          },
+          "updateError": {
+            "description": "Something went wrong with the update. Please try again.",
+            "title": "Update Error"
+          }
+        },
+        "downloadUpdate": "Download Update {{version}}",
+        "downloading": "Downloading... {{progress}}%",
+        "openReleasePage": "Open download page",
+        "installAndRestart": "Install & Restart",
+        "latestVersion": "You're on the latest version",
+        "newVersion": "A newer version is available",
+        "newVersionAvailable": "New version available",
+        "restarting": "Restarting...",
+        "title": "Updates",
+        "versionPlaceholder": "—",
+        "whatsNew": "What's new in v{{version}}"
+      }
+    },
+    "permissions": {
+      "accessibilityDescription": "Required for auto-paste to work after transcription",
+      "accessibilityTitle": "Accessibility",
+      "description": "Test and manage system permissions required for ChordVox to function correctly",
+      "microphoneDescription": "Required for voice recording and dictation",
+      "microphoneTitle": "Microphone",
+      "systemDescription": "Check the core system access ChordVox needs for recording, dictation, and auto-paste.",
+      "systemTitle": "System Permissions",
+      "resetAccessibility": {
+        "description": "This will remove ChordVox from accessibility permissions. You'll need to re-grant access in System Settings > Privacy & Security > Accessibility.",
+        "label": "Reset accessibility permissions",
+        "rowDescription": "Fix issues after reinstalling or rebuilding the app by removing and re-adding ChordVox in System Settings",
+        "title": "Reset Accessibility Permissions"
+      },
+      "test": "Test",
+      "testAndGrant": "Test & Grant",
+      "title": "Permissions",
+      "troubleshoot": "Troubleshoot",
+      "troubleshootingTitle": "Troubleshooting"
+    },
+    "privacy": {
+      "cloudBackup": "Cloud backup",
+      "cloudBackupDescription": "Save your transcriptions to the cloud so you never lose them.",
+      "description": "Control logging, transcription history, and analytics behavior. You can turn these off at any time.",
+      "transcriptionHistory": "Save transcription history",
+      "transcriptionHistoryDescription": "When disabled, ChordVox will still transcribe and paste, but won't save new history entries.",
+      "title": "Privacy",
+      "usageAnalytics": "Usage analytics",
+      "usageAnalyticsDescription": "Remote usage analytics are not enabled in this build. This switch is local-only and does not upload any transcription or performance data."
+    },
+    "prompts": {
+      "description": "View, customize, and test the unified system prompt that powers text cleanup and instruction detection",
+      "requiresProDescription": "Editing prompts stays free. Running AI tests can start a free 7-day Pro trial.",
+      "requiresProTitle": "Prompt testing requires Pro",
+      "title": "Prompt Studio"
+    },
+    "transcription": {
+      "customSetup": "Custom Setup",
+      "customSetupDescription": "Use your own provider and API key.",
+      "description": "Choose how ChordVox transcribes your voice",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "Just works. No configuration needed.",
+      "title": "Speech to Text",
+      "toasts": {
+        "switchedCloud": {
+          "description": "Transcription will use ChordVox's cloud service.",
+          "title": "Switched to ChordVox Cloud"
+        },
+        "switchedCustom": {
+          "description": "Configure your own provider and API key.",
+          "title": "Switched to Custom Setup"
+        }
+      },
+      "storageLocation": {
+        "label": "Model storage location",
+        "description": "Manage streaming, Whisper, Parakeet, and SenseVoice models from one location."
+      },
+      "streaming": {
+        "currentFolderLabel": "Streaming model folder",
+        "currentFolderHint": "Streaming models use the streaming-models subfolder under the unified model storage location.",
+        "folderAutoInstallHint": "If you do not choose a folder, streaming models install to the streaming-models subfolder under the unified model storage location.",
+        "clearAllButton": "Clear all models",
+        "models": {
+          "zipformerSmall": {
+            "name": "Ultra Fast",
+            "description": "Low-end devices / Quick input"
+          },
+          "zipformerBalanced": {
+            "name": "Balanced",
+            "description": "Chinese, speed & accuracy balance"
+          },
+          "zipformerHighAccuracy": {
+            "name": "High Accuracy (Chinese)",
+            "description": "Best Chinese accuracy"
+          },
+          "paraformerBilingual": {
+            "name": "Recommended (Chinese + English)",
+            "description": "Recommended default · Works for Chinese and English"
+          }
+        },
+        "toasts": {
+          "downloadInProgressTitle": "A download is already running",
+          "downloadInProgressDescription": "Please wait for the current model download to finish.",
+          "modelReadyTitle": "Model ready",
+          "modelReadyDescription": "The streaming model has been downloaded and installed.",
+          "downloadFailedTitle": "Download failed",
+          "downloadFailedDescription": "Failed to download the streaming model. Please try again.",
+          "downloadCancelledTitle": "Download cancelled",
+          "downloadCancelledDescription": "The current streaming model download has been cancelled.",
+          "deleteDialogTitle": "Delete streaming model",
+          "deleteDialogDescription": "Delete \"{{model}}\"? You will need to download it again before using it.",
+          "deleteSuccessTitle": "Model deleted",
+          "deleteSuccessDescription": "\"{{model}}\" has been deleted.",
+          "deleteFailedTitle": "Delete failed",
+          "deleteFailedDescription": "Failed to delete the streaming model. Please try again.",
+          "clearFailedTitle": "Clear failed",
+          "clearFailedDescription": "Failed to clear streaming models. Please try again."
+        }
+      }
+    },
+    "fileTranscription": {
+      "title": "File Transcription",
+      "description": "Transcribe a single audio or video file and save the result to history. Your first file transcription can start a free 7-day Pro trial.",
+      "chooseFile": "Choose File",
+      "chooseFileDescription": "Pick an audio or video file to transcribe inside ChordVox.",
+      "route": {
+        "label": "Current Route",
+        "provider": "Transcription Engine",
+        "model": "Current Model",
+        "syncBadge": "Matches transcription settings",
+        "streamingProvider": "Local streaming",
+        "streamingTitle": "Local Streaming Transcription",
+        "streamingDescription": "File transcription follows your currently selected real-time model and will not switch itself to a high-accuracy route.",
+        "localTitle": "Local Transcription",
+        "localDescription": "File transcription follows the same local model and settings selected in the Transcription section.",
+        "cloudTitle": "Cloud / BYOK Transcription",
+        "cloudDescription": "File transcription follows the same cloud provider and model selected in the Transcription section.",
+        "currentRouteHint": "Current file transcription route: {{provider}} / {{model}}"
+      },
+      "supportedFormats": "Supports common audio and video formats such as mp3, wav, m4a, mp4, mov, and webm.",
+      "currentFile": "Current File",
+      "historyButton": "Open History",
+      "progressLabel": "Progress",
+      "progressTitle": "Task Progress",
+      "progressDescription": "Shows the current file, overall progress, and active processing stage.",
+      "stages": {
+        "idle": "Transcription starts automatically after you choose a file.",
+        "preparing": "Preparing the file...",
+        "transcribing": "Transcribing the file...",
+        "enhancing": "Enhancing the text with AI...",
+        "saving": "Saving the result...",
+        "complete": "Transcription complete.",
+        "short": {
+          "idle": "Idle",
+          "preparing": "Preparing",
+          "transcribing": "Transcribing",
+          "enhancing": "Enhancing",
+          "saving": "Saving",
+          "complete": "Complete"
+        }
+      },
+      "trialHint": "Your first file transcription can start a free 7-day Pro trial."
+    }
+  },
+  "models": {
+    "descriptions": {
+      "parakeet": {
+        "parakeet_tdt_0_6b_v3": "Fast European-language ASR with auto language detection (25 languages, no Chinese)"
+      },
+      "whisper": {
+        "tiny": "Fastest, lower quality",
+        "base": "Good balance",
+        "small": "Better quality, slower",
+        "medium": "High quality",
+        "large": "Best quality, slowest",
+        "turbo": "Fast with good quality"
+      },
+      "transcription": {
+        "openai_gpt_4o_mini_transcribe": "Fast and accurate transcription",
+        "openai_gpt_4o_transcribe": "Most accurate transcription",
+        "openai_whisper_1": "Legacy Whisper API model",
+        "groq_whisper_large_v3": "Highest quality Groq Whisper model",
+        "groq_whisper_large_v3_turbo": "216x real-time speed",
+        "mistral_voxtral_mini_latest": "Fast multilingual transcription"
+      },
+      "cloud": {
+        "openai_gpt_5_2": "Latest flagship reasoning model",
+        "openai_gpt_5_mini": "Fast and cost-efficient",
+        "openai_gpt_5_nano": "Ultra-fast, low latency",
+        "openai_gpt_4_1": "Strong baseline, 1M context",
+        "openai_gpt_4_1_mini": "Smaller GPT-4.1 model",
+        "openai_gpt_4_1_nano": "Lowest latency GPT-4.1",
+        "anthropic_claude_sonnet_4_5": "Balanced performance",
+        "anthropic_claude_haiku_4_5": "Fast with near-frontier intelligence",
+        "anthropic_claude_opus_4_5": "Most capable Claude model",
+        "gemini_gemini_3_pro_preview": "Next-gen flagship model for complex reasoning",
+        "gemini_gemini_3_flash_preview": "Ultra-fast, high-capability next-gen model",
+        "gemini_gemini_2_5_flash_lite": "Lowest latency and cost",
+        "groq_qwen_qwen3_32b": "Powerful reasoning model, 131K context",
+        "groq_openai_gpt_oss_120b": "OpenAI's open-source flagship, 500 T/sec",
+        "groq_openai_gpt_oss_20b": "Fast open-source model, 1000 T/sec",
+        "groq_llama_3_3_70b_versatile": "Meta's versatile model, 280 T/sec",
+        "groq_llama_3_1_8b_instant": "Ultra-fast 560 T/sec, 131K context",
+        "groq_mixtral_8x7b_32768": "32K context, mixture of experts",
+        "groq_gemma2_9b_it": "Google's efficient model"
+      },
+      "local": {
+        "qwen_qwen3_8b_q4_k_m": "Latest Qwen3 with thinking mode support",
+        "qwen_qwen3_8b_q5_k_m": "Higher quality Qwen3 with thinking mode",
+        "qwen_qwen3_4b_q4_k_m": "Compact Qwen3 with reasoning capabilities",
+        "qwen_qwen3_1_7b_q8_0": "Small but capable Qwen3 model",
+        "qwen_qwen3_0_6b_q8_0": "Tiny Qwen3 for edge devices",
+        "qwen_qwen3_32b_q4_k_m": "Most powerful local Qwen3 with deep reasoning",
+        "qwen_qwen2_5_0_5b_instruct_q5_k_m": "Smallest model, fast but limited capabilities",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "Small model, good for basic tasks",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "Balanced model for general use",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "Large model with high quality (Q4_K_M)",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "Large model, high quality reasoning (Q5_K_M)",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "Fast and efficient instruction model",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "Higher quality instruction model",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "Tiny model for edge devices",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "Small but capable multilingual model",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "Powerful model with great performance",
+        "openai_oss_gpt_oss_20b_mxfp4": "OpenAI's open-weight model for consumer hardware"
+      }
+    }
+  },
+  "transcriptionModes": {
+    "realTime": {
+      "label": "Real-time Transcription",
+      "cardDescription": "Talk & see text instantly · Local · Low latency · Private",
+      "switchedTitle": "Switched to Real-time Transcription",
+      "switchedDescription": "Talk and see text appear instantly with local, low-latency processing",
+      "modelsLabel": "Real-time Transcription Models",
+      "clearModelsTitle": "Clear real-time transcription models",
+      "clearModelsDescription": "Delete all downloaded real-time transcription models? You will need to download them again.",
+      "clearedModelsTitle": "Real-time transcription models cleared",
+      "clearedModelsDescription": "All downloaded real-time transcription models have been removed.",
+      "downloadHint": "Download a local model before using real-time transcription.",
+      "defaultEnabledTitle": "Real-time transcription is enabled by default",
+      "defaultEnabledDescription": "Hotkey dictation will use local real-time transcription by default. The default model is \"{{defaultModelName}}\". You can configure high-accuracy transcription below if needed."
+    },
+    "highAccuracy": {
+      "label": "High-Accuracy Transcription",
+      "optionalLabel": "High-Accuracy Transcription (Optional)",
+      "cardDescription": "Transcribe after recording for higher accuracy, but slower · Cloud API or local models",
+      "switchedTitle": "Switched to High-Accuracy Transcription",
+      "switchedDescription": "Transcribe after recording for higher accuracy, but slower",
+      "onboardingDescription": "Best for long-form dictation and meetings: higher accuracy, but slower, with cloud API or local model options."
+    }
+  }
+}
