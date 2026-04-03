@@ -30,8 +30,6 @@
 
 <p align="center">
   <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>下载</strong></a>
-  ·
-  <a href="https://github.com/GravityPoet/ChordVox/releases/latest">最新版本</a>
 </p>
 
 <p align="center">
