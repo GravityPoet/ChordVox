@@ -30,8 +30,8 @@
 
 <p align="center">
   <strong>Choose your language:</strong><br/>
-  <a href="./README.md"><img src="assets/button-english-homepage-v3.svg" alt="English Homepage" /></a>
-  <a href="./README.zh.md"><img src="assets/button-zh-intro-v3.svg" alt="中文介绍页面" /></a>
+  <a href="./README.md"><img src="assets/button-english-homepage-v4.svg" alt="English Homepage" /></a>
+  <a href="./README.zh.md"><img src="assets/button-zh-intro-v4.svg" alt="中文介绍页面" /></a>
 </p>
 
 <p align="center">

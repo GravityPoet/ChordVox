@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="32" viewBox="0 0 150 32" role="img" aria-label="中文介绍页面">
+  <rect width="150" height="32" fill="#e11d48"/>
+  <text
+    x="75"
+    y="22"
+    fill="#ffffff"
+    font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, Helvetica, sans-serif"
+    font-size="14"
+    font-weight="700"
+    text-anchor="middle"
+  >
+    中文介绍页面
+  </text>
+</svg>
