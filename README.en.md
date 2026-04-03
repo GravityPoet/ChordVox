@@ -1,4 +1,8 @@
 
+<p align="center">
+  <img src="assets/logo.png" alt="ChordVox" width="128" />
+</p>
+
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
@@ -21,17 +25,6 @@
   <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>Download</strong></a>
   ·
   <a href="https://github.com/GravityPoet/ChordVox/releases/latest">Latest Release</a>
-</p>
-
-<p align="center">
-  <img src="assets/chordvox-demo.webp" alt="ChordVox demo" width="100%" />
-</p>
-
----
-
-<!-- Demo placeholder -->
-<p align="center">
-  <img src="https://raw.githubusercontent.com/GravityPoet/ChordVox/main/docs/assets/chordvox_demo_apple.png" alt="ChordVox Demo" />
 </p>
 
 ---
