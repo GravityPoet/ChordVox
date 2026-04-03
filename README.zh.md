@@ -5,13 +5,20 @@
 <h1 align="center">ChordVox AI语音输入法</h1>
 
 <p align="center">
-  <strong>还在忍受低效的打字，或是错漏百出的传统语音识别？</strong><br>
-  “你的嘴，就是最快的键盘。”
+  <strong>还在忍受低效的打字，或是错漏百出的传统语音识别？</strong>
+</p>
+
+<h2 align="center">“你的嘴，就是最快的键盘。”</h2>
+
+<p align="center">
+  用说话的速度，捕捉灵感、完成文章与邮件。<br>
+  一句话即可让 AI 自动为你润色排版，瞬间产出，跃然纸上。
 </p>
 
 <p align="center">
-  用说话的速度，捕捉灵感、完成文章与邮件。一句话即可让 AI 自动为你润色排版，瞬间产出，跃然纸上。<br>
-  <strong>拒绝大厂“用免费换数据”的收割套路。真正的纯本地运行、永久免费，你的隐私连网线都出不去。</strong>
+  <img src="https://img.shields.io/badge/%E6%8B%92%E7%BB%9D%E5%A4%A7%E5%8E%82%E2%80%9C%E5%85%8D%E8%B4%B9%E6%8D%A2%E6%95%B0%E6%8D%AE%E2%80%9D-e11d48?style=for-the-badge" alt="拒绝大厂免费换数据" />
+  <img src="https://img.shields.io/badge/%E7%9C%9F%E6%AD%A3%E7%BA%AF%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C-e11d48?style=for-the-badge" alt="真正纯本地运行" />
+  <img src="https://img.shields.io/badge/%E9%9A%90%E7%A7%81%E8%BF%9E%E7%BD%91%E7%BA%BF%E9%83%BD%E5%87%BA%E4%B8%8D%E5%8E%BB-e11d48?style=for-the-badge" alt="隐私连网线都出不去" />
 </p>
 
 <p align="center">

@@ -5,13 +5,20 @@
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
-  <strong>Still fighting with slow typing or messy voice dictation?</strong><br>
-  "Your mouth is the fastest keyboard."
+  <strong>Still fighting with slow typing or messy voice dictation?</strong>
+</p>
+
+<h2 align="center">"Your mouth is the fastest keyboard."</h2>
+
+<p align="center">
+  Capture ideas, write articles, and draft emails at the speed of speech.<br>
+  Just a single sentence lets AI auto-polish and format, leaping onto your screen instantly.
 </p>
 
 <p align="center">
-  Capture ideas, write articles, and draft emails at the speed of speech. Just a single sentence lets AI auto-polish and format, leaping onto your screen instantly.<br>
-  <strong>Stop feeding your privacy to big tech's "free" traps. Truly local and genuinely free—your data never leaves your device.</strong>
+  <img src="https://img.shields.io/badge/NO_BIG_TECH_%22FREE%22_TRAP-e11d48?style=for-the-badge" alt="No big tech free trap" />
+  <img src="https://img.shields.io/badge/TRULY_LOCAL-e11d48?style=for-the-badge" alt="Truly local" />
+  <img src="https://img.shields.io/badge/DATA_NEVER_LEAVES_YOUR_DEVICE-e11d48?style=for-the-badge" alt="Data never leaves your device" />
 </p>
 
 <p align="center">
