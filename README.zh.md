@@ -5,14 +5,13 @@
 <h1 align="center">ChordVox AI语音输入法</h1>
 
 <p align="center">
-  <strong>还在手动打字 or 改语音识别的错别字？</strong>
+  <strong>还在忍受低效的打字，或是错漏百出的传统语音识别？</strong><br>
+  “你的嘴，就是最快的键盘。”
 </p>
 
-<h2 align="center">你的嘴，就是最快的键盘。</h2>
-
 <p align="center">
-  <strong>说话秒变精修长文，自动粘贴一气呵成。</strong><br/>
-  纯本地免费，隐私掌握在你手中。
+  用说话的速度，捕捉灵感、完成文章与邮件。一句话即可让 AI 自动为你润色排版，瞬间产出，跃然纸上。<br>
+  <strong>拒绝大厂“用免费换数据”的收割套路。真正的纯本地运行、永久免费，你的隐私连网线都出不去。</strong>
 </p>
 
 <p align="center">

@@ -4,11 +4,14 @@
 
 <h1 align="center">ChordVox IME</h1>
 
-<h2 align="center">"Just speak your mind. Let AI write it out perfectly."</h2>
+<p align="center">
+  <strong>Still fighting with slow typing or messy voice dictation?</strong><br>
+  "Your mouth is the fastest keyboard."
+</p>
 
 <p align="center">
-  <strong>Type code and reports at the speed of speech.</strong><br>
-  Local, free, and pastes right at your cursor.
+  Capture ideas, write articles, and draft emails at the speed of speech. Just a single sentence lets AI auto-polish and format, leaping onto your screen instantly.<br>
+  <strong>Stop feeding your privacy to big tech's "free" traps. Truly local and genuinely free—your data never leaves your device.</strong>
 </p>
 
 <p align="center">
