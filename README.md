@@ -26,8 +26,6 @@
 
 <p align="center">
   <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>Download</strong></a>
-  ·
-  <a href="https://github.com/GravityPoet/ChordVox/releases/latest">Latest Release</a>
 </p>
 
 ---
