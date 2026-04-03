@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="44" viewBox="0 0 160 44" role="img" aria-label="下载">
+  <rect width="160" height="44" rx="10" fill="#2563eb"/>
+  <text
+    x="80"
+    y="29"
+    fill="#ffffff"
+    font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, Helvetica, sans-serif"
+    font-size="18"
+    font-weight="700"
+    text-anchor="middle"
+  >
+    下载
+  </text>
+</svg>

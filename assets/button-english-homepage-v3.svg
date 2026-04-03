@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="36" viewBox="0 0 220 36" role="img" aria-label="English Homepage">
+  <rect width="220" height="36" fill="#111827"/>
+  <text
+    x="110"
+    y="24"
+    fill="#ffffff"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="15"
+    font-weight="700"
+    letter-spacing="0.7"
+    text-anchor="middle"
+  >
+    ENGLISH HOMEPAGE
+  </text>
+</svg>

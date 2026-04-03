@@ -30,12 +30,12 @@
 
 <p align="center">
   <strong>Choose your language:</strong><br/>
-  <a href="./README.md"><img src="assets/button-english-homepage-v2.svg" alt="English Homepage" /></a>
-  <a href="./README.zh.md"><img src="assets/button-zh-intro-v2.svg" alt="中文介绍页面" /></a>
+  <a href="./README.md"><img src="assets/button-english-homepage-v3.svg" alt="English Homepage" /></a>
+  <a href="./README.zh.md"><img src="assets/button-zh-intro-v3.svg" alt="中文介绍页面" /></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>Download</strong></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="assets/button-download-en.svg" alt="Download" /></a>
 </p>
 
 <p align="center">
@@ -112,7 +112,7 @@
 ### Download
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="https://img.shields.io/badge/Download-111827?style=for-the-badge" alt="Download" /></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="assets/button-download-en.svg" alt="Download" /></a>
 </p>
 
 After opening the release page, click `Show all assets` if needed, then choose:

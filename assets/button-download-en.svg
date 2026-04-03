@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="196" height="44" viewBox="0 0 196 44" role="img" aria-label="Download">
+  <rect width="196" height="44" rx="10" fill="#2563eb"/>
+  <text
+    x="98"
+    y="29"
+    fill="#ffffff"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="18"
+    font-weight="700"
+    letter-spacing="0.9"
+    text-anchor="middle"
+  >
+    DOWNLOAD
+  </text>
+</svg>
