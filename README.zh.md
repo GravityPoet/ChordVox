@@ -30,12 +30,12 @@
 
 <p align="center">
   <strong>选择语言：</strong><br/>
-  <a href="./README.md"><img src="assets/button-english-homepage-v2.svg" alt="English Homepage" /></a>
-  <a href="./README.zh.md"><img src="assets/button-zh-intro-v2.svg" alt="中文介绍页面" /></a>
+  <a href="./README.md"><img src="assets/button-english-homepage-v3.svg" alt="English Homepage" /></a>
+  <a href="./README.zh.md"><img src="assets/button-zh-intro-v3.svg" alt="中文介绍页面" /></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>下载</strong></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="assets/button-download-zh.svg" alt="下载" /></a>
 </p>
 
 <p align="center">
@@ -96,7 +96,7 @@
 ### 下载
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-111827?style=for-the-badge" alt="下载" /></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="assets/button-download-zh.svg" alt="下载" /></a>
 </p>
 
 进入发布页后，如有需要先点 `Show all assets`，再选择你的系统对应文件：
