@@ -2,7 +2,8 @@
 <h1 align="center">ChordVox IME</h1>
 
 <p align="center">
-  <strong>Your voice, refined by AI, pasted where you need it.</strong>
+  <strong>"Just speak your mind. Let AI write it out perfectly."</strong><br>
+  Type code and reports at the speed of speech. Local, free, and pastes right at your cursor.
 </p>
 
 <p align="center">
@@ -24,31 +25,47 @@
 
 ---
 
-### One-liner
+<!-- Demo placeholder -->
+<p align="center">
+  <img src="https://via.placeholder.com/800x400?text=ChordVox+Demo+-+Speaking+vs+AI+Typing" alt="ChordVox Demo" />
+</p>
 
-> **Desktop voice keyboard that transcribes locally, refines with AI, and pastes directly at your cursor — no cloud account required.**
+---
+
+### Why You Need ChordVox
+
+**What you actually said**:  
+> *"Umm... let's have a meeting this afternoon, maybe at 3, invite Bob... oh wait, I mean invite Alice. We need to discuss the UI redesign."*
+
+- 🟢 **Free Version (Raw Text)**: Transcribes exactly that, keeping your filler words and hesitations.
+- 🚀 **Pro Version (AI Secretary)**: `[Meeting Notice] Time: 3:00 PM today; Attendee: Alice; Topic: UI redesign discussion.`
+
+**💡 With the Free version, you get a recorder. With Pro, you get a private secretary.**
 
 ---
 
 ### Key Features
 
-- 🔒 **Privacy-first, Local-first** — Ship with built-in STT engines (whisper.cpp · NVIDIA Parakeet · SenseVoice). Your audio never leaves your machine unless you choose it to. Zero Python dependency; a single native binary handles everything.
+- ⌨️ **Speak into Text, Pasted Instantly** — One hotkey triggers the flow: record → transcribe → refine → paste right at your blinking cursor. Zero window switching, unbroken train of thought.
 
-- 💼 **Enterprise-Grade Features (Pro)** — Smoothly upgrade to unlock heavy-duty commercial capabilities: injection of professional-domain business dictionaries, complex anti-abuse and content moderation mechanisms, and integration of exclusive high-speed commercial endpoints (ready to use, no need to hunt for and configure third-party API keys).
+- 🧠 **AI Refinement Pipeline** — Raw speech → polished prose. Automatically strips filler words and perfects your punctuation. (*Power users can plug in their own local GGUF or top-tier APIs.*)
 
-- 🎯 **Agent Naming & Command Mode** — Personalize your AI assistant's name. Address it directly ("Hi ChordVox, draft an email…") to instantly switch from normal dictation to instruction-following mode.
+- 🎯 **Summon Your Executive Assistant** — Start your sentence with "Hi ChordVox, draft an email...", and it instantly transforms from a dictation tool into an instruction-following assistant.
 
-- 📖 **Custom Dictionary** — Add domain-specific jargon, names, and technical terms to the in-app dictionary to drastically improve transcription accuracy for your specific workflows.
+- 📖 **Learns Your Jargon** — A built-in custom dictionary. Feed it your colleagues' names, coding acronyms, or medical terms, and it will transcribe them flawlessly.
 
-- 🧠 **AI Refinement Pipeline** — Raw speech → polished text. Connect to OpenAI / Anthropic / Google Gemini / Groq / any OpenAI-compatible endpoint, or run a local GGUF model via bundled llama.cpp. Includes smart contextual repair and format correction.
+- 🔒 **100% Local (Free Forever)** — Audio processing happens entirely on your machine. No Python setup, no cloud uploads, total privacy.
 
-- ⌨️ **Cursor-level Paste** — One hotkey triggers → records → transcribes → refines → pastes at your active cursor. Works across every app on macOS (AppleScript), Windows (SendKeys + nircmd), and Linux (XTest / xdotool / wtype / ydotool). True Push-to-Talk with native keyboard hooks on macOS (Globe/Fn key via Swift listener) and Windows (low-level `WH_KEYBOARD_LL` hook).
+<details>
+<summary><b>👀 Click to reveal hardcore geeky specs</b></summary>
+<br>
 
-- 🌍 **58 Languages · 10 Interface Languages** — Auto-detect or pin your language. Full UI localization in EN / ZH-CN / ZH-TW / JA / DE / FR / ES / PT / IT / RU.
-
-- 🔄 **Dual-Profile Hotkeys** — Bind two independent hotkey profiles, each with its own STT engine, AI model, and refinement strategy. Switch workflows in a single keystroke.
-
-- 🧹 **Storage Management** — Built-in cache cleanup tools. Easily remove downloaded Whisper/GGUF models to free up disk space with a single click in Settings.
+- **Enterprise-Grade Features (Pro)** — Inject business dictionaries, anti-abuse mechanisms, and ready-to-use premium cloud endpoints (bypassing the need to deal with API keys).
+- **Under the Hood** — Built on whisper.cpp, NVIDIA Parakeet, and SenseVoice. Connects to OpenAI compatible endpoints or uses bundled llama.cpp.
+- **System Hooks** — Deep OS integration using AppleScript/Swift (macOS), SendKeys/low-level hooks (Windows), and XTest/ydotool (Linux). 
+- **Dual-Profile Hotkeys** — Bind two completely independent hotkey and engine/model workflows.
+- **Storage Management** — 1-click removal of hefty Whisper/GGUF model caches.
+</details>
 
 ---
 
@@ -84,13 +101,15 @@
 ### Download
 
 - [Download ChordVox on GitHub Releases](https://github.com/GravityPoet/ChordVox/releases)
-- [Open the latest release](https://github.com/GravityPoet/ChordVox/releases/latest)
+- [Download the latest release](https://github.com/GravityPoet/ChordVox/releases/latest)
 
-After opening the release page, click `Show all assets` if needed, then choose:
+Once you open the release page, click the file that matches your system:
 
 - macOS (Apple Silicon): `ChordVox-*-arm64.dmg`
 - Windows (x64): `ChordVox-Setup-*.exe`
 - Linux (x64): `ChordVox-*-linux-x86_64.AppImage`, `ChordVox-*-linux-amd64.deb`, or `ChordVox-*-linux-x86_64.rpm`
+
+> Free forever local speech-to-text. AI enhancement, file transcription, BYOK, and advanced workflows are optional with Pro.
 
 #### macOS First Launch
 
