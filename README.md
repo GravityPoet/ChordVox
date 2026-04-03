@@ -18,8 +18,8 @@
 
 <p align="center">
   <strong>Choose your language:</strong><br/>
-  <a href="./README.md"><img src="https://img.shields.io/badge/English-Homepage-111827?style=for-the-badge" alt="English Homepage" /></a>
-  <a href="./README.zh.md"><img src="https://img.shields.io/badge/%E4%B8%AD%E6%96%87-%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D-e11d48?style=for-the-badge" alt="中文产品介绍" /></a>
+  <a href="./README.md"><img src="https://img.shields.io/badge/English%20Homepage-111827?style=for-the-badge" alt="English Homepage" height="40" /></a>
+  <a href="./README.zh.md"><img src="https://img.shields.io/badge/%E4%B8%AD%E6%96%87%E4%BB%8B%E7%BB%8D%E9%A1%B5%E9%9D%A2-e11d48?style=for-the-badge" alt="中文介绍页面" height="40" /></a>
 </p>
 
 <p align="center">
