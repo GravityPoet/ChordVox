@@ -33,7 +33,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/chordvox-demo.webp" alt="ChordVox 演示" width="100%" />
+  <img src="assets/chordvox-demo-zh-v4.webp" alt="ChordVox 演示" width="100%" />
 </p>
 
 ---
