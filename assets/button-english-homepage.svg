@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="388" height="56" viewBox="0 0 388 56" role="img" aria-label="English Homepage">
-  <rect width="388" height="56" fill="#111827"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="332" height="48" viewBox="0 0 332 48" role="img" aria-label="English Homepage">
+  <rect width="332" height="48" fill="#111827"/>
   <text
-    x="194"
-    y="36"
+    x="166"
+    y="31"
     fill="#ffffff"
     font-family="Arial, Helvetica, sans-serif"
-    font-size="20"
+    font-size="18"
     font-weight="700"
-    letter-spacing="1.5"
+    letter-spacing="1.2"
     text-anchor="middle"
   >
     ENGLISH HOMEPAGE

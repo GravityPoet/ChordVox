@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <strong>Choose your language:</strong><br/>
+  <sub>Choose your language</sub><br/>
   <a href="./README.md"><img src="assets/button-english-homepage.svg" alt="English Homepage" /></a>
   <a href="./README.zh.md"><img src="assets/button-zh-intro.svg" alt="中文介绍页面" /></a>
 </p>
