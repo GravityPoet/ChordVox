@@ -27,7 +27,7 @@
 
 <!-- Demo placeholder -->
 <p align="center">
-  <img src="https://via.placeholder.com/800x400?text=ChordVox+Demo+-+Speaking+vs+AI+Typing" alt="ChordVox Demo" />
+  <img src="https://raw.githubusercontent.com/GravityPoet/ChordVox/main/docs/assets/chordvox_demo_apple.png" alt="ChordVox Demo" />
 </p>
 
 ---
