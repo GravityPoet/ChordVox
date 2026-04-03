@@ -26,6 +26,12 @@
   <a href="./README.md">English</a> | <strong>中文</strong>
 </p>
 
+<p align="center">
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>下载</strong></a>
+  ·
+  <a href="https://github.com/GravityPoet/ChordVox/releases/latest">最新版本</a>
+</p>
+
 ---
 
 ### 应用场景 / 痛点解决
@@ -79,14 +85,14 @@
 
 ### 下载
 
-当前稳定版：[`v1.5.68`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.68)
+- [下载 ChordVox（GitHub Releases）](https://github.com/GravityPoet/ChordVox/releases)
+- [打开最新版本](https://github.com/GravityPoet/ChordVox/releases/latest)
 
-| 系统 | 格式 | 下载 |
-|---|---|---|
-| macOS (Apple Silicon) | .dmg | [⬇ 下载](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.68/ChordVox-1.5.68-arm64.dmg) |
-| macOS (Intel) | .dmg | 即将上线 |
-| Windows | .exe | 即将上线 |
-| Linux | .AppImage / .deb | 即将上线 |
+进入发布页后，如有需要先点 `Show all assets`，再选择你的系统对应文件：
+
+- macOS（Apple Silicon）：`ChordVox-*-arm64.dmg`
+- Windows（x64）：`ChordVox-Setup-*.exe`
+- Linux（x64）：`ChordVox-*-linux-x86_64.AppImage`、`ChordVox-*-linux-amd64.deb` 或 `ChordVox-*-linux-x86_64.rpm`
 
 > 永久免费本地语音转文字。AI 文本增强、文件转录、BYOK 和高级工作流可选 Pro。
 

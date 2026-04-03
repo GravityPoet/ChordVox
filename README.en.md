@@ -16,6 +16,12 @@
   <strong>English</strong> | <a href="./README.md">中文</a>
 </p>
 
+<p align="center">
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>Download</strong></a>
+  ·
+  <a href="https://github.com/GravityPoet/ChordVox/releases/latest">Latest Release</a>
+</p>
+
 ---
 
 ### One-liner
@@ -77,14 +83,14 @@
 
 ### Download
 
-Current stable: [`v1.5.18`](https://github.com/GravityPoet/ChordVox/releases/tag/v1.5.18)
+- [Download ChordVox on GitHub Releases](https://github.com/GravityPoet/ChordVox/releases)
+- [Open the latest release](https://github.com/GravityPoet/ChordVox/releases/latest)
 
-| System | Chip | Format | Link |
-|---|---|---|---|
-| macOS | Apple Silicon | dmg | [⬇ Download](https://github.com/GravityPoet/ChordVox/releases/download/v1.5.18/ChordVox-1.5.18-arm64.dmg) |
-| macOS | Intel | dmg | Coming soon |
-| Windows | x64 | exe | Coming soon |
-| Linux | x64 | AppImage / deb | Coming soon |
+After opening the release page, click `Show all assets` if needed, then choose:
+
+- macOS (Apple Silicon): `ChordVox-*-arm64.dmg`
+- Windows (x64): `ChordVox-Setup-*.exe`
+- Linux (x64): `ChordVox-*-linux-x86_64.AppImage`, `ChordVox-*-linux-amd64.deb`, or `ChordVox-*-linux-x86_64.rpm`
 
 #### macOS First Launch
 
