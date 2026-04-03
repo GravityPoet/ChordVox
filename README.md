@@ -27,6 +27,10 @@
   <img src="https://raw.githubusercontent.com/GravityPoet/ChordVox/main/docs/assets/chordvox_demo_apple.png" alt="ChordVox 动态演示" />
 </p>
 
+<p align="center">
+  <img src="assets/chordvox-demo.webp" alt="ChordVox demo" width="100%" />
+</p>
+
 ---
 
 ### 为什么你需要 ChordVox？

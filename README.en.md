@@ -23,6 +23,10 @@
   <a href="https://github.com/GravityPoet/ChordVox/releases/latest">Latest Release</a>
 </p>
 
+<p align="center">
+  <img src="assets/chordvox-demo.webp" alt="ChordVox demo" width="100%" />
+</p>
+
 ---
 
 <!-- Demo placeholder -->
