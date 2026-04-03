@@ -91,8 +91,10 @@
 
 ### 下载
 
-- [下载 ChordVox（GitHub Releases）](https://github.com/GravityPoet/ChordVox/releases)
-- [打开最新版本](https://github.com/GravityPoet/ChordVox/releases/latest)
+<p align="center">
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-%E6%89%80%E6%9C%89%E7%89%88%E6%9C%AC-111827?style=for-the-badge" alt="下载所有版本" /></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases/latest"><img src="https://img.shields.io/badge/%E6%9C%80%E6%96%B0-%E7%89%88%E6%9C%AC-0f766e?style=for-the-badge" alt="最新版本" /></a>
+</p>
 
 进入发布页后，如有需要先点 `Show all assets`，再选择你的系统对应文件：
 

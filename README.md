@@ -97,8 +97,10 @@
 
 ### Download
 
-- [Download ChordVox on GitHub Releases](https://github.com/GravityPoet/ChordVox/releases)
-- [Download the latest release](https://github.com/GravityPoet/ChordVox/releases/latest)
+<p align="center">
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="https://img.shields.io/badge/Download-All%20Releases-111827?style=for-the-badge" alt="Download All Releases" /></a>
+  <a href="https://github.com/GravityPoet/ChordVox/releases/latest"><img src="https://img.shields.io/badge/Latest-Release-0f766e?style=for-the-badge" alt="Latest Release" /></a>
+</p>
 
 After opening the release page, click `Show all assets` if needed, then choose:
 
