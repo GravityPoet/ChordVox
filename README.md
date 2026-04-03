@@ -105,18 +105,16 @@
 - Windows（x64）：`ChordVox-Setup-*.exe`
 - Linux（x64）：`ChordVox-*-linux-x86_64.AppImage`、`ChordVox-*-linux-amd64.deb` 或 `ChordVox-*-linux-x86_64.rpm`
 
+> [!IMPORTANT]
+> **macOS 首次启动必读**：由于版本非 App Store 下载，可能会被 Gatekeeper 拦截导致“文件损坏”或无法打开。请在终端执行以下命令解除拦截：
+> ```bash
+> xattr -dr com.apple.quarantine /Applications/ChordVox.app
+> open /Applications/ChordVox.app
+> ```
+
 > 永久免费的本地离线语音识别。数据绝对隐私，你的声音只属于你。
 
-#### macOS 首次启动
 
-版本非APP Store下载可能被 Gatekeeper 拦截，执行以下命令解除：
-
-```bash
-xattr -dr com.apple.quarantine /Applications/ChordVox.app
-open /Applications/ChordVox.app
-```
-
----
 
 ### 快速链接
 
