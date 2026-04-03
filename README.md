@@ -24,7 +24,7 @@
 
 <!-- 演示视频/GIF 占位符：后续我们会将录制好的 WebP 动图或者 GIF 放在这里 -->
 <p align="center">
-  <img src="https://via.placeholder.com/800x400?text=ChordVox+Demo+-+Speaking+vs+AI+Typing" alt="ChordVox 动态演示" />
+  <img src="https://raw.githubusercontent.com/GravityPoet/ChordVox/main/docs/assets/chordvox_demo_apple.png" alt="ChordVox 动态演示" />
 </p>
 
 ---
