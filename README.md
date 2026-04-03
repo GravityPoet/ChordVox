@@ -4,9 +4,11 @@
 
 <h1 align="center">ChordVox IME</h1>
 
+<h2 align="center">"Just speak your mind. Let AI write it out perfectly."</h2>
+
 <p align="center">
-  <strong>"Just speak your mind. Let AI write it out perfectly."</strong><br>
-  Type code and reports at the speed of speech. Local, free, and pastes right at your cursor.
+  <strong>Type code and reports at the speed of speech.</strong><br>
+  Local, free, and pastes right at your cursor.
 </p>
 
 <p align="center">

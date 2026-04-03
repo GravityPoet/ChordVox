@@ -8,11 +8,11 @@
   <strong>还在手动打字 or 改语音识别的错别字？</strong>
 </p>
 
-<h3 align="center">你的嘴，就是最快的键盘。</h3>
+<h2 align="center">你的嘴，就是最快的键盘。</h2>
 
 <p align="center">
-  纯本地 AI 语音输入法 — 说话秒变精修长文，自动粘贴一气呵成。<br/>
-  隐私掌握在你手中，永久免费本地语音转文字。
+  <strong>说话秒变精修长文，自动粘贴一气呵成。</strong><br/>
+  纯本地免费，隐私掌握在你手中。
 </p>
 
 <p align="center">
