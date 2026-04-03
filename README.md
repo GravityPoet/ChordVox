@@ -17,7 +17,9 @@
 </p>
 
 <p align="center">
-  <strong>English</strong> | <a href="./README.zh.md">中文</a>
+  <strong>Choose your language:</strong><br/>
+  <a href="./README.md"><img src="https://img.shields.io/badge/English-Homepage-111827?style=for-the-badge" alt="English Homepage" /></a>
+  <a href="./README.zh.md"><img src="https://img.shields.io/badge/%E4%B8%AD%E6%96%87-%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D-e11d48?style=for-the-badge" alt="中文产品介绍" /></a>
 </p>
 
 <p align="center">
