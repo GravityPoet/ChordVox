@@ -32,6 +32,10 @@
   <a href="https://github.com/GravityPoet/ChordVox/releases/latest">最新版本</a>
 </p>
 
+<p align="center">
+  <img src="assets/chordvox-demo.webp" alt="ChordVox 演示" width="100%" />
+</p>
+
 ---
 
 ### 应用场景 / 痛点解决
