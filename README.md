@@ -17,9 +17,9 @@
 </p>
 
 <p align="center">
-  <sub>Choose your language</sub><br/>
-  <a href="./README.md"><img src="assets/button-english-homepage.svg" alt="English Homepage" /></a>
-  <a href="./README.zh.md"><img src="assets/button-zh-intro.svg" alt="中文介绍页面" /></a>
+  <strong>Choose your language:</strong><br/>
+  <a href="./README.md"><img src="assets/button-english-homepage-v2.svg" alt="English Homepage" /></a>
+  <a href="./README.zh.md"><img src="assets/button-zh-intro-v2.svg" alt="中文介绍页面" /></a>
 </p>
 
 <p align="center">
