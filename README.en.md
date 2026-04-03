@@ -108,18 +108,16 @@ Once you open the release page, click the file that matches your system:
 - Windows (x64): `ChordVox-Setup-*.exe`
 - Linux (x64): `ChordVox-*-linux-x86_64.AppImage`, `ChordVox-*-linux-amd64.deb`, or `ChordVox-*-linux-x86_64.rpm`
 
+> [!IMPORTANT]
+> **Essential for macOS First Launch**: Since this build is not from the App Store, it might be flagged as "damaged" by Gatekeeper. To fix this, run the following command in your terminal:
+> ```bash
+> xattr -dr com.apple.quarantine /Applications/ChordVox.app
+> open /Applications/ChordVox.app
+> ```
+
 > Free forever local speech-to-text. Absolute privacy with offline processing.
 
-#### macOS First Launch
 
-Unsigned builds may trigger Gatekeeper. Fix with:
-
-```bash
-xattr -dr com.apple.quarantine /Applications/ChordVox.app
-open /Applications/ChordVox.app
-```
-
----
 
 ### Quick Links
 
