@@ -37,10 +37,10 @@
 **What you actually said**:  
 > *"Umm... let's have a meeting this afternoon, maybe at 3, invite Bob... oh wait, I mean invite Alice. We need to discuss the UI redesign."*
 
-- 🟢 **Free Version (Raw Text)**: Transcribes exactly that, keeping your filler words and hesitations.
-- 🚀 **Pro Version (AI Secretary)**: `[Meeting Notice] Time: 3:00 PM today; Attendee: Alice; Topic: UI redesign discussion.`
+- 🟢 **Standard Dictation**: Transcribes exactly that, keeping your filler words and hesitations.
+- 🚀 **ChordVox AI**: `[Meeting Notice] Time: 3:00 PM today; Attendee: Alice; Topic: UI redesign discussion.`
 
-**💡 With the Free version, you get a recorder. With Pro, you get a private secretary.**
+**💡 A permanently free local speech-to-text engine that turns your spoken thoughts into perfect text.**
 
 ---
 
@@ -60,7 +60,6 @@
 <summary><b>👀 Click to reveal hardcore geeky specs</b></summary>
 <br>
 
-- **Enterprise-Grade Features (Pro)** — Inject business dictionaries, anti-abuse mechanisms, and ready-to-use premium cloud endpoints (bypassing the need to deal with API keys).
 - **Under the Hood** — Built on whisper.cpp, NVIDIA Parakeet, and SenseVoice. Connects to OpenAI compatible endpoints or uses bundled llama.cpp.
 - **System Hooks** — Deep OS integration using AppleScript/Swift (macOS), SendKeys/low-level hooks (Windows), and XTest/ydotool (Linux). 
 - **Dual-Profile Hotkeys** — Bind two completely independent hotkey and engine/model workflows.
@@ -109,7 +108,7 @@ Once you open the release page, click the file that matches your system:
 - Windows (x64): `ChordVox-Setup-*.exe`
 - Linux (x64): `ChordVox-*-linux-x86_64.AppImage`, `ChordVox-*-linux-amd64.deb`, or `ChordVox-*-linux-x86_64.rpm`
 
-> Free forever local speech-to-text. AI enhancement, file transcription, BYOK, and advanced workflows are optional with Pro.
+> Free forever local speech-to-text. Absolute privacy with offline processing.
 
 #### macOS First Launch
 
