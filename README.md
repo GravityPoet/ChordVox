@@ -39,7 +39,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/chordvox-demo-en-v4-trimmed.webp" alt="ChordVox English demo" width="100%" />
+  <img src="assets/chordvox-demo-en-v3.webp" alt="ChordVox English demo" width="100%" />
 </p>
 
 ---
