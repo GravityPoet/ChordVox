@@ -28,6 +28,10 @@
   <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>Download</strong></a>
 </p>
 
+<p align="center">
+  <img src="assets/chordvox-demo-en.webp" alt="ChordVox English demo" width="100%" />
+</p>
+
 ---
 
 ### Why You Need ChordVox
