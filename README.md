@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/%E2%9A%A0%EF%B8%8F_REJECT_BIG_TECH%27S_%22FREE_FOR_DATA%22_TRAP-d73a49?style=for-the-badge" alt="Reject big tech's free for data trap" />
+  <img src="assets/warning-en-trap-v1.svg" alt="Reject big tech's free for data trap" />
 </p>
 
 <p align="center">
