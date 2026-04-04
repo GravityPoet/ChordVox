@@ -8,13 +8,11 @@
 <h3 align="center">“你的嘴，就是最快的键盘。”</h3>
 
 <p align="center">
-  用说话的速度，捕捉灵感、完成文章与邮件。纯本地语音识别，断网也能瞬间出字。<br>
+  用说话的速度，捕捉灵感、完成文章与邮件。<br>
   按需自由接入<b>最强 AI 模型（ChatGPT / Gemini / Claude）</b>，一句话即可自动润色排版。
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/%E2%9A%A0%EF%B8%8F_%E6%8B%92%E7%BB%9D%E5%A4%A7%E5%8E%82%E2%80%9C%E5%85%8D%E8%B4%B9%E6%8D%A2%E6%95%B0%E6%8D%AE%E2%80%9D%E7%9A%84%E9%99%B7%E9%98%B1-d73a49?style=for-the-badge" alt="拒绝大厂免费换数据的陷阱" />
-</p>
+<h4 align="center">⚠️ 拒绝大厂“免费换数据”的陷阱</h4>
 
 <p align="center">
   别让你的私密对话变成 AI 模型的免费语料，也别让你的个人数据沦为定制广告的养料。<br>
