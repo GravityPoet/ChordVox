@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/%E2%9A%A0%EF%B8%8F_%E6%8B%92%E7%BB%9D%E5%A4%A7%E5%8E%82%E2%80%9C%E5%85%8D%E8%B4%B9%E6%8D%A2%E6%95%B0%E6%8D%AE%E2%80%9D%E7%9A%84%E9%99%B7%E9%98%B1-d73a49?style=for-the-badge" alt="拒绝大厂免费换数据的陷阱" />
+  <img src="assets/warning-zh-trap-v2.svg" alt="拒绝大厂免费换数据的陷阱" />
 </p>
 
 <p align="center">
