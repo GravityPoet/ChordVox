@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/warning-zh-trap-v3.svg" alt="拒绝大厂免费换数据的陷阱" />
+  <img src="assets/warning-zh-trap-v4.svg" alt="拒绝大厂免费换数据的陷阱" />
 </p>
 
 <p align="center">
