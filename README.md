@@ -9,7 +9,7 @@
 
 <p align="center">
   Capture ideas, write articles, and draft emails at the speed of speech. Completely local voice recognition—dictate instantly even offline.<br>
-  <b>Optionally plug in the most powerful AI brains (ChatGPT / Gemini / Claude)</b> to auto-polish and format with a single sentence.
+  Optionally plug in <b>the most powerful AI brains (ChatGPT / Gemini / Claude)</b> to auto-polish and format with a single sentence.
 </p>
 
 <p align="center">
@@ -17,12 +17,12 @@
 </p>
 
 <p align="center">
-  <strong>Don't let your private conversations become free training data for AI models, and don't let your personal data fuel targeted ads.</strong><br>
+  Don't let your private conversations become free training data for AI models, and don't let your personal data fuel targeted ads.<br>
   <strong>Truly permanent, offline, and free—your privacy never leaves your device.</strong>
 </p>
 
 <p align="center">
-  <strong>Choose your language:</strong><br/>
+  Choose your language:<br/>
   <a href="./README.md"><img src="assets/button-english-homepage-v4.svg" alt="English Homepage" /></a>
   <a href="./README.zh.md"><img src="assets/button-zh-intro-v4.svg" alt="中文介绍页面" /></a>
 </p>

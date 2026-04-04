@@ -9,7 +9,7 @@
 
 <p align="center">
   用说话的速度，捕捉灵感、完成文章与邮件。纯本地语音识别，断网也能瞬间出字。<br>
-  <b>按需自由接入最强 AI 模型（ChatGPT / Gemini / Claude）</b>，一句话即可自动润色排版。
+  按需自由接入<b>最强 AI 模型（ChatGPT / Gemini / Claude）</b>，一句话即可自动润色排版。
 </p>
 
 <p align="center">
@@ -17,12 +17,12 @@
 </p>
 
 <p align="center">
-  <strong>别让你的私密对话变成 AI 模型的免费语料，也别让你的个人数据沦为定制广告的养料。</strong><br>
+  别让你的私密对话变成 AI 模型的免费语料，也别让你的个人数据沦为定制广告的养料。<br>
   <strong>真正的永久离线免费，你的隐私连网线都出不去。</strong>
 </p>
 
 <p align="center">
-  <strong>选择语言：</strong><br/>
+  选择语言：<br/>
   <a href="./README.md"><img src="assets/button-english-homepage-v4.svg" alt="English Homepage" /></a>
   <a href="./README.zh.md"><img src="assets/button-zh-intro-v4.svg" alt="中文介绍页面" /></a>
 </p>
