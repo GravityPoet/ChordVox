@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/warning-en-trap-v1.svg" alt="Reject big tech's free for data trap" />
+  <img src="assets/warning-en-trap-v2.svg" alt="Reject big tech's free for data trap" />
 </p>
 
 <p align="center">
