@@ -4,21 +4,21 @@
 
 <h1 align="center">ChordVox IME</h1>
 
-<p align="center">
-  <strong>Still fighting with slow typing or messy voice dictation?</strong>
-</p>
-
-<h2 align="center">"Your mouth is the fastest keyboard."</h2>
+<h2 align="center">Still fighting with slow typing or messy voice dictation?</h2>
+<h3 align="center">"Your mouth is the fastest keyboard."</h3>
 
 <p align="center">
-  Capture ideas, write articles, and draft emails at the speed of speech.<br>
-  Just a single sentence lets AI auto-polish and format, leaping onto your screen instantly.
+  Capture ideas, write articles, and draft emails at the speed of speech. Completely local voice recognition—dictate instantly even offline.<br>
+  <b>Optionally plug in the most powerful AI brains (ChatGPT / Gemini / Claude)</b> to auto-polish and format with a single sentence.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/NO_BIG_TECH_%22FREE%22_TRAP-e11d48?style=for-the-badge" alt="No big tech free trap" />
-  <img src="https://img.shields.io/badge/TRULY_LOCAL-e11d48?style=for-the-badge" alt="Truly local" />
-  <img src="https://img.shields.io/badge/DATA_NEVER_LEAVES_YOUR_DEVICE-e11d48?style=for-the-badge" alt="Data never leaves your device" />
+  <img src="https://img.shields.io/badge/%E2%9A%A0%EF%B8%8F_REJECT_BIG_TECH%27S_%22FREE_FOR_DATA%22_TRAP-d73a49?style=for-the-badge" alt="Reject big tech's free for data trap" />
+</p>
+
+<p align="center">
+  <strong>Don't let your private conversations become free training data for AI models, and don't let your personal data fuel targeted ads.</strong><br>
+  <strong>Truly permanent, offline, and free—your privacy never leaves your device.</strong>
 </p>
 
 <p align="center">
