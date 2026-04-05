@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="150" height="32" viewBox="0 0 150 32" role="img" aria-label="中文介绍页面">
-  <rect width="150" height="32" fill="#e11d48"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="136" height="28" viewBox="0 0 136 28" role="img" aria-label="中文介绍页面">
+  <rect width="136" height="28" fill="#e11d48"/>
   <text
-    x="75"
-    y="22"
+    x="68"
+    y="19"
     fill="#ffffff"
     font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, Helvetica, sans-serif"
-    font-size="14"
+    font-size="13"
     font-weight="700"
     text-anchor="middle"
   >
