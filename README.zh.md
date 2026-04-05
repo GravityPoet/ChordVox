@@ -4,7 +4,7 @@
 
 <h1 align="center">ChordVox AI语音输入法</h1>
 
-<h3 align="center">还在忍受低效的打字，或是错漏百出的传统语音识别？</h3>
+<h3 align="center">还在忍受低效打字，或偷隐私的传统语音识别？</h3>
 <h2 align="center">“你的嘴，就是最快的键盘。”</h2>
 
 <p align="center">
