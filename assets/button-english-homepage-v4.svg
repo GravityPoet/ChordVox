@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="180" height="28" viewBox="0 0 180 28" role="img" aria-label="English Homepage">
-  <rect width="180" height="28" fill="#111827"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="190" height="30" viewBox="0 0 190 30" role="img" aria-label="English Homepage">
+  <rect width="190" height="30" fill="#111827"/>
   <text
-    x="90"
-    y="19"
+    x="95"
+    y="20"
     fill="#ffffff"
     font-family="Arial, Helvetica, sans-serif"
-    font-size="13"
+    font-size="14"
     font-weight="700"
     letter-spacing="0.4"
     text-anchor="middle"
