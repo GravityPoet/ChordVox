@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="420" height="38" viewBox="0 0 420 38" role="img" aria-label="拒绝大厂免费换数据的陷阱">
-  <rect width="420" height="38" rx="8" fill="#d73a49"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="470" height="38" viewBox="0 0 470 38" role="img" aria-label="拒绝大厂“免费但偷数据”的陷阱。">
+  <rect width="470" height="38" rx="8" fill="#d73a49"/>
   <text
-    x="210"
+    x="235"
     y="25"
     fill="#ffffff"
     font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, Helvetica, sans-serif"
@@ -9,6 +9,6 @@
     font-weight="800"
     text-anchor="middle"
   >
-    ⚠️ 拒绝大厂“免费换数据”的陷阱
+    ⚠️ 拒绝大厂“免费但偷数据”的陷阱。
   </text>
 </svg>
