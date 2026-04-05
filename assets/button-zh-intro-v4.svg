@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="144" height="30" viewBox="0 0 144 30" role="img" aria-label="中文介绍页面">
-  <rect width="144" height="30" fill="#e11d48"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="32" viewBox="0 0 150 32" role="img" aria-label="中文介绍页面">
+  <rect width="150" height="32" fill="#e11d48"/>
   <text
-    x="72"
-    y="20"
+    x="75"
+    y="21"
     fill="#ffffff"
     font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, Helvetica, sans-serif"
     font-size="14"
