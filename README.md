@@ -32,7 +32,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/chordvox-demo-en-v10.webp" alt="ChordVox English demo" width="100%" />
+  <img src="https://chordvox.com/assets/chordvox-demo-en-v35.webp?v=20260410s" alt="ChordVox English demo" width="100%" />
 </p>
 
 ---
