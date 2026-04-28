@@ -32,7 +32,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/chordvox-hero-v2-en.webp" alt="ChordVox voice input demo: typing vs AI polished output" width="100%" />
+  <img src="assets/chordvox-demo-en-v35.webp" alt="ChordVox English demo: keyboard input vs AI voice output" width="100%" />
 </p>
 
 ---

@@ -32,7 +32,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/chordvox-hero-v2-zh.webp" alt="ChordVox 中文动态演示：打字对比 AI 语音润色成稿" width="100%" />
+  <img src="assets/chordvox-demo-zh-v35.webp" alt="ChordVox 中文动态演示：键盘打字对比 AI 语音输入" width="100%" />
 </p>
 
 ---
