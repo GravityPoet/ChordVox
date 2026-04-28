@@ -34,7 +34,7 @@
 <p align="center">
   <strong>Join the ChordVox community</strong><br>
   Get release updates, ask questions, and share feedback in our Telegram channel:<br>
-  <a href="https://t.me/chordvoxai">https://t.me/chordvoxai</a>
+  <a href="https://t.me/chordvox6">https://t.me/chordvox6</a>
 </p>
 
 <p align="center">
@@ -135,7 +135,7 @@ After opening the release page, click `Show all assets` if needed, then choose:
 
 - 🌐 [Website chordvox.com](https://chordvox.com)
 - 📦 [All Releases](https://github.com/GravityPoet/ChordVox/releases)
-- 💬 [Telegram Community](https://t.me/chordvoxai)
+- 💬 [Telegram Community](https://t.me/chordvox6)
 - 📖 [Legacy Technical README](docs/README_LEGACY.md)
 - 📬 Contact: `gravitypoet@icloud.com`
 
