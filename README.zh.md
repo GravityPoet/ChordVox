@@ -32,6 +32,12 @@
 </p>
 
 <p align="center">
+  <strong>加入 ChordVox QQ 交流群</strong><br>
+  使用问题、版本反馈和功能建议都可以进群交流。<br>
+  <img src="assets/chordvox-qq-group-qr.jpg" alt="ChordVox QQ 交流群二维码" width="180" />
+</p>
+
+<p align="center">
   <img src="assets/chordvox-demo-zh-v35.webp" alt="ChordVox 中文动态演示：键盘打字对比 AI 语音输入" width="100%" />
 </p>
 
@@ -114,6 +120,7 @@ xattr -dr com.apple.quarantine /Applications/ChordVox.app && open /Applications/
 
 - 🌐 [官网 chordvox.com](https://chordvox.com)
 - 📦 [所有版本](https://github.com/GravityPoet/ChordVox/releases)
+- 💬 QQ 交流群：扫码见上方
 - 📖 [完整技术文档](docs/README_LEGACY.md)
 - 📬 联系方式：`gravitypoet@icloud.com`
 

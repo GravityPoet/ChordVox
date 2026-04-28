@@ -32,6 +32,12 @@
 </p>
 
 <p align="center">
+  <strong>Join the ChordVox community</strong><br>
+  Get release updates, ask questions, and share feedback in our Telegram channel:<br>
+  <a href="https://t.me/chordvoxai">https://t.me/chordvoxai</a>
+</p>
+
+<p align="center">
   <img src="assets/chordvox-demo-en-v35.webp" alt="ChordVox English demo: keyboard input vs AI voice output" width="100%" />
 </p>
 
@@ -129,6 +135,7 @@ After opening the release page, click `Show all assets` if needed, then choose:
 
 - 🌐 [Website chordvox.com](https://chordvox.com)
 - 📦 [All Releases](https://github.com/GravityPoet/ChordVox/releases)
+- 💬 [Telegram Community](https://t.me/chordvoxai)
 - 📖 [Legacy Technical README](docs/README_LEGACY.md)
 - 📬 Contact: `gravitypoet@icloud.com`
 
