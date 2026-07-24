@@ -126,6 +126,9 @@ xattr -dr com.apple.quarantine /Applications/ChordVox.app && open /Applications/
 
 ---
 
-### 许可证
+### 许可证 (License)
 
-本项目社区版基于 [AGPL-3.0 License](./LICENSE) 协议 100% 开源（个人免费使用，严禁未经授权的商业套壳贩卖）。第三方授权与归属声明详见 [NOTICE](./NOTICE) 文件。
+ChordVox 社区版基于 **[AGPL-3.0 License](./LICENSE)** 协议开源。
+
+- **开源免费使用**：任何个人和企业均可按照 AGPL-3.0 协议规定**免费使用与分发**。
+- **商业免开源许可**：如果您或您的企业需要将本软件**闭源集成、免除 AGPL-3.0 开源义务或获取专有再分发权**，请联系我们购买 [商业许可 (Commercial Dual-License)](mailto:moonlitpoet@proton.me)。第三方授权与归属声明详见 [NOTICE](./NOTICE) 文件。

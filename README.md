@@ -143,4 +143,7 @@ After opening the release page, click `Show all assets` if needed, then choose:
 
 ### License
 
-ChordVox Community Edition is 100% Open Source under the [AGPL-3.0 License](./LICENSE) (free for personal use, unauthorized commercial redistribution prohibited). For third-party attributions, see [NOTICE](./NOTICE).
+ChordVox Community Edition is open source under the **[AGPL-3.0 License](./LICENSE)**.
+
+- **Open Source Free Use**: Any individual or enterprise may use and distribute ChordVox for free in accordance with AGPL-3.0 license terms.
+- **Commercial Dual-License**: If you or your organization need closed-source integration, exemption from AGPL-3.0 copyleft obligations, or proprietary redistribution rights, please contact us for a [Commercial License](mailto:moonlitpoet@proton.me). For third-party attributions, see [NOTICE](./NOTICE).
