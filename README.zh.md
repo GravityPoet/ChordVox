@@ -18,7 +18,7 @@
 
 <p align="center">
   别让你的私密对话变成 AI 模型的免费语料，也别让你的个人数据沦为定制广告的养料。<br>
-  <strong>真正的永久离线免费，你的隐私连网线都出不去。</strong>
+  <strong>100% 开源 (AGPL-3.0) · 真正永久离线免费，你的隐私连网线都出不去。</strong>
 </p>
 
 <p align="center">
@@ -104,7 +104,7 @@
 - Windows（x64）：`ChordVox-Setup-*.exe`
 - Linux（x64）：`ChordVox-*-linux-x86_64.AppImage`、`ChordVox-*-linux-amd64.deb` 或 `ChordVox-*-linux-x86_64.rpm`
 
-> 永久免费本地语音转文字。AI 文本增强、文件转录、BYOK 和高级工作流可选 Pro。
+> 💡 **开源体验承诺**：ChordVox 社区版 100% 开源（AGPL-3.0），本地离线 STT 语音识别功能永久免费、零隐私泄漏。AI 文本增强、文件转录与高级工作流可按需升级 Pro 商业版。
 
 #### macOS 首次启动
 
@@ -128,4 +128,4 @@ xattr -dr com.apple.quarantine /Applications/ChordVox.app && open /Applications/
 
 ### 许可证
 
-AGPL-3.0 License. 详见 [LICENSE](./LICENSE) 与 [NOTICE](./NOTICE) 文件。
+本项目社区版基于 [AGPL-3.0 License](./LICENSE) 协议 100% 开源（个人免费使用，严禁未经授权的商业套壳贩卖）。第三方授权与归属声明详见 [NOTICE](./NOTICE) 文件。

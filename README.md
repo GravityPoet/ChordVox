@@ -18,7 +18,7 @@
 
 <p align="center">
   Don't let your private conversations become free training data for AI models, and don't let your personal data fuel targeted ads.<br>
-  <strong>Truly permanent, offline, and free—your privacy never leaves your device.</strong>
+  <strong>100% Open Source (AGPL-3.0) · Truly permanent, offline, and free—your privacy never leaves your device.</strong>
 </p>
 
 <p align="center">
@@ -127,7 +127,7 @@ After opening the release page, click `Show all assets` if needed, then choose:
 > open /Applications/ChordVox.app
 > ```
 
-> Free forever local offline speech-to-text. Your voice stays private and on-device.
+> 💡 **Open Source Commitment**: ChordVox Community Edition is 100% Open Source (AGPL-3.0). Local offline STT dictation is free forever with zero privacy leaks. AI enhancement, file transcription, and advanced workflows are available in Pro.
 
 ---
 
@@ -143,4 +143,4 @@ After opening the release page, click `Show all assets` if needed, then choose:
 
 ### License
 
-AGPL-3.0 License. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
+ChordVox Community Edition is 100% Open Source under the [AGPL-3.0 License](./LICENSE) (free for personal use, unauthorized commercial redistribution prohibited). For third-party attributions, see [NOTICE](./NOTICE).
