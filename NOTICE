@@ -1,11 +1,13 @@
-This product includes software derived from OpenWhispr/openwhispr.
+This product includes software derived from an upstream MIT-licensed project.
 
 Copyright (c) 2024 OpenWhispr Team
 Licensed under the MIT License.
-Source: https://github.com/OpenWhispr/openwhispr
+Source: upstream GitHub repository
 
-
-This repository has undergone comprehensive optimization and upgrades based on open-source software
-adding multiple features and significantly enhancing the user experience.
+This repository includes substantial downstream modifications and additional features.
 
 Additional modifications in this repository are Copyright (c) 2026 GravityPoet.
+
+This product may download or use local speech recognition model packages.
+Local ASR model notices and Apache-2.0 attribution are maintained in
+resources/legal/OPEN_SOURCE_NOTICES.txt and docs/legal/MODEL_COMPLIANCE.md.

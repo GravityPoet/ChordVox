@@ -143,4 +143,4 @@ After opening the release page, click `Show all assets` if needed, then choose:
 
 ### License
 
-MIT License. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
+AGPL-3.0 License. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
