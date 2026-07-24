@@ -1,3 +1,5 @@
+## 🌐 [Click here to switch to: English Version](./README.md)
+
 <p align="center">
   <img src="assets/logo.png" alt="ChordVox" width="128" />
 </p>

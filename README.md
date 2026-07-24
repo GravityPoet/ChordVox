@@ -1,3 +1,5 @@
+## 🌐 [点击这里切换到：中文版 (Chinese Version)](./README.zh.md)
+
 <p align="center">
   <img src="assets/logo.png" alt="ChordVox" width="128" />
 </p>
