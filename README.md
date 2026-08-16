@@ -1,30 +1,46 @@
-## 🌐 [Click here for English Version](./README.en.md)
-
-<h1 align="center">ChordVox IME</h1>
+## 🌐 [Click here to switch to: English Version](./README.en.md)
 
 <p align="center">
-  <strong>“你的嘴巴只管说，AI 负责把它们变成完美的文章。”</strong><br>
-  用说话的速度写代码和报告。本地听写免费，光标处直接落字。
+  <img src="assets/logo.png" alt="ChordVox" width="128" />
+</p>
+
+<h1 align="center">ChordVox AI语音输入法</h1>
+
+<h3 align="center">还在忍受低效打字 OR 偷隐私的传统语音识别？</h3>
+<h2 align="center">“你的嘴，就是最快的键盘。”</h2>
+
+<p align="center">
+  把说话的速度，变成出稿的速度。对话、文章、邮件，开口即成。<br>
+  按需自由接入<b>最强 AI 模型（ChatGPT / Gemini / Claude）</b>，一句话即可自动润色排版。
 </p>
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/ChordVox/releases/latest"><img src="https://img.shields.io/github/v/release/GravityPoet/ChordVox?label=release&color=6366f1" alt="Latest Release" /></a>
-  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="https://img.shields.io/github/downloads/GravityPoet/ChordVox/total?style=flat&color=06b6d4" alt="Downloads" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-a78bfa" alt="Platform" /></a>
+  <img src="assets/warning-zh-trap-v4.svg" alt="拒绝大厂“免费但偷数据”的陷阱。" />
 </p>
 
 <p align="center">
-  <a href="./README.en.md">English</a> | <strong>中文</strong>
+  别让你的私密对话变成 AI 模型的免费语料，也别让你的个人数据沦为定制广告的养料。<br>
+  <strong>100% 开源 · 真正永久离线免费，你的隐私连网线都出不去。</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>下载</strong></a>
-  ·
-  <a href="https://github.com/GravityPoet/ChordVox/releases/latest">最新版本</a>
+  选择语言：<br/>
+  <a href="./README.en.md"><img src="assets/button-english-homepage-v4.svg" alt="English Homepage" /></a>
+  <a href="./README.md"><img src="assets/button-zh-intro-v4.svg" alt="中文介绍页面" /></a>
 </p>
 
 <p align="center">
-  <img src="https://chordvox.com/assets/chordvox-demo-zh-v35.webp?v=20260410s" alt="ChordVox 中文动态演示" />
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="assets/button-download-zh.svg" alt="下载" /></a>
+</p>
+
+<p align="center">
+  <strong>加入 ChordVox QQ 交流群</strong><br>
+  使用问题、版本反馈和功能建议都可以进群交流。<br>
+  <img src="assets/chordvox-qq-group-qr.jpg" alt="ChordVox QQ 交流群二维码" width="180" />
+</p>
+
+<p align="center">
+  <img src="assets/chordvox-demo-zh-v35.webp" alt="ChordVox 中文动态演示：键盘打字对比 AI 语音输入" width="100%" />
 </p>
 
 ---
