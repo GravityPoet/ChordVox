@@ -94,7 +94,7 @@ Standard dictation tools are frustrating: they leave in every filler word, garbl
 
 ### Who Needs This / Use Cases
 
-- 👤 **Everyday Users & Everyone:** Daily messaging, web searching, journaling, social media posts, and jotting down thoughts—speak naturally and get crisp, polished text without typing.
+- 👤 **Everyday Users & Everyone:** Casual messaging, searching the web, journaling, posting on social media, and capturing quick thoughts—speak naturally and get crisp, polished text without typing.
 - 👨‍💻 **Software Engineers:** Write PR descriptions, code comments, architecture RFCs, and commit messages without taking hands off the thinking flow.
 - ✍️ **Writers & Researchers:** Capture first-draft brainstorms, blog posts, and scripts at natural speech velocity.
 - 👔 **Managers & Executives:** Triage Slack messages, compose detailed email responses, and summarize meeting outcomes in seconds.
