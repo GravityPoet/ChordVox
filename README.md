@@ -1,7 +1,7 @@
 <h2 align="center">🌐 <a href="./README.zh.md">中文用户：点击查看中文版本</a></h2>
 
 <p align="center">
-  <img src="https://chordvox.com/assets/icon.png" alt="ChordVox Logo" width="128" />
+  <img src="https://raw.githubusercontent.com/GravityPoet/ChordVox/main/src/assets/icon.png" alt="ChordVox Logo" width="128" />
 </p>
 
 <h1 align="center">ChordVox IME</h1>
