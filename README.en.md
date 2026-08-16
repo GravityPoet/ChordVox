@@ -1,32 +1,46 @@
 ## 🌐 [点击这里切换到：中文版 (Chinese Version)](./README.md)
 
+<p align="center">
+  <img src="assets/logo.png" alt="ChordVox" width="128" />
+</p>
+
 <h1 align="center">ChordVox IME</h1>
 
+<h2 align="center">Still fighting with slow typing or messy voice dictation?</h2>
+<h3 align="center">"Your mouth is the fastest keyboard."</h3>
+
 <p align="center">
-  <strong>"Just speak your mind. Let AI write it out perfectly."</strong><br>
-  Type code and reports at the speed of speech. Free local dictation, pasted right at your cursor.
+  Capture ideas, write articles, and draft emails at the speed of speech. Completely local voice recognition—dictate instantly even offline.<br>
+  Optionally plug in <b>the most powerful AI brains (ChatGPT / Gemini / Claude)</b> to auto-polish and format with a single sentence.
 </p>
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/ChordVox/releases/latest"><img src="https://img.shields.io/github/v/release/GravityPoet/ChordVox?label=release&color=6366f1" alt="Latest Release" /></a>
-  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="https://img.shields.io/github/downloads/GravityPoet/ChordVox/total?style=flat&color=06b6d4" alt="Downloads" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-a78bfa" alt="Platform" /></a>
+  <img src="assets/warning-en-trap-v2.svg" alt="Reject big tech's free for data trap" />
 </p>
 
 <p align="center">
-  <strong>English</strong> | <a href="./README.md">中文</a>
+  Don't let your private conversations become free training data for AI models, and don't let your personal data fuel targeted ads.<br>
+  <strong>100% Open Source · Truly permanent, offline, and free—your privacy never leaves your device.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/GravityPoet/ChordVox/releases"><strong>Download</strong></a>
-  ·
-  <a href="https://github.com/GravityPoet/ChordVox/releases/latest">Latest Release</a>
+  Choose your language:<br/>
+  <a href="./README.en.md"><img src="assets/button-english-homepage-v4.svg" alt="English Homepage" /></a>
+  <a href="./README.md"><img src="assets/button-zh-intro-v4.svg" alt="中文介绍页面" /></a>
 </p>
 
----
+<p align="center">
+  <a href="https://github.com/GravityPoet/ChordVox/releases"><img src="assets/button-download-en.svg" alt="Download" /></a>
+</p>
 
 <p align="center">
-  <img src="https://chordvox.com/assets/chordvox-demo-en-v35.webp?v=20260410s" alt="ChordVox English Demo" />
+  <strong>Join the ChordVox community</strong><br>
+  Get release updates, ask questions, and share feedback in our Telegram channel:<br>
+  <a href="https://t.me/chordvox6">https://t.me/chordvox6</a>
+</p>
+
+<p align="center">
+  <img src="assets/chordvox-demo-en-v35.webp" alt="ChordVox English demo: keyboard input vs AI voice output" width="100%" />
 </p>
 
 ---
