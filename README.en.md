@@ -70,9 +70,7 @@ Standard dictation tools are frustrating: they leave in every filler word, garbl
   - **Result:** Core transcription runs completely offline on your CPU/GPU. No audio ever touches the network. Bring Your Own Key (BYOK) for cloud AI or use local reasoning for zero-cloud privacy.
   - **Under the Hood:** Built-in high-performance `whisper.cpp`, NVIDIA `Parakeet`, and `SenseVoice` engines with zero Python runtime required.
 
-<details>
-<summary><b>👀 Hardcore Geek Specs & Architecture</b></summary>
-<br>
+### 👀 Architecture & Hardcore Specs
 
 ```
 ┌─────────────┐    ┌──────────────────────────┐    ┌─────────────────┐    ┌──────────────┐
@@ -88,7 +86,6 @@ Standard dictation tools are frustrating: they leave in every filler word, garbl
 - **Multi-Shortcut Workflows**: Assign independent hotkeys to different workflows with separate transcription and reasoning models.
 - **Custom Dictionary**: Add colleague names, internal acronyms, and technical terms to guide both the STT and LLM engines.
 - **Model Cache Management**: 1-click cleanup of Whisper/GGUF model caches to reclaim disk space whenever needed.
-</details>
 
 ---
 
