@@ -10,7 +10,7 @@
 <h3 align="center">"Your mouth is the fastest keyboard."</h3>
 
 <p align="center">
-  Capture ideas, write articles, and draft emails at the speed of speech. Completely local voice recognition—dictate instantly even offline.<br>
+  Completely local voice recognition—dictate instantly even offline.<br>
   Optionally plug in <b>the most powerful AI brains (ChatGPT / Gemini / Claude)</b> to auto-polish and format with a single sentence.
 </p>
 
