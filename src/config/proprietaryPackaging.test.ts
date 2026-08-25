@@ -87,7 +87,7 @@ describe("ChordVox Pro proprietary packaging boundary", () => {
       packages: { "": { version: string; license: string } };
     };
 
-    expect(packageJson.version).toBe("1.5.133");
+    expect(packageJson.version).toBe("1.5.135");
     expect(packageJson.license).toBe("UNLICENSED");
     expect(packageLock.packages[""]).toMatchObject({
       version: packageJson.version,

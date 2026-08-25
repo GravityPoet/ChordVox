@@ -498,7 +498,7 @@ export default function CallRecordsSection({ showConfirmDialog }: CallRecordsSec
     !getProcessingDurationMs(selectedSession);
 
   return (
-    <div className="space-y-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-[15px] font-semibold text-foreground tracking-tight">
@@ -532,9 +532,9 @@ export default function CallRecordsSection({ showConfirmDialog }: CallRecordsSec
         </div>
       </div>
 
-      <div className="call-records-table-shell glass-panel glass-panel--soft overflow-hidden rounded-xl">
-        <div className="grid grid-cols-1 md:grid-cols-[300px_minmax(0,1fr)] lg:grid-cols-[320px_minmax(0,1fr)]">
-          <div className="border-b border-border/40 md:border-b-0 md:border-r md:border-[color:var(--ui-glass-divider)]">
+      <div className="call-records-table-shell glass-panel glass-panel--soft overflow-hidden rounded-xl md:flex md:min-h-0 md:flex-1 md:flex-col">
+        <div className="grid grid-cols-1 md:min-h-0 md:flex-1 md:grid-cols-[300px_minmax(0,1fr)] lg:grid-cols-[320px_minmax(0,1fr)]">
+          <div className="border-b border-border/40 md:flex md:min-h-0 md:flex-col md:border-b-0 md:border-r md:border-[color:var(--ui-glass-divider)]">
             <div className="border-b border-border/30 px-5 py-3 md:border-[color:var(--ui-glass-divider)]">
               <p className="text-[12px] font-medium text-foreground">
                 {t("developerSection.trace.sessionLabel")}
@@ -543,7 +543,7 @@ export default function CallRecordsSection({ showConfirmDialog }: CallRecordsSec
                 {t("developerSection.trace.showingLatest", { count: 30 })}
               </p>
             </div>
-            <div className="max-h-[520px] overflow-y-auto">
+            <div className="max-h-[520px] overflow-y-auto md:min-h-0 md:flex-1 md:max-h-none">
               {traceSessions.length === 0 ? (
                 <div className="px-5 py-6 text-[12px] text-muted-foreground">
                   {t("developerSection.trace.emptySessions")}
@@ -596,7 +596,7 @@ export default function CallRecordsSection({ showConfirmDialog }: CallRecordsSec
             </div>
           </div>
 
-          <div>
+          <div className="md:flex md:min-h-0 md:flex-col">
             <div className="border-b border-border/30 px-5 py-3 md:border-[color:var(--ui-glass-divider)]">
               <p className="text-[12px] font-medium text-foreground">
                 {t("developerSection.trace.summary.overviewTitle")}
@@ -614,7 +614,7 @@ export default function CallRecordsSection({ showConfirmDialog }: CallRecordsSec
                 </p>
               )}
             </div>
-            <div className="max-h-[520px] overflow-y-auto">
+            <div className="max-h-[520px] overflow-y-auto md:min-h-0 md:flex-1 md:max-h-none">
               {!selectedSession ? (
                 <div className="px-5 py-6 text-[12px] text-muted-foreground">
                   {t("developerSection.trace.emptyEvents")}

@@ -109,7 +109,9 @@ foreach ($File in $FilesToVerify) {
     Fail "Windows assets were signed by different certificates."
   }
 
-  $RelativePath = [System.IO.Path]::GetRelativePath($DistRoot, $File.FullName).Replace('\', '/')
+  # Windows PowerShell 5.1 does not expose .NET Core's GetRelativePath API.
+  # Keep the release gate runnable on the supported inbox PowerShell runtime.
+  $RelativePath = $File.FullName.Substring($DistRoot.Length).TrimStart([char[]]@('\', '/'))
   $EvidenceAssets += [ordered]@{
     path = $RelativePath
     sha256 = (Get-FileHash -LiteralPath $File.FullName -Algorithm SHA256).Hash.ToLowerInvariant()

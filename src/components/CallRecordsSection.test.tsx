@@ -20,4 +20,15 @@ describe("CallRecordsSection customer-facing summaries", () => {
     const source = readFileSync(new URL("./CallRecordsSection.tsx", import.meta.url), "utf8");
     expect(source).not.toContain(">{selectedSession.runId}<");
   });
+
+  it("fills the available settings viewport instead of capping desktop diagnostics at 520px", () => {
+    const source = readFileSync(new URL("./CallRecordsSection.tsx", import.meta.url), "utf8");
+    const sidebarSource = readFileSync(new URL("./ui/SidebarModal.tsx", import.meta.url), "utf8");
+
+    expect(source).toContain('className="flex min-h-0 flex-1 flex-col gap-6"');
+    expect(
+      source.match(/max-h-\[520px\] overflow-y-auto md:min-h-0 md:flex-1 md:max-h-none/g)
+    ).toHaveLength(2);
+    expect(sidebarSource).toContain("section-entrance flex min-h-full flex-col");
+  });
 });

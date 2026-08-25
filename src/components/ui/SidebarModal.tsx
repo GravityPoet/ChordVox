@@ -269,7 +269,7 @@ export default function SidebarModal<T extends string>({
                   className="scroll-edge-fade-top min-h-0 flex-1 overflow-y-auto"
                 >
                   <div
-                    className={`section-entrance px-6 pb-4 sm:px-7 sm:pb-5 ${
+                    className={`section-entrance flex min-h-full flex-col px-6 pb-4 sm:px-7 sm:pb-5 ${
                       isMac ? "pt-8" : "pt-7 sm:pt-8"
                     }`}
                   >

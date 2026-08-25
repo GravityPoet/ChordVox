@@ -424,7 +424,11 @@ export function useModelDownload({
           result = await window.electronAPI?.modelDelete?.(modelId);
         }
 
-        if (!result?.success) {
+        // A stale card can outlive a model that was removed outside the app.
+        // "Model not found" already satisfies the user's delete intent, so
+        // continue into the normal refresh path instead of freezing the old UI state.
+        const modelAlreadyAbsent = result?.error?.trim().toLowerCase() === "model not found";
+        if (!result?.success && !modelAlreadyAbsent) {
           throw new Error(result?.error || t("hooks.modelDownload.errors.unknown"));
         }
 

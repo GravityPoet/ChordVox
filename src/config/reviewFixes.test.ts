@@ -667,6 +667,10 @@ describe("reviewed release and prompt guardrails", () => {
       /toast\([\s\S]*?try \{\s*await onComplete\?\.\(\);\s*\} catch \(refreshError\)/
     );
     expect(deleteFlow).toContain("Model deleted but model-list refresh failed:");
+    expect(deleteFlow).toContain(
+      'const modelAlreadyAbsent = result?.error?.trim().toLowerCase() === "model not found";'
+    );
+    expect(deleteFlow).toContain("if (!result?.success && !modelAlreadyAbsent)");
   });
 
   it("finishes the usage hook when hosted-cloud usage is unavailable", () => {

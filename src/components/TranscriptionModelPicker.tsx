@@ -44,14 +44,9 @@ import { createExternalLinkHandler } from "../utils/externalLinks";
 import { getProviderGuideUrl } from "../utils/providerGuideLinks";
 import { addChordVoxModelsClearedListener } from "../utils/chordvoxCloud";
 import { DEFAULT_ENGLISH_PARAKEET_MODEL_ID } from "../utils/defaultTranscriptionModel";
+import { markDeletedModelUnavailable, type ModelDownloadState } from "../utils/modelDeletionState";
 
-interface LocalModel {
-  model: string;
-  size_mb?: number;
-  downloaded?: boolean;
-  modelPath?: string;
-  path?: string;
-}
+type LocalModel = ModelDownloadState;
 
 interface LocalModelCardProps {
   modelId: string;
@@ -1382,36 +1377,39 @@ export default function TranscriptionModelPicker({
       deletedModelId: string,
       selectedValueBeforeDelete: string | null
     ) => {
+      const reconcileModels = (provider: typeof deletedProvider, models: LocalModel[]) =>
+        provider === deletedProvider ? markDeletedModelUnavailable(models, deletedModelId) : models;
+
       const loadWhisper = async () => {
         try {
           const result = await window.electronAPI?.listWhisperModels();
-          return result?.success ? result.models : localModels;
+          return reconcileModels("whisper", result?.success ? result.models : localModels);
         } catch {
-          return localModels;
+          return reconcileModels("whisper", localModels);
         }
       };
       const loadParakeet = async () => {
         try {
           const result = await window.electronAPI?.listParakeetModels();
-          return result?.success ? result.models : parakeetModels;
+          return reconcileModels("nvidia", result?.success ? result.models : parakeetModels);
         } catch {
-          return parakeetModels;
+          return reconcileModels("nvidia", parakeetModels);
         }
       };
       const loadParaformer = async () => {
         try {
           const result = await window.electronAPI?.listParaformerModels();
-          return result?.success ? result.models : paraformerModels;
+          return reconcileModels("paraformer", result?.success ? result.models : paraformerModels);
         } catch {
-          return paraformerModels;
+          return reconcileModels("paraformer", paraformerModels);
         }
       };
       const loadGranite = async () => {
         try {
           const result = await window.electronAPI?.listGraniteModels?.();
-          return result?.success ? result.models : graniteModels;
+          return reconcileModels("granite", result?.success ? result.models : graniteModels);
         } catch {
-          return graniteModels;
+          return reconcileModels("granite", graniteModels);
         }
       };
 

@@ -482,22 +482,58 @@ async function armNativeMicPointer(page: Page, micButton: ReturnType<Page["locat
   // capsule. Reused X11 displays can leave the pointer inside the button from
   // a prior run, which produces no new mouseenter. Move outside first, then use
   // the same hover path as a user and wait for the native acknowledgement.
+  const chrome = page.locator(".dictation-window__chrome").first();
+  const capsule = chrome.locator(".dv-capsule").first();
   await page.mouse.move(0, 0);
   await page.evaluate(async () => {
     await window.electronAPI?.showDictationPanel?.();
-    await window.electronAPI?.setMainWindowInteractivity?.(true, { focus: false });
+    // On macOS an installed, click-through panel can be visible before its
+    // native window has become the active hit-test surface. A focus request
+    // here is only the short arming phase; the paste target is explicitly
+    // focused again before the stop/paste assertion below.
+    await window.electronAPI?.setMainWindowInteractivity?.(true, { focus: true });
   });
   await revealInteractiveMic(page, micButton);
+  await chrome.hover({ force: true });
+  await capsule.hover({ force: true });
   await micButton.hover({ force: true });
   await expect
     .poll(
-      () => page.locator(".dictation-window__chrome").first().getAttribute("data-close-ready"),
+      async () => {
+        const ready = await chrome.getAttribute("data-close-ready");
+        if (ready === "true") return ready;
+
+        // React can re-render the capsule after the native window call. Keep
+        // the pointer on the rendered hit target and re-arm the native window
+        // instead of assuming a second mouseenter will happen by itself.
+        await page.evaluate(async () => {
+          await window.electronAPI?.showDictationPanel?.();
+          await window.electronAPI?.setMainWindowInteractivity?.(true, { focus: true });
+        });
+        await chrome.hover({ force: true }).catch(() => {});
+        await capsule.hover({ force: true }).catch(() => {});
+        await micButton.hover({ force: true }).catch(() => {});
+        return await chrome.getAttribute("data-close-ready");
+      },
       {
-        timeout: 10_000,
-        intervals: [50, 100, 200, 400],
+        timeout: 15_000,
+        intervals: [100, 200, 400, 800],
       }
     )
     .toBe("true");
+}
+
+async function hideDictationPanelForMacFocus(page: Page): Promise<void> {
+  if (process.platform !== "darwin") return;
+  // The production panel is always-on-top while it is interactive. Hide it
+  // before asking macOS to activate the independent paste target; otherwise
+  // System Events can report success while Electron's target window remains
+  // visually behind the panel (a false focus failure).
+  await page.evaluate(async () => {
+    await window.electronAPI?.setMainWindowInteractivity?.(false, { focus: false });
+    await window.electronAPI?.hideWindow?.();
+  });
+  await delay(150);
 }
 
 test("fixed WAV traverses an installed production app and trusted-click paste path", async () => {
@@ -628,6 +664,7 @@ test("fixed WAV traverses an installed production app and trusted-click paste pa
       .toBeGreaterThan(0);
 
     await dictationPage.waitForTimeout(4_000);
+    await hideDictationPanelForMacFocus(dictationPage);
     await focusPasteTarget(pasteTargetApp, pasteTargetPage);
     await armNativeMicPointer(dictationPage, micButton);
     await micButton.click({ force: true });
