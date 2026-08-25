@@ -1,0 +1,24 @@
+{
+  "name": "chordvox-license-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "types": "wrangler types",
+    "check": "tsc --noEmit",
+    "wrangler:check": "npm run wrangler:check:prod && npm run wrangler:check:staging",
+    "wrangler:check:prod": "wrangler deploy --env=\"\" --dry-run --outdir .wrangler-dry-run/prod",
+    "wrangler:check:staging": "wrangler deploy --env staging --dry-run --outdir .wrangler-dry-run/staging",
+    "db:schema:staging": "wrangler d1 execute chordvox-license-staging --env staging --remote --file=./src/schema.sql",
+    "db:schema:prod": "wrangler d1 execute chordvox-license-prod --remote --file=./src/schema.sql",
+    "dev": "wrangler dev",
+    "dev:staging": "wrangler dev --env staging",
+    "deploy": "node -e \"console.error('Use npm run deploy:staging or npm run deploy:prod.'); process.exit(1)\"",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:prod": "wrangler deploy --env=\"\""
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "wrangler": "^4.96.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "defaultStyle": "nebula",
+  "styles": {
+    "flow": {
+      "width": 504,
+      "height": 104
+    },
+    "stardust": {
+      "width": 504,
+      "height": 104
+    },
+    "nebula": {
+      "width": 320,
+      "height": 180
+    }
+  }
+}

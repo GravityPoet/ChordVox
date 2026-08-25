@@ -1,0 +1,120 @@
+ChordVox Pro Commercial Binary License
+Version 1.0 — 24 July 2026
+
+Copyright (c) 2026 GravityPoet. All rights reserved.
+
+1. Scope
+
+This license applies only to a copy of ChordVox Pro that GravityPoet expressly
+distributes under this commercial license (the "Software"). It does not change
+the license of a different copy, public repository, earlier release, or
+third-party component.
+
+2. License grant
+
+While you hold a valid subscription, purchase entitlement, or License Key,
+GravityPoet grants you a limited, non-exclusive, non-transferable, and
+non-sublicensable license to install and use the object-code form of the
+Software for your own internal purposes, on the number of users or devices
+allowed by the applicable order, plan, or written agreement.
+
+3. Restrictions
+
+Except as expressly allowed by an applicable order, written agreement,
+open-source component license, or mandatory law, you may not:
+
+(a) copy, distribute, sell, rent, lease, sublicense, publicly display, or make
+the Software available to another person;
+
+(b) modify, translate, or create derivative works of the proprietary portions
+of the Software;
+
+(c) reverse engineer, decompile, disassemble, or otherwise attempt to derive
+source code, non-public protocols, or implementation details from the
+proprietary portions of the Software;
+
+(d) bypass, disable, tamper with, or evade License Key validation, entitlement
+checks, usage limits, integrity checks, or other technical protection measures;
+or
+
+(e) remove or obscure copyright, trademark, license, attribution, or other
+proprietary notices.
+
+The restriction in paragraph (c) applies only to the extent enforceable under
+applicable law. It does not limit reverse engineering or decompilation that
+mandatory law expressly permits and does not allow the parties to waive, such
+as a qualifying interoperability exception. Where the law requires an
+opportunity to request interoperability information first, contact GravityPoet
+before undertaking decompilation.
+
+4. License Keys
+
+A License Key is evidence of a contractual entitlement, not a transfer of
+copyright or ownership. You must not publish, resell, share, counterfeit, or
+use a License Key outside its authorized scope. GravityPoet may suspend or
+revoke a key obtained fraudulently, shared outside its scope, refunded, charged
+back, or used in material breach of this license, subject to applicable
+consumer law and the applicable order terms.
+
+5. Ownership
+
+GravityPoet and its licensors retain all right, title, and interest in the
+Software. This license grants permission to use a qualifying copy; it does not
+sell or assign intellectual-property rights.
+
+6. Open-source and third-party components
+
+The Software includes open-source components and other third-party materials.
+Those components remain governed by their own licenses, not by the
+restrictions of this license. Their notices and license texts are provided in
+NOTICE.txt and OPEN_SOURCE_NOTICES.txt. Nothing in this license narrows rights
+granted by an applicable open-source license.
+
+7. Earlier releases and public repositories
+
+Earlier releases, public source repositories, and copies previously conveyed
+under another license retain the license attached to those copies. In
+particular, this license does not retroactively alter any ChordVox v1.5.131 copy
+actually distributed under the MIT License, or any public copy distributed
+under GNU AGPL-3.0. Similar names or shared history do not replace the license
+notice delivered with a particular copy.
+
+8. Updates and services
+
+Updates may be subject to the license delivered with the update. Network
+services, AI providers, payment services, and model downloads may have
+additional terms and privacy policies. A perpetual purchase, if offered, does
+not imply perpetual availability of third-party network services.
+
+9. Termination
+
+This license terminates automatically upon an uncured material breach. On
+termination, you must stop using and delete the proprietary Software, except
+for copies that applicable law requires you to retain. Rights under third-party
+open-source licenses survive according to those licenses.
+
+10. Disclaimer
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE SOFTWARE IS PROVIDED
+"AS IS" AND "AS AVAILABLE", WITHOUT WARRANTIES OF ANY KIND. MANDATORY
+STATUTORY WARRANTIES AND NON-WAIVABLE CONSUMER RIGHTS ARE NOT EXCLUDED.
+
+11. Limitation of liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, GRAVITYPOET WILL NOT BE
+LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE, OR
+CONSEQUENTIAL DAMAGES, OR FOR LOST PROFITS, REVENUE, DATA, OR BUSINESS
+OPPORTUNITY. ANY LIABILITY CAP STATED IN AN APPLICABLE ORDER OR WRITTEN
+AGREEMENT CONTROLS. THIS SECTION DOES NOT LIMIT LIABILITY THAT CANNOT LAWFULLY
+BE LIMITED.
+
+12. Governing terms
+
+An applicable order form, marketplace agreement, or written agreement may
+specify governing law, forum, refunds, support, and additional terms. If it
+conflicts with this license, that agreement controls for the conflict. Nothing
+in these terms displaces mandatory law or non-waivable consumer rights.
+
+13. Contact
+
+Legal and licensing inquiries: gravitypoet@icloud.com

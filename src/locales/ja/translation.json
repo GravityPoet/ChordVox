@@ -1,0 +1,2690 @@
+{
+  "app": {
+    "name": "ChordVox",
+    "loading": "ChordVox を読み込み中...",
+    "oauth": {
+      "redirectTitle": "ChordVox にリダイレクト中",
+      "closeTab": "このタブは閉じて構いません"
+    },
+    "buttons": {
+      "cancelRecording": "録音をキャンセル",
+      "cancelProcessing": "処理をキャンセル"
+    },
+    "mic": {
+      "hotkeyToSpeak": "[{{hotkey}}] で音声入力",
+      "recording": "録音中...",
+      "processing": "処理中...",
+      "clickToSpeak": "クリックして音声入力",
+      "status": {
+        "recording": "録音中",
+        "transcribing": "文字起こし中",
+        "polishing": "仕上げ中",
+        "completed": "完了",
+        "starting": "準備中"
+      },
+      "placeholder": {
+        "listening": "聞いています...",
+        "transcribing": "文字起こし中...",
+        "polishing": "整え中...",
+        "pasting": "貼り付け中…",
+        "completed": "このディクテーションは完了しました",
+        "starting": "マイクとモデルを準備しています…"
+      },
+      "starting": "音声入力を準備中…"
+    },
+    "pasteConfirm": {
+      "title": "まもなく貼り付け",
+      "confirm": "今すぐ貼り付け",
+      "cancel": "キャンセル"
+    },
+    "toasts": {
+      "dictationCancelled": {
+        "title": "音声入力キャンセル",
+        "description": "音声コマンドにより今回の入力内容が破棄されました。"
+      },
+      "dictationRestarted": {
+        "title": "音声入力を再開",
+        "description": "前回の内容を破棄し、録音を再開しました。"
+      },
+      "hotkeyChanged": {
+        "description": "「{{original}}」ショートカットは使用できなかったため、ChordVox は「{{fallback}}」に切り替えました。設定で変更できます。",
+        "title": "ホットキーを変更しました"
+      },
+      "hotkeyUnavailable": {
+        "title": "ホットキーが使用できません",
+        "description": "ホットキーを登録できませんでした。設定から別のホットキーを設定してください。"
+      },
+      "pushToTalkUnavailable": {
+        "title": "プッシュトゥトークが利用できません",
+        "description": "Windows キーリスナーを起動できなかったため、ChordVox はタップトゥトークに切り替えました。ホットキーを押してディクテーションを開始または停止してください。",
+        "descriptionWithReason": "ChordVox はタップトゥトークに切り替えました：{{reason}}"
+      }
+    },
+    "commandMenu": {
+      "startListening": "音声入力を開始",
+      "stopListening": "音声入力を停止",
+      "hideForNow": "一時的に非表示にする"
+    },
+    "trialExpiredModal": {
+      "title": "試用期間が終了しました",
+      "description": "ライセンスを購入すると、すべてのアプリで無制限の音声入力、AI 整形、自動貼り付けを引き続き利用できます。",
+      "valueBullets": "無制限の音声入力 · AI テキスト整形 · カーソル位置への自動貼り付け · プライバシー重視のローカルモード対応",
+      "actions": {
+        "buyNow": "ライセンスを購入",
+        "haveKey": "ライセンスキーを持っています",
+        "later": "閉じる"
+      }
+    },
+    "aria": {
+      "dictationOverlay": "ディクテーションオーバーレイ",
+      "micButton": {
+        "idle": "マイク、待機中。アクティブにしてディクテーションを開始します。",
+        "hover": "マイク、待機中。アクティブにしてディクテーションを開始します。",
+        "starting": "マイク、ディクテーションを準備中。",
+        "recording": "マイク、録音中。アクティブにして停止します。",
+        "processing": "マイク、音声を処理中。",
+        "success": "マイク、ディクテーションが完了しました。",
+        "error": "マイク、エラー。アクティブにして再試行します。"
+      }
+    }
+  },
+  "settings": {
+    "language": {
+      "sectionTitle": "言語",
+      "sectionDescription": "インターフェースと文字起こしの言語を個別に設定",
+      "uiLabel": "インターフェース言語",
+      "uiDescription": "ChordVox のインターフェースで使用する言語を選択",
+      "transcriptionLabel": "文字起こし言語",
+      "transcriptionDescription": "より正確な文字起こしのために話す言語を選択",
+      "uiOption": {
+        "en": "English",
+        "es": "Español",
+        "fr": "Français",
+        "de": "Deutsch",
+        "pt": "Português",
+        "it": "Italiano",
+        "zh-CN": "简体中文",
+        "zh-TW": "繁體中文",
+        "ru": "Русский",
+        "ja": "日本語"
+      }
+    }
+  },
+  "tray": {
+    "toggleDictation": {
+      "show": "ディクテーションパネルを表示",
+      "hide": "ディクテーションパネルを非表示"
+    },
+    "openControlPanel": "コントロールパネルを開く",
+    "quit": "ChordVox を終了",
+    "tooltip": "ChordVox - 音声ディクテーション"
+  },
+  "menu": {
+    "appLabel": "ChordVox",
+    "quit": "ChordVox を終了",
+    "speech": "スピーチ",
+    "help": "ヘルプ",
+    "learnMore": "詳細を見る",
+    "file": "ファイル",
+    "closeWindow": "ウィンドウを閉じる",
+    "edit": "編集",
+    "view": "表示",
+    "window": "ウインドウ"
+  },
+  "window": {
+    "voiceRecorderTitle": "ボイスレコーダー",
+    "controlPanelTitle": "コントロールパネル"
+  },
+  "support": {
+    "menuLabel": "サポート",
+    "contact": "サポートメールをコピー",
+    "submitBug": "バグを報告",
+    "card": {
+      "title": "サポートとフィードバック",
+      "description": "問題の報告、改善提案、プロジェクトの進捗確認はこちら",
+      "github": "GitHub プロジェクト",
+      "email": "作者のメールをコピー",
+      "emailAddress": "gravitypoet@icloud.com"
+    },
+    "emailCopied": {
+      "title": "メールアドレスをコピーしました",
+      "description": "{{email}} をクリップボードにコピーしました。"
+    },
+    "copyFailed": {
+      "title": "メールアドレスをコピーできませんでした",
+      "description": "このアドレスを手動でコピーしてください：{{email}}"
+    },
+    "openFailed": {
+      "title": "リンクを開けませんでした",
+      "description": "このリンクを手動で開いてください: {{url}}"
+    }
+  },
+  "dialog": {
+    "openLink": {
+      "title": "リンクを開けません",
+      "message": "ブラウザでリンクを開けませんでした:\n{{url}}\n\nエラー: {{error}}"
+    },
+    "loadFailure": {
+      "title": "ChordVox の読み込みに失敗しました",
+      "message": "ChordVox の UI を読み込めませんでした。",
+      "detail": {
+        "window": "ウィンドウ: {{windowName}}",
+        "error": "エラー {{errorCode}}: {{errorDescription}}",
+        "url": "URL: {{url}}",
+        "hint": "アプリを再インストールするか、--log-level=debug オプションで起動してください。"
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ChordVox 起動エラー",
+      "message": "アプリケーションの起動に失敗しました:\n\n{{error}}\n\nこの問題を報告してください。"
+    },
+    "globeHotkey": {
+      "title": "Globe ホットキーが使用できません",
+      "message": "ChordVox は Globe キーのホットキーを有効にできませんでした。",
+      "details": {
+        "unknown": "Globe リスナーの起動中に不明なエラーが発生しました。",
+        "fallback": "Globe キーのショートカットは無効のままになります。既存のキーボードショートカットは引き続き使用できます。",
+        "devHint": "`npm run compile:globe` を実行し、アプリを再ビルドしてリスナーバイナリを再生成してください。",
+        "reinstallHint": "ChordVox を再インストールするか、問題が解決しない場合はサポートにお問い合わせください。"
+      }
+    }
+  },
+  "fatalError": {
+    "title": "ChordVox を再起動する必要があります",
+    "restartingDescription": "予期しないエラーが発生したため、ChordVox は新しいセッションで自動的に再起動します。保存済みの設定と履歴は変更されません。",
+    "stoppedDescription": "復旧直後に予期しないエラーが再発したため、クラッシュの繰り返しを防ぐために停止しました。アプリをもう一度開いてください。"
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "ホットキー設定にはコールバック関数が必要です",
+      "globeOnlyMac": "Globe キーは macOS でのみ利用できます。",
+      "alreadyRegistered": "\"{{hotkey}}\" は別のアプリケーションで既に登録されています。",
+      "osReserved": "\"{{hotkey}}\" はデスクトップ環境で予約されている可能性があります。",
+      "registrationFailed": "\"{{hotkey}}\" を登録できませんでした。別のアプリケーションで使用されている可能性があります。",
+      "trySuggestions": "お試しください: {{suggestions}}"
+    }
+  },
+  "systemSettings": {
+    "microphone": "システム設定を開いてマイクの権限を設定してください。",
+    "sound": "システムのサウンド設定を開いてください（例: pavucontrol）。",
+    "accessibility": "このプラットフォームではアクセシビリティ設定を利用できません。"
+  },
+  "titleBar": {
+    "quitTitle": "ChordVox を終了",
+    "quitConfirmTitle": "ChordVox を終了しますか？",
+    "quitConfirmDescription": "ChordVox を終了し、バックグラウンドプロセスを停止します。",
+    "quit": "終了",
+    "cancel": "キャンセル"
+  },
+  "upgradePrompt": {
+    "paymentFailed": "お支払いを処理できませんでした",
+    "weeklyLimit": "週間の利用上限に達しました",
+    "pastDueDescription": "無料のローカル文字起こしは引き続き機能します。お支払い方法を更新すると、Pro 機能と無制限のホスト使用量が復元されます。",
+    "limitDescription": "{{used}} / {{limit}} ワード使用済み。\n文字起こしは保存・貼り付けされました。",
+    "updatePayment": "お支払い方法を更新",
+    "updatePaymentDescription": "無制限の Pro 文字起こしに戻りましょう。",
+    "upgradeToPro": "Pro にアップグレード",
+    "upgradeDescription": "無制限の文字起こし。月額 $9。",
+    "useApiKey": "自分の API キーを使用",
+    "useApiKeyDescription": "自分のキーで無制限に利用できます。",
+    "switchToLocal": "ローカルに切り替え",
+    "switchToLocalDescription": "オフライン文字起こし。制限なし。",
+    "rollingWeeklyLimit": "週間利用上限（ローリング）"
+  },
+  "windowControls": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "元のサイズに戻す",
+    "close": "閉じる",
+    "actionFailedTitle": "ウインドウを操作できませんでした",
+    "actionFailedDescription": "「{{action}}」を実行できませんでした。もう一度お試しください。"
+  },
+  "windows": {
+    "pttUnavailable": "プッシュトゥトークのネイティブリスナーが利用できません"
+  },
+  "common": {
+    "back": "戻る",
+    "next": "次へ",
+    "skip": "スキップ",
+    "complete": "完了",
+    "reset": "リセット",
+    "refresh": "更新",
+    "download": "ダウンロード",
+    "cancel": "キャンセル",
+    "chooseFolder": "フォルダを選択",
+    "working": "処理中",
+    "ready": "準備完了",
+    "recommended": "推奨",
+    "active": "有効",
+    "unavailable": "利用不可",
+    "cloud": "クラウド",
+    "local": "ローカル",
+    "apiKey": "API キー",
+    "model": "モデル",
+    "loading": "読み込み中...",
+    "unknown": "不明",
+    "availableModels": "利用可能なモデル",
+    "fast": "高速",
+    "hold": "ホールド",
+    "less": "少なく表示",
+    "more": "もっと見る",
+    "noMatchingModels": "一致するモデルが見つかりません",
+    "noModelsAvailable": "利用可能なモデルはありません",
+    "noModelsAvailableForProvider": "このプロバイダーで利用可能なモデルはありません",
+    "private": "プライベート",
+    "tap": "タップ",
+    "openSystemSettings": "システム設定を開く",
+    "delete": "削除",
+    "deleteAll": "すべて削除",
+    "downloading": "ダウンロード中",
+    "connectingDownloadNode": "ダウンロードノードに接続中",
+    "switchingDownloadNode": "現在のノードが遅いため、予備ノードに切り替えています",
+    "verifyingDownload": "モデルファイルを検証中",
+    "repairingDownload": "モデルのダウンロードを修復中",
+    "installing": "インストール中",
+    "deleting": "削除中",
+    "clearing": "削除中",
+    "downloadRequired": "ダウンロードが必要",
+    "copy": "コピー",
+    "showApiKey": "API キーを表示",
+    "hideApiKey": "API キーを非表示",
+    "apiKeyHelp": "プロバイダーのダッシュボードで API キーを取得してください。",
+    "save": "保存",
+    "saving": "保存中...",
+    "confirm": "確認",
+    "ok": "OK",
+    "use": "使用",
+    "selected": "選択済み",
+    "close": "閉じる"
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "ようこそ",
+      "language": "言語",
+      "setup": "セットアップ",
+      "permissions": "権限",
+      "activation": "アクティベーション",
+      "complete": "完了"
+    },
+    "hotkey": {
+      "couldNotRegisterTitle": "ホットキーを登録できませんでした",
+      "couldNotRegisterDescription": "そのキーの組み合わせは既に使用されている可能性があります。別の組み合わせをお試しください。"
+    },
+    "setup": {
+      "title": "セットアップ",
+      "description": "まずはローカル文字起こしから始めて、プライバシーと使いやすさを先に整えましょう",
+      "language": "言語",
+      "localPrivacyTitle": "標準でローカル",
+      "localPrivacyDescription": "まずはローカル文字起こしから始めることをおすすめします。そうすれば音声とテキストはデバイス内に残ります。必要になったら後からクラウドに切り替えられます。",
+      "uiChineseHint": "请选择界面语言",
+      "moreLanguages": "その他の言語",
+      "highlights": {
+        "fast": {
+          "title": "かんたんセットアップ",
+          "description": "ローカルモデルの準備中に、言語、権限、ホットキーを設定します。"
+        },
+        "local": {
+          "title": "ローカル優先",
+          "description": "ローカルモデルはバックグラウンドで準備され、オンボーディングを止めません。"
+        },
+        "adjust": {
+          "title": "あとで調整",
+          "description": "転写エンジン、モデル、API key はあとで設定画面から細かく調整できます。"
+        }
+      },
+      "modelPrepAfterNext": "「次へ」をクリックすると、既定のローカルモデルの準備が始まります。"
+    },
+    "permissions": {
+      "title": "権限",
+      "microphoneTitle": "マイク",
+      "microphoneDescription": "音声のキャプチャに使用",
+      "grant": "許可",
+      "accessibilityTitle": "アクセシビリティ",
+      "accessibilityDescription": "文字起こし後の自動貼り付けに必要です。ChordVox はキー入力を記録しません。",
+      "screenRecordingTitle": "画面収録（任意）",
+      "screenRecordingDescription": "任意: AI 整文にスクリーンショット文脈を使いたい場合だけ画面収録を許可してください。基本の音声入力とテキスト文脈は許可なしでも動作します。",
+      "testAndGrant": "テストして許可",
+      "requiredForApp": "ChordVox の動作に必要です",
+      "microphoneRequired": "マイクへのアクセスが必要です",
+      "skipDialog": {
+        "title": "今は権限チェックをスキップしますか？",
+        "description": "マイクとアクセシビリティの準備がまだ完了していません。このままスキップすると最初の音声入力に失敗する可能性があります。あとで設定から続けられます。",
+        "confirm": "それでもスキップ",
+        "cancel": "戻る"
+      }
+    },
+    "transcription": {
+      "title": "文字起こし設定",
+      "description": "一番すぐ話し始められる文字起こしの方法を選んでください",
+      "preferredLanguage": "優先言語"
+    },
+    "activation": {
+      "title": "ホットキー",
+      "description": "ホットキーを設定して短いディクテーションを試し、動作を確認してください。",
+      "hotkey": "ホットキー",
+      "hotkeyHint": "毎回押しやすいショートカットを選んでください。",
+      "mode": "モード",
+      "tapDescription": "押して開始/停止",
+      "holdDescription": "押しながら話す",
+      "test": "テスト",
+      "testDescription": "下の入力欄をクリックしてから、そのままショートカットを使ってください。フローティングバーは自動で表示されます。",
+      "hotkeyToStartStop": "{{hotkey}} で開始/停止",
+      "holdHotkey": "{{hotkey}} を押し続ける",
+      "textareaPlaceholder": "ここをクリックしてホットキーでディクテーション...",
+      "textareaLockedPlaceholder": "ローカルモデルの準備が完了すると、この入力欄は自動で使えるようになります。",
+      "focusInput": "入力欄を選択",
+      "manualFallbackHint": "音声入力がまだ安定しない場合は、ここに短い一文を手入力して先に進むこともできます。あとで実際のテストを一度行うのがおすすめです。",
+      "stepFocusInput": "下の入力欄をクリックしてください",
+      "stepSeeCompleted": "\"完了\" が表示されるまで待ってください",
+      "successTitle": "テストディクテーションが完了しました",
+      "successDescription": "ホットキー、フローティングバー、貼り付けの流れは正常に動作しています。",
+      "lastTranscriptLabel": "今検出された内容:",
+      "completeHint": "次へ進む前に、短い音声入力を1回行うか、ここに短い文を入力してください。",
+      "manualPassTitle": "手入力のフォールバックを保存しました。続行できます",
+      "manualPassDescription": "今回はこのまま先へ進めますが、あとで実際のホットキーテストを1回行うことをおすすめします。",
+      "proTipsTitle": "セットアップ後のヒント",
+      "proTipsDictionary": "珍しい名前・ブランド・専門用語は 設定 -> カスタム辞書 に追加すると、より正確に文字起こしされます。",
+      "proTipsAgentName": "設定 -> エージェント で AI に名前を付ければ、ディクテーション中に直接呼びかけられます（例: 「Hey CC, まとめて」）。",
+      "lockedWaitingTitle": "モデルの準備が完了するとテストが自動で解放されます",
+      "lockedWaitingDescription": "今は先にホットキーとモードを設定できます。ローカルモデルのダウンロードと検証が完了すると、このエリアは最初の実テスト用に自動で解放されます。",
+      "lockedErrorTitle": "このテストは現在利用できません",
+      "lockedErrorDescription": "ローカルモデルの準備に失敗した場合、この画面では手入力による代替通過はできません。今はメイン画面へ進み、あとで設定から対応できます。",
+      "skipDialog": {
+        "title": "最初の音声入力テストをスキップしますか？",
+        "description": "このステップは、まだ実際のホットキー経由の音声入力で確認されていません。先にメイン画面へ進めますが、あとで実テストを完了することをおすすめします。",
+        "confirm": "そのまま続行",
+        "cancel": "戻る"
+      },
+      "route": {
+        "local": {
+          "title": "ローカルモデルの準備が完了しました",
+          "description": "このテストはローカルのリアルタイム転写を使用し、その後もローカル優先のままになります。"
+        },
+        "error": {
+          "title": "ローカルモデルの準備に失敗しました",
+          "description": "今はこのままスキップして、あとで設定画面から再試行するかクラウドの代替に切り替えられます。"
+        },
+        "cloud": {
+          "title": "ローカルモデルをまだ準備中です",
+          "description": "API key が設定済みなら、このテストはまずクラウドを使い、ローカルモデルの準備が終わると自動でローカルへ戻ります。"
+        },
+        "waiting": {
+          "title": "ローカルモデルをバックグラウンドで準備中です",
+          "description": "まだクラウドのフォールバック key がないため、最初のテストはローカルモデルの準備完了を待つ必要があります。準備が整うと、このエリアは自動で解放されます。"
+        },
+        "progressLabel": "モデル: {{model}} · {{percentage}}%",
+        "installingLabel": "モデル: {{model}} · インストールと検証を進めています。準備が整うとテストは自動で解放されます。"
+      },
+      "status": {
+        "readyTitle": "最初のテストを始める準備ができました",
+        "listeningTitle": "聞き取り中です",
+        "processingTitle": "直前のフレーズを処理中です",
+        "processingDescription": "このページを開いたまま、結果が入力欄に戻るのを待ってください。"
+      },
+      "elapsedLabel": "認識時間 {{value}}",
+      "elapsedSecondsValue": "{{value}} 秒",
+      "elapsedMillisecondsValue": "{{value}} ミリ秒"
+    },
+    "streamingModelPicker": {
+      "currentFolderLabel": "現在のモデルフォルダ",
+      "currentFolderHint": "このフォルダにすでにストリーミングモデルがある場合、オンボーディングは再ダウンロードせずそのまま再利用します。",
+      "readyDescription": "ローカルのリアルタイムモデルは準備完了です。ホットキー入力ではこれが既定で使われます。"
+    },
+    "completion": {
+      "title": "準備完了です",
+      "description": "ホットキーと最初のディクテーションテストの準備ができました。今すぐ ChordVox を使い始められます。",
+      "card": {
+        "title": "既定ではローカル文字起こしを使用",
+        "subtitle": "プライバシー重視の音声入力",
+        "description": "文字起こしモードは後から設定で切り替えられます。"
+      },
+      "hotkeyReady": "{{hotkey}} はいつでもディクテーションに使えます。",
+      "tryReady": "すでに実際のテストディクテーションを完了しているので、フローティングバーと貼り付けの流れは正常に動作しています。"
+    },
+    "workflowHotkeyTip": {
+      "title": "Pro では複数のホットキーを設定できます",
+      "description": "「設定 → ホットキー」で、音声入力、翻訳、文章の推敲、AI への質問にそれぞれホットキーを割り当て、ワークフローごとにモデルを選べます。押したホットキーのタスクがすぐに実行されます。"
+    }
+  },
+  "controlPanel": {
+    "update": {
+      "readyTitle": "アップデートの準備完了",
+      "readyDescription": "「アップデートをインストール」をクリックして最新バージョンで再起動します。",
+      "problemTitle": "アップデートで問題が発生しました",
+      "problemDescription": "アップデートを完了できませんでした。後でもう一度お試しください。",
+      "installTitle": "アップデートをインストール",
+      "installDescription": "ChordVox はアップデートを適用するために再起動します。作業中のデータは保存されます。",
+      "couldNotInstallTitle": "アップデートをインストールできませんでした",
+      "couldNotInstallDescription": "問題が発生しました。もう一度お試しください。",
+      "couldNotDownloadTitle": "アップデートをダウンロードできませんでした",
+      "couldNotDownloadDescription": "インターネット接続を確認してもう一度お試しください。",
+      "installing": "インストール中...",
+      "installButton": "アップデートをインストール",
+      "availableButton": "アップデートあり"
+    },
+    "limit": {
+      "weeklyTitle": "週間の利用上限に達しました",
+      "weeklyDescription": "利用上限はローリング方式でリセットされます。Pro にアップグレードするか、自分の API キーを使用して無制限にご利用ください。"
+    },
+    "billing": {
+      "pastDueTitle": "お支払いを処理できませんでした",
+      "pastDueDescription": "ご安心ください。現在は無料プランをご利用中です。設定からお支払い方法を更新して Pro に戻しましょう。",
+      "bannerDescription": "現在は無料プランをご利用中です。週 {{limit}} ワードまで利用できます。お支払い方法を更新して Pro に戻しましょう。",
+      "updatePayment": "お支払い方法を更新"
+    },
+    "history": {
+      "title": "文字起こし履歴",
+      "backToHome": "ホームに戻る",
+      "backToHomeHint": "ホームページに戻る",
+      "couldNotLoadTitle": "履歴を読み込めませんでした",
+      "couldNotLoadDescription": "文字起こし履歴の読み込み中に問題が発生しました。アプリを閉じて再度開いてください。",
+      "copiedTitle": "コピーしました！",
+      "copiedDescription": "テキストをクリップボードにコピーしました",
+      "couldNotCopyTitle": "コピーできませんでした",
+      "couldNotCopyDescription": "クリップボードへのコピー中に問題が発生しました。もう一度お試しください。",
+      "clearTitle": "履歴を消去",
+      "clearDescription": "すべての文字起こし履歴を削除します。この操作は元に戻せません。",
+      "clearedTitle": "履歴を消去しました",
+      "clearedDescription": "{{count}} 件の文字起こしを削除しました",
+      "clearedDescription_other": "{{count}} 件の文字起こしを削除しました",
+      "couldNotClearTitle": "履歴を消去できませんでした",
+      "couldNotClearDescription": "問題が発生しました。もう一度お試しください。",
+      "deleteTitle": "文字起こしを削除",
+      "deleteDescription": "この文字起こしは完全に削除されます。",
+      "couldNotDeleteTitle": "削除できませんでした",
+      "couldNotDeleteDescription": "この文字起こしは既に削除されている可能性があります。",
+      "couldNotDeleteDescriptionGeneric": "問題が発生しました。もう一度お試しください。",
+      "clear": "消去",
+      "empty": "文字起こし履歴はまだありません",
+      "press": "押してください",
+      "toStart": "開始するには",
+      "transcribeFile": "ファイルを文字起こし",
+      "transcribeFileProcessing": "文字起こし中...",
+      "cancelFileTranscription": "文字起こしをキャンセル",
+      "fileTranscriptionCancelledTitle": "ファイルの文字起こしをキャンセルしました",
+      "fileTranscriptionCancelledDescription": "ChordVox はこのファイルの待機を停止しました。別のファイルを選択できます。",
+      "transcribedFileTitle": "ファイルの文字起こしが完了しました",
+      "transcribedFileDescription": "{{name}} の文字起こしが完了しました。",
+      "couldNotTranscribeFileTitle": "ファイルを文字起こしできませんでした",
+      "couldNotTranscribeFileDescription": "このファイルの文字起こし中に問題が発生しました。別のファイルまたはモデルをお試しください。",
+      "couldNotSaveFileTitle": "文字起こし結果を保存できませんでした",
+      "couldNotSaveFileDescription": "文字起こしは完了しましたが、履歴に保存できませんでした。この結果を閉じる前にテキストをコピーしてください。",
+      "fileTranscriptionRequiresProTitle": "ファイルの文字起こしには Pro が必要です",
+      "fileTranscriptionRequiresProDescription": "ChordVox で音声・動画ファイルを文字起こしするには Pro にアップグレードしてください。プライバシーを守るローカル音声認識は、引き続き無料で利用できます。",
+      "emptyFileDescription": "選択したファイルは空です。有効なオーディオまたはビデオ ファイルを選択してください。",
+      "unsupportedFileDescription": "このファイル形式には対応していません。一般的な音声または動画ファイルを選択してください。",
+      "selectedFileFallback": "あなたのファイル",
+      "transcribeFileProgress": "文字起こし中 {{progress}}%...",
+      "clearedDescription_one": "{{count}} 件の文字起こしを削除しました",
+      "clearedDescription_few": "{{count}} 件の文字起こしを削除しました",
+      "clearedDescription_many": "{{count}} 件の文字起こしを削除しました",
+      "searchPlaceholder": "文字起こしを検索",
+      "searchAriaLabel": "文字起こしを検索",
+      "noResults": "フィルターに一致する文字起こしはありません。",
+      "clearFilters": "フィルターをクリア",
+      "starredOnly": "お気に入り",
+      "allStarred": "お気に入りのみ",
+      "rePolishSuccess": "再ポリッシュ完了",
+      "rePolishFailed": "再ポリッシュ失敗",
+      "rePolishSaveFailed": "再推敲は完了しましたが、結果を保存できませんでした。",
+      "favoriteUpdateFailedTitle": "お気に入りを更新できませんでした",
+      "favoriteUpdateFailedDescription": "お気に入りの変更を保存できませんでした。もう一度お試しください。",
+      "retry": "再試行",
+      "loadMore": "さらに読み込む",
+      "rePolishRecordAria": "この文字起こしを再ポリッシュ",
+      "favoriteRecordAria": "この文字起こしをお気に入りに登録/解除",
+      "timeFilter": {
+        "label": "期間",
+        "all": "すべての期間",
+        "today": "今日",
+        "week": "過去 7 日間",
+        "month": "過去 30 日間"
+      },
+      "export": "エクスポート",
+      "exportSelected": "選択項目をエクスポート",
+      "exportTooltip": "履歴をファイルにエクスポート",
+      "exportSelectedTooltip": "{{count}} 件の選択した文字起こしをエクスポート",
+      "exportFormat": {
+        "txt": "プレーンテキスト (.txt)",
+        "md": "Markdown (.md)",
+        "csv": "スプレッドシート (.csv)",
+        "json": "JSON (.json)"
+      },
+      "exportEmptyTitle": "エクスポートする内容がありません",
+      "exportEmptyDescription": "エクスポートする前に少なくとも 1 件の転写を録音してください。",
+      "exportedTitle": "履歴をエクスポートしました",
+      "exportedDescription": "{{count}} 件を {{path}} に保存しました",
+      "exportedDescription_other": "{{count}} 件を {{path}} に保存しました",
+      "openExportFolder": "フォルダーを開く",
+      "openExportFolderFailedTitle": "フォルダーを開けませんでした",
+      "openExportFolderFailedDescription": "上のパスを使って、エクスポートしたファイルを手動で探してください。",
+      "exportFailedTitle": "エクスポートに失敗しました",
+      "exportFailedDescription": "ファイルの保存中にエラーが発生しました。もう一度お試しください。",
+      "exportSelectedTooltip_other": "{{count}} 件の選択した文字起こしをエクスポート",
+      "selectAllVisible": "表示中をすべて選択",
+      "deselectAllVisible": "表示中の選択を解除",
+      "clearSelection": "選択をクリア",
+      "selectedCount": "{{count}} 件選択中",
+      "selectedCount_other": "{{count}} 件選択中",
+      "selectRecordAria": "この文字起こしを選択",
+      "deselectRecordAria": "この文字起こしの選択を解除",
+      "copyRecordAria": "文字起こしをコピー",
+      "deleteRecordAria": "文字起こしを削除"
+    },
+    "cloudMigration": {
+      "title": "ChordVox Pro へようこそ",
+      "description": "7 日間の無料トライアルが有効です！より高速で正確な文字起こしのために ChordVox Cloud に切り替えました。以前の設定は保存されています。設定からいつでも戻せます。",
+      "viewSettings": "設定を表示"
+    },
+    "aiCta": {
+      "title": "AI で文字起こしを向上させましょう",
+      "description": "話しながら文法、句読点、書式を自動的に修正します。",
+      "enable": "AI 補正を有効にする"
+    },
+    "loading": "読み込み中...",
+    "streamingFallback": {
+      "title": "ローカルストリーミングを開始できませんでした",
+      "description": "ChordVox は自動的に標準録音モードへ切り替わりました。理由: {{reason}}"
+    }
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "クラウド",
+      "local": "ローカル",
+      "localDescription": "デバイス上で動作。完全なプライバシー保護、オフライン対応。",
+      "cloudDescription": "API 経由の高度なモデル。高速・高機能、インターネット接続が必要。"
+    },
+    "enableTitle": "AI テキスト補正を有効にする",
+    "enableDescription": "AI を使って文字起こしの品質を自動的に向上",
+    "custom": {
+      "endpointWithProtocol": "プロトコルを含む完全なベース URL を入力してください（例: https://server/v1）。",
+      "httpsRequired": "HTTPS が必要です（ローカルネットワークのみ HTTP を許可）。",
+      "endpointUnauthorized": "エンドポイントがリクエストを拒否しました（401/403）。API キーを追加するか、サーバーの認証設定を調整してください。",
+      "endpointTitle": "エンドポイント URL",
+      "endpointExamples": "例:",
+      "ollama": "（Ollama）",
+      "localAi": "（LocalAI）",
+      "apiKeyOptional": "API キー（任意）",
+      "apiKeyHelp": "任意。Bearer トークンとして認証に使用されます。OpenAI API キーとは別のものです。",
+      "applyAndRefresh": "適用して更新",
+      "queryPrefix": "問い合わせ先:",
+      "querySuffix": "で利用可能なモデルを取得します。",
+      "modelsReloadHint": "URL フィールドからフォーカスを外すか「適用して更新」をクリックすると、モデルが再読み込みされます。",
+      "enterEndpoint": "上にエンドポイント URL を入力してモデルを読み込んでください。",
+      "fetchingModels": "エンドポイントからモデル一覧を取得中...",
+      "noModels": "モデルが見つかりません。エンドポイント URL を確認してください。",
+      "providerName": "カスタム",
+      "ownerLabel": "提供元: {{owner}}",
+      "unableToLoadModels": "エンドポイントからモデルを読み込めませんでした。",
+      "protocolTitle": "プロトコル",
+      "protocolAuto": "自動 (推奨)",
+      "protocolChat": "Chat Completions",
+      "protocolResponses": "Responses",
+      "protocolGeminiGenerateContent": "Gemini generateContent",
+      "protocolHelp": "自動はまず Chat Completions を試し、必要に応じて Responses にフォールバックし、各エンドポイントで機能する方式を記憶します。",
+      "detectedProtocolHelp": "Auto は現在、このエンドポイントの {{protocol}} を記憶しています。",
+      "resetDetectedProtocol": "検出されたプロトコルをリセットする",
+      "apiKeyHelpGemini": "Optional. Sent as x-goog-api-key for Gemini-compatible endpoints.",
+      "geminiEndpointHint": "Use a Gemini-compatible base URL, or paste a full generateContent endpoint.",
+      "modelIdTitle": "Model ID",
+      "modelIdHint": "Use this when the endpoint supports a model that is not listed below.",
+      "geminiModelIdHint": "Required when you enter a base URL. Full generateContent URLs fill this automatically.",
+      "fullEndpointModelsHint": "Full endpoint mode skips model-list loading and calls the configured endpoint directly.",
+      "geminiRequestPrefix": "Generation requests will call",
+      "bedrockEndpointHint": "デフォルトではリージョンから自動生成されます。 VPC エンドポイントおよび同様のセットアップにはカスタム エンドポイントを使用します。",
+      "accessKeyId": "アクセスキー ID",
+      "secretAccessKey": "シークレットアクセスキー",
+      "sessionToken": "セッショントークン（任意）",
+      "sessionTokenHelp": "一時的な AWS 認証情報を使用する場合は必須です。",
+      "region": "リージョン"
+    },
+    "getApiKey": "設定方法がわからない？ガイドを見る ->",
+    "selectModel": "モデルを選択",
+    "availableModels": "利用可能なモデル",
+    "gemini": {
+      "endpointHint": "Gemini のヒント: ChordVox の AI 整形は公式 generateContent API を使うため、Google 公式エンドポイントは v1beta のままにしてください。",
+      "previewEndpointMismatch": "現在の Google 公式エンドポイントは v1 です。この入力欄を離れるかモデルを再読み込みすると、Gemini は v1beta に戻ります。",
+      "autoSwitchedToBeta": "公式 generateContent リクエストに対応するため、Gemini を v1beta に切り替えました。"
+    }
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "モデルを削除",
+      "description": "このモデルを削除してもよろしいですか？再度使用するにはダウンロードし直す必要があります。"
+    },
+    "parakeet": {
+      "multilingual": "25 言語対応",
+      "english": "英語",
+      "externalRuntime": "このモデルには NVIDIA NeMo ランタイムが必要です。内蔵の sherpa-onnx NVIDIA パイプラインでは、まだ直接ダウンロードまたは実行できません。"
+    },
+    "apiKeyOptional": "API キー（任意）",
+    "getKey": "設定方法がわからない？ガイドを見る ->",
+    "endpointUrl": "エンドポイント URL",
+    "customProvider": "カスタム",
+    "customModelIdLabel": "カスタムモデル ID",
+    "customModelIdHint": "プロバイダーが上記にないモデルをサポートしている場合に入力します。",
+    "customModelIdDescription": "カスタムモデル ID",
+    "fallback": {
+      "whisperModelDescription": "モデル",
+      "parakeetModelDescription": "NVIDIA モデル",
+      "paraformerModelDescription": "Paraformer フル精度モデル",
+      "graniteModelDescription": "IBM Granite Speech モデル",
+      "cohereModelDescription": "Cohere Transcribe モデル"
+    },
+    "whisperModels": "Whisper モデル",
+    "browse": "参照",
+    "whisperModelFileLabel": "Whisper モデル (.bin)",
+    "parakeetLocalHelp": "Parakeet モデルはモデル保存先で一元管理されます。ここで公式モデルをダウンロードするか、ローカルのモデルディレクトリを選択してください。",
+    "parakeetModelDirectoryLabel": "Parakeet モデルディレクトリ",
+    "whisperModelFileHint": "「参照」をクリックして、ダウンロードした Whisper モデルファイル（.bin）を選択してください。例: ggml-large-v3-turbo.bin",
+    "fireRedRuntime": {
+      "title": "FireRed ランタイム",
+      "description": "FireRedASR2-AED には別途ローカル Python ランタイムが必要です。ここでインストールまたは修復すると、このマシンで FireRed モデルを使えるようになります。",
+      "modelUnavailable": "FireRed のモデルディレクトリはまだ利用できません。モデルファイルが完全にダウンロードされていることを確認してから、ランタイムを再確認してください。",
+      "modelErrorLabel": "モデル確認:",
+      "ready": "準備完了",
+      "installNeeded": "インストールが必要",
+      "repairNeeded": "修復が必要",
+      "checking": "確認中...",
+      "installAction": "ランタイムをインストール",
+      "repairAction": "ランタイムを修復",
+      "recheckAction": "再確認",
+      "currentPathLabel": "現在のランタイムパス",
+      "managedPathLabel": "アプリ管理のインストール先",
+      "sourceLabel": "ソース:",
+      "bootstrapLabel": "セットアップ Python:",
+      "available": "利用可能",
+      "pythonMissing": "Python 3.11+ が必要です",
+      "missingModules": "不足しているモジュール:",
+      "installSuccess": "FireRed ランタイムをインストールしました",
+      "repairSuccess": "FireRed ランタイムを修復しました",
+      "installFailed": "FireRed ランタイムのセットアップに失敗しました",
+      "checkFailed": "FireRed ランタイムを確認できませんでした",
+      "sourceValues": {
+        "env": "環境変数の上書き",
+        "managed": "アプリ管理",
+        "sibling": "モデルディレクトリの隣",
+        "legacy": "旧ローカルパス",
+        "none": "未検出"
+      }
+    },
+    "appId": "App ID",
+    "accessToken": "アクセストークン",
+    "connectionTest": {
+      "button": "接続をテスト",
+      "testing": "テスト中",
+      "unsupported": "このビルドは接続テストに対応していません。",
+      "defaultError": "接続テストに失敗しました",
+      "failed": "接続テストに失敗しました: {{message}}",
+      "testingProvider": "{{provider}} への接続をテスト中...",
+      "modelMissingWarning": "接続には成功しましたが、{{provider}} の利用可能モデル一覧に {{model}} が見つかりませんでした。",
+      "modelAvailable": "接続に成功しました。{{model}} が利用可能です。",
+      "doubao": {
+        "testing": "Doubao への接続をテスト中...",
+        "autoFallbackWarning": "接続に成功しました。自動モードは現在 {{model}} にフォールバックしています。",
+        "availableModel": "接続に成功しました。利用可能モデル: {{model}}。",
+        "autoHint": "自動モードは Streaming 2.0 を優先し、必要に応じて Streaming 1.0 にフォールバックします。",
+        "streaming2": "Streaming 2.0",
+        "streaming1Compatibility": "Streaming 1.0（互換）",
+        "autoRecommended": "自動"
+      },
+      "soniox": {
+        "testing": "Soniox 接続をテスト中...",
+        "availableModel": "接続に成功しました。利用可能なモデル: {{model}}。"
+      },
+      "deepgram": {
+        "testing": "Deepgram 接続をテスト中...",
+        "availableModel": "接続に成功しました。利用可能なモデル: {{model}}。"
+      },
+      "googleCloud": {
+        "testing": "Google Cloud Speech-to-Text 接続をテスト中...",
+        "availableModel": "接続に成功しました。利用可能なモデル: {{model}}。"
+      }
+    },
+    "paraformer": {
+      "chineseEnglish": "中国語 / 英語",
+      "chinese": "中国語"
+    },
+    "granite": {
+      "englishSpecialized": "英語 ASR",
+      "externalRuntime": "IBM Granite Speech は、アプリがローカル Python ランタイム経由で管理します。初回使用時に依存関係をインストールし、モデルをダウンロードしてローカル文字起こしサービスを開始します。"
+    },
+    "cohere": {
+      "multilingual": "14 言語",
+      "externalRuntime": "Cohere Transcribe には、Hugging Face の制限付きアクセスと、OpenAI 互換の文字起こしエンドポイントを公開する外部 ASR ランタイムが必要です。選択を有効にするにはエンドポイントを設定してください。"
+    },
+    "route": {
+      "cloudTitle": "クラウド",
+      "cloudDescription": "API モデル / オンライン / プロバイダー選択",
+      "localTitle": "ローカル",
+      "localDescription": "オフラインモデル / プライベート / デバイス上で実行",
+      "cloudProviderLabel": "クラウドプロバイダー",
+      "localProviderLabel": "ローカルモデル",
+      "localBuiltInProviderLabel": "内蔵ローカルモデル"
+    },
+    "externalRuntime": {
+      "title": "外部ランタイム",
+      "configureAction": "ランタイムを設定",
+      "checkAction": "ランタイムを確認",
+      "configured": "設定済み",
+      "required": "必須",
+      "ready": "準備完了",
+      "reachable": "到達可能",
+      "checking": "確認中...",
+      "checkRequired": "確認が必要",
+      "checkFailed": "ランタイム確認に失敗しました",
+      "checkUnsupported": "このビルドではランタイム確認を利用できません。",
+      "endpointRequired": "先にランタイムエンドポイントを入力してください。",
+      "readyMessage": "ランタイムと文字起こしエンドポイントに到達できます。このモデルを選択できるようになりました。",
+      "reachableMessage": "ランタイムには到達できますが、文字起こしエンドポイントまたはモデル一覧を完全には確認できませんでした。使用は可能です。文字起こしに失敗した場合、ChordVox はフォールバックします。",
+      "modelMissing": "ランタイムには到達できますが、このモデルは /v1/models から返されませんでした。使用前に読み込まれているモデル ID を確認してください。",
+      "authRequired": "ランタイムがリクエストを拒否しました。有効な API キーを追加するか、ランタイムの認証設定を調整してください。",
+      "endpointError": "{{message}}",
+      "advancedTitle": "高度な外部ランタイム",
+      "advancedBadge": "独自ランタイムを使用",
+      "advancedDescription": "ユーザー管理のランタイムまたは制限付きアクセスがまだ必要なモデルはここに表示されます。顧客向けにすぐ使えるローカルモデルは上に表示されます。",
+      "endpointLabel": "ランタイムエンドポイント",
+      "endpointHelp": "OpenAI 互換の音声文字起こしエンドポイントを使用してください。ベース URL を入力すると、アプリが /v1/audio/transcriptions を自動的に追加します。",
+      "apiKeyHelp": "ランタイムが認証を必要としない場合は空欄にしてください。設定すると Bearer トークンとして送信されます。"
+    },
+    "paraformerLocalHelp": "Paraformer モデルはモデル保存場所で管理されます。既定では、高精度なローカル中国語文字起こしのためにフル精度の model.onnx を使用します。",
+    "paraformerModelDirectoryLabel": "Paraformer モデルディレクトリ",
+    "graniteLocalHelp": "Granite はアプリ管理のローカルランタイムを使用します。初回使用時に専用の Python/uv 環境を準備し、依存関係をインストールし、約 4.64GB のモデルをダウンロードしてから 127.0.0.1 の文字起こしサービスを開始します。既定ポートが使用中の場合は、アプリが自動的に空きポートを選択します。",
+    "cohereLocalHelp": "Cohere Transcribe は内蔵ダウンロードフローを使用しなくなりました。制限付き Hugging Face モデルを外部ランタイムで読み込み、互換エンドポイントをここで設定してください。",
+    "graniteRuntime": {
+      "title": "Granite ローカルランタイム",
+      "checking": "確認中...",
+      "ready": "準備完了",
+      "installNeeded": "インストールが必要",
+      "repairNeeded": "修復が必要",
+      "pythonMissing": "ランタイム設定に失敗しました",
+      "installAction": "ランタイムをインストール",
+      "installAndDownloadAction": "インストールしてダウンロード"
+    },
+    "deepgram": {
+      "apiKeyPlaceholder": "Deepgram API キー",
+      "apiKeyHelp": "Deepgram は Authorization: Token 認証を使用します。ここに生の API キーを貼り付けてください。",
+      "endpointHelp": "既定では Deepgram の事前録音音声用 /v1/listen API を使用します。プロキシを使う場合は、Deepgram Listen 互換エンドポイントを入力してください。"
+    },
+    "googleCloud": {
+      "credential": "API キー / アクセストークン",
+      "credentialPlaceholder": "AIza... または ya29...",
+      "credentialHelp": "長期利用できる Google Cloud API キーを推奨します。OAuth アクセストークンもサポートしますが、通常は短命でデバッグ向きです。Speech-to-Text v2 の直接呼び出しが PERMISSION_DENIED を返し続ける場合は、Speech-to-Text API が有効で、呼び出し元に speech.recognizers.recognize 権限があることを確認してください。",
+      "endpointHelp": "Speech-to-Text v2 Recognize の完全なエンドポイントを入力してください。プロジェクト ID、ロケーション、認証情報は同じアクセス可能な Google Cloud プロジェクトに属している必要があります。"
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorTitles": {
+        "sessionExpired": "セッション期限切れ",
+        "offline": "オフラインです",
+        "dailyLimitReached": "1 日の上限に達しました"
+      },
+      "fallback": {
+        "title": "フォールバックモード",
+        "description": "ローカル Whisper が失敗しました。代わりに OpenAI API を使用しました。"
+      },
+      "byokFallback": {
+        "title": "クラウド文字起こしを利用できません",
+        "description": "設定したクラウド文字起こしを実行できなかったため、ChordVox はローカルモデルで音声入力を完了しました。"
+      },
+      "reasoningFailed": {
+        "title": "AI 推敲は適用されませんでした",
+        "description": "元の文字起こしは正常に貼り付けられました。次回までに AI プロバイダーとモデル設定を確認してください。"
+      },
+      "noAudio": {
+        "title": "音声が検出されませんでした",
+        "description": "使用できる音声が検出されませんでした。テキストは貼り付けられず、履歴にも保存されていません。マイク入力を確認してから、新しい音声入力を開始してください。"
+      },
+      "systemRecovery": {
+        "title": "音声セッションを復元しました",
+        "interruptedDescription": "コンピューターのスリープ時に、進行中の音声入力を停止しました。マイクとローカルモデルはリセット済みです。もう一度開始してください。",
+        "recoveringTitle": "音声を復元しています",
+        "recoveringDescription": "ChordVox がマイクとローカルモデルに再接続しています。少し待ってからもう一度お試しください。",
+        "degradedDescription": "スリープ解除後に音声を完全には復元できませんでした。もう一度試し、失敗が続く場合は ChordVox を再起動してください。"
+      },
+      "failureActions": {
+        "retry": "新しい音声入力を開始",
+        "openMicrophoneSettings": "マイク設定を開く",
+        "openSoundSettings": "サウンド設定を開く"
+      },
+      "failures": {
+        "recording": {
+          "title": "録音を開始できませんでした",
+          "description": "音声もテキストも保存されていません。マイクへのアクセスと入力を確認してから、新しい音声入力を開始してください。"
+        },
+        "transcription": {
+          "title": "文字起こしに失敗しました",
+          "description": "文字起こしに失敗しました: {{reason}}。テキストは貼り付けられず、履歴にも追加されていません。問題を解決してから、新しい音声入力を開始してください。",
+          "unknownReason": "原因不明です。もう一度お試しください。繰り返し失敗する場合は、設定で文字起こしエンジンを切り替えてください。"
+        },
+        "historySave": {
+          "title": "履歴を保存できませんでした",
+          "description": "テキストは対象アプリに貼り付けられましたが、ローカルの文字起こし履歴には追加されていません。貼り付けたテキストに影響はありません。準備ができたら新しい音声入力を開始してください。"
+        }
+      },
+      "reasoningRequiresPro": {
+        "description": "AI 整形には Pro が必要です。この音声入力は AI 整形なしで貼り付けられました。整形を再び有効にするには、アップグレードするかライセンスを有効化してください。"
+      },
+      "reasoningPreviewUsed": {
+        "title": "AI 整形が完了しました",
+        "description": "この音声入力は Pro AI 整形プレビューを使用しました。本日は {{limit}} 回中あと {{remaining}} 回です。Pro では毎回自動で整形できます。"
+      },
+      "reasoningPreviewLimit": {
+        "title": "AI プレビュー上限に達しました",
+        "description": "本日の Pro AI 整形プレビュー {{limit}} 回は使い切りました。この音声入力は AI 整形なしで貼り付けられました。Pro にアップグレードすると自動整形を続けられます。"
+      },
+      "modelMissingAction": "モデルをダウンロード",
+      "usageNearLimit": {
+        "title": "ホスト型文字起こしの残量が少なくなっています",
+        "description": "今週のホスト型文字起こし枠を {{percent}}% 使用しました（残り約 {{remaining}} 語）。使い切るとローカル文字起こしに自動で切り替わります。Pro へのアップグレードやご自身の API キーの利用も可能です。"
+      },
+      "previousStillProcessing": {
+        "title": "前の音声入力を文字起こし中です",
+        "description": "今回のキー操作では新しい録音を開始していません。現在の文字起こしが終わってから、もう一度話してください。"
+      },
+      "modelMissingPreflight": {
+        "title": "文字起こしモデルが未ダウンロードです",
+        "description": "モデル {{model}} はまだダウンロードされていないため、この音声入力は文字起こしできません。先にモデルをダウンロードするか、エンジンを切り替えてください。"
+      },
+      "proNudge": {
+        "title": "{{total}} 件の音声入力を完了しました",
+        "description": "ローカル音声入力はずっと無料です。AI 推敲、ファイル文字起こし、高度なワークフローには Pro をご覧ください。",
+        "action": "Pro を見る"
+      }
+    },
+    "clipboard": {
+      "pasteFailed": {
+        "title": "クリップボードの貼り付けに失敗",
+        "description": "文字起こしは成功し、テキストはクリップボードにありますが、自動貼り付けに失敗しましたが、テキストはローカル履歴に保存されています。手動で貼り付けてから、次の音声入力の前に ChordVox のシステム権限を確認してください。",
+        "macosDescription": "文字起こしは成功し、テキストはクリップボードにありますが、自動貼り付けに失敗しましたが、テキストはローカル履歴に保存されています。まず Cmd+V で手動貼り付けしてください。その後、システム設定 -> プライバシーとセキュリティ -> アクセシビリティと入力監視で ChordVox の権限を確認してください。",
+        "windowsDescription": "文字起こしは成功し、テキストはクリップボードにありますが、自動貼り付けに失敗しましたが、テキストはローカル履歴に保存されています。まず Ctrl+V で手動貼り付けしてください。その後、Windows のプライバシー、セキュリティ、セキュリティソフトの設定で、キーボード入力、クリップボード、支援制御がブロックされていないか確認してください。",
+        "linuxDescription": "文字起こしは成功し、テキストはクリップボードにありますが、自動貼り付けに失敗しましたが、テキストはローカル履歴に保存されています。まず Ctrl+V で手動貼り付けしてください。その後、デスクトップ環境の制限と、xdotool、wtype、ydotool などの自動貼り付けツールがインストールされ動作しているか確認してください。",
+        "autoPasteAccessibilityRequired": "自動貼り付けにはアクセシビリティ権限が必要です。システム設定 > プライバシーとセキュリティ > アクセシビリティで ChordVox を許可してから、もう一度お試しください。テキストはクリップボードにコピーされています。Cmd+V で手動で貼り付けてください。",
+        "detailPrefix": "詳細: "
+      },
+      "accessibilityDialog": {
+        "standard": {
+          "title": "アクセシビリティ権限が必要です",
+          "message": "ChordVox が他のアプリにテキストを貼り付けるには、アクセシビリティ権限が必要です。",
+          "detail": "現在の状態: クリップボードへのコピーは成功していますが、貼り付け（Cmd+V のシミュレーション）に失敗しています。\n\n対処方法:\n1. システム設定を開きます\n2. 「プライバシーとセキュリティ -> アクセシビリティ」に移動します\n3. 左下の鍵アイコンをクリックしてパスワードを入力します\n4. ChordVox を一覧に追加して有効にします\n5. ChordVox を再起動します\n\nこの権限がない場合、音声入力したテキストはクリップボードにコピーされるだけで、自動貼り付けは行われません。"
+        },
+        "stuck": {
+          "title": "アクセシビリティ権限を再設定",
+          "message": "ChordVox が以前のバージョンの古いアクセシビリティ権限を使い続けている可能性があります。",
+          "detail": "よくあるケース: ChordVox を再ビルドまたは再インストールした後、macOS に古い権限が残り、新しいアプリがブロックされることがあります。\n\n対処方法:\n1. 「システム設定 -> プライバシーとセキュリティ -> アクセシビリティ」を開きます\n2. 古い「ChordVox」項目をすべて削除します\n3. 「Electron」や不明な古いアプリ名の項目も削除します\n4. 「+」を押して現在の ChordVox アプリを再度追加します\n5. チェックボックスが有効になっていることを確認します\n6. ChordVox を再起動します\n\nこの権限がない場合、テキストはクリップボードにコピーされるだけで、自動貼り付けは行われません。"
+        }
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "invalidHotkey": "無効なホットキー",
+        "notRegistered": "ホットキー未登録",
+        "saved": "ホットキーを保存しました",
+        "error": "ホットキーエラー"
+      },
+      "errors": {
+        "enterValidHotkey": "有効なホットキーを入力してください",
+        "unsupportedShortcut": "そのショートカットはサポートされていません。",
+        "couldNotRegister": "このキーを登録できませんでした。別のキーを選択してください。",
+        "failedToRegister": "ホットキーの登録に失敗しました。もう一度お試しください。"
+      },
+      "messages": {
+        "nowUsing": "ディクテーションに {{hotkey}} を使用します"
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "ダウンロードがタイムアウトしました。インターネット接続を確認してもう一度お試しください。",
+        "notFound": "ダウンロードサーバーに接続できませんでした。インターネット接続を確認してください。",
+        "corrupted": "ダウンロードが不完全または破損しています。もう一度お試しください。",
+        "rateLimited": "ダウンロードサーバーがレート制限中です。数分待ってからもう一度お試しください。",
+        "downloadNodesUnavailable": "ダウンロードノードが一時的に利用できないか、モデルの検証に失敗しました。後でもう一度お試しください。",
+        "server": "サーバーエラー（{{error}}）。後でもう一度お試しください。",
+        "generic": "ダウンロードに失敗しました: {{error}}",
+        "extractionFailed": "モデルのダウンロードは完了しましたが、インストールに失敗しました。ダウンロードをクリックして再ダウンロードなしでインストールを再試行してください。",
+        "diskSpace": "モデルのダウンロードを完了するための空きディスク容量が不足しています。",
+        "unknown": "不明なエラー",
+        "actions": {
+          "timeout": "対処法: より安定したネットワーク（有線や別の Wi-Fi）に切り替えて再試行してください。それでも失敗する場合は、より小さなモデルを選んでください。",
+          "notFound": "対処法: ネット接続を確認し、必要に応じて VPN/プロキシを無効にして、再度ダウンロードしてください。",
+          "corrupted": "対処法: もう一度「ダウンロード」を押してください。ChordVox が再開して検証します。",
+          "rateLimited": "対処法: 2〜5 分待ってから再試行し、複数のダウンロードを同時に行わないでください。",
+          "downloadNodesUnavailable": "対処法: 数分待ってから再試行してください。何度も失敗する場合は、別のモデルサイズを選ぶかネットワークを切り替えてください。",
+          "server": "対処法: 一時的なサーバー側の問題です。数分待ってから再試行してください。",
+          "extractionFailed": "対処法: ディスクの空き容量が 2 GB 以上あることを確認してから、もう一度ダウンロードを押すと、インストールのみ再試行されます。",
+          "diskSpace": "対処法: ディスク容量を空けてから再試行してください。Whisper tiny/base モデルなら約 150 MB で十分です。",
+          "generic": "対処法: ダウンロードを再試行してください。何度も失敗する場合は、ネットワークを切り替えるかより小さなモデルを選んでください。"
+        }
+      },
+      "downloadFailed": {
+        "title": "ダウンロードに失敗しました"
+      },
+      "installationFailed": {
+        "title": "インストールに失敗しました"
+      },
+      "downloadInProgress": {
+        "title": "ダウンロード中",
+        "description": "現在のダウンロードが完了するか、先にキャンセルしてください。"
+      },
+      "modelDeleted": {
+        "title": "モデルを削除しました",
+        "descriptionWithSpace": "モデルを削除しました！{{sizeMb}}MB のディスク容量を解放しました。",
+        "description": "モデルを削除しました！"
+      },
+      "deleteFailed": {
+        "title": "削除に失敗しました",
+        "description": "モデルの削除に失敗しました: {{error}}"
+      },
+      "cancelFailed": {
+        "title": "ダウンロードをキャンセルできませんでした",
+        "description": "ダウンロードをキャンセルできませんでした: {{error}}"
+      },
+      "downloadCancelled": {
+        "title": "ダウンロードをキャンセルしました",
+        "description": "ダウンロードがキャンセルされました。"
+      }
+    },
+    "permissions": {
+      "paths": {
+        "windowsMicrophone": "設定 -> プライバシー -> マイク",
+        "linuxSound": "システムのサウンド設定",
+        "defaultSound": "システム設定 -> サウンド -> 入力",
+        "linuxPrivacy": "システムのプライバシー設定",
+        "defaultPrivacy": "システム設定 -> プライバシーとセキュリティ -> マイク"
+      },
+      "micErrors": {
+        "accessFailed": "マイクへのアクセスに失敗しました。もう一度お試しください。",
+        "noMicrophones": "マイクが検出されませんでした。{{settingsPath}} でマイクを接続または選択してください。",
+        "permissionDenied": "権限が拒否されました。{{privacyPath}} を開いて ChordVox を許可してください。",
+        "couldNotStart": "選択したマイクを開始できませんでした。{{settingsPath}} で入力デバイスを選択してから、テストを再実行してください。",
+        "noActiveInput": "アクティブな音声入力が見つかりませんでした。{{settingsPath}} でマイクを選択してください。",
+        "unknown": "マイクへのアクセスに失敗しました: {{error}}。別の入力デバイスを選択してもう一度お試しください。",
+        "unknownFallback": "不明なエラー"
+      },
+      "settingsTitles": {
+        "microphone": "マイク設定",
+        "sound": "サウンド設定",
+        "accessibility": "アクセシビリティ設定"
+      },
+      "settingsErrors": {
+        "unableToOpenMicrophone": "マイク設定を開けませんでした。システム設定を手動で開いてください。",
+        "unableToOpenSound": "サウンド設定を開けませんでした。システム設定を手動で開いてください。",
+        "unableToOpenAccessibility": "アクセシビリティ設定を開けませんでした。システム設定を手動で開いてください。"
+      },
+      "micUnavailable": "この環境ではマイク API が利用できません。アプリを再起動してください。",
+      "titles": {
+        "microphoneUnavailable": "マイクが利用できません",
+        "microphonePermissionRequired": "マイクの権限が必要です",
+        "accessibilityNeeded": "アクセシビリティの権限が必要です",
+        "readyToGo": "準備完了！",
+        "waylandClipboardMode": "Wayland でのクリップボードモード",
+        "optionalPasteTool": "オプション: 貼り付けツールのインストール",
+        "accessibilityRefreshNeeded": "アクセシビリティ権限を更新"
+      },
+      "descriptions": {
+        "accessibilityNeeded": "テキストの自動貼り付けを有効にするには、システム設定でアクセシビリティの権限を許可してください。",
+        "windowsReady": "Windows では自動貼り付けに特別な権限は必要ありません。準備完了です！",
+        "linuxReadyWithMethod": "{{method}} を使用した自動貼り付けが利用可能です。準備完了です！",
+        "waylandClipboardMode": "この Wayland セッションでは自動貼り付けが利用できません。ChordVox はテキストをクリップボードにコピーしますので、Ctrl+V で貼り付けてください。",
+        "optionalPasteTool": "自動貼り付けには {{tool}} をインストールしてください:\n\n{{installCmd}}{{waylandNote}}\n\nインストールしなくても ChordVox は使用できます。テキストがクリップボードにコピーされるので、Ctrl+V で貼り付けてください。",
+        "accessibilityRefreshNeeded": "アップデート前から ChordVox にアクセシビリティ権限を許可していた場合は、システム設定 -> プライバシーとセキュリティ -> アクセシビリティ にある古い権限項目を削除して、もう一度許可し直す必要があるかもしれません。"
+      },
+      "alerts": {
+        "accessibilityNeeded": "アクセシビリティの権限が必要です！システム設定で許可してください。",
+        "accessibilityRefreshNeeded": "アップデート前からアクセシビリティが有効でも動作しない場合は、古い ChordVox の権限項目を削除してから再度許可してください。"
+      },
+      "notes": {
+        "waylandWtype": "\n\n注: XWayland アプリでは xdotool も使用できます。",
+        "waylandXwaylandOnly": "\n\n注: 自動貼り付けは XWayland アプリのみで動作します。"
+      },
+      "labels": {
+        "defaultPasteTool": "xdotool",
+        "xdotoolXwayland": "xdotool（XWayland アプリ）"
+      },
+      "accessibilityTestText": "ChordVox アクセシビリティテスト",
+      "warning": {
+        "messages": {
+          "macos": "サウンド設定で入力デバイスを確認してください",
+          "windows": "Windows の設定で入力デバイスを確認してください",
+          "linux": "システムのサウンド設定で入力デバイスを確認してください"
+        },
+        "soundLabel": "サウンド",
+        "privacyLabel": "プライバシー"
+      }
+    }
+  },
+  "auth": {
+    "cloudNotConfigured": "クラウド未設定",
+    "common": {
+      "back": "戻る",
+      "continue": "続ける",
+      "or": "または"
+    },
+    "emailStep": {
+      "continueWithEmail": "メールで続ける",
+      "continueWithoutAccount": "アカウントなしで続ける",
+      "emailPlaceholder": "you@example.com"
+    },
+    "errors": {
+      "accountExistsSignIn": "このメールアドレスのアカウントは既に存在します。サインインしてください。",
+      "accountNotFoundCreate": "このメールアドレスのアカウントが見つかりません。アカウントを作成してください。",
+      "authNotConfigured": "認証が設定されていません",
+      "createAccountFailed": "アカウントの作成に失敗しました",
+      "failedProviderSignIn": "{{provider}} でのサインインに失敗しました",
+      "failedUserCheck": "ユーザーアカウントの確認に失敗しました",
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "invalidCredentials": "メールアドレスまたはパスワードが正しくありません",
+      "plusAliasUnsupported": "「+」を含むメールエイリアスはサポートされていません"
+    },
+    "getStarted": "はじめる",
+    "legal": {
+      "and": "および",
+      "prefix": "続行すると、",
+      "privacy": "プライバシーポリシー",
+      "suffix": "に同意したことになります",
+      "terms": "利用規約"
+    },
+    "passwordForm": {
+      "createAccount": "アカウントを作成",
+      "createAccountButton": "アカウントを作成",
+      "createAccountLink": "アカウントを作成",
+      "createPasswordPlaceholder": "パスワードを作成",
+      "creatingAccount": "アカウント作成中...",
+      "enterPasswordPlaceholder": "パスワードを入力",
+      "forgotPassword": "パスワードをお忘れですか？",
+      "fullNamePlaceholder": "氏名",
+      "haveAccount": "既にアカウントをお持ちですか？",
+      "newHere": "初めてですか？",
+      "passwordMinLength": "パスワードは 8 文字以上にしてください",
+      "signIn": "サインイン",
+      "signInLink": "サインイン",
+      "signingIn": "サインイン中...",
+      "welcomeBack": "おかえりなさい"
+    },
+    "signedIn": {
+      "ready": "準備完了",
+      "welcomeBack": "おかえりなさい",
+      "welcomeBackName": "おかえりなさい、{{name}} さん"
+    },
+    "social": {
+      "completeInBrowser": "ブラウザでサインインを完了してください",
+      "continueWithGoogle": "Google で続ける"
+    },
+    "welcomeSubtitle": "プライバシー重視の音声入力、標準でローカル",
+    "welcomeTitle": "ChordVox へようこそ",
+    "localPrivacyHint": "まずはローカル文字起こしから始めることをおすすめします。そうすれば音声とテキストは標準でこのデバイス内に残ります。必要になったときだけ後からクラウドに切り替えられます。"
+  },
+  "cleanupPrompt": "クリーンアップ",
+  "developerSection": {
+    "currentLogFile": "現在のログファイル",
+    "debugMode": {
+      "label": "デバッグモード",
+      "description": "問題の診断と切り分けに役立つ詳細な実行データを記録します。"
+    },
+    "description": "問題の診断に役立つ詳細なログを記録",
+    "openLogsFolder": "ログフォルダーを開く",
+    "performanceNote": {
+      "description": "デバッグログは継続的にディスクに書き込まれるため、パフォーマンスにわずかに影響する場合があります。トラブルシューティング以外では無効にしてください。",
+      "label": "注意"
+    },
+    "title": "デバッグログ",
+    "toasts": {
+      "copied": {
+        "description": "ログファイルのパスをクリップボードにコピーしました",
+        "title": "コピーしました"
+      },
+      "copyFailed": {
+        "description": "クリップボードへのコピー中に問題が発生しました。",
+        "title": "コピーできませんでした"
+      },
+      "debugDisabled": {
+        "description": "デバッグログを無効にしました",
+        "title": "デバッグログ無効"
+      },
+      "debugEnabled": {
+        "description": "詳細なログをディスクに書き込み中です",
+        "title": "デバッグログ有効"
+      },
+      "loadFailed": {
+        "description": "問題が発生しました。設定を開き直してください。",
+        "title": "デバッグ設定を読み込めませんでした"
+      },
+      "openLogsFailed": {
+        "description": "ログディレクトリを開く際に問題が発生しました。",
+        "title": "ログフォルダーを開けませんでした"
+      },
+      "updateFailed": {
+        "description": "問題が発生しました。もう一度お試しください。",
+        "title": "デバッグログを更新できませんでした"
+      }
+    },
+    "whatGetsLogged": {
+      "items": {
+        "apiRequests": "API リクエスト",
+        "audioProcessing": "音声処理",
+        "errorDetails": "エラーの詳細",
+        "ffmpegOperations": "FFmpeg 操作",
+        "systemDiagnostics": "システム診断",
+        "transcriptionPipeline": "文字起こしパイプライン"
+      },
+      "title": "記録される内容"
+    },
+    "localOnlyNotice": "ログはこのデバイスにローカルに保存され、自動的にアップロードされることはありません。",
+    "trace": {
+      "clear": "クリア",
+      "description": "詳細な実行履歴は「通話記録」に移動しました。このセクションには、コンパクトなデバッグ概要とクリーンアップ操作のみを表示します。",
+      "emptyEvents": "左側で実行を選択すると、詳細なイベントが表示されます",
+      "emptySessions": "通話履歴はまだありません",
+      "errorPrefix": "エラー",
+      "eventLabel": "イベント詳細",
+      "models": {
+        "reasoning": "改良モデル",
+        "transcription": "転写モデル"
+      },
+      "phases": {
+        "paste": "ペースト",
+        "reasoning": "洗練",
+        "recording": "録音",
+        "session": "セッション",
+        "transcription": "転写"
+      },
+      "refresh": "リフレッシュ",
+      "runId": "実行ID",
+      "profileLabel": "プロファイル",
+      "sessionLabel": "通話追跡",
+      "showingLatest": "最大 {{count}} 件の最近の実行を表示します",
+      "startedAt": "開始しました",
+      "profiles": {
+        "primary": "プロファイル 1",
+        "secondary": "プロファイル 2"
+      },
+      "reasons": {
+        "aiFallback": "AI 整形はスキップされ、元の文字起こしを使用しました。",
+        "reasoningRequiresPro": "AI 整形には Pro が必要なため、元の文字起こしを使用しました。",
+        "reasoningPreviewUsed": "Pro AI 整形プレビューが完了しました。本日は {{limit}} 回中あと {{remaining}} 回です。",
+        "reasoningPreviewLimit": "本日の Pro AI 整形プレビュー {{limit}} 回は使い切ったため、元の文字起こしを使用しました。",
+        "noReasoningModel": "AI 整形モデルが選択されていません。",
+        "noTextForReasoning": "AI 整形に使える文字起こしテキストがありません。",
+        "reasoningDisabled": "AI 整形は無効です。",
+        "reasoningUnavailable": "AI 整形は利用できないため、元の文字起こしを使用しました。"
+      },
+      "status": {
+        "cancelled": "キャンセル",
+        "error": "失敗した",
+        "fallback": "フォールバック",
+        "route": "ルーティング",
+        "skipped": "スキップされました",
+        "start": "進行中",
+        "success": "成功",
+        "unknown": "未知"
+      },
+      "title": "電話診断",
+      "toasts": {
+        "clearFailed": {
+          "description": "保存済みの診断記録を消去できませんでした。文字起こし履歴には影響ありません。もう一度お試しください。",
+          "title": "診断記録を消去できませんでした"
+        },
+        "cleared": {
+          "description": "保存済みの診断記録を消去しました。文字起こし履歴には影響ありません。",
+          "title": "診断記録を消去しました"
+        },
+        "confirmClear": {
+          "title": "診断記録を消去しますか？",
+          "description": "保存済みの診断トレースをすべて消去しますか？元に戻せませんが、文字起こし履歴は削除されません。",
+          "confirmText": "すべてクリア"
+        },
+        "loadFailed": {
+          "description": "保存済みの診断記録を読み込めませんでした。文字起こし履歴には影響ありません。しばらくしてからもう一度お試しください。",
+          "title": "診断記録を読み込めませんでした"
+        }
+      },
+      "updatedAt": "最終更新日",
+      "summary": {
+        "overviewTitle": "実行の概要",
+        "timelineTitle": "段階の記録",
+        "recordingDuration": "録音時間",
+        "transcriptionDuration": "文字起こし時間",
+        "reasoningDuration": "AI 所要時間",
+        "totalDuration": "処理合計時間",
+        "durationSecondsValue": "{{value}} 秒",
+        "flowDuration": "全体所要時間",
+        "failedAt": "失敗した段階",
+        "recentRuns": "最近の実行",
+        "failedRuns": "失敗した実行",
+        "lastUpdated": "最終更新",
+        "latestFailure": "直近の失敗",
+        "noRecentFailures": "最近の失敗はありません",
+        "callRecordsHint": "実行ごとの詳細を見るには、AI モデルの下にある通話記録を開いてください。"
+      }
+    }
+  },
+  "dictionarySuffix": "辞書サフィックス",
+  "emailVerification": {
+    "checkEmailDescription": "確認リンクを送信しました",
+    "checkEmailTitle": "メールを確認してください",
+    "errors": {
+      "resendFailed": "メールを再送信できませんでした。もう一度お試しください。",
+      "serverUnreachable": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。"
+    },
+    "resendButton": "確認メールを再送信",
+    "resendIn": "{{seconds}} 秒後に再送信可能",
+    "verifiedDescription": "アカウントの設定が完了しました。",
+    "verifiedTitle": "メール確認完了",
+    "waiting": "確認を待っています..."
+  },
+  "errorBoundary": {
+    "description": "予期しないエラーが発生しました。再読み込みしてもう一度お試しください。",
+    "reload": "再読み込み",
+    "title": "問題が発生しました",
+    "tryAgain": "再試行",
+    "context": {
+      "dictation": "ディクテーションオーバーレイがクラッシュしました。",
+      "controlPanel": "コントロールパネルがクラッシュしました。",
+      "onboarding": "オンボーディングがクラッシュしました。",
+      "authentication": "認証ステップがクラッシュしました。",
+      "commandMenu": "コマンドメニューがクラッシュしました。"
+    }
+  },
+  "forgotPassword": {
+    "back": "戻る",
+    "backToSignIn": "サインインに戻る",
+    "emailPlaceholder": "メールアドレスを入力",
+    "goBack": "戻る",
+    "notConfigured": "認証がまだ設定されていません。",
+    "sendResetLink": "リセットリンクを送信",
+    "sending": "送信中...",
+    "subtitle": "メールアドレスを入力するとリセットリンクを送信します",
+    "success": {
+      "description": "パスワードリセットリンクを送信しました",
+      "help": "メールが届きませんか？迷惑メールフォルダを確認するか、もう一度お試しください。",
+      "title": "メールを確認してください",
+      "tryAnother": "別のメールアドレスで試す"
+    },
+    "title": "パスワードをリセット"
+  },
+  "fullPrompt": "フルプロンプト",
+  "hotkeyGuidance": {
+    "blockedDescription": "これらのショートカットはシステムでよく使われるためブロックされています。",
+    "blockedTitle": "ブロックされたショートカット",
+    "description": "以下のプラットフォームルールを参考に、システムと競合しないショートカットを選択してください。",
+    "examplesTitle": "有効な例",
+    "platforms": {
+      "linux": "Linux",
+      "macos": "macOS",
+      "windows": "Windows"
+    },
+    "recommended": {
+      "linux": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Super+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Ctrl+Shift+J",
+        "4": "Alt+Space"
+      },
+      "macos": {
+        "0": "⌥Space",
+        "1": "⌃⌥S",
+        "2": "⌃⌥D",
+        "3": "Fn",
+        "4": "⌘⇧J"
+      },
+      "windows": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Ctrl+Shift+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Win+Alt+K"
+      }
+    },
+    "recommendedTitle": "推奨ショートカット",
+    "rulesTitle": "ショートカットルール",
+    "showAll": "すべて表示",
+    "showFewer": "折りたたむ",
+    "title": "ショートカットガイド",
+    "validationRules": {
+      "0": "修飾キー（Ctrl、Alt、Shift など）を 1 つ以上使用してください",
+      "1": "システム予約済みのショートカットは使用できません",
+      "2": "単一キーのみの設定はできません",
+      "3": "一部の組み合わせは他のアプリと競合する可能性があります"
+    }
+  },
+  "hotkeyInput": {
+    "ariaLabel": "キーの組み合わせを押してホットキーを設定",
+    "clickToChange": "クリックして変更",
+    "clickToChangeLower": "クリックして変更",
+    "clickToSet": "クリックしてホットキーを設定",
+    "fnCaptureHint": "組み合わせるキーを押すか、離して Globe に設定",
+    "fnHeldHint": "+ キーまたは離して Globe に設定",
+    "globe": "Globe",
+    "hotkeyLabel": "ホットキー",
+    "keyHint": "+ キー",
+    "listening": "入力待ち...",
+    "pressAnyKey": "任意のキーまたは Ctrl+Shift+K を押してください",
+    "pressAnyKeyMac": "任意のキーまたは ⌘⇧K を押してください",
+    "recording": "記録中",
+    "tryShortcut": "Ctrl+Shift+K をお試しください",
+    "tryShortcutMac": "⌘⇧K をお試しください"
+  },
+  "languageSelector": {
+    "noLanguagesFound": "言語が見つかりません",
+    "searchPlaceholder": "検索..."
+  },
+  "microphoneSettings": {
+    "builtIn": "（内蔵）",
+    "errors": {
+      "unableToAccess": "マイクにアクセスできません。権限を確認してください。"
+    },
+    "helpText": "特定のマイクを選択するか、システムのデフォルト設定を使用してください。",
+    "inputDevice": "入力デバイス",
+    "noBuiltInDetected": "内蔵マイクが検出されません。システムのデフォルトを使用しています。",
+    "preferBuiltIn": {
+      "description": "外部マイクは遅延や文字起こし品質の低下を引き起こす場合があります",
+      "label": "内蔵マイクを優先"
+    },
+    "selectPlaceholder": "マイクを選択",
+    "systemDefault": "システムデフォルト",
+    "unknownDevice": "不明なデバイス",
+    "using": "使用中:"
+  },
+  "pasteToolsInfo": {
+    "checking": "システム機能を確認中...",
+    "installCommands": {
+      "archLinux": "# Arch Linux",
+      "debianUbuntu": "# Debian / Ubuntu",
+      "debianUbuntuMint": "# Debian / Ubuntu / Mint",
+      "fedoraRhel": "# Fedora / RHEL"
+    },
+    "installPrefix": "テキストの自動貼り付けには",
+    "methodReady": "で自動貼り付け可能",
+    "noteXwaylandAlso": "注: XWayland アプリでは xdotool も使用できます。",
+    "noteXwaylandOnly": "注: 自動貼り付けは XWayland アプリのみで動作します。",
+    "optionalEnableTitle": "オプション: 自動貼り付けを有効にする",
+    "readyTitle": "自動貼り付け準備完了",
+    "recheck": "再確認",
+    "recheckChecking": "確認中...",
+    "title": "自動貼り付け",
+    "usingMethodPrefix": "使用中:",
+    "waylandClipboardDescription": "この Wayland セッションでは自動貼り付けが利用できません。ChordVox はテキストをクリップボードにコピーしますので、Ctrl+V で手動で貼り付けてください。",
+    "waylandClipboardTitle": "Wayland でのクリップボードモード",
+    "windowsReady": "Windows は自動貼り付けに標準対応しています。設定は不要です！",
+    "withoutToolPrefix": "このツールがない場合、ChordVox はテキストをクリップボードにコピーします。Ctrl+V で手動で貼り付けてください。",
+    "xwaylandAppsOnly": "自動貼り付けは XWayland アプリのみで動作します"
+  },
+  "promptStudio": {
+    "common": {
+      "copied": "コピーしました",
+      "copy": "コピー",
+      "reset": "リセット",
+      "save": "保存"
+    },
+    "defaultTestInput": "Hi CC, 今日の天気は？",
+    "dialogs": {
+      "reset": {
+        "description": "プロンプトをデフォルト値にリセットしました。",
+        "title": "リセット完了"
+      },
+      "saved": {
+        "description": "カスタムプロンプトが今後すべての AI 処理に使用されます。",
+        "title": "プロンプトを保存しました"
+      }
+    },
+    "edit": {
+      "agentNameLabel": "エージェント名:",
+      "cautionLabel": "注意",
+      "cautionTextPrefix": "このプロンプトを変更すると文字起こしの品質に影響する場合があります。",
+      "cautionTextSuffix": "エージェント検出を維持するために {{agentName}} プレースホルダーを残してください。",
+      "placeholder": "カスタムシステムプロンプトを入力..."
+    },
+    "tabs": {
+      "customize": "カスタマイズ",
+      "test": "テスト",
+      "view": "表示"
+    },
+    "test": {
+      "addressHint": "「{{agentName}}」と呼びかけて指示モードをテストしてみてください",
+      "aiModels": "AI モデル",
+      "baseUrlMissing": "{{provider}} のベース URL が未設定です。AI モデル設定で追加してください。",
+      "cleanup": "クリーンアップ",
+      "disabledInSettingsPrefix": "AI テキスト補正が無効です。",
+      "disabledInSettingsSuffix": "AI モデルで有効にするとプロンプトをテストできます。",
+      "disabledReasoning": "AI テキスト補正が無効です。AI モデルで有効にするとプロンプトをテストできます。",
+      "failed": "テスト失敗: {{error}}",
+      "inputLabel": "入力",
+      "inputPlaceholder": "テストするテキストを入力...",
+      "instruction": "指示",
+      "modelLabel": "モデル",
+      "noModelSelected": "モデル未選択",
+      "none": "なし",
+      "outputLabel": "出力",
+      "processing": "処理中...",
+      "chordvoxCloud": "ChordVox Cloud",
+      "providerLabel": "プロバイダー",
+      "run": "テスト実行"
+    },
+    "view": {
+      "customPrompt": "カスタムプロンプト",
+      "defaultPrompt": "デフォルトプロンプト",
+      "modes": {
+        "agent": {
+          "description": "「{{agentName}}」で起動 — コマンド実行、質問への回答、コンテンツ作成",
+          "label": "エージェント"
+        },
+        "cleanup": {
+          "description": "高速パス — フィラーワードの除去、文法・句読点の修正",
+          "label": "クリーンアップ"
+        }
+      },
+      "modified": "変更済み"
+    }
+  },
+  "resetPassword": {
+    "backToSignIn": "サインインに戻る",
+    "confirmPasswordPlaceholder": "新しいパスワードを確認",
+    "continue": "続ける",
+    "errors": {
+      "passwordMinLength": "パスワードは 8 文字以上にしてください",
+      "passwordsDoNotMatch": "パスワードが一致しません"
+    },
+    "goBack": "戻る",
+    "newPasswordPlaceholder": "新しいパスワード",
+    "notConfigured": "認証が設定されていません。",
+    "passwordMinLength": "パスワードは 8 文字以上にしてください",
+    "resetButton": "パスワードをリセット",
+    "resetting": "リセット中...",
+    "subtitle": "新しいパスワードを入力してください",
+    "success": {
+      "description": "パスワードが更新されました。サインイン済みです。",
+      "title": "パスワードのリセットが完了しました"
+    },
+    "title": "新しいパスワードを作成"
+  },
+  "settingsModal": {
+    "groups": {
+      "app": "アプリ",
+      "intelligence": "インテリジェンス",
+      "profile": "プロフィール",
+      "speech": "音声",
+      "system": "システム"
+    },
+    "sections": {
+      "account": {
+        "description": "ライセンス、アクティベーション、プラン",
+        "label": "アカウント"
+      },
+      "agentConfig": {
+        "description": "音声エージェント設定",
+        "label": "エージェント"
+      },
+      "aiModels": {
+        "description": "テキスト補正と改善",
+        "label": "AI モデル"
+      },
+      "developer": {
+        "description": "ログ・診断・データ",
+        "label": "開発者"
+      },
+      "dictionary": {
+        "description": "カスタム語句",
+        "label": "辞書"
+      },
+      "general": {
+        "description": "外観・ホットキー・起動設定",
+        "label": "環境設定"
+      },
+      "permissions": {
+        "description": "マイクとアクセシビリティ",
+        "label": "権限"
+      },
+      "privacy": {
+        "description": "クラウドバックアップと分析",
+        "label": "プライバシー"
+      },
+      "prompts": {
+        "description": "システムプロンプトスタジオ",
+        "label": "プロンプト"
+      },
+      "transcription": {
+        "description": "音声テキスト変換エンジン",
+        "label": "文字起こし"
+      },
+      "fileTranscription": {
+        "label": "ファイル文字起こし",
+        "description": "音声または動画ファイルを文字起こし"
+      },
+      "hotkeys": {
+        "label": "ホットキー",
+        "description": "メインホットキー、プロファイル 2、起動方式"
+      },
+      "callRecords": {
+        "label": "診断記録",
+        "description": "最近保存された段階、失敗、所要時間"
+      },
+      "transcriptionHistory": {
+        "label": "文字起こし履歴",
+        "description": "ローカルに保存した音声入力を表示"
+      },
+      "context": {
+        "label": "コンテキスト",
+        "description": "コンテキスト対応の整文設定"
+      }
+    },
+    "title": "設定"
+  },
+  "settingsPage": {
+    "account": {
+      "badges": {
+        "free": "無料",
+        "freeForever": "永久無料",
+        "limitReached": "上限到達",
+        "pastDue": "支払い遅延",
+        "pro": "Pro",
+        "trial": "トライアル"
+      },
+      "billing": {
+        "couldNotOpenDescription": "請求ページを開く際に問題が発生しました。もう一度お試しください。",
+        "couldNotOpenTitle": "請求を開けませんでした",
+        "manageBilling": "請求を管理",
+        "opening": "開いています...",
+        "updatePaymentMethod": "お支払い方法を更新"
+      },
+      "checkout": {
+        "couldNotOpenDescription": "購入ページを開く際に問題が発生しました。もう一度お試しください。",
+        "couldNotOpenTitle": "購入ページを開けませんでした",
+        "opening": "開いています...",
+        "upgradeToPro": "Pro にアップグレード"
+      },
+      "disabled": "無効",
+      "featuresDisabled": "アカウント機能が無効です",
+      "featuresDisabledDescription": ".env ファイルで VITE_NEON_AUTH_URL を設定してアカウント機能を有効にしてください。",
+      "notConfigured": "認証が設定されていません",
+      "notSignedIn": "サインインしていません",
+      "notSignedInDescription": "アカウントを作成してプレミアム機能をアンロックしましょう。",
+      "offline": "オフライン",
+      "pastDue": {
+        "description": "現在は無料プランをご利用中です。お支払い方法を更新して Pro に戻しましょう。",
+        "title": "お支払いを処理できませんでした"
+      },
+      "planDescriptions": {
+        "freeUsage": "今週 {{used}} / {{limit}} ワード使用済み",
+        "nextBilling": "次の請求日: {{date}}",
+        "pastDue": "今週 {{used}} / {{limit}} 無料ワード使用済み - お支払い方法を更新して Pro を復元",
+        "trial": "残り {{days}} 日 - 無制限の文字起こし",
+        "unlimited": "無制限"
+      },
+      "planLabels": {
+        "free": "無料",
+        "pro": "Pro",
+        "trial": "トライアル"
+      },
+      "planTitle": "プラン",
+      "rollingWeeklyLimit": "週間利用上限（ローリング）",
+      "signOut": {
+        "failedDescription": "サインアウト中に問題が発生しました。もう一度お試しください。",
+        "failedTitle": "サインアウトできませんでした",
+        "signOut": "サインアウト",
+        "signingOut": "サインアウト中..."
+      },
+      "signedIn": "サインイン済み",
+      "title": "アカウント",
+      "toasts": {
+        "approachingLimit": {
+          "description": "今週 {{used}} / {{limit}} 無料ワードを使用しました。Pro にアップグレードして無制限にご利用ください。",
+          "title": "週間利用上限に近づいています"
+        }
+      },
+      "trialCta": {
+        "button": "7日間の試用を開始",
+        "description": "下から 7 日間の Pro トライアルを開始すると、AI 強化、ファイル文字起こし、Prompt Studio テスト、BYOK、複数のホットキーワークフローを試せます。無料のローカル音声入力は期間中ずっと使えます。",
+        "title": "音声入力はずっと無料、さらに Pro を 7 日間無料体験"
+      },
+      "user": "ユーザー",
+      "wordsRemaining": "残り {{remaining}}",
+      "trialReminder": {
+        "title": "試用期間はあと {{days}} 日です",
+        "description": "今のうちにライセンスを購入すると、試用終了後も音声入力、AI 整形、自動貼り付けを途切れなく使えます。",
+        "button": "ライセンスを見る",
+        "headline": "高精度の音声文字起こしは永久に無料で利用できます。",
+        "subheadline": "Pro にアップグレードすると、AI 強化ワークフロー、高精度の長尺ファイル文字起こし、そして ChatGPT・Claude・Gemini など最上位モデルへのフルアクセスが解放されます。"
+      },
+      "desktopLicense": {
+        "title": "デスクトップライセンス",
+        "descriptionConfigured": "このビルドではデスクトップ ライセンスを使用して、このデバイスの Pro 機能のロックを解除します。",
+        "descriptionNotConfigured": "無料のローカル文字起こしは引き続き機能します。 Pro のアクティベーションが必要な場合は、サポートにお問い合わせください。",
+        "currentStatusLabel": "現在の状況",
+        "currentStatusDescription": "無料のローカル文字起こしが利用可能です。このデバイスの Pro 機能のロックを解除するには、有料のライセンス キーを使用してください。",
+        "currentStatusActiveDescription": "Pro はこのデバイスでアクティブです。",
+        "currentStatusTrialDescription": "Pro トライアルは有効です。 AI 強化やその他の有料機能の利用可能期間は残り {{days}} 日です。",
+        "currentStatusTrialExpiredDescription": "無料のローカル文字起こしは引き続き利用可能です。 Pro ライセンス キーを入力して、有料機能のロックを再度解除します。",
+        "currentStatusNotConfigured": "Creem ライセンス リレーはこのビルドではまだ準備ができていません。サポートにお問い合わせください。",
+        "licenseApiUrlLabel": "ライセンス API URL",
+        "licenseApiUrlPlaceholder": "https://license.あなたのドメイン.com",
+        "licenseApiUrlDescription": "Creem ライセンス チェックを独自のリレー経由でルーティングする場合は、これを 1 回設定します。",
+        "inputPlaceholder": "ライセンスキーを入力してください",
+        "activatedHint": "このデバイスはアクティブ化されています。 「キー変更」はライセンスを交換する場合のみ使用してください。",
+        "actions": {
+          "activate": "活性化",
+          "activating": "アクティブ化中",
+          "validate": "検証する",
+          "checking": "チェック中",
+          "clear": "クリア",
+          "changeKey": "キーを変更する",
+          "save": "保存",
+          "saving": "保存"
+        },
+        "statusLabels": {
+          "active": "アクティブ",
+          "trial": "Pro トライアル",
+          "offlineGrace": "オフライン猶予",
+          "expired": "期限切れ",
+          "invalid": "無効",
+          "notActivated": "アクティブ化されていません"
+        },
+        "meta": {
+          "plan": "計画: {{plan}}",
+          "expires": "有効期限: {{date}}",
+          "expiresPermanent": "有効期限: 無期限",
+          "lastCheck": "最終チェック: {{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "保存されたライセンスを削除しますか?",
+          "removeDescription": "このデバイスは、再度アクティブ化するまでライセンスなしモードに戻ります。",
+          "removeConfirm": "取り除く"
+        },
+        "toasts": {
+          "keyRequiredTitle": "ライセンスキーが必要です",
+          "keyRequiredDescription": "アクティベートする前にライセンス キーを入力してください。",
+          "activatedTitle": "ライセンスが有効化されました",
+          "activatedDescription": "このデバイスはアクティブ化されました。",
+          "activationFailedTitle": "アクティベーションに失敗しました",
+          "activationFailedDescription": "ライセンスキーをアクティベートできませんでした。",
+          "activationLimitDescription": "このライセンス キーは 1 つのデバイスのみをサポートします。デバイスを切り替えるには、サポートに連絡して以前のアクティベーションをリセットしてください。",
+          "serverNotReadyDescription": "ライセンス サービスはまだ準備ができていません。サポートにお問い合わせください。",
+          "trialServerUnavailableDescription": "Proトライアルを開始するにはオンラインのライセンス確認が必要です。ライセンスサービスに接続できるようになったら再試行してください。",
+          "deviceNotActivatedDescription": "このライセンス キーはこのデバイスではアクティブ化されていません。",
+          "revokedDescription": "このライセンス キーは取り消されました。サポートにお問い合わせください。",
+          "expiredDescription": "このライセンス キーの有効期限が切れています。",
+          "notActiveDescription": "このライセンス キーは現在アクティブではありません。",
+          "activationUnexpectedError": "ライセンスのアクティベーション中に予期しないエラーが発生しました。",
+          "validatedTitle": "ライセンス認証済み",
+          "validateFailedTitle": "ライセンスチェックに失敗しました",
+          "validatedDescription": "ライセンスは有効です。",
+          "invalidDescription": "ライセンスが無効です。",
+          "validateUnexpectedError": "ライセンスステータスの確認中に予期しないエラーが発生しました。",
+          "removedTitle": "ライセンスが削除されました",
+          "removedDescription": "保存されたライセンス状態がクリアされました。",
+          "removeFailedTitle": "ライセンスを削除できませんでした",
+          "removeFailedDescription": "保存されたライセンスを削除中に予期しないエラーが発生しました。",
+          "licenseApiSavedTitle": "ライセンス API が保存されました",
+          "licenseApiSavedDescription": "ライセンスのアクティベーションでは、新しい API URL が使用されるようになりました。",
+          "licenseApiSaveFailedTitle": "ライセンス API を保存できませんでした",
+          "licenseApiSaveFailedDescription": "URL を確認して、再試行してください。",
+          "validatingTitle": "ライセンスを確認中",
+          "validatingDescription": "ライセンスサーバーに接続しています。数秒かかる場合があります。",
+          "trialExpiredDescription": "このデバイスは 7 日間の Pro トライアルをすでに利用しています。無料のローカル音声入力は引き続き使えます。Pro を続ける準備ができたときにのみ Pro プランをご覧ください。"
+        }
+      },
+      "trialStartDialog": {
+        "title": "7日間の Pro トライアルを開始しますか？",
+        "description": "トライアルには AI 強化、ファイル文字起こし、BYOK、複数のホットキーワークフロー、高度なプロンプトワークフローが含まれます。無料のローカル音声入力は終了後も使えます。",
+        "confirm": "7日間の試用を開始",
+        "cancel": "あとで",
+        "startedTitle": "7日間の Pro トライアルを開始しました",
+        "startedDescription": "AI 強化、ファイル文字起こし、BYOK、複数のホットキーワークフロー、高度なプロンプトワークフローを今すぐ試せます。",
+        "notStartedTitle": "トライアルは開始されていません",
+        "unavailableDescription": "トライアルは開始されませんでした。無料のローカル音声入力は引き続き使え、後でもう一度お試しいただけます。",
+        "expiredTitle": "7 日間の Pro トライアルが終了しました",
+        "expiredDescription": "このデバイスは {{days}} 日間の Pro トライアルをすでに利用しています。無料のローカル音声入力は引き続き使えます。Pro を続けたいときは「ライセンスを見る」をクリックしてください。"
+      },
+      "efficiencyOverview": {
+        "title": "効率概要",
+        "description": "保存された文字起こし履歴から自動集計しています。",
+        "loadErrorTitle": "文字起こし統計を読み込めませんでした",
+        "loadErrorDescription": "しばらくしてからもう一度お試しください。",
+        "units": {
+          "words": "語",
+          "characters": "字",
+          "mixed": "単語・文字単位"
+        },
+        "duration": {
+          "subMinute": "< 1 分",
+          "hoursAndMinutes": "{{hours}} 時間 {{minutes}} 分",
+          "minutesOnly": "{{minutes}} 分"
+        },
+        "speed": {
+          "perMinute": "{{speed}} {{unit}}/分"
+        },
+        "cards": {
+          "completed": {
+            "label": "完了した音声入力",
+            "value_one": "{{formattedCount}} 回",
+            "value_few": "{{formattedCount}} 回",
+            "value_many": "{{formattedCount}} 回",
+            "value_other": "{{formattedCount}} 回",
+            "helper": "録音合計 {{duration}} · 開始から終了までを計測"
+          },
+          "words": {
+            "label": "総文字数",
+            "helper": "今日追加 {{total}} {{unit}}"
+          },
+          "saved": {
+            "label": "削減時間"
+          },
+          "speed": {
+            "label": "平均ディクテーション速度"
+          }
+        },
+        "onboardingFunnel": {
+          "title": "オンボーディングファネル（ローカル）",
+          "localOnly": "この端末のみに保存され、クラウドには送信されません",
+          "events": {
+            "onboarding_started": "オンボーディング開始",
+            "step_permissions": "権限設定ステップに到達",
+            "step_activation": "アクティベーションステップに到達",
+            "onboarding_completed": "オンボーディング完了",
+            "first_successful_dictation": "初回ディクテーション成功"
+          },
+          "summary": {
+            "completedIn": "オンボーディング完了まで {{duration}}",
+            "notCompleted": "オンボーディング未完了（到達：{{step}}）",
+            "activatedIn": "完了から {{duration}} で初回ディクテーション成功",
+            "notActivated": "初回ディクテーションはまだです",
+            "durationSeconds": "{{value}} 秒",
+            "durationMinutes": "{{value}} 分",
+            "durationHours": "{{value}} 時間"
+          }
+        }
+      },
+      "monthlyReminder": {
+        "badge": "Pro 月額プラン更新まであと {{days}} 日",
+        "headline": "Pro 年額プランへのアップグレードで 25% お得に",
+        "description": "月額プランの更新まであと {{days}} 日です。年額プランにアップグレードすると 25% の割引が適用され、AI ワークフローを途切れることなくご利用いただけます。",
+        "button": "年額プランへ移行"
+      }
+    },
+    "callRecords": {
+      "overview": {
+        "cancelledNoStageData": "この実行はキャンセルされ、ステージデータがありません。"
+      }
+    },
+    "agentConfig": {
+      "agentName": "エージェント名",
+      "cleanupExample": "通常の音声入力は自動で整えられます",
+      "cleanupMode": "通常の音声入力",
+      "description": "AI アシスタントに名前を付けます。通常の音声入力は自動で整えられます。翻訳、要約、書き換え、文章生成をしたいときだけ名前を呼んでください。",
+      "dialogs": {
+        "updatedDescription": "アシスタント名は「{{name}}」になりました。通常の音声入力では名前を呼ぶ必要はありません。翻訳、要約、書き換え、文章生成をしたいときは「Hi {{name}}」と言ってから指示してください。",
+        "updatedTitle": "エージェント名を更新しました"
+      },
+      "examplesTitle": "例",
+      "helper": "声に出して言いやすい短い名前を選びましょう",
+      "howItWorksDescription": "通常の音声入力では {{agentName}} を呼ぶ必要はありません。AI が話し言葉を送信や保存に使える文章へ自動で整えます。直前に話した内容を処理したい場合は、先に内容を話してから「Hi {{agentName}}, translate this into English」と言います。新しい文章を直接生成したい場合は、「Hi {{agentName}}」から始めて依頼内容を話してください。",
+      "howItWorksTitle": "仕組み",
+      "instructionMode": "アシスタントモード",
+      "placeholder": "例: CC、Nova、Atlas...",
+      "save": "保存",
+      "title": "音声エージェント",
+      "examples": {
+        "normalDictation": {
+          "mode": "通常の音声入力",
+          "input": "明日の午後 3 時に会議。PRD、予算表、デザインファイルを持ってきてください。"
+        },
+        "processPrevious": {
+          "mode": "直前の内容を処理",
+          "input": "この製品紹介では、音声文字起こし、自動整形、AI アシスタントについて説明しています。Hi {{agentName}}, translate this into English"
+        },
+        "directGenerate": {
+          "mode": "直接生成",
+          "input": "Hi {{agentName}}, write an email telling the client we have a meeting tomorrow at 3 PM"
+        },
+        "format": {
+          "mode": "形式変換",
+          "input": "Hi {{agentName}}, convert this to bullet points"
+        }
+      },
+      "styleRules": {
+        "title": "アプリ別推敲スタイルの自動切替",
+        "description": "現在アクティブなアプリに基づいて、AI推敲用のトーン＆マナースタイル指示を自動的に挿入します。",
+        "addRule": "ルールを追加",
+        "pickAppsTitle": "文章スタイルを切り替えるアプリを選択",
+        "chooseApps": "アプリを選択",
+        "changeApp": "アプリを変更",
+        "advancedMatcher": "詳細：手動で指定",
+        "pickAppsFailed": "アプリ選択画面を開けませんでした。手動でルールを追加することもできます。",
+        "manualAdd": "手動で追加",
+        "emptyRules": "ルールはまだありません。アプリを選択して始めましょう。",
+        "matchTypeApp": "アプリ名に含む",
+        "matchTypeBundle": "Bundle ID 接頭辞",
+        "matchValuePlaceholder": "例: wechat または com.tencent.xin",
+        "styleKeyCasual": "Casual (カジュアル・会話調)",
+        "styleKeyProfessional": "Professional (ビジネス・フォーマル)",
+        "styleKeyTechnical": "Technical (技術・正確)",
+        "styleKeyCustom": "Custom (カスタムプロンプト)",
+        "customPromptPlaceholder": "ここにカスタムスタイルプロンプトを入力してください...",
+        "delete": "削除"
+      }
+    },
+    "aiModels": {
+      "customSetup": "カスタム設定",
+      "customSetupDescription": "独自のプロバイダーと API キーを使用。",
+      "description": "無料のローカル音声入力は引き続き使えます。ここでは AI 強化、BYOK、整形品質を設定できます。最初の本格的な Pro 操作で 7 日間の無料トライアルを開始できます。",
+      "enableTextCleanup": "AIテキスト磨き上げ",
+      "enableTextCleanupDescription": "AIが文書を自動で磨き上げ、内容を賢く最適化します。",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "設定不要ですぐに使えます。",
+      "title": "AI テキスト補正",
+      "trialHint": "最初の AI 強化で 7 日間の無料 Pro トライアルを開始できます。",
+      "toasts": {
+        "switchedCloud": {
+          "description": "テキスト補正に ChordVox のクラウドサービスを使用します。",
+          "title": "ChordVox Cloud に切り替えました"
+        },
+        "switchedCustom": {
+          "description": "独自のプロバイダーと API キーを設定してください。",
+          "title": "カスタム設定に切り替えました"
+        },
+        "savedCloud": {
+          "title": "ChordVox Cloud を選択しました"
+        },
+        "savedCustom": {
+          "title": "カスタム設定を選択しました"
+        },
+        "savedWhileOff": {
+          "description": "AI による文字起こし補正は現在無効です。オンにするとこれらの設定が適用されます。"
+        }
+      },
+      "statusOn": "有効",
+      "statusOff": "無効",
+      "disabledHintWithTrial": "現在は無効です。設定はいつでも調整できます。スイッチをオンにすると 7 日間の Pro トライアルを開始します。",
+      "disabledHint": "現在は無効です。設定はいつでも調整できます。スイッチをオンにすると新しい文字起こしに適用されます。",
+      "proRequiredDialog": {
+        "title": "AI 文章補正には Pro が必要です",
+        "description": "このデバイスでは現在 Pro が有効ではないため、AI 文章補正をまだオンにできません。基本の音声入力は引き続き使えます。今日の無料 AI 補正プレビューを使い切った場合、Pro にすると新しい文字起こしを自動で補正できます。",
+        "trialExpiredTitle": "Pro トライアルは終了しました",
+        "trialExpiredDescription": "このデバイスではすでに Pro トライアルを使用済みです。Pro なしでは AI 文章補正を有効にできません。基本の音声入力は引き続き使えます。自動補正を続けたい場合は Pro の価格をご確認ください。",
+        "unavailableTitle": "AI 補正を有効にできません",
+        "unavailableDescription": "現在 Pro の確認またはトライアル開始ができません。基本の音声入力は引き続き使えます。あとで再試行するか、先に Pro の価格をご確認ください。",
+        "confirm": "Pro 価格を見る"
+      }
+    },
+    "developer": {
+      "clearCache": "モデルを削除",
+      "dataManagementDescription": "ローカルモデルとアプリデータを管理",
+      "dataManagementTitle": "データ管理",
+      "modelCache": "ローカルモデル",
+      "open": "開く",
+      "removeModels": {
+        "confirmText": "モデルを削除",
+        "description": "ここで管理されているダウンロード済みローカルモデル（{{path}}）を削除し、ディスク容量を解放します。必要なときに再度ダウンロードできます。",
+        "failedDescription": "モデルの削除中に問題が発生しました。もう一度お試しください。",
+        "failedDescriptionShort": "キャッシュされたモデルを削除できませんでした。",
+        "failedTitle": "モデルを削除できませんでした",
+        "successDescription": "キャッシュされたすべてのモデルが削除されました。",
+        "successTitle": "モデルを削除しました",
+        "title": "ダウンロードしたモデルを削除しますか？"
+      },
+      "removing": "削除中...",
+      "resetAll": {
+        "confirmText": "すべて削除",
+        "description": "すべての設定、文字起こし履歴、キャッシュデータが完全に削除されます。リセット後にアプリが再読み込みされます。",
+        "failedDescription": "問題が発生しました。もう一度試すか、アプリを再インストールしてください。",
+        "failedTitle": "リセットできませんでした",
+        "successDescription": "すべてリセットされました。アプリを再読み込みします。",
+        "successTitle": "完了しました",
+        "title": "すべてのアプリデータをリセット"
+      },
+      "resetAppData": "アプリデータをリセット",
+      "resetAppDataDescription": "すべての設定、文字起こし履歴、キャッシュデータを完全に削除",
+      "settingsTransfer": {
+        "description": "現在の設定をファイルにエクスポートするか、ファイルから設定を復元します。",
+        "export": "設定のエクスポート",
+        "exportFailedDescription": "設定のエクスポートに失敗しました。もう一度試してください。",
+        "exportFailedTitle": "エクスポートに失敗しました",
+        "exportSuccessDescription": "設定のエクスポート先: {{path}}",
+        "exportSuccessTitle": "エクスポートに成功しました",
+        "import": "インポート設定",
+        "importConfirmButton": "インポートと上書き",
+        "importConfirmDescription": "これにより、現在の設定が上書きされ、完了したらアプリが再起動されます。",
+        "importConfirmTitle": "今すぐ設定をインポートしますか?",
+        "importFailedDescription": "設定のインポートに失敗しました。ファイル形式を確認してください。",
+        "importFailedTitle": "インポートに失敗しました",
+        "importSuccessDescription": "設定がインポートされました。アプリが再起動されます。",
+        "importSuccessTitle": "インポート成功",
+        "title": "設定のバックアップ",
+        "importFailedWithReason": "設定のインポートに失敗しました: {{reason}}",
+        "importInvalidPayload": "ファイルの内容は有効な ChordVox 設定バックアップではありません。",
+        "importNoSettingsFound": "インポート可能な ChordVox 設定が見つかりませんでした。ChordVox 設定バックアップファイルを選択してください。",
+        "importSuccessWithWarningsDescription": "設定がインポートされました。アプリが再起動されます。一部のランタイム同期処理は失敗しましたが、設定の復元はブロックされませんでした。"
+      },
+      "hotkeyDiagnostics": {
+        "title": "ホットキー診断",
+        "description": "現在のホットキーバックエンド、登録状態、より安全なプラットフォーム既定値を確認します。",
+        "runtimeState": "実行時状態",
+        "runtimeDescription": "保存されているように見えるホットキーが反応しない場合は、メインプロセスが実際にどの登録経路を使っているかをここで確認してください。",
+        "refresh": "更新",
+        "platform": "プラットフォーム",
+        "sessionType": "セッション種別",
+        "desktopSession": "デスクトップセッション",
+        "backend": "ホットキーバックエンド",
+        "primaryHotkey": "メインホットキー",
+        "secondaryHotkey": "サブホットキー",
+        "primaryStatus": "メインホットキーの状態",
+        "secondaryStatus": "サブホットキーの状態",
+        "registered": "登録済み",
+        "notRegistered": "未登録",
+        "recommendedTitle": "推奨デフォルト",
+        "recommendedDescription": "{{hotkey}} はこのプラットフォームでより安全な既定値になりました。初回セットアップとフォールバックではこれが優先されます。",
+        "warnings": {
+          "linuxSuper": "現在の Linux ホットキーにはまだ Super/Meta が含まれており、デスクトップショートカットに奪われやすいです。",
+          "windowsSuper": "現在の Windows ホットキーにはまだ Win/Super が含まれており、システムショートカットと競合しやすくなっています。"
+        },
+        "backends": {
+          "globe": "macOS Globe",
+          "globalShortcut": "Electron globalShortcut",
+          "windows-native": "Windows ネイティブリスナー",
+          "gnome-wayland": "GNOME Wayland ネイティブショートカット",
+          "native-modifier": "ネイティブ修飾キーリスナー"
+        }
+      }
+    },
+    "dictionary": {
+      "add": "追加",
+      "addWordOrPhrase": "単語やフレーズを追加",
+      "agentNameAutoManaged": "エージェント名（自動管理）",
+      "clearAll": "すべて消去",
+      "clearDictionaryDescription": "カスタム辞書からすべての単語が削除されます。この操作は元に戻せません。",
+      "clearDictionaryTitle": "辞書を消去しますか？",
+      "description": "文字起こしの精度を向上させるために単語、名前、専門用語を追加",
+      "howItWorksDescription": "追加した単語は AI プロンプトに含まれ、文字起こしのクリーンアップ時にこれらの用語を正確に認識・保持します。",
+      "howItWorksTitle": "仕組み",
+      "noWords": "まだ単語が追加されていません",
+      "placeholder": "例: Kubernetes、田中先生、OpenAI...",
+      "pressEnterToAdd": "Enter で追加",
+      "removeWord": "単語を削除",
+      "tipDescription": "固有名詞、専門用語、誤って文字起こしされやすい単語を追加してください。",
+      "tipLabel": "ヒント",
+      "title": "カスタム辞書",
+      "wordsAppearHere": "追加した単語がここに表示されます",
+      "yourWords": "登録した単語",
+      "suggestionsTitle": "推奨される追加単語",
+      "addToDictionary": "辞書に追加",
+      "ignoreSuggestion": "提案を無視",
+      "resetIgnored": "無視された提案をリセット",
+      "loadingSuggestionHistory": "すべての文字起こし履歴を分析しています…",
+      "suggestionHistoryLoadFailed": "古い履歴を読み込めなかったため、現在の候補は読み込み済みの履歴のみを使用しています。",
+      "syncFailedTitle": "辞書を保存できませんでした",
+      "syncFailedDescription": "ローカル文字起こしと AI の内容を一致させるため、変更を元に戻しました。もう一度お試しください。"
+    },
+    "general": {
+      "appearance": {
+        "auto": "自動",
+        "dark": "ダーク",
+        "description": "ChordVox の外観を設定",
+        "light": "ライト",
+        "theme": "テーマ",
+        "themeDescription": "ライト、ダーク、またはシステムに合わせる",
+        "title": "外観"
+      },
+      "floatingIcon": {
+        "recordingAnimation": "録音アニメーション",
+        "recordingAnimationDescription": "録音中と処理中にフローティングバーへ表示するフィードバックを選択します",
+        "animationStyles": {
+          "flow": "フローライン",
+          "stardust": "スターダスト",
+          "nebula": "星雲",
+          "planet": "惑星"
+        },
+        "description": "画面上のディクテーションアイコンの表示を制御",
+        "title": "フローティングアイコン"
+      },
+      "hotkey": {
+        "activationMode": "起動モード",
+        "description": "音声ディクテーションの開始/停止に使用するキーの組み合わせ",
+        "title": "ディクテーションホットキー",
+        "secondary": {
+          "workflowsTitle": "Pro ショートカットワークフロー",
+          "workflowsDescription": "ショートカットごとに、音声入力、翻訳、文章の整形、AI への質問を実行できます。各ワークフローは独自の文字起こしモデルと AI モデルを保持します。",
+          "actions": {
+            "dictate": {
+              "title": "音声入力",
+              "description": "話した内容をそのままテキストに変換"
+            },
+            "translate": {
+              "title": "翻訳",
+              "description": "話した内容を指定した言語で出力"
+            },
+            "polish": {
+              "title": "文章を整える",
+              "description": "明確で送信できる文章に整形"
+            },
+            "chat": {
+              "title": "AI に質問",
+              "description": "質問を話して回答を貼り付け"
+            }
+          },
+          "addWorkflow": "ワークフローを追加",
+          "emptyTitle": "最初のショートカットワークフローを追加",
+          "emptyDescription": "タスク、ショートカット、モデルを選びます。保存後はショートカット一つでワークフロー全体を実行できます。",
+          "newWorkflow": "新しいショートカットワークフロー",
+          "editWorkflow": "ショートカットワークフローを編集",
+          "editorDescription": "タスク、ショートカット、モデルの順に選択します。",
+          "cancelEdit": "キャンセル",
+          "chooseAction": "1 このショートカットで何をしますか？",
+          "workflowName": "名前（任意）",
+          "targetLanguage": "翻訳先",
+          "shortcut": "2 ショートカットを選択",
+          "modelsForWorkflow": "3 このワークフローのモデルを選択",
+          "modelsDescription": "設定でモデルを選び、ここに戻って「現在のモデルを使用」を選択します。保存後、このワークフローのモデルは個別に保持されます。",
+          "useCurrentModels": "現在のモデルを使用",
+          "transcriptionModel": "文字起こしモデル",
+          "reasoningModel": "AI モデル",
+          "aiModelRequired": "翻訳、文章の整形、AI への質問には AI モデルが必要です。",
+          "duplicateHotkey": "別のワークフローがこのショートカットを使用しています。",
+          "saveWorkflow": "ワークフローを保存",
+          "deleteWorkflow": "ワークフローを削除",
+          "workflowsSavedTitle": "ショートカットワークフローを保存しました",
+          "workflowsSavedDescription": "{{count}} 件のショートカットワークフローが有効です。",
+          "title": "プロファイル 2：セカンダリホットキー + 独立モデル",
+          "profileSavedState": "プロファイル 2 設定を保存しました",
+          "profileUnsavedState": "プロファイル 2 設定が保存されていません (最初にモデルを設定してからボタンをクリックしてください)",
+          "modelSetupTitle": "プロファイル 2 のモデルを選択",
+          "saveCurrentAsProfile2": "現在を プロファイル 2 として保存",
+          "profileEmptyHint": "現在の文字起こしと推論モデルを プロファイル 2 として保存すれば、副ショートカットでワンタップ切替できます。",
+          "stepHotkeyTitle": "セカンダリホットキーを設定",
+          "stepHotkeyDescription": "プロファイル 2 の起動に使いたいキーの組み合わせを押してください。",
+          "stepHotkeyReady": "{{hotkey}} に設定しました",
+          "stepModelsTitle": "プロファイル 2 のモデルを選択",
+          "stepModelsDescription": "下の「文字起こしモデルを選択」と「整形モデルを選択」で、プロファイル 2 で使うモデルを選びます。",
+          "stepSaveTitle": "プロファイル 2 を保存",
+          "stepSaveDescription": "モデルを選んだら保存をクリックすると、セカンダリホットキーがこの設定を使うようになります。",
+          "stepSaveReady": "プロファイル 2 は保存済みで、すぐに使えます。",
+          "usageHint": "仕組み：メインホットキーは引き続きプロファイル 1 を使います。セカンダリホットキーを押すと、ChordVox は一時的にプロファイル 2 の文字起こしと AI 整形モデルに切り替わります。",
+          "savedTitle": "セカンダリホットキーが保存されました",
+          "savedDescription": "プロファイル 2 ホットキーが更新されました。",
+          "profileSavedTitle": "プロファイル 2 を保存しました",
+          "profileSavedDescription": "現在の文字起こしと AI 調整設定は プロファイル 2 に保存されました。",
+          "profileSavedVerifiedAt": "{{time}} で保存が確認されました",
+          "profileSavedTranscriptionSummary": "転写: {{provider}} / {{model}}",
+          "profileSavedReasoningSummary": "絞り込み: {{provider}} / {{model}}",
+          "profileSavedReasoningDisabled": "絞り込み: 無効",
+          "profileSaveFailedTitle": "プロファイル 2 の保存に失敗しました",
+          "profileSaveFailed": "プロファイル 2 設定を保存できませんでした。もう一度試してください。",
+          "registerFailed": "セカンダリ ホットキーの登録に失敗しました。別のショートカットを選択してください。",
+          "registerRetry": "セカンダリ ホットキーの登録に失敗しました。もう一度試してください。",
+          "requiresProTitle": "Pro で複数のショートカットワークフローを追加",
+          "requiresProDescription": "音声入力、翻訳、文章の整形、AI への質問に、それぞれショートカットとモデルを設定できます。対象デバイスでは 7 日間無料で試せます。",
+          "globeNotSupported": "セカンダリ ホットキーは Globe/Fn キーをサポートしていません。",
+          "rightModifierNotSupported": "セカンダリ ホットキーは、右側の単一修飾子をサポートしていません。",
+          "modifiersOnlyNotSupported": "セカンダリ ホットキーは、修飾子のみの組み合わせをサポートしていません。",
+          "modelSetupDescription": "別のよく使う場面向けに、専用の文字起こしモデルを設定します。整形モデルは任意です。別のホットキーを押すと、普段の設定を変えずにプロファイル 2 を使えます。",
+          "chooseTranscriptionModel": "文字起こしモデルを選択",
+          "chooseReasoningModel": "整形モデルを選択",
+          "savedModelSnapshot": "保存済みのプロファイル 2 モデル",
+          "currentModelSnapshot": "現在の選択",
+          "currentModelEmpty": "現在のモデル情報を取得できません。先に文字起こしと AI モデルの設定を確認してください。",
+          "savedModelEmpty": "まだ保存されていません。保存すると、セカンダリホットキーはこの文字起こし設定を使用します。整形はプロファイル 2 で有効な場合のみ使用されます。",
+          "saveAndEnableProfile2": "プロファイル 2 を保存",
+          "updateProfile2": "プロファイル 2 のモデルを更新",
+          "setupReadyBadge": "プロファイル 2 使用可能",
+          "setupNeedsHotkeyBadge": "先にセカンダリホットキーを設定",
+          "setupNeedsSaveBadge": "モデルを保存して完了",
+          "stepModelsReady": "モデルは保存済みです。変更するには、別のモデルを選んでプロファイル 2 を更新してください。",
+          "saveNeedsHotkey": "プロファイル 2 を保存する前に、使用可能なセカンダリホットキーを設定してください。",
+          "saveReadyHint": "保存すると、セカンダリホットキーは「現在の選択」に表示された設定を使用します。AI 整形は自動的には有効になりません。",
+          "saveUpdateHint": "プロファイル 2 はすでに現在の選択と一致しています。",
+          "profileSavedReasoningDisabledWithModel": "整形: 無効、選択中 {{provider}} / {{model}}",
+          "unsavedChangeNotice": "新しいモデルはまだ左側のプレビューにあるだけです。プロファイル 2 は右側の以前の設定をまだ使用しています。",
+          "savedModelSnapshotStale": "プロファイル 2 が使用中",
+          "profile2UpToDate": "プロファイル 2 は最新です",
+          "setupUnsavedChangesBadge": "未保存の変更",
+          "stepModelsChanged": "現在の選択が変更されました。セカンダリホットキーが新しいモデルを使用する前に、「プロファイル 2 のモデルを更新」をクリックしてください。",
+          "saveUnsavedChangesHint": "左側の現在の選択が変更されました。更新すると右側のプロファイル 2 が上書きされます。",
+          "profile2LiveSnapshot": "プロファイル 2 のモデル"
+        },
+        "diagnostics": {
+          "title": "ホットキー診断",
+          "description": "有効なホットキーバックエンド、登録状態、起動チェーンを直接確認します。",
+          "refresh": "更新",
+          "testWake": "起動チェーンをテスト",
+          "platform": "プラットフォーム",
+          "backend": "ホットキーバックエンド",
+          "primaryHotkey": "メインホットキー",
+          "secondaryHotkey": "サブホットキー",
+          "primaryStatus": "メインホットキーの状態",
+          "secondaryStatus": "サブホットキーの状態",
+          "registered": "登録済み",
+          "notRegistered": "未登録",
+          "recommendedTitle": "推奨デフォルト",
+          "recommendedDescription": "{{hotkey}} はこのプラットフォームでより安全な既定値です。初回セットアップと自動フォールバックではこれが優先されます。",
+          "warnings": {
+            "linuxSuper": "現在の Linux ホットキーにはまだ Super/Meta が含まれており、デスクトップショートカットに奪われやすいです。",
+            "windowsSuper": "現在の Windows ホットキーにはまだ Win/Super が含まれており、システムショートカットと競合しやすくなっています。",
+            "macosCommandSpace": "Command+Space は macOS で Spotlight や入力ソース切り替えに奪われやすいです。"
+          },
+          "backends": {
+            "globe": "macOS Globe",
+            "globalShortcut": "Electron globalShortcut",
+            "windows-native": "Windows ネイティブリスナー",
+            "gnome-wayland": "GNOME Wayland ネイティブショートカット",
+            "native-modifier": "ネイティブ修飾キーリスナー"
+          }
+        },
+        "availability": {
+          "checking": "可用性を確認中…",
+          "free": "利用可能",
+          "owned": "ChordVox に登録済み",
+          "conflict": "他のアプリが使用中",
+          "invalid": "無効なホットキー",
+          "native": "ネイティブリスナーで実行時に処理"
+        }
+      },
+      "microphone": {
+        "description": "ディクテーションに使用する入力デバイスを選択",
+        "title": "マイク"
+      },
+      "soundEffects": {
+        "dictationSounds": "ディクテーション音",
+        "dictationSoundsDescription": "録音の開始・停止時に効果音を再生",
+        "cueStyles": {
+          "off": "オフ",
+          "electronic": "電子音",
+          "droplet1": "しずく 1",
+          "droplet2": "しずく 2"
+        },
+        "title": "サウンドとアニメーション"
+      },
+      "startup": {
+        "launchAtLogin": "ログイン時に起動",
+        "launchAtLoginDescription": "ログイン時に ChordVox を自動的に起動",
+        "title": "起動設定",
+        "autoCheckUpdate": "アップデートの自動チェック",
+        "autoCheckUpdateDescription": "ChordVox の起動時に新しいバージョンを自動的に確認してダウンロードします (自動インストールなし)",
+        "menuBarIcon": "メニューバーアイコン",
+        "menuBarIconDescription": "macOS のメニューバーに ChordVox を表示します。オフにしてから再度オンにすると、アイコンが強制的に再作成されます。"
+      },
+      "updates": {
+        "badges": {
+          "dev": "開発版",
+          "latest": "最新",
+          "update": "アップデート"
+        },
+        "checkForUpdates": "アップデートを確認",
+        "checking": "確認中...",
+        "currentVersion": "現在のバージョン",
+        "devMode": "開発モードで実行中",
+        "dialogs": {
+          "almostThere": {
+            "description": "アップデートの準備がほぼ完了しました。少々お待ちください。",
+            "title": "もうすぐです"
+          },
+          "checkFailed": {
+            "description": "アップデートの確認中に問題が発生しました。しばらくしてからもう一度お試しください。",
+            "title": "アップデートを確認できませんでした"
+          },
+          "downloadFailed": {
+            "description": "アップデートのダウンロード中に問題が発生しました。もう一度お試しください。",
+            "title": "アップデートをダウンロードできませんでした"
+          },
+          "installFailed": {
+            "description": "アップデートのインストール中に問題が発生しました。もう一度お試しください。",
+            "title": "アップデートをインストールできませんでした"
+          },
+          "installUpdate": {
+            "confirmText": "インストールして再起動",
+            "description": "ChordVox はアップデートを適用するために再起動します。",
+            "title": "アップデートをインストール"
+          },
+          "noUpdates": {
+            "description": "最新バージョンをお使いです。",
+            "title": "アップデートはありません"
+          },
+          "updateAvailable": {
+            "description": "アップデートあり: v{{version}}",
+            "title": "アップデートあり",
+            "fallbackItems": [
+              "最新の安定性修正と体験改善を取得します。",
+              "音声文字起こし、ライセンス状態、クロスプラットフォームのインストール動作を改善します。",
+              "既知の問題を減らし、今後の機能サポートを利用できる状態に保つために更新してください。"
+            ],
+            "valueIntro": "このアップデートの内容:"
+          },
+          "updateError": {
+            "description": "アップデート中に問題が発生しました。もう一度お試しください。",
+            "title": "アップデートエラー"
+          },
+          "manualUpdateAvailable": {
+            "confirmText": "ダウンロードページを開く",
+            "description": "バージョン v{{version}} が利用可能です。この環境では自動ダウンロードができないため、リリースページを開いてアップデートしてください。",
+            "title": "利用可能なアップデート"
+          }
+        },
+        "downloadUpdate": "アップデート v{{version}} をダウンロード",
+        "downloading": "ダウンロード中... {{progress}}%",
+        "installAndRestart": "インストールして再起動",
+        "latestVersion": "最新バージョンをお使いです",
+        "newVersion": "新しいバージョンがあります",
+        "newVersionAvailable": "新しいバージョンが利用可能",
+        "restarting": "再起動中...",
+        "title": "アップデート",
+        "versionPlaceholder": "—",
+        "whatsNew": "v{{version}} の新機能",
+        "openReleasePage": "ダウンロードページを開く"
+      },
+      "notifications": {
+        "fileTranscriptionCompletion": "ファイル文字起こし完了アラート",
+        "fileTranscriptionCompletionDescription": "ファイルの文字起こしが完了したときに ChordVox のアラートを表示します。署名されていない macOS テストビルドでも動作します。"
+      },
+      "pasteConfirm": {
+        "label": "長文貼り付け確認ウィンドウ",
+        "description": "長文の推敲完了後、貼り付ける前に5秒間のカウントダウン一時停止ウィンドウを表示し、キャンセルまたは即時貼り付けを可能にします。",
+        "thresholdLabel": "トリガー文字数しきい値",
+        "thresholdDescription": "一時停止ウィンドウをトリガーする最小テキスト文字数"
+      },
+      "tailCommands": {
+        "label": "音声終了コマンド",
+        "description": "音声入力の最後に「取消别输出」または「cancel dictation」と言うと入力を破棄し、「重新说」または「start over」と言うと録音をやり直します（対応コマンドは中国語・英語のみ）。"
+      }
+    },
+    "permissions": {
+      "accessibilityDescription": "文字起こし後の自動貼り付けに必要です。ChordVox はキー入力を記録しません。",
+      "accessibilityTitle": "アクセシビリティ",
+      "description": "ChordVox の正常動作に必要なシステム権限をテスト・管理",
+      "microphoneDescription": "音声録音とディクテーションに必要",
+      "microphoneTitle": "マイク",
+      "microphoneTest": {
+        "title": "マイク入力をテスト",
+        "description": "音声入力の前に、8 秒間のリアルタイム入力レベルテストを実行します。",
+        "start": "8 秒テストを開始",
+        "stop": "テストを停止",
+        "meterLabel": "マイクのリアルタイム入力レベル",
+        "listening": "マイク入力を確認しています…",
+        "heardLive": "リアルタイム入力を検出しました",
+        "success": "マイクが音声を受信しています。",
+        "silent": "使用できる入力が検出されませんでした。選択したマイクと入力レベルを確認してください。",
+        "idle": "テスト開始後、通常の声量で話してください。",
+        "privacyNote": "このテストはリアルタイム音量だけを測定します。録音、文字起こし、音声の保存は行いません。",
+        "openPrivacySettings": "マイクのプライバシー設定を開く",
+        "openSoundSettings": "サウンド設定を開く",
+        "errors": {
+          "permission": "マイクへのアクセスが許可されていません。システム設定で許可してから、もう一度テストしてください。",
+          "device": "選択したマイクを使用できません。別の入力デバイスを選択して、もう一度テストしてください。",
+          "unavailable": "このデバイスではリアルタイムマイクテストを利用できません。",
+          "unknown": "マイクテストを開始できませんでした。入力設定を確認して、もう一度お試しください。"
+        }
+      },
+      "systemDescription": "録音、音声入力、自動貼り付けに必要な ChordVox の主要なシステム権限を確認します。",
+      "systemTitle": "システム権限",
+      "resetAccessibility": {
+        "description": "ChordVox をアクセシビリティの権限から削除します。システム設定 > プライバシーとセキュリティ > アクセシビリティ で再度許可する必要があります。",
+        "label": "アクセシビリティの権限をリセット",
+        "rowDescription": "ChordVox を更新するたびに自動貼り付けが機能しなくなる場合があります。古い ChordVox エントリを削除してから現在の ChordVox.app を追加し、再度アクセスを許可してください。",
+        "title": "アクセシビリティの権限をリセット"
+      },
+      "macAccessibilityDrag": {
+        "description": "前面の小さなウィンドウから ChordVox.app をアクセシビリティの一覧へドラッグしてオンにしてください。ドラッグが戻る場合は、左下の + から ChordVox.app を選択してください。",
+        "dragCardHint": "一覧にない？ここにドラッグするか、+ から追加してください。",
+        "dragLabel": "前面ウィンドウからアクセシビリティへドラッグ",
+        "openSettings": "アクセシビリティを開く",
+        "openScreenRecording": "画面収録を開く",
+        "packagedOnly": "ドラッグによる許可はパッケージ版アプリで利用できます。開発モードまたはドラッグできない場合は、+ から現在のアプリを手動で追加してください。",
+        "revealApp": "アクセシビリティを開く",
+        "openAccessibility": "アクセシビリティを開く",
+        "screenRecordingDescription": "前面の小さなウィンドウから ChordVox.app を画面収録の一覧へドラッグしてオンにしてください。ドラッグが戻る場合は、左下の + から ChordVox.app を選択してください。",
+        "screenRecordingDragLabel": "前面ウィンドウから画面収録へドラッグ",
+        "title": "ChordVox を一覧へドラッグ",
+        "grantedLabel": "許可しました ✓"
+      },
+      "test": "テスト",
+      "testAndGrant": "テストして許可",
+      "title": "権限",
+      "troubleshoot": "トラブルシュート",
+      "troubleshootingTitle": "トラブルシューティング"
+    },
+    "privacy": {
+      "cloudBackup": "クラウドバックアップ",
+      "cloudBackupDescription": "文字起こしをクラウドに保存してデータを失わないようにします。",
+      "description": "デバイスからのデータ送信を管理します。初期設定ではすべてオフです。",
+      "title": "プライバシー",
+      "usageAnalytics": "問題の早期修正に協力",
+      "usageAnalyticsDescription": "有効にすると、プライバシー処理済みの少量のアプリエラー情報と初期設定の進捗が送信され、問題をより早く特定・修正するために使用されます。この設定で文字起こし、音声、入力内容がアップロードされることはなく、いつでもオフにできます。",
+      "transcriptionHistory": "文字起こし履歴の保存",
+      "transcriptionHistoryDescription": "無効にすると、ChordVox は文字起こしと貼り付けを行いますが、新しい履歴エントリは保存されません。"
+    },
+    "prompts": {
+      "description": "テキスト補正と指示検出を行う統合システムプロンプトの表示、カスタマイズ、テスト",
+      "title": "プロンプトスタジオ",
+      "requiresProDescription": "プロンプトの編集は無料のままです。AI テストの実行で 7 日間の無料 Pro トライアルを開始できます。",
+      "requiresProTitle": "Prompt Studio には Pro が必要です"
+    },
+    "transcription": {
+      "customSetup": "カスタム設定",
+      "customSetupDescription": "独自のプロバイダーと API キーを使用。",
+      "description": "ChordVox の音声文字起こし方法を選択",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "設定不要ですぐに使えます。",
+      "title": "音声テキスト変換",
+      "toasts": {
+        "switchedCloud": {
+          "description": "文字起こしに ChordVox のクラウドサービスを使用します。",
+          "title": "ChordVox Cloud に切り替えました"
+        },
+        "switchedCustom": {
+          "description": "独自のプロバイダーと API キーを設定してください。",
+          "title": "カスタム設定に切り替えました"
+        }
+      },
+      "storageLocation": {
+        "label": "モデルの保存場所",
+        "description": "ストリーミング、Whisper、Parakeet、IBM Granite / Cohere のモデルを 1 か所で管理します。",
+        "rootLabel": "統合モデルディレクトリ",
+        "streamingFolderLabel": "リアルタイム文字起こしディレクトリ",
+        "streamingFolderHint": "リアルタイム文字起こしモデルは、このディレクトリ配下の streaming-models サブフォルダーに自動保存されます。",
+        "saveFailedTitle": "モデルフォルダーを保存できませんでした",
+        "saveFailedDescription": "モデルは現在のフォルダーに残っています。空き容量とフォルダー権限を確認して、もう一度お試しください。",
+        "migrating": "モデルを移動中 {{completed}}/{{total}}…",
+        "migrationCompleteTitle": "モデルフォルダーを更新しました",
+        "migrationCompleteDescription": "インストール済みモデルをすべて検証してから、新しいフォルダーへ切り替えました。",
+        "migrationCompleteWithCopies": "新しいフォルダーは使用できます。クリーンアップを完了できなかったため、古いフォルダーに検証済みのコピーが一部残っています。",
+        "normalizedTitle": "安全なモデルフォルダーを使用します",
+        "normalizedDescription": "ドライブのルートを選択しました。ChordVox はモデルを {{path}} に保存し、アプリがドライブのルートに直接ファイルを保存したり削除したりしないようにします。"
+      },
+      "streaming": {
+        "clearAllButton": "すべてのモデルを削除",
+        "models": {
+          "zipformerHighAccuracy": {
+            "name": "ストリーミング高精度（中国語）",
+            "description": "xlarge INT8、中国語の高精度と速度のバランス"
+          },
+          "zipformerHighestAccuracyFp16": {
+            "name": "最高精度（中国語、FP16）",
+            "description": "リアルタイム中国語で最高精度の大きな FP16 モデル"
+          },
+          "zipformerFastRealtime": {
+            "name": "高速リアルタイム（中国語）",
+            "description": "日常の dictation に最適: 滑らかで CPU 負荷が軽く、十分に高精度"
+          },
+          "nemotronEnglishRealtime": {
+            "name": "Nemotron Streaming En 0.6B（英語のみ）",
+            "description": "英語専用の低遅延リアルタイム文字起こしモデル"
+          }
+        },
+        "toasts": {
+          "downloadInProgressTitle": "ダウンロードはすでに進行中です",
+          "downloadInProgressDescription": "現在のモデルのダウンロードが終わるまでお待ちください。",
+          "modelReadyTitle": "モデルの準備ができました",
+          "modelReadyDescription": "ストリーミングモデルのダウンロードとインストールが完了しました。",
+          "downloadFailedTitle": "ダウンロードに失敗しました",
+          "downloadFailedDescription": "ストリーミングモデルをダウンロードできませんでした。もう一度お試しください。",
+          "downloadCancelledTitle": "ダウンロードをキャンセルしました",
+          "downloadCancelledDescription": "現在のストリーミングモデルのダウンロードをキャンセルしました。",
+          "deleteDialogTitle": "ストリーミングモデルを削除",
+          "deleteDialogDescription": "「{{model}}」を削除しますか？ 使用前に再度ダウンロードが必要です。",
+          "deleteSuccessTitle": "モデルを削除しました",
+          "deleteSuccessDescription": "「{{model}}」を削除しました。",
+          "deleteFailedTitle": "削除に失敗しました",
+          "deleteFailedDescription": "ストリーミングモデルを削除できませんでした。もう一度お試しください。",
+          "clearFailedTitle": "削除に失敗しました",
+          "clearFailedDescription": "ストリーミングモデルを一括削除できませんでした。もう一度お試しください。"
+        },
+        "defaultRecommendedBadge": "既定",
+        "deprecatedBadge": "旧モデル無効",
+        "deprecatedModelDescription": "この旧モデルは推奨されなくなりました。ランタイムは代わりに「{{replacement}}」を使用します。削除すると空き容量を増やせます。",
+        "highAccuracyBadge": "高スペック"
+      }
+    },
+    "fileTranscription": {
+      "title": "ファイル文字起こし",
+      "description": "音声または動画ファイルを 1 つ文字起こしし、結果を履歴に保存します。初回のファイル文字起こしで 7 日間の Pro 無料トライアルを開始できます。",
+      "chooseFile": "ファイルを選択",
+      "cancelButton": "文字起こしをキャンセル",
+      "cancelledTitle": "ファイルの文字起こしをキャンセルしました",
+      "cancelledDescription": "ChordVox はこのファイルの待機を停止しました。別のファイルを選択できます。",
+      "chooseFileDescription": "ChordVox 内で文字起こしする音声または動画ファイルを選択します。",
+      "route": {
+        "label": "現在のルート",
+        "provider": "文字起こしエンジン",
+        "model": "現在のモデル",
+        "currentProviderHint": "ファイル文字起こしは、すでに選択している文字起こしエンジンに従います。",
+        "currentModelHint": "ファイル文字起こしは、このルートに現在ひも付いているモデルをそのまま使い続けます。",
+        "syncBadge": "現在の選択に厳密に従う",
+        "streamingProvider": "ローカルストリーミング",
+        "streamingTitle": "ローカルストリーミング文字起こし",
+        "streamingDescription": "ファイル文字起こしは現在選択中のリアルタイムモデルに従い、自動で高精度ルートへ切り替わることはありません。",
+        "localTitle": "ローカル文字起こし",
+        "localDescription": "ファイル文字起こしは、文字起こしセクションで選択したローカルモデルと設定をそのまま使用します。",
+        "cloudTitle": "クラウド / BYOK 文字起こし",
+        "cloudDescription": "ファイル文字起こしは、文字起こしセクションで選択したクラウドプロバイダーとモデルをそのまま使用します。",
+        "currentRouteHint": "現在のファイル文字起こしルート: {{provider}} / {{model}}",
+        "switchHint": "ルートを切り替えるには、サイドバーの「文字起こし」設定を開いてください。",
+        "switchButton": "文字起こし設定を開く"
+      },
+      "supportedFormats": "mp3、wav、m4a、mp4、mov、webm などの一般的な音声・動画形式に対応しています。",
+      "dropzoneTitle": "ここに音声または動画ファイルをドロップ",
+      "dropzoneDescription": "ここをクリックしても同じです。ファイルを選択ボタンと同じ流れで処理します。",
+      "dropzoneActiveDescription": "ドロップすると Pro 権限を確認して、そのまま文字起こしを開始します。",
+      "dropzoneBusyTitle": "現在ファイルを処理中です",
+      "dropzoneBusyDescription": "今の文字起こしが終わるまで、新しいファイルのドロップや選択はお待ちください。",
+      "emptyStateTitle": "まだファイル文字起こしは始まっていません",
+      "emptyStateDescription": "ファイルを選ぶか、ここへドロップすると、このパネルに進捗が表示されます。",
+      "currentFile": "現在のファイル",
+      "historyButton": "履歴を開く",
+      "progressLabel": "進捗",
+      "progressTitle": "タスク進捗",
+      "progressDescription": "現在のファイル、全体の進捗、現在の処理段階を表示します。",
+      "stages": {
+        "idle": "ファイルを選択すると自動的に文字起こしが始まります。",
+        "preparing": "ファイルを準備しています...",
+        "transcribing": "ファイルを文字起こししています...",
+        "enhancing": "AI でテキストを改善しています...",
+        "saving": "結果を保存しています...",
+        "complete": "ファイル文字起こしが完了しました。",
+        "short": {
+          "idle": "待機中",
+          "preparing": "準備中",
+          "transcribing": "文字起こし中",
+          "enhancing": "改善中",
+          "saving": "保存中",
+          "complete": "完了"
+        }
+      },
+      "trialHint": "初回のファイル文字起こしで 7 日間の Pro 無料トライアルを開始できます。"
+    },
+    "context": {
+      "title": "コンテキスト対応の整文",
+      "description": "現在のアプリ、ウィンドウ、表示テキスト、任意の画面コンテキストを使って AI 整文を文脈に合わせます。コンテキストを使うと処理時間が少し増えます。",
+      "enableContext": "文脈対応の整文を有効にする",
+      "enableContextDescription": "文脈を使って、AI 整文を現在の作業に合わせます。通常は少し遅くなる程度です。",
+      "privacyNotice": "現在のアプリと内容に合う整文にして、手直しを減らします。",
+      "permissions": "コンテキストアクセス",
+      "accessibility": "アクセシビリティ",
+      "screenRecording": "画面収録",
+      "accessibilityPermission": "アクセシビリティ権限",
+      "accessibilityPermissionDescription": "現在のアプリ、ウィンドウタイトル、表示テキストの読み取りに必要です。",
+      "screenRecordingPermission": "画面収録権限",
+      "screenRecordingPermissionDescription": "複雑なページ、表、レイアウト向けの任意の視覚コンテキストです。",
+      "grant": "許可",
+      "visionCapability": "画像理解機能",
+      "currentModel": "現在のモデル",
+      "notSelected": "未選択",
+      "testVision": "画像理解をテスト",
+      "testingVision": "テスト中...",
+      "visionSupported": "画像理解に対応",
+      "visionNotSupported": "画像理解に非対応",
+      "visionNotSupportedHint": "現在のモデルは画像入力に対応していません。コンテキストにはテキストのみを使用します。",
+      "howItWorks": "仕組み",
+      "howItWorksItem1": "音声入力中にアプリとウィンドウの文脈を参照",
+      "howItWorksItem2": "表示テキストからより合う表現と構成を選択",
+      "howItWorksItem3": "Screen Vision 有効時だけスクリーンショットを補足",
+      "howItWorksItem4": "アプリと作業に合ったテキストを出力",
+      "platformLimitation": "完全なコンテキスト対応整文（アクセシビリティテキスト + スクリーンショット取得）は現在 macOS のみで利用できます。Windows と Linux のサポートは今後のリリースで予定されています。",
+      "enableTextContext": "テキスト文脈",
+      "enableTextContextDescription": "現在のアプリ、ウィンドウタイトル、表示テキストを使い、AI 整文を作業に合わせます。通常は少し遅くなる程度です。",
+      "enableVisionContext": "画面ビジョン",
+      "enableVisionContextDescription": "複雑なページ、表、レイアウト向けの任意のスクリーンショット参照です。有効にすると画像の取得と解析が追加されるため、AI 整形に時間がかかる場合があります。既定はオフです。",
+      "dictionaryPointer": "名前、ブランド、専門用語が誤変換される場合はカスタム辞書へ追加。",
+      "sensitiveAppsTitle": "機密アプリのプライバシー保護",
+      "sensitiveAppsDescription": "これらのアプリが前面にあるとき、ChordVox はテキストの読み取りや画面キャプチャの前に処理を停止し、パスワードやキーなどの機密情報をコンテキストに含めません。",
+      "sensitiveAppsChoose": "保護するアプリを追加",
+      "sensitiveAppsSelected": "保護中のアプリ",
+      "sensitiveAppsAdvanced": "詳細：手動で追加",
+      "sensitiveProcessNames": "アプリ / プロセス名",
+      "sensitiveProcessNamesPlaceholder": "1Password\n社内保管庫",
+      "sensitiveBundleIds": "macOS バンドル ID",
+      "sensitiveBundleIdsPlaceholder": "com.agilebits.onepassword\ncom.company.secureapp",
+      "sensitiveAppsSaved": "除外リストを保存しました。",
+      "sensitiveAppsSaveFailed": "除外リストを保存できませんでした。",
+      "sensitiveAppsHint": "選択内容は自動保存されます。保護対象のアプリが前面にある間は、テキストとスクリーンショットのコンテキストを取得しません。",
+      "visionTestFailed": "画像認識テストに失敗しました：{{reason}}",
+      "openDictionary": "辞書を開く"
+    }
+  },
+  "models": {
+    "descriptions": {
+      "parakeet": {
+        "parakeet_tdt_0_6b_v3": "高速多言語 ASR、自動言語検出対応（25 言語）",
+        "parakeet_tdt_0_6b_v2": "句読点と大文字化に対応した高精度英語 ASR"
+      },
+      "whisper": {
+        "tiny": "最速、品質は低め",
+        "base": "速度と品質のバランス",
+        "small": "より高品質、やや低速",
+        "medium": "高品質",
+        "large": "最高品質、最も低速",
+        "turbo": "高速で高品質",
+        "belle_large_v3_zh_punct_full": "中国語に最適化された Full GGML 句読点モデル",
+        "belle_large_v3_turbo_zh_full": "高速な中国語文字起こし向けに調整された Turbo Full GGML モデル"
+      },
+      "transcription": {
+        "openai_gpt_4o_mini_transcribe": "高速で正確な文字起こし",
+        "openai_gpt_4o_transcribe": "最も正確な文字起こし",
+        "openai_whisper_1": "オリジナル Whisper モデル",
+        "groq_whisper_large_v3": "Groq で最高品質の Whisper モデル",
+        "groq_whisper_large_v3_turbo": "リアルタイムの 216 倍速",
+        "mistral_voxtral_mini_latest": "高速多言語文字起こし",
+        "soniox_stt_rt_v4": "60 以上の言語に対応する低遅延リアルタイム文字起こし",
+        "deepgram_nova_3": "Deepgram の高精度クラウド文字起こしモデル",
+        "google_chirp_3": "高精度な多言語文字起こし向け Google Cloud フラッグシップモデル"
+      },
+      "cloud": {
+        "openai_gpt_5_2": "最新のフラッグシップ推論モデル",
+        "openai_gpt_5_mini": "高速で費用対効果が高い",
+        "openai_gpt_5_nano": "超高速、低レイテンシー",
+        "openai_gpt_4_1": "強力なベースライン、100 万トークンコンテキスト",
+        "openai_gpt_4_1_mini": "小型 GPT-4.1 モデル",
+        "openai_gpt_4_1_nano": "最低レイテンシーの GPT-4.1",
+        "anthropic_claude_sonnet_4_5": "バランスの取れた性能",
+        "anthropic_claude_haiku_4_5": "高速でフロンティアに近い知能",
+        "anthropic_claude_opus_4_5": "最も高性能な Claude モデル",
+        "gemini_gemini_3_pro_preview": "複雑な推論向けの次世代フラッグシップモデル",
+        "gemini_gemini_3_flash_preview": "超高速・高性能の次世代モデル",
+        "gemini_gemini_2_5_flash_lite": "最低レイテンシーとコスト",
+        "groq_qwen_qwen3_32b": "強力な推論モデル、131K コンテキスト",
+        "groq_openai_gpt_oss_120b": "OpenAI のオープンソースフラッグシップ、500 T/秒",
+        "groq_openai_gpt_oss_20b": "高速オープンソースモデル、1000 T/秒",
+        "groq_llama_3_3_70b_versatile": "Meta の汎用モデル、280 T/秒",
+        "groq_llama_3_1_8b_instant": "超高速 560 T/秒、131K コンテキスト",
+        "groq_mixtral_8x7b_32768": "32K コンテキスト、Mixture of Experts",
+        "groq_gemma2_9b_it": "Google の高効率モデル",
+        "openai_gpt_5_5": "複雑なプロフェッショナル作業向けの最新 frontier モデル",
+        "openai_gpt_5_4": "1.05M コンテキストの frontier モデル",
+        "openai_gpt_5_4_mini": "大量処理に適した強力な mini モデル",
+        "openai_gpt_5_4_nano": "単純なタスク向けの最安 GPT-5.4 クラスモデル",
+        "anthropic_claude_opus_4_7": "複雑な reasoning と coding に最も強い Claude モデル",
+        "anthropic_claude_sonnet_4_6": "速度と知能の最良バランス",
+        "gemini_gemini_3_1_pro_preview": "エージェント型ワークフロー向けの最新 Gemini 3 Pro プレビュー",
+        "gemini_gemini_3_1_flash_lite_preview": "最もコスト効率の高い Gemini 3.1 モデル",
+        "gemini_gemini_2_5_flash": "強力な reasoning を備えた安定した低遅延モデル",
+        "groq_compound": "組み込みツールを備えた本番向けエージェントシステム",
+        "groq_llama_4_scout": "評価用プレビューモデル、131K コンテキスト"
+      },
+      "local": {
+        "qwen_qwen3_8b_q4_k_m": "思考モード対応の最新 Qwen3",
+        "qwen_qwen3_8b_q5_k_m": "思考モード対応の高品質 Qwen3",
+        "qwen_qwen3_4b_q4_k_m": "推論機能を持つコンパクトな Qwen3",
+        "qwen_qwen3_1_7b_q8_0": "小型ながら高性能な Qwen3 モデル",
+        "qwen_qwen3_0_6b_q8_0": "エッジデバイス向け超小型 Qwen3",
+        "qwen_qwen3_32b_q4_k_m": "深い推論を備えた最も強力なローカル Qwen3",
+        "qwen_qwen2_5_0_5b_instruct_q5_k_m": "最小モデル、高速だが機能は限定的",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "小型モデル、基本的なタスクに最適",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "汎用のバランスモデル",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "高品質な大型モデル（Q4_K_M）",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "高品質推論の大型モデル（Q5_K_M）",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "高速で効率的な指示モデル",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "より高品質な指示モデル",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "エッジデバイス向け超小型モデル",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "小型ながら高性能な多言語モデル",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "優れた性能を持つ強力なモデル",
+        "openai_oss_gpt_oss_20b_mxfp4": "一般消費者向けハードウェア用 OpenAI オープンウェイトモデル"
+      },
+      "paraformer": {
+        "paraformer_large_zh": "フル精度 model.onnx。オンデマンド sherpa-onnx ランタイムを使用する中国語 / 英語向けローカルオフライン ASR"
+      },
+      "granite": {
+        "granite_4_0_1b_speech": "Transformers または vLLM で提供する、Apache-2.0 の企業向け高精度英語 ASR モデル"
+      },
+      "cohere": {
+        "cohere_transcribe_03_2026": "Hugging Face の制限付きアクセスが必要な最高精度 2B ASR モデル。Transformers または vLLM で提供"
+      }
+    },
+    "providerBadges": {
+      "paraformerChineseRecommended": "中国語推奨",
+      "nvidiaEnglishRecommended": "英語推奨"
+    },
+    "badges": {
+      "parakeet": {
+        "parakeet_tdt_0_6b_v2": "英語 ASR"
+      },
+      "paraformer": {
+        "paraformer_large_zh": "フル精度"
+      },
+      "granite": {
+        "granite_4_0_1b_speech": "英語高精度"
+      },
+      "cohere": {
+        "cohere_transcribe_03_2026": "最高精度"
+      },
+      "whisper": {
+        "belle_large_v3_zh_punct_full": "中国語句読点",
+        "belle_large_v3_turbo_zh_full": "高速中国語"
+      }
+    }
+  },
+  "transcriptionModes": {
+    "realTime": {
+      "label": "リアルタイム文字起こし",
+      "cardDescription": "話すとすぐに文字が表示 · ローカル · 低遅延 · プライベート",
+      "switchedTitle": "リアルタイム文字起こしに切り替えました",
+      "switchedDescription": "低遅延のローカル処理で、話すとすぐに文字が表示されます",
+      "modelsLabel": "リアルタイム文字起こしモデル",
+      "clearModelsTitle": "リアルタイム文字起こしモデルを削除",
+      "clearModelsDescription": "ダウンロード済みのリアルタイム文字起こしモデルをすべて削除しますか？ 再利用するには再度ダウンロードが必要です。",
+      "clearedModelsTitle": "リアルタイム文字起こしモデルを削除しました",
+      "clearedModelsDescription": "ダウンロード済みのリアルタイム文字起こしモデルをすべて削除しました。",
+      "downloadHint": "リアルタイム文字起こしを使う前にローカルモデルをダウンロードしてください。",
+      "defaultEnabledTitle": "リアルタイム文字起こしが既定で有効です",
+      "defaultEnabledDescription": "ホットキー入力では既定でローカルのリアルタイム文字起こしを使います。既定モデルは「{{defaultModelName}}」です。必要に応じて、下で高精度文字起こしを設定できます。"
+    },
+    "highAccuracy": {
+      "label": "高精度文字起こし",
+      "optionalLabel": "高精度文字起こし（任意）",
+      "cardDescription": "録音後に文字起こしして精度を高めますが、速度は遅くなります · クラウド API またはローカルモデル",
+      "switchedTitle": "高精度文字起こしに切り替えました",
+      "switchedDescription": "録音後に文字起こしして精度を高めますが、速度は遅くなります",
+      "onboardingDescription": "長文のディクテーションや会議に最適です。より高精度ですが遅くなり、クラウド API とローカルモデルの両方を選べます。"
+    }
+  },
+  "modelStatusBanner": {
+    "readyTitle": "ローカルモデルの準備が完了しました",
+    "readyToastDescription": "今後の音声入力は自動でローカルのリアルタイム転写に戻ります。",
+    "readyDescription": "今後の音声入力は自動でローカルのリアルタイム転写に戻り、設定画面から引き続きモデル管理もできます。",
+    "errorTitle": "ローカルモデルの準備に失敗しました",
+    "errorDescription": "ダウンロードを再試行するか、設定からクラウド経路へ切り替えられます。",
+    "loadingTitle": "ローカルモデルを準備中です",
+    "loadingDescription": "モデル: {{model}} · {{percentage}}% · 準備が完了すると自動でローカルに戻ります。",
+    "unsupportedEnvironment": "この環境ではローカルモデルのダウンロードに対応していません。",
+    "retryFailed": "再ダウンロードに失敗しました。あとでもう一度お試しください。",
+    "retry": "再試行",
+    "settings": "転写設定"
+  }
+}

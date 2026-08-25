@@ -1,0 +1,1032 @@
+/* ============================================================
+   ChordVox Premium Motion System — Noticeable Edition
+   ============================================================
+   动效强度：Noticeable（显著 / 炫酷惹眼）
+   每个表面都在呼吸，每个交互都有重量感。
+   ============================================================ */
+
+/* ---- 1. CSS Custom Properties for Motion (animatable) ---- */
+
+@property --shimmer-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: -100%;
+}
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --glow-opacity {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --depth-blur {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 20px;
+}
+
+@property --luster-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+@property --flare-opacity {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+/* ---- 2. Shimmer Sweep — 流光扫过 ---- */
+
+@keyframes shimmer-sweep {
+  0% {
+    --shimmer-x: -100%;
+  }
+  100% {
+    --shimmer-x: 200%;
+  }
+}
+
+.shimmer-on-mount {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dark mode shimmer — punchy and visible */
+.shimmer-on-mount::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.06) 38%,
+    rgba(255, 255, 255, 0.15) 44%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.15) 56%,
+    rgba(255, 255, 255, 0.06) 62%,
+    transparent 75%
+  );
+  transform: translateX(var(--shimmer-x));
+  animation: shimmer-sweep 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s 1 forwards;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Light mode shimmer — bright, mirror-like flash */
+:root:not(.dark) .shimmer-on-mount::after {
+  background: linear-gradient(
+    105deg,
+    transparent 22%,
+    rgba(255, 255, 255, 0.12) 35%,
+    rgba(255, 255, 255, 0.35) 44%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.35) 56%,
+    rgba(255, 255, 255, 0.12) 65%,
+    transparent 78%
+  );
+  animation-duration: 1.2s;
+}
+
+/* ---- 3. Breathing Glow — 呼吸光晕 ---- */
+
+@keyframes breathing-glow {
+  0%,
+  100% {
+    --glow-opacity: 0.35;
+    box-shadow:
+      0 0 16px -4px oklch(0.7 0.22 258 / var(--glow-opacity)),
+      0 0 4px -1px oklch(0.65 0.25 258 / calc(var(--glow-opacity) * 0.6)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    --glow-opacity: 0.85;
+    box-shadow:
+      0 0 28px 0 oklch(0.7 0.22 258 / var(--glow-opacity)),
+      0 0 56px -8px oklch(0.65 0.25 258 / calc(var(--glow-opacity) * 0.45)),
+      0 0 80px -16px oklch(0.6 0.2 280 / calc(var(--glow-opacity) * 0.2)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+}
+
+.glow-breath {
+  animation: breathing-glow 3s ease-in-out infinite;
+}
+
+.glow-breath--slow {
+  animation: breathing-glow 5s ease-in-out infinite;
+}
+
+.glow-breath--accent {
+  animation: breathing-glow-accent 3s ease-in-out infinite;
+}
+
+@keyframes breathing-glow-accent {
+  0%,
+  100% {
+    box-shadow:
+      0 0 12px -2px oklch(0.58 0.25 258 / 0.25),
+      0 0 4px oklch(0.62 0.22 258 / 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+  50% {
+    box-shadow:
+      0 0 22px 2px oklch(0.58 0.25 258 / 0.5),
+      0 0 44px -4px oklch(0.65 0.22 280 / 0.25),
+      0 0 64px -12px oklch(0.6 0.2 300 / 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Light mode: warm, saturated aura glow */
+:root:not(.dark) .glow-breath,
+:root:not(.dark) .glow-breath--slow {
+  animation-name: breathing-glow-light;
+}
+
+@keyframes breathing-glow-light {
+  0%,
+  100% {
+    box-shadow:
+      0 0 12px -2px oklch(0.55 0.24 258 / 0.18),
+      0 2px 6px rgba(0, 0, 0, 0.04),
+      inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 0 24px 2px oklch(0.55 0.24 258 / 0.32),
+      0 0 48px -6px oklch(0.6 0.22 280 / 0.16),
+      0 2px 6px rgba(0, 0, 0, 0.04),
+      inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  }
+}
+
+:root:not(.dark) .glow-breath--accent {
+  animation-name: breathing-glow-accent-light;
+}
+
+@keyframes breathing-glow-accent-light {
+  0%,
+  100% {
+    box-shadow:
+      0 0 10px -2px oklch(0.52 0.26 258 / 0.2),
+      0 1px 3px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 20px 2px oklch(0.52 0.26 258 / 0.38),
+      0 0 40px -4px oklch(0.58 0.24 280 / 0.18),
+      0 1px 3px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+}
+
+/* ---- 4. Hover Lift — 悬浮升起 (Noticeable) ---- */
+
+.hover-lift {
+  transition:
+    transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 260ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow:
+    0 12px 32px -8px rgba(0, 0, 0, 0.15),
+    0 4px 8px -2px rgba(0, 0, 0, 0.08);
+}
+
+.hover-lift:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 100ms;
+}
+
+.dark .hover-lift:hover {
+  box-shadow:
+    0 16px 40px -8px rgba(0, 0, 0, 0.5),
+    0 4px 12px -2px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Light mode: brighter shadow + inner highlight */
+:root:not(.dark) .hover-lift:hover {
+  box-shadow:
+    0 12px 32px -8px rgba(0, 0, 0, 0.1),
+    0 4px 8px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* ---- 5. Staggered Entrance — 渐进入场 ---- */
+
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[data-stagger] {
+  animation: fade-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+[data-stagger="1"] {
+  animation-delay: 0.04s;
+}
+[data-stagger="2"] {
+  animation-delay: 0.08s;
+}
+[data-stagger="3"] {
+  animation-delay: 0.12s;
+}
+[data-stagger="4"] {
+  animation-delay: 0.16s;
+}
+[data-stagger="5"] {
+  animation-delay: 0.2s;
+}
+[data-stagger="6"] {
+  animation-delay: 0.24s;
+}
+[data-stagger="7"] {
+  animation-delay: 0.28s;
+}
+[data-stagger="8"] {
+  animation-delay: 0.32s;
+}
+
+/* Section-level entrance for settings panels */
+.section-entrance {
+  animation: fade-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.05s;
+}
+
+.section-entrance:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.section-entrance:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.section-entrance:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.section-entrance:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.section-entrance:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+/* ---- 6. Gradient Border Flow — 流动渐变边框 ---- */
+
+@keyframes gradient-flow {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
+}
+
+.flow-border {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Dark mode: vivid conic gradient border */
+.flow-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(173, 191, 220, 0.28) 100%);
+  mask:
+    linear-gradient(#000, #000) content-box,
+    linear-gradient(#000, #000);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#000, #000) content-box,
+    linear-gradient(#000, #000);
+  -webkit-mask-composite: xor;
+  padding: 1px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle variant for non-hero elements */
+.flow-border--subtle::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(173, 191, 220, 0.18) 100%);
+}
+
+/* Light mode: rich, saturated rainbow border */
+:root:not(.dark) .flow-border::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(178, 196, 226, 0.5) 100%);
+}
+
+:root:not(.dark) .flow-border--subtle::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(186, 202, 230, 0.34) 100%);
+}
+
+/* ---- 7. Glass Depth Pulse — 毛玻璃深度呼吸 ---- */
+
+@keyframes glass-depth-pulse {
+  0%,
+  100% {
+    --depth-blur: 20px;
+    backdrop-filter: blur(var(--depth-blur)) saturate(115%);
+    -webkit-backdrop-filter: blur(var(--depth-blur)) saturate(115%);
+  }
+  50% {
+    --depth-blur: 28px;
+    backdrop-filter: blur(var(--depth-blur)) saturate(125%);
+    -webkit-backdrop-filter: blur(var(--depth-blur)) saturate(125%);
+  }
+}
+
+.glass-depth-pulse {
+  animation: glass-depth-pulse 6s ease-in-out infinite;
+}
+
+/* ---- 8. Surface Luster — 表面光泽流动 (Light Mode Exclusive) ---- */
+
+@keyframes surface-luster {
+  0% {
+    --luster-x: -40%;
+  }
+  100% {
+    --luster-x: 140%;
+  }
+}
+
+.surface-luster {
+  position: relative;
+  overflow: hidden;
+}
+
+.surface-luster::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse 60% 100% at var(--luster-x) 30%,
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.25) 30%,
+    transparent 70%
+  );
+  animation: surface-luster 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+}
+
+/* Only show in light mode */
+:root:not(.dark) .surface-luster::before {
+  opacity: 1;
+}
+
+/* ---- 9. Glass Flare — 玻璃镜面闪耀 (Light Mode Exclusive) ---- */
+
+@keyframes glass-flare {
+  0%,
+  100% {
+    --flare-opacity: 0;
+  }
+  15% {
+    --flare-opacity: 0.6;
+  }
+  30% {
+    --flare-opacity: 0;
+  }
+}
+
+.glass-flare {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-flare::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 30%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.7) 45%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(255, 255, 255, 0.7) 55%,
+    transparent 80%
+  );
+  transform: rotate(25deg) translateX(var(--luster-x, 0%));
+  animation: surface-luster 10s ease-in-out infinite alternate;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+:root:not(.dark) .glass-flare::after {
+  opacity: var(--flare-opacity, 0);
+  animation:
+    surface-luster 10s ease-in-out infinite alternate,
+    glass-flare 12s ease-in-out infinite;
+}
+
+/* ---- 10. Surface Highlight Shift — 表面高光位移 ---- */
+
+@keyframes highlight-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.surface-highlight-shift {
+  background-size: 200% 100%;
+  animation: highlight-shift 8s ease-in-out infinite;
+}
+
+/* ---- 11. Enhanced Premium Panel with Motion ---- */
+
+.premium-panel--hero {
+  position: relative;
+}
+
+.premium-panel--hero.shimmer-on-mount::after {
+  animation-duration: 1.6s;
+  animation-delay: 0.3s;
+}
+
+/* Active sidebar item glow timing */
+.settings-sidebar-item--active.glow-breath--accent {
+  animation-duration: 3s;
+}
+
+/* ---- 12. Interactive Card Shine Effect ---- */
+
+@keyframes card-shine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.card-shine-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shine-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0) 42%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0) 58%,
+    transparent 65%
+  );
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card-shine-hover:hover::after {
+  opacity: 1;
+  animation: card-shine 1s ease-in-out 1;
+}
+
+/* Light mode: blinding mirror shine */
+:root:not(.dark) .card-shine-hover::after {
+  background: linear-gradient(
+    105deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0) 60%,
+    transparent 68%
+  );
+  background-size: 200% 100%;
+}
+
+/* ---- 13. Light-Mode Inner Highlight (亮面高光) ---- */
+
+:root:not(.dark) .premium-panel,
+:root:not(.dark) .glass-panel {
+  --light-highlight:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+:root:not(.dark) .premium-panel--hero {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    0 4px 16px -4px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2),
+    var(--glass-4layer-edge);
+}
+
+.dark .premium-panel--hero {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 4px 16px -4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    var(--glass-4layer-edge);
+}
+
+:root:not(.dark) .premium-panel--subtle {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ---- 14. Pro Upgrade Card — 升级卡片专属动效 ---- */
+
+/* Aurora gradient background shift */
+@keyframes pro-aurora {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.pro-upgrade-card {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(
+    135deg,
+    oklch(0.44 0.1 258 / 0.5) 0%,
+    oklch(0.35 0.11 278 / 0.42) 26%,
+    oklch(0.3 0.115 300 / 0.38) 50%,
+    oklch(0.38 0.11 240 / 0.42) 72%,
+    oklch(0.44 0.1 258 / 0.5) 100%
+  ) !important;
+  background-color: transparent !important;
+  background-size: 300% 300% !important;
+  animation: pro-aurora 6s linear infinite;
+  border-color: oklch(0.65 0.2 258 / 0.35) !important;
+  box-shadow:
+    0 0 20px -4px oklch(0.6 0.22 258 / 0.25),
+    0 8px 32px -8px oklch(0.5 0.2 280 / 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+:root:not(.dark) .pro-upgrade-card {
+  background-image: linear-gradient(
+    135deg,
+    oklch(0.92 0.05 258 / 0.83) 0%,
+    oklch(0.83 0.08 278 / 0.78) 26%,
+    oklch(0.79 0.09 300 / 0.74) 50%,
+    oklch(0.85 0.08 240 / 0.78) 72%,
+    oklch(0.92 0.05 258 / 0.83) 100%
+  ) !important;
+  background-size: 300% 300% !important;
+  border-color: oklch(0.55 0.2 258 / 0.3) !important;
+  box-shadow:
+    0 0 16px -4px oklch(0.55 0.24 258 / 0.2),
+    0 8px 28px -8px oklch(0.5 0.22 280 / 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Sparkle icon floating animation */
+@keyframes pro-sparkle-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-2px) rotate(5deg) scale(1.08);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-3deg) scale(1.12);
+  }
+  75% {
+    transform: translateY(-1px) rotate(2deg) scale(1.05);
+  }
+}
+
+.pro-upgrade-card .pro-sparkle-icon {
+  animation: pro-sparkle-float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px oklch(0.7 0.22 258 / 0.5));
+}
+
+:root:not(.dark) .pro-upgrade-card .pro-sparkle-icon {
+  filter: drop-shadow(0 0 4px oklch(0.5 0.24 258 / 0.4));
+}
+
+/* CTA button pulse glow */
+@keyframes pro-cta-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 oklch(0.65 0.22 258 / 0),
+      0 2px 8px -2px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 16px 4px oklch(0.65 0.22 258 / 0.3),
+      0 2px 12px -2px oklch(0.6 0.2 258 / 0.2);
+  }
+}
+
+.pro-upgrade-card .pro-cta-btn {
+  animation: pro-cta-pulse 2.5s ease-in-out infinite;
+  transition:
+    transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 200ms ease,
+    background-color 150ms ease;
+}
+
+.pro-upgrade-card .pro-cta-btn:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow:
+    0 0 24px 6px oklch(0.65 0.22 258 / 0.4),
+    0 4px 16px -2px oklch(0.6 0.2 258 / 0.3) !important;
+  animation: none;
+}
+
+.pro-upgrade-card .pro-cta-btn:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 80ms;
+}
+
+/* Ambient particle layer (pseudo-element sparkles) */
+@keyframes pro-particles {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+.pro-upgrade-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 20% 30%, oklch(0.75 0.2 258 / 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 80% 20%, oklch(0.7 0.22 300 / 0.15) 0%, transparent 25%),
+    radial-gradient(circle at 60% 80%, oklch(0.72 0.18 240 / 0.12) 0%, transparent 28%),
+    radial-gradient(circle at 10% 70%, oklch(0.68 0.2 280 / 0.1) 0%, transparent 22%);
+  background-size: 200% 200%;
+  animation: pro-particles 12s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+:root:not(.dark) .pro-upgrade-card::before {
+  background:
+    radial-gradient(circle at 20% 30%, oklch(0.6 0.2 258 / 0.12) 0%, transparent 30%),
+    radial-gradient(circle at 80% 20%, oklch(0.55 0.22 300 / 0.1) 0%, transparent 25%),
+    radial-gradient(circle at 60% 80%, oklch(0.58 0.18 240 / 0.08) 0%, transparent 28%),
+    radial-gradient(circle at 10% 70%, oklch(0.52 0.2 280 / 0.06) 0%, transparent 22%);
+  opacity: 0.5;
+}
+
+/* Ensure card content stays above pseudo-elements */
+.pro-upgrade-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- 15. Standalone Conversion CTA — 渐变转化按钮 (开通 Pro) ---- */
+/* Slow flowing gradient + looping sheen. Used on the always-visible upgrade
+   action so the conversion path stays eye-catching even outside pro cards. */
+.pro-cta-gradient {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(
+    120deg,
+    oklch(0.62 0.2 258),
+    oklch(0.58 0.23 282),
+    oklch(0.6 0.21 305),
+    oklch(0.62 0.2 258)
+  ) !important;
+  background-color: transparent !important;
+  background-size: 200% 100% !important;
+  animation: pro-aurora 7s ease-in-out infinite;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow:
+    0 2px 10px -2px oklch(0.6 0.22 258 / 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  transition:
+    transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 200ms ease;
+}
+
+.pro-cta-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.38) 50%,
+    transparent 62%
+  );
+  background-size: 220% 100%;
+  animation: card-shine 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.pro-cta-gradient > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pro-cta-gradient:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow:
+    0 0 22px 4px oklch(0.62 0.22 258 / 0.45),
+    0 4px 16px -2px oklch(0.58 0.2 282 / 0.35) !important;
+}
+
+.pro-cta-gradient:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 80ms;
+}
+
+/* ---- Glass Morph: liquid enter/exit transitions ---- */
+
+.glass-morph-in {
+  animation: glass-morph-in 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes glass-morph-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Scroll edge fade — simulate Tahoe scroll edge effect */
+.scroll-edge-fade {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+}
+
+.scroll-edge-fade-top {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 16px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 16px);
+}
+
+/* Capsule resize morph: mask the hard setBounds jump */
+.dv-capsule-morphing {
+  transform: scale(0.97);
+  opacity: 0.92;
+  transition:
+    transform 90ms var(--dv-ease-silk),
+    opacity 90ms var(--dv-ease-silk);
+}
+
+/* ---- Accessibility: Reduced Motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-on-mount::after,
+  .glow-breath,
+  .glow-breath--slow,
+  .glow-breath--accent,
+  .flow-border::before,
+  .flow-border--subtle::before,
+  .glass-depth-pulse,
+  .surface-highlight-shift,
+  .surface-luster::before,
+  .glass-flare::after,
+  .card-shine-hover::after,
+  .pro-upgrade-card,
+  .pro-upgrade-card::before,
+  .pro-upgrade-card .pro-sparkle-icon,
+  .pro-upgrade-card .pro-cta-btn,
+  .pro-cta-gradient,
+  .pro-cta-gradient::after,
+  [data-stagger],
+  .section-entrance {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .hover-lift:hover {
+    transform: none;
+  }
+
+  .glass-morph-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .dv-capsule-morphing {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   8. Border Beam — 悬停边框流光（纯追加，不影响中性化）
+   ============================================================
+   hover 时一道柔和淡蓝弧光沿卡片 1.5px 边框环匀速旋转。
+   独立 .border-beam 子元素承载，零伪元素冲突，不碰 flow-border。
+   色相锁 248–250（淡蓝），单色单弧，非彩虹。
+   ============================================================ */
+
+@property --beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes border-beam-rotate {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+.border-beam {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  /* 单色蓝单弧：~65° 柔光，中心近白高光，两侧淡出。色相 248–250 only */
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0deg,
+    transparent 296deg,
+    oklch(0.9 0.1 248 / 0) 300deg,
+    oklch(0.9 0.12 248 / 0.7) 332deg,
+    oklch(0.97 0.04 250 / 0.95) 346deg,
+    oklch(0.9 0.12 248 / 0.7) 358deg,
+    transparent 360deg
+  );
+  /* 把渐变裁成 1.5px 边框环 */
+  -webkit-mask:
+    linear-gradient(#000, #000) content-box,
+    linear-gradient(#000, #000);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000, #000) content-box,
+    linear-gradient(#000, #000);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+/*
+ * Background/idle power policy. Electron still composites a visible window
+ * after it loses focus, so decorative gradients, custom-property animations,
+ * and blur layers otherwise keep the GPU awake while the user works elsewhere.
+ * The activity hook only sets this attribute; functional spinners and the
+ * recording state are intentionally left alone.
+ */
+html[data-window-activity="background"] .shimmer-on-mount::after,
+html[data-window-activity="idle"] .shimmer-on-mount::after,
+html[data-window-activity="background"] .glow-breath,
+html[data-window-activity="background"] .glow-breath--slow,
+html[data-window-activity="background"] .glow-breath--accent,
+html[data-window-activity="idle"] .glow-breath,
+html[data-window-activity="idle"] .glow-breath--slow,
+html[data-window-activity="idle"] .glow-breath--accent,
+html[data-window-activity="background"] .glass-depth-pulse,
+html[data-window-activity="idle"] .glass-depth-pulse,
+html[data-window-activity="background"] .surface-highlight-shift,
+html[data-window-activity="idle"] .surface-highlight-shift,
+html[data-window-activity="background"] .surface-luster::before,
+html[data-window-activity="idle"] .surface-luster::before,
+html[data-window-activity="background"] .pro-upgrade-card,
+html[data-window-activity="idle"] .pro-upgrade-card,
+html[data-window-activity="background"] .pro-upgrade-card::before,
+html[data-window-activity="idle"] .pro-upgrade-card::before,
+html[data-window-activity="background"] .pro-upgrade-card .pro-sparkle-icon,
+html[data-window-activity="idle"] .pro-upgrade-card .pro-sparkle-icon,
+html[data-window-activity="background"] .pro-upgrade-card .pro-cta-btn,
+html[data-window-activity="idle"] .pro-upgrade-card .pro-cta-btn,
+html[data-window-activity="background"] .pro-cta-gradient,
+html[data-window-activity="idle"] .pro-cta-gradient,
+html[data-window-activity="background"] .pro-cta-gradient::after,
+html[data-window-activity="idle"] .pro-cta-gradient::after,
+html[data-window-activity="background"] .settings-modal-shell .premium-panel--hero,
+html[data-window-activity="idle"] .settings-modal-shell .premium-panel--hero,
+html[data-window-activity="background"] .settings-modal-shell .premium-panel.aurora-full,
+html[data-window-activity="idle"] .settings-modal-shell .premium-panel.aurora-full,
+html[data-window-activity="background"] .account-status-card,
+html[data-window-activity="idle"] .account-status-card,
+html[data-window-activity="background"] .border-beam,
+html[data-window-activity="idle"] .border-beam {
+  animation-play-state: paused !important;
+}
+
+/* Blur is useful during interaction but expensive for a parked transparent
+ * window. Static tints preserve hierarchy while allowing the compositor to
+ * release the continuously-updated backdrop surface. */
+html[data-window-activity="background"] .app-glass-shell .glass-panel,
+html[data-window-activity="background"] .app-glass-shell .premium-panel,
+html[data-window-activity="idle"] .app-glass-shell .glass-panel,
+html[data-window-activity="idle"] .app-glass-shell .premium-panel {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html[data-window-activity="background"] .settings-modal-overlay,
+html[data-window-activity="idle"] .settings-modal-overlay {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html[data-window-activity="background"]
+  .dv-capsule:not([data-state="recording"]):not([data-state="starting"]),
+html[data-window-activity="idle"]
+  .dv-capsule:not([data-state="recording"]):not([data-state="starting"]) {
+  animation-play-state: paused !important;
+  will-change: auto;
+}
+
+html[data-window-activity="background"]
+  .dv-capsule:not([data-state="recording"]):not([data-state="starting"])::before,
+html[data-window-activity="background"]
+  .dv-capsule:not([data-state="recording"]):not([data-state="starting"])::after,
+html[data-window-activity="idle"]
+  .dv-capsule:not([data-state="recording"]):not([data-state="starting"])::before,
+html[data-window-activity="idle"]
+  .dv-capsule:not([data-state="recording"]):not([data-state="starting"])::after {
+  animation-play-state: paused !important;
+}
+
+/* 悬停父卡 → 弧光淡入并匀速旋转。通用直接子选择器，仅 .border-beam 的宿主卡命中 */
+:hover > .border-beam {
+  opacity: 1;
+  animation: border-beam-rotate 3.4s linear infinite;
+}
+
+/* 降低动态偏好：彻底隐藏流光，保留既有静态描边 */
+@media (prefers-reduced-motion: reduce) {
+  .border-beam {
+    display: none;
+  }
+}

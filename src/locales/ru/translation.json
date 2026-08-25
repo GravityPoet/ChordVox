@@ -1,0 +1,2690 @@
+{
+  "app": {
+    "name": "ChordVox",
+    "loading": "Загрузка ChordVox...",
+    "oauth": {
+      "redirectTitle": "Перенаправление в ChordVox",
+      "closeTab": "Можете закрыть эту вкладку"
+    },
+    "buttons": {
+      "cancelRecording": "Отменить запись",
+      "cancelProcessing": "Отменить обработку"
+    },
+    "mic": {
+      "hotkeyToSpeak": "[{{hotkey}}] для диктовки",
+      "recording": "Запись...",
+      "processing": "Обработка...",
+      "clickToSpeak": "Нажмите для диктовки",
+      "status": {
+        "recording": "Запись",
+        "transcribing": "Расшифровка",
+        "polishing": "Доработка",
+        "completed": "Завершено",
+        "starting": "Подготовка"
+      },
+      "placeholder": {
+        "listening": "Слушаю...",
+        "transcribing": "Распознаю...",
+        "polishing": "Улучшаю...",
+        "pasting": "Вставка…",
+        "completed": "Эта диктовка завершена",
+        "starting": "Подготавливаем микрофон и модель…"
+      },
+      "starting": "Подготовка диктовки…"
+    },
+    "toasts": {
+      "hotkeyChanged": {
+        "description": "Горячая клавиша \"{{original}}\" была недоступна, поэтому ChordVox переключился на \"{{fallback}}\". Ее можно изменить в настройках.",
+        "title": "Горячая клавиша изменена"
+      },
+      "hotkeyUnavailable": {
+        "title": "Горячая клавиша недоступна",
+        "description": "Не удалось зарегистрировать горячую клавишу. Выберите другую в настройках."
+      },
+      "pushToTalkUnavailable": {
+        "title": "Push-to-Talk недоступен",
+        "description": "ChordVox использует режим нажать-для-разговора, потому что слушатель клавиш Windows не запустился. Нажмите горячую клавишу, чтобы начать и остановить диктовку.",
+        "descriptionWithReason": "ChordVox переключился в режим нажать-для-разговора: {{reason}}"
+      },
+      "dictationCancelled": {
+        "description": "Транскрипция была отменена голосовой командой.",
+        "title": "Диктовка отменена"
+      },
+      "dictationRestarted": {
+        "description": "Транскрипция отменена. Запись началась заново.",
+        "title": "Перезапуск диктовки"
+      }
+    },
+    "commandMenu": {
+      "startListening": "Начать прослушивание",
+      "stopListening": "Остановить прослушивание",
+      "hideForNow": "Скрыть"
+    },
+    "trialExpiredModal": {
+      "title": "Пробный период завершён",
+      "description": "Купите лицензию, чтобы продолжить использовать безлимитный голосовой ввод, ИИ-редактуру и автовставку в любом приложении.",
+      "valueBullets": "Безлимитный голосовой ввод · ИИ-редактура текста · Автовставка в курсор · Локальный режим с упором на приватность",
+      "actions": {
+        "buyNow": "Купить лицензию",
+        "haveKey": "У меня уже есть ключ",
+        "later": "Закрыть"
+      }
+    },
+    "aria": {
+      "dictationOverlay": "Панель диктовки",
+      "micButton": {
+        "idle": "Микрофон, ожидание. Активируйте, чтобы начать диктовку.",
+        "hover": "Микрофон, ожидание. Активируйте, чтобы начать диктовку.",
+        "starting": "Микрофон, подготовка диктовки.",
+        "recording": "Микрофон, идет запись. Активируйте, чтобы остановить.",
+        "processing": "Микрофон, обработка речи.",
+        "success": "Микрофон, диктовка завершена.",
+        "error": "Микрофон, ошибка. Активируйте, чтобы повторить."
+      }
+    },
+    "pasteConfirm": {
+      "cancel": "Отмена",
+      "confirm": "Вставить сейчас",
+      "title": "Скоро будет вставка"
+    }
+  },
+  "settings": {
+    "language": {
+      "sectionTitle": "Язык",
+      "sectionDescription": "Настройте язык интерфейса и транскрипции независимо друг от друга",
+      "uiLabel": "Язык интерфейса",
+      "uiDescription": "Выберите язык интерфейса ChordVox",
+      "transcriptionLabel": "Язык транскрипции",
+      "transcriptionDescription": "Выберите язык, на котором вы говорите, для более точной транскрипции",
+      "uiOption": {
+        "en": "English",
+        "es": "Español",
+        "fr": "Français",
+        "de": "Deutsch",
+        "pt": "Português",
+        "it": "Italiano",
+        "zh-CN": "简体中文",
+        "zh-TW": "繁體中文",
+        "ru": "Русский",
+        "ja": "日本語"
+      }
+    }
+  },
+  "tray": {
+    "toggleDictation": {
+      "show": "Показать панель диктовки",
+      "hide": "Скрыть панель диктовки"
+    },
+    "openControlPanel": "Открыть панель управления",
+    "quit": "Закрыть ChordVox",
+    "tooltip": "ChordVox — голосовая диктовка"
+  },
+  "menu": {
+    "appLabel": "ChordVox",
+    "quit": "Закрыть ChordVox",
+    "speech": "Речь",
+    "help": "Справка",
+    "learnMore": "Узнать больше",
+    "file": "Файл",
+    "closeWindow": "Закрыть окно",
+    "edit": "Правка",
+    "view": "Вид",
+    "window": "Окно"
+  },
+  "window": {
+    "voiceRecorderTitle": "Диктофон",
+    "controlPanelTitle": "Панель управления"
+  },
+  "support": {
+    "menuLabel": "Поддержка",
+    "contact": "Скопировать адрес поддержки",
+    "submitBug": "Сообщить об ошибке",
+    "card": {
+      "title": "Поддержка и обратная связь",
+      "description": "Возникла проблема, есть предложение или хотите следить за проектом?",
+      "github": "Проект на GitHub",
+      "email": "Скопировать адрес автора",
+      "emailAddress": "gravitypoet@icloud.com"
+    },
+    "emailCopied": {
+      "title": "Адрес скопирован",
+      "description": "{{email}} скопирован в буфер обмена."
+    },
+    "copyFailed": {
+      "title": "Не удалось скопировать адрес",
+      "description": "Скопируйте этот адрес вручную: {{email}}"
+    },
+    "openFailed": {
+      "title": "Не удалось открыть ссылку",
+      "description": "Откройте эту ссылку вручную: {{url}}"
+    }
+  },
+  "dialog": {
+    "openLink": {
+      "title": "Не удалось открыть ссылку",
+      "message": "Не удалось открыть ссылку в браузере:\n{{url}}\n\nОшибка: {{error}}"
+    },
+    "loadFailure": {
+      "title": "ChordVox не удалось загрузить",
+      "message": "ChordVox не смог загрузить интерфейс.",
+      "detail": {
+        "window": "Окно: {{windowName}}",
+        "error": "Ошибка {{errorCode}}: {{errorDescription}}",
+        "url": "URL: {{url}}",
+        "hint": "Попробуйте переустановить приложение или запустить с флагом --log-level=debug."
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "Ошибка запуска ChordVox",
+      "message": "Не удалось запустить приложение:\n\n{{error}}\n\nПожалуйста, сообщите об этой проблеме."
+    },
+    "globeHotkey": {
+      "title": "Клавиша Globe недоступна",
+      "message": "ChordVox не смог активировать горячую клавишу Globe.",
+      "details": {
+        "unknown": "Неизвестная ошибка при запуске слушателя клавиши Globe.",
+        "fallback": "Сочетание с клавишей Globe будет отключено; остальные горячие клавиши продолжат работать.",
+        "devHint": "Выполните `npm run compile:globe` и пересоберите приложение для генерации бинарного файла слушателя.",
+        "reinstallHint": "Попробуйте переустановить ChordVox или обратитесь в поддержку, если проблема сохраняется."
+      }
+    }
+  },
+  "fatalError": {
+    "title": "Требуется перезапуск ChordVox",
+    "restartingDescription": "В ChordVox произошла непредвиденная ошибка. Приложение перезапустится с новым сеансом; сохранённые настройки и история не изменятся.",
+    "stoppedDescription": "Вскоре после восстановления произошла ещё одна непредвиденная ошибка. ChordVox остановлен, чтобы избежать цикла сбоев. Откройте приложение снова."
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "Для настройки горячей клавиши необходима функция обратного вызова",
+      "globeOnlyMac": "Клавиша Globe доступна только на macOS.",
+      "alreadyRegistered": "«{{hotkey}}» уже зарегистрирована другим приложением.",
+      "osReserved": "«{{hotkey}}» может быть зарезервирована вашей операционной системой.",
+      "registrationFailed": "Не удалось зарегистрировать «{{hotkey}}». Возможно, она используется другим приложением.",
+      "trySuggestions": "Попробуйте: {{suggestions}}"
+    }
+  },
+  "systemSettings": {
+    "microphone": "Откройте системные настройки для настройки разрешений микрофона.",
+    "sound": "Откройте системные настройки звука (например, pavucontrol).",
+    "accessibility": "Настройки универсального доступа недоступны на этой платформе."
+  },
+  "titleBar": {
+    "quitTitle": "Закрыть ChordVox",
+    "quitConfirmTitle": "Закрыть ChordVox?",
+    "quitConfirmDescription": "Это закроет ChordVox и остановит фоновые процессы.",
+    "quit": "Закрыть",
+    "cancel": "Отмена"
+  },
+  "upgradePrompt": {
+    "paymentFailed": "Не удалось обработать платёж",
+    "weeklyLimit": "Вы достигли недельного лимита",
+    "pastDueDescription": "Бесплатная местная транскрипция все еще работает. Обновите способ оплаты, чтобы восстановить функции Pro и неограниченное использование хостинга.",
+    "limitDescription": "Использовано {{used}} из {{limit}} слов.\nВаша транскрипция сохранена и вставлена.",
+    "updatePayment": "Обновить способ оплаты",
+    "updatePaymentDescription": "Вернитесь к безлимитным Pro-транскрипциям.",
+    "upgradeToPro": "Перейти на Pro",
+    "upgradeDescription": "Безлимитные транскрипции. $9/мес.",
+    "useApiKey": "Использовать свой API-ключ",
+    "useApiKeyDescription": "Свой ключ — без ограничений.",
+    "switchToLocal": "Перейти на локальный режим",
+    "switchToLocalDescription": "Офлайн-транскрипция. Без ограничений.",
+    "rollingWeeklyLimit": "Скользящий недельный лимит"
+  },
+  "windowControls": {
+    "minimize": "Свернуть",
+    "maximize": "Развернуть",
+    "restore": "Восстановить",
+    "close": "Закрыть",
+    "actionFailedTitle": "Не удалось выполнить действие с окном",
+    "actionFailedDescription": "Не удалось выполнить «{{action}}». Повторите попытку."
+  },
+  "windows": {
+    "pttUnavailable": "Нативный слушатель Push-to-Talk недоступен"
+  },
+  "common": {
+    "back": "Назад",
+    "next": "Далее",
+    "skip": "Пропустить",
+    "complete": "Готово",
+    "reset": "Сбросить",
+    "refresh": "Обновить",
+    "download": "Скачать",
+    "cancel": "Отмена",
+    "chooseFolder": "Выбрать папку",
+    "working": "Выполняется",
+    "ready": "Готово",
+    "recommended": "Рекомендуется",
+    "active": "Активно",
+    "unavailable": "Недоступно",
+    "cloud": "Облако",
+    "local": "Локально",
+    "apiKey": "API-ключ",
+    "model": "Модель",
+    "loading": "Загрузка...",
+    "unknown": "Неизвестно",
+    "availableModels": "Доступные модели",
+    "fast": "Быстрый",
+    "hold": "Удержание",
+    "less": "Меньше",
+    "more": "Больше",
+    "noMatchingModels": "Подходящие модели не найдены",
+    "noModelsAvailable": "Нет доступных моделей",
+    "noModelsAvailableForProvider": "Для этого провайдера нет доступных моделей",
+    "private": "Приватный",
+    "tap": "Нажатие",
+    "openSystemSettings": "Открыть системные настройки",
+    "delete": "Удалить",
+    "deleteAll": "Удалить всё",
+    "downloading": "Загрузка",
+    "connectingDownloadNode": "Подключение к узлу загрузки",
+    "switchingDownloadNode": "Текущий узел медленный, переключаемся на резервный",
+    "verifyingDownload": "Проверка файла модели",
+    "repairingDownload": "Восстановление загрузки модели",
+    "installing": "Установка",
+    "deleting": "Удаление",
+    "clearing": "Очистка",
+    "downloadRequired": "Требуется загрузка",
+    "copy": "Копировать",
+    "showApiKey": "Показать API-ключ",
+    "hideApiKey": "Скрыть API-ключ",
+    "apiKeyHelp": "Получите API-ключ в панели управления вашего провайдера.",
+    "save": "Сохранить",
+    "saving": "Сохранение...",
+    "confirm": "Подтвердить",
+    "ok": "OK",
+    "use": "Использовать",
+    "selected": "Выбрано",
+    "close": "Закрыть"
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "Приветствие",
+      "language": "Язык",
+      "setup": "Настройка",
+      "permissions": "Разрешения",
+      "activation": "Активация",
+      "complete": "Готово"
+    },
+    "hotkey": {
+      "couldNotRegisterTitle": "Не удалось зарегистрировать горячую клавишу",
+      "couldNotRegisterDescription": "Эта комбинация клавиш, возможно, уже используется. Попробуйте другую."
+    },
+    "setup": {
+      "title": "Настройка",
+      "description": "Начните с локальной расшифровки, чтобы сначала подготовить приватность и удобство работы",
+      "language": "Язык",
+      "localPrivacyTitle": "Локально по умолчанию",
+      "localPrivacyDescription": "Мы рекомендуем сначала использовать локальную расшифровку, чтобы ваш голос и текст оставались на устройстве. При необходимости позже всегда можно переключиться на облако.",
+      "uiChineseHint": "请选择界面语言",
+      "moreLanguages": "Другие языки",
+      "highlights": {
+        "fast": {
+          "title": "Быстрая настройка",
+          "description": "Настройте язык, разрешения и горячую клавишу, пока готовится локальная модель."
+        },
+        "local": {
+          "title": "Сначала локально",
+          "description": "Локальная модель готовится в фоне и не блокирует онбординг."
+        },
+        "adjust": {
+          "title": "Настроить позже",
+          "description": "Движки, модели и API-ключи можно будет тонко настроить позже в настройках."
+        }
+      },
+      "modelPrepAfterNext": "Локальная модель по умолчанию начнет подготовку после нажатия Далее."
+    },
+    "permissions": {
+      "title": "Разрешения",
+      "microphoneTitle": "Микрофон",
+      "microphoneDescription": "Для записи голоса",
+      "grant": "Предоставить",
+      "accessibilityTitle": "Универсальный доступ",
+      "accessibilityDescription": "Нужно для автоматической вставки после транскрипции. ChordVox не записывает нажатия клавиш.",
+      "screenRecordingTitle": "Запись экрана (необязательно)",
+      "screenRecordingDescription": "Необязательно: разрешайте запись экрана только если нужен контекст скриншота для обработки ИИ. Базовая диктовка и текстовый контекст работают без этого.",
+      "testAndGrant": "Проверить и предоставить",
+      "requiredForApp": "Необходимо для работы ChordVox",
+      "microphoneRequired": "Требуется доступ к микрофону",
+      "skipDialog": {
+        "title": "Пока пропустить проверку разрешений?",
+        "description": "Микрофон и специальные возможности ещё не полностью готовы. Если пропустить сейчас, первая диктовка может не сработать. Позже это можно завершить в настройках.",
+        "confirm": "Всё равно пропустить",
+        "cancel": "Назад"
+      }
+    },
+    "transcription": {
+      "title": "Настройка транскрипции",
+      "description": "Выберите вариант расшифровки, с которым получится быстрее всего начать говорить",
+      "preferredLanguage": "Предпочитаемый язык"
+    },
+    "activation": {
+      "title": "Горячая клавиша",
+      "description": "Настройте горячую клавишу и попробуйте короткую диктовку, чтобы убедиться, что все работает.",
+      "hotkey": "Горячая клавиша",
+      "hotkeyHint": "Выберите сочетание клавиш, которое удобно нажимать каждый раз.",
+      "mode": "Режим",
+      "tapDescription": "Нажмите для старта/остановки",
+      "holdDescription": "Удерживайте во время речи",
+      "test": "Тест",
+      "testDescription": "Нажмите на поле ввода ниже, затем сразу используйте своё сочетание клавиш. Плавающая панель появится автоматически.",
+      "hotkeyToStartStop": "{{hotkey}} для старта/остановки",
+      "holdHotkey": "Удерживайте {{hotkey}}",
+      "textareaPlaceholder": "Нажмите сюда и используйте горячую клавишу для диктовки...",
+      "textareaLockedPlaceholder": "Это поле разблокируется автоматически, когда локальная модель будет готова.",
+      "focusInput": "Фокус на поле",
+      "manualFallbackHint": "Если диктовка пока нестабильна, можно ввести здесь короткую фразу вручную как запасной вариант и продолжить. Но позже всё равно лучше вернуться и пройти реальный тест.",
+      "stepFocusInput": "Нажмите на поле ввода ниже",
+      "stepSeeCompleted": "Дождитесь появления \"Завершено\"",
+      "successTitle": "Тестовая диктовка завершена",
+      "successDescription": "Горячая клавиша, плавающая панель и вставка работают нормально.",
+      "lastTranscriptLabel": "Только что распознано:",
+      "completeHint": "Перед продолжением выполните короткую диктовку или введите здесь короткую фразу вручную.",
+      "manualPassTitle": "Ручной запасной вариант сохранён, можно продолжать",
+      "manualPassDescription": "Сейчас можно продолжить, но позже всё равно рекомендуется вернуться и пройти настоящий тест диктовки по горячей клавише.",
+      "proTipsTitle": "Советы после настройки",
+      "proTipsDictionary": "Добавляйте редкие имена, бренды или термины в Настройки -> Пользовательский словарь — они будут распознаваться точнее.",
+      "proTipsAgentName": "Задайте имя ИИ в Настройки -> Агент, чтобы обращаться к нему во время диктовки (например, «Hey CC, сделай резюме»).",
+      "lockedWaitingTitle": "Тест автоматически разблокируется, когда модель будет готова",
+      "lockedWaitingDescription": "Сейчас можно настроить горячую клавишу и режим. Как только локальная модель завершит загрузку и проверку, эта зона автоматически откроется для первого реального теста.",
+      "lockedErrorTitle": "Тест сейчас недоступен",
+      "lockedErrorDescription": "Если подготовка локальной модели завершилась ошибкой, здесь нельзя пройти шаг через ручной ввод. Сейчас можно перейти в основное приложение и исправить это позже в настройках.",
+      "skipDialog": {
+        "title": "Пропустить первый тест диктовки?",
+        "description": "Этот шаг ещё не подтверждён через реальный путь диктовки по горячей клавише. Вы можете перейти в основное приложение, но позже стоит выполнить настоящий тест.",
+        "confirm": "Продолжить всё равно",
+        "cancel": "Назад"
+      },
+      "route": {
+        "local": {
+          "title": "Локальная модель готова",
+          "description": "Этот тест будет использовать локальную транскрипцию в реальном времени, и локальный режим останется приоритетным и дальше."
+        },
+        "error": {
+          "title": "Не удалось подготовить локальную модель",
+          "description": "Можно пока пропустить этот шаг, а позже в настройках повторить загрузку или переключиться на облачный резервный вариант."
+        },
+        "cloud": {
+          "title": "Локальная модель ещё готовится",
+          "description": "Если API-ключ уже настроен, этот тест сначала пойдёт через облако, а после завершения загрузки автоматически вернётся на локальный режим."
+        },
+        "waiting": {
+          "title": "Локальная модель готовится в фоне",
+          "description": "Сейчас нет доступного облачного резервного ключа, поэтому первый тест должен дождаться завершения локальной подготовки. Эта зона откроется автоматически, когда всё будет готово."
+        },
+        "progressLabel": "Модель: {{model}} · {{percentage}}%",
+        "installingLabel": "Модель: {{model}} · Идёт установка и проверка. Тест автоматически разблокируется, когда всё будет готово."
+      },
+      "status": {
+        "readyTitle": "Готово к первому тесту",
+        "listeningTitle": "Сейчас слушаем",
+        "processingTitle": "Обрабатываем последнюю фразу",
+        "processingDescription": "Оставьте эту страницу открытой и дождитесь, пока результат вернётся в поле ввода."
+      },
+      "elapsedLabel": "Время распознавания {{value}}",
+      "elapsedSecondsValue": "{{value}} с",
+      "elapsedMillisecondsValue": "{{value}} мс"
+    },
+    "streamingModelPicker": {
+      "currentFolderLabel": "Текущая папка модели",
+      "currentFolderHint": "Если в этой папке уже есть потоковые модели, мастер использует их повторно без новой загрузки.",
+      "readyDescription": "Локальная модель для распознавания в реальном времени готова. Диктовка по горячей клавише будет использовать её по умолчанию."
+    },
+    "completion": {
+      "title": "Все готово",
+      "description": "Горячая клавиша и первый тест диктовки готовы. Теперь можно начинать пользоваться ChordVox.",
+      "card": {
+        "title": "Локальная расшифровка по умолчанию",
+        "subtitle": "Голосовой ввод с упором на приватность",
+        "description": "Позже вы сможете сменить режим расшифровки в настройках."
+      },
+      "hotkeyReady": "{{hotkey}} готова в любой момент, когда захотите диктовать.",
+      "tryReady": "Вы уже завершили реальный тест диктовки, поэтому плавающая панель и вставка работают."
+    },
+    "workflowHotkeyTip": {
+      "description": "В Настройках → Горячие клавиши можно назначить отдельные сочетания для диктовки, перевода, редактирования и вопросов ИИ, а также выбрать модели для каждого сценария. Каждое сочетание сразу запускает свою задачу.",
+      "title": "В Pro доступно несколько горячих клавиш"
+    }
+  },
+  "controlPanel": {
+    "update": {
+      "readyTitle": "Обновление готово к установке",
+      "readyDescription": "Нажмите «Установить обновление», чтобы перезапустить приложение с новой версией.",
+      "problemTitle": "Проблема с обновлением",
+      "problemDescription": "Не удалось завершить обновление. Попробуйте позже.",
+      "installTitle": "Установить обновление",
+      "installDescription": "ChordVox перезапустится для применения обновления. Текущая работа будет сохранена.",
+      "couldNotInstallTitle": "Не удалось установить обновление",
+      "couldNotInstallDescription": "Что-то пошло не так. Попробуйте ещё раз.",
+      "couldNotDownloadTitle": "Не удалось скачать обновление",
+      "couldNotDownloadDescription": "Проверьте подключение к интернету и попробуйте снова.",
+      "installing": "Установка...",
+      "installButton": "Установить обновление",
+      "availableButton": "Доступно обновление"
+    },
+    "limit": {
+      "weeklyTitle": "Недельный лимит достигнут",
+      "weeklyDescription": "Ваш лимит обновляется на скользящей основе. Перейдите на Pro или используйте свой API-ключ для безлимитного использования."
+    },
+    "billing": {
+      "pastDueTitle": "Не удалось обработать платёж",
+      "pastDueDescription": "Не волнуйтесь — сейчас вы на бесплатном плане. Обновите способ оплаты в настройках, чтобы вернуться к Pro.",
+      "bannerDescription": "Сейчас вы на бесплатном плане — у вас есть {{limit}} слов в неделю. Обновите способ оплаты, чтобы вернуться к Pro.",
+      "updatePayment": "Обновить платёж"
+    },
+    "history": {
+      "title": "Транскрипции",
+      "backToHome": "Вернуться на главную",
+      "backToHomeHint": "Вернуться на главную страницу",
+      "couldNotLoadTitle": "Не удалось загрузить историю",
+      "couldNotLoadDescription": "Произошла ошибка при загрузке транскрипций. Попробуйте закрыть и снова открыть приложение.",
+      "copiedTitle": "Скопировано!",
+      "copiedDescription": "Текст скопирован в буфер обмена",
+      "couldNotCopyTitle": "Не удалось скопировать",
+      "couldNotCopyDescription": "Произошла ошибка при копировании в буфер обмена. Попробуйте снова.",
+      "clearTitle": "Очистить историю",
+      "clearDescription": "Все ваши транскрипции будут удалены. Это действие нельзя отменить.",
+      "clearedTitle": "История очищена",
+      "clearedDescription_one": "{{count}} транскрипция удалена",
+      "clearedDescription_few": "{{count}} транскрипции удалены",
+      "clearedDescription_many": "{{count}} транскрипций удалено",
+      "couldNotClearTitle": "Не удалось очистить историю",
+      "couldNotClearDescription": "Что-то пошло не так. Попробуйте снова.",
+      "deleteTitle": "Удалить транскрипцию",
+      "deleteDescription": "Эта транскрипция будет удалена безвозвратно.",
+      "couldNotDeleteTitle": "Не удалось удалить",
+      "couldNotDeleteDescription": "Эта транскрипция, возможно, уже была удалена.",
+      "couldNotDeleteDescriptionGeneric": "Что-то пошло не так. Попробуйте снова.",
+      "clear": "Очистить",
+      "empty": "Транскрипций пока нет",
+      "press": "Нажмите",
+      "toStart": "чтобы начать",
+      "clearedDescription": "Транскрипция {{count}} удалена.",
+      "clearedDescription_other": "{{count}} транскрипции удалены.",
+      "transcribeFile": "Расшифровать файл",
+      "transcribeFileProcessing": "Расшифровка...",
+      "cancelFileTranscription": "Отменить расшифровку",
+      "fileTranscriptionCancelledTitle": "Расшифровка файла отменена",
+      "fileTranscriptionCancelledDescription": "ChordVox больше не ждёт этот файл. Вы можете выбрать другой файл.",
+      "transcribedFileTitle": "Файл расшифрован",
+      "transcribedFileDescription": "Расшифровка {{name}} завершена.",
+      "couldNotTranscribeFileTitle": "Не удалось расшифровать файл",
+      "couldNotTranscribeFileDescription": "Что-то пошло не так при расшифровке этого файла. Пожалуйста, попробуйте другой файл или модель.",
+      "couldNotSaveFileTitle": "Не удалось сохранить расшифровку",
+      "couldNotSaveFileDescription": "Расшифровка завершена, но ее не удалось сохранить в истории. Скопируйте текст перед закрытием результата.",
+      "fileTranscriptionRequiresProTitle": "Для транскрипции файла требуется Pro",
+      "fileTranscriptionRequiresProDescription": "Обновите версию Pro, чтобы расшифровывать аудио- и видеофайлы внутри ChordVox. Бесплатная местная живая диктовка остается доступной.",
+      "emptyFileDescription": "Выбранный файл пуст. Пожалуйста, выберите действительный аудио- или видеофайл.",
+      "unsupportedFileDescription": "Этот формат файла не поддерживается. Выберите распространенный аудио- или видеофайл.",
+      "selectedFileFallback": "Ваш файл",
+      "transcribeFileProgress": "Транскрибация {{progress}}%...",
+      "searchPlaceholder": "Поиск транскрипций",
+      "searchAriaLabel": "Поиск транскрипций",
+      "noResults": "Нет транскрипций, соответствующих фильтрам.",
+      "clearFilters": "Сбросить фильтры",
+      "timeFilter": {
+        "label": "Период",
+        "all": "Все время",
+        "today": "Сегодня",
+        "week": "Последние 7 дней",
+        "month": "Последние 30 дней"
+      },
+      "export": "Экспорт",
+      "exportSelected": "Экспортировать выбранное",
+      "exportTooltip": "Экспортировать историю в файл",
+      "exportSelectedTooltip": "Экспортировать {{count}} выбранную расшифровку",
+      "exportFormat": {
+        "txt": "Обычный текст (.txt)",
+        "md": "Markdown (.md)",
+        "csv": "Таблица (.csv)",
+        "json": "JSON (.json)"
+      },
+      "exportEmptyTitle": "Нечего экспортировать",
+      "exportEmptyDescription": "Запишите хотя бы одну транскрипцию перед экспортом.",
+      "exportedTitle": "История экспортирована",
+      "exportedDescription": "Сохранена {{count}} запись в {{path}}",
+      "exportedDescription_other": "Сохранено {{count}} записей в {{path}}",
+      "openExportFolder": "Открыть папку",
+      "openExportFolderFailedTitle": "Не удалось открыть папку",
+      "openExportFolderFailedDescription": "Используйте путь выше, чтобы вручную найти экспортированный файл.",
+      "exportFailedTitle": "Не удалось экспортировать историю",
+      "exportFailedDescription": "При сохранении файла произошла ошибка. Повторите попытку.",
+      "exportSelectedTooltip_other": "Экспортировать {{count}} выбранных расшифровок",
+      "selectAllVisible": "Выбрать все показанные",
+      "deselectAllVisible": "Снять выбор с показанных",
+      "clearSelection": "Очистить выбор",
+      "selectedCount": "{{count}} выбрано",
+      "selectedCount_other": "{{count}} выбрано",
+      "selectRecordAria": "Выбрать эту расшифровку",
+      "deselectRecordAria": "Снять выбор с этой расшифровки",
+      "copyRecordAria": "Скопировать транскрипцию",
+      "deleteRecordAria": "Удалить транскрипцию",
+      "allStarred": "Только избранное",
+      "favoriteRecordAria": "Добавить эту транскрипцию в избранное или убрать из него",
+      "rePolishFailed": "Повторная правка не удалась",
+      "rePolishSaveFailed": "Обработка завершена, но результат не удалось сохранить.",
+      "favoriteUpdateFailedTitle": "Не удалось обновить избранное",
+      "favoriteUpdateFailedDescription": "Изменение избранного не сохранилось. Повторите попытку.",
+      "retry": "Повторить",
+      "loadMore": "Загрузить ещё",
+      "rePolishRecordAria": "Повторно отредактировать эту транскрипцию",
+      "rePolishSuccess": "Повторная правка завершена",
+      "starredOnly": "Избранное"
+    },
+    "cloudMigration": {
+      "title": "Добро пожаловать в ChordVox Pro",
+      "description": "Ваш 7-дневный бесплатный пробный период активирован! Мы переключили транскрипцию на ChordVox Cloud для более быстрых и точных результатов. Ваши предыдущие настройки сохранены — вы можете вернуться к ним в любой момент в настройках.",
+      "viewSettings": "Открыть настройки"
+    },
+    "aiCta": {
+      "title": "Улучшите транскрипции с помощью ИИ",
+      "description": "Автоматически исправляйте грамматику, пунктуацию и форматирование прямо во время диктовки.",
+      "enable": "Включить ИИ-улучшение"
+    },
+    "loading": "Загрузка...",
+    "streamingFallback": {
+      "title": "Не удалось запустить локальный потоковый режим",
+      "description": "ChordVox автоматически переключился на стандартный режим записи. Причина: {{reason}}"
+    }
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "Облако",
+      "local": "Локально",
+      "localDescription": "Работает на вашем устройстве. Полная приватность, работает офлайн.",
+      "cloudDescription": "Продвинутые модели через API. Быстро и мощно, требуется интернет."
+    },
+    "enableTitle": "Включить ИИ-улучшение текста",
+    "enableDescription": "Используйте ИИ для автоматического повышения качества транскрипций",
+    "custom": {
+      "endpointWithProtocol": "Введите полный базовый URL, включая протокол (например, https://server/v1).",
+      "httpsRequired": "Требуется HTTPS (HTTP допускается только для локальной сети).",
+      "endpointUnauthorized": "Конечная точка отклонила запрос (401/403). Добавьте API-ключ или измените настройки авторизации сервера.",
+      "endpointTitle": "URL конечной точки",
+      "endpointExamples": "Примеры:",
+      "ollama": "(Ollama)",
+      "localAi": "(LocalAI)",
+      "apiKeyOptional": "API-ключ (необязательно)",
+      "apiKeyHelp": "Необязательно. Отправляется как Bearer-токен для аутентификации. Это не ваш API-ключ OpenAI.",
+      "applyAndRefresh": "Применить и обновить",
+      "queryPrefix": "Мы запросим",
+      "querySuffix": "для получения списка доступных моделей.",
+      "modelsReloadHint": "Модели перезагрузятся, когда вы покинете поле URL или нажмёте «Применить и обновить».",
+      "enterEndpoint": "Введите URL конечной точки выше для загрузки моделей.",
+      "fetchingModels": "Получение списка моделей с конечной точки...",
+      "noModels": "Модели не найдены. Проверьте URL конечной точки.",
+      "providerName": "Пользовательский",
+      "ownerLabel": "Автор: {{owner}}",
+      "unableToLoadModels": "Не удалось загрузить модели с конечной точки.",
+      "protocolTitle": "Протокол",
+      "protocolAuto": "Авто (рекомендуется)",
+      "protocolChat": "Chat Completions",
+      "protocolResponses": "Responses",
+      "protocolGeminiGenerateContent": "Gemini generateContent",
+      "protocolHelp": "Авто сначала пробует Chat Completions, при необходимости переходит на Responses и запоминает, что работает для каждого endpoint.",
+      "detectedProtocolHelp": "В настоящее время Auto запоминает {{protocol}} для этой конечной точки.",
+      "resetDetectedProtocol": "Сбросить обнаруженный протокол",
+      "apiKeyHelpGemini": "Optional. Sent as x-goog-api-key for Gemini-compatible endpoints.",
+      "geminiEndpointHint": "Use a Gemini-compatible base URL, or paste a full generateContent endpoint.",
+      "modelIdTitle": "Model ID",
+      "modelIdHint": "Use this when the endpoint supports a model that is not listed below.",
+      "geminiModelIdHint": "Required when you enter a base URL. Full generateContent URLs fill this automatically.",
+      "fullEndpointModelsHint": "Full endpoint mode skips model-list loading and calls the configured endpoint directly.",
+      "geminiRequestPrefix": "Generation requests will call",
+      "bedrockEndpointHint": "По умолчанию генерируется автоматически из региона. Используйте пользовательскую конечную точку для конечных точек VPC и подобных настроек.",
+      "accessKeyId": "ID ключа доступа",
+      "secretAccessKey": "Секретный ключ доступа",
+      "sessionToken": "Токен сеанса (необязательно)",
+      "sessionTokenHelp": "Обязателен при использовании временных учётных данных AWS.",
+      "region": "Регион"
+    },
+    "getApiKey": "Не знаете, как настроить? Открыть инструкцию ->",
+    "selectModel": "Выберите модель",
+    "availableModels": "Доступные модели",
+    "gemini": {
+      "endpointHint": "Подсказка Gemini: AI-редактирование ChordVox использует официальный API generateContent, поэтому оставьте официальный endpoint Google на v1beta.",
+      "previewEndpointMismatch": "Этот официальный endpoint Google использует v1. Если выйти из этого поля или обновить список моделей, Gemini автоматически вернется на v1beta.",
+      "autoSwitchedToBeta": "Gemini был переключен на v1beta для совместимости с official generateContent."
+    }
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "Удалить модель",
+      "description": "Вы уверены, что хотите удалить эту модель? Для повторного использования её нужно будет скачать заново."
+    },
+    "parakeet": {
+      "multilingual": "25 языков",
+      "english": "Английский",
+      "externalRuntime": "Эта модель требует среду выполнения NVIDIA NeMo. Встроенный pipeline sherpa-onnx для NVIDIA пока не может напрямую скачать или запустить её."
+    },
+    "apiKeyOptional": "API-ключ (необязательно)",
+    "getKey": "Не знаете, как настроить? Открыть инструкцию ->",
+    "endpointUrl": "URL конечной точки",
+    "customProvider": "Пользовательский",
+    "customModelIdLabel": "Пользовательский ID модели",
+    "customModelIdHint": "Используйте, если провайдер поддерживает модель, которой нет в списке выше.",
+    "customModelIdDescription": "Пользовательский ID модели",
+    "fallback": {
+      "whisperModelDescription": "Модель",
+      "parakeetModelDescription": "Модель NVIDIA",
+      "paraformerModelDescription": "Полноточная модель Paraformer",
+      "graniteModelDescription": "Модель IBM Granite Speech",
+      "cohereModelDescription": "Модель Cohere Transcribe"
+    },
+    "whisperModels": "Модели Whisper",
+    "browse": "Обзор",
+    "whisperModelFileLabel": "Модель Whisper (.bin)",
+    "parakeetLocalHelp": "Модели Parakeet управляются через папку хранения моделей. Здесь можно скачать официальную модель или выбрать локальную папку модели.",
+    "parakeetModelDirectoryLabel": "Папка модели Parakeet",
+    "whisperModelFileHint": "Нажмите «Обзор» и выберите загруженный файл модели Whisper (.bin), например ggml-large-v3-turbo.bin.",
+    "fireRedRuntime": {
+      "title": "Runtime FireRed",
+      "description": "Для FireRedASR2-AED нужен отдельный локальный Python runtime. Установите или восстановите его здесь, чтобы эта модель работала на этом компьютере.",
+      "modelUnavailable": "Каталог модели FireRed пока недоступен. Убедитесь, что файлы модели полностью загружены, затем снова проверьте runtime.",
+      "modelErrorLabel": "Проверка модели:",
+      "ready": "Готово",
+      "installNeeded": "Требуется установка",
+      "repairNeeded": "Требуется восстановление",
+      "checking": "Проверка...",
+      "installAction": "Установить runtime",
+      "repairAction": "Восстановить runtime",
+      "recheckAction": "Проверить снова",
+      "currentPathLabel": "Текущий путь runtime",
+      "managedPathLabel": "Путь управляемой установки",
+      "sourceLabel": "Источник:",
+      "bootstrapLabel": "Python для установки:",
+      "available": "Доступно",
+      "pythonMissing": "Требуется Python 3.11+",
+      "missingModules": "Отсутствующие модули:",
+      "installSuccess": "Runtime FireRed установлен",
+      "repairSuccess": "Runtime FireRed восстановлен",
+      "installFailed": "Не удалось установить runtime FireRed",
+      "checkFailed": "Не удалось проверить runtime FireRed",
+      "sourceValues": {
+        "env": "Переменная окружения",
+        "managed": "Управляется приложением",
+        "sibling": "Рядом с каталогом модели",
+        "legacy": "Старый локальный путь",
+        "none": "Не найдено"
+      }
+    },
+    "appId": "ID приложения",
+    "accessToken": "Токен доступа",
+    "connectionTest": {
+      "button": "Проверить соединение",
+      "testing": "Проверка",
+      "unsupported": "Эта сборка не поддерживает проверку соединения.",
+      "defaultError": "Проверка соединения не удалась",
+      "failed": "Проверка соединения не удалась: {{message}}",
+      "testingProvider": "Проверяем соединение с {{provider}}...",
+      "modelMissingWarning": "Соединение успешно, но {{model}} не найдено в списке доступных моделей {{provider}}.",
+      "modelAvailable": "Соединение успешно. {{model}} доступна.",
+      "doubao": {
+        "testing": "Проверяем соединение с Doubao...",
+        "autoFallbackWarning": "Соединение успешно. Автоматический режим сейчас откатывается на {{model}}.",
+        "availableModel": "Соединение успешно. Доступная модель: {{model}}.",
+        "autoHint": "Автоматический режим предпочитает Streaming 2.0 и при необходимости откатывается на Streaming 1.0.",
+        "streaming2": "Streaming 2.0",
+        "streaming1Compatibility": "Streaming 1.0 (совместимость)",
+        "autoRecommended": "Авто"
+      },
+      "soniox": {
+        "testing": "Проверяем соединение с Soniox...",
+        "availableModel": "Соединение успешно. Доступная модель: {{model}}."
+      },
+      "deepgram": {
+        "testing": "Проверяем соединение с Deepgram...",
+        "availableModel": "Соединение успешно. Доступная модель: {{model}}."
+      },
+      "googleCloud": {
+        "testing": "Проверяем соединение с Google Cloud Speech-to-Text...",
+        "availableModel": "Соединение успешно. Доступная модель: {{model}}."
+      }
+    },
+    "paraformer": {
+      "chineseEnglish": "Китайский / английский",
+      "chinese": "Китайский"
+    },
+    "granite": {
+      "englishSpecialized": "Английская ASR",
+      "externalRuntime": "IBM Granite Speech управляется приложением через локальную среду Python. При первом использовании устанавливаются зависимости, загружается модель и запускается локальная служба транскрипции."
+    },
+    "cohere": {
+      "multilingual": "14 языков",
+      "externalRuntime": "Cohere Transcribe требует закрытого доступа Hugging Face и внешней ASR-среды с OpenAI-совместимой конечной точкой транскрипции. Настройте конечную точку, чтобы включить выбор."
+    },
+    "route": {
+      "cloudTitle": "Облако",
+      "cloudDescription": "API-модели / онлайн / выбор провайдера",
+      "localTitle": "Локально",
+      "localDescription": "Офлайн-модели / приватно / на устройстве",
+      "cloudProviderLabel": "Облачные провайдеры",
+      "localProviderLabel": "Локальные модели",
+      "localBuiltInProviderLabel": "Встроенные локальные модели"
+    },
+    "externalRuntime": {
+      "title": "Внешняя среда выполнения",
+      "configureAction": "Настроить среду выполнения",
+      "checkAction": "Проверить среду выполнения",
+      "configured": "Настроено",
+      "required": "Требуется",
+      "ready": "Готово",
+      "reachable": "Доступно",
+      "checking": "Проверка...",
+      "checkRequired": "Требуется проверка",
+      "checkFailed": "Проверка среды выполнения не удалась",
+      "checkUnsupported": "Проверки среды выполнения недоступны в этой сборке.",
+      "endpointRequired": "Сначала введите конечную точку среды выполнения.",
+      "readyMessage": "Среда выполнения и конечная точка транскрипции доступны. Теперь эту модель можно выбрать.",
+      "reachableMessage": "Среда выполнения доступна, но конечную точку транскрипции или список моделей не удалось полностью подтвердить. Вы можете использовать её; ChordVox переключится на запасной вариант, если транскрипция не удастся.",
+      "modelMissing": "Среда выполнения доступна, но эта модель не была возвращена из /v1/models. Перед использованием проверьте загруженный ID модели.",
+      "authRequired": "Среда выполнения отклонила запрос. Добавьте действительный API-ключ или измените настройки аутентификации среды выполнения.",
+      "endpointError": "{{message}}",
+      "advancedTitle": "Расширенные внешние среды выполнения",
+      "advancedBadge": "Использовать свою среду выполнения",
+      "advancedDescription": "Модели, которым всё ещё требуется самостоятельно управляемая среда выполнения или закрытый доступ, остаются здесь. Готовые для пользователей локальные модели перечислены выше.",
+      "endpointLabel": "Конечная точка среды выполнения",
+      "endpointHelp": "Используйте OpenAI-совместимую конечную точку аудиотранскрипции. Можно ввести базовый URL; приложение автоматически добавит /v1/audio/transcriptions.",
+      "apiKeyHelp": "Оставьте пустым, если ваша среда не требует аутентификации. Если значение задано, оно отправляется как Bearer-токен."
+    },
+    "paraformerLocalHelp": "Модели Paraformer управляются в вашем хранилище моделей. По умолчанию используется полноточный model.onnx для более точной локальной китайской транскрипции.",
+    "paraformerModelDirectoryLabel": "Каталог модели Paraformer",
+    "graniteLocalHelp": "Granite использует локальную среду выполнения, управляемую приложением. При первом использовании создаётся приватная среда Python/uv, устанавливаются зависимости, загружается модель размером около 4,64 ГБ, затем запускается служба транскрипции на 127.0.0.1; если порт по умолчанию занят, приложение автоматически выбирает свободный порт.",
+    "cohereLocalHelp": "Cohere Transcribe больше не использует встроенный процесс загрузки. Пользователям следует загрузить закрытую модель Hugging Face во внешней среде выполнения и настроить здесь совместимую конечную точку.",
+    "graniteRuntime": {
+      "title": "Локальная среда Granite",
+      "checking": "Проверка...",
+      "ready": "Готово",
+      "installNeeded": "Требуется установка",
+      "repairNeeded": "Требуется восстановление",
+      "pythonMissing": "Настройка среды выполнения не удалась",
+      "installAction": "Установить среду выполнения",
+      "installAndDownloadAction": "Установить и скачать"
+    },
+    "deepgram": {
+      "apiKeyPlaceholder": "API-ключ Deepgram",
+      "apiKeyHelp": "Deepgram использует Authorization: Token. Вставьте сюда только API-ключ.",
+      "endpointHelp": "По умолчанию используется API Deepgram /v1/listen для предварительно записанного аудио. Для прокси укажите конечную точку, совместимую с Deepgram Listen."
+    },
+    "googleCloud": {
+      "credential": "API-ключ / токен доступа",
+      "credentialPlaceholder": "AIza... или ya29...",
+      "credentialHelp": "Предпочтительно использовать долгоживущий API-ключ Google Cloud. OAuth-токены доступа тоже поддерживаются, но обычно они краткоживущие и лучше подходят для отладки. Если прямой вызов Speech-to-Text v2 по-прежнему возвращает PERMISSION_DENIED, проверьте, включён ли Speech-to-Text API и есть ли у вызывающей учётной записи разрешение speech.recognizers.recognize.",
+      "endpointHelp": "Введите полную конечную точку Speech-to-Text v2 Recognize. ID проекта, регион и учётные данные должны относиться к одному доступному проекту Google Cloud."
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorTitles": {
+        "sessionExpired": "Сессия истекла",
+        "offline": "Нет подключения к интернету",
+        "dailyLimitReached": "Дневной лимит достигнут"
+      },
+      "fallback": {
+        "title": "Резервный режим",
+        "description": "Локальный Whisper не сработал. Использован OpenAI API."
+      },
+      "byokFallback": {
+        "title": "Облачная транскрипция недоступна",
+        "description": "Настроенную облачную транскрипцию не удалось запустить, поэтому ChordVox завершил диктовку с помощью локальной модели."
+      },
+      "reasoningFailed": {
+        "title": "ИИ-редактирование не применено",
+        "description": "Исходная транскрипция успешно вставлена. Перед следующей диктовкой проверьте поставщика и модель ИИ."
+      },
+      "noAudio": {
+        "title": "Звук не обнаружен",
+        "description": "Не обнаружен пригодный звук. Текст не был вставлен или добавлен в историю. Проверьте микрофон и начните новую диктовку."
+      },
+      "systemRecovery": {
+        "title": "Аудиосеанс восстановлен",
+        "interruptedDescription": "Текущая диктовка была остановлена, когда компьютер перешёл в спящий режим. ChordVox сбросил микрофон и локальные модели; можно начать новую диктовку.",
+        "recoveringTitle": "Восстановление аудио",
+        "recoveringDescription": "ChordVox повторно подключает микрофон и локальные модели. Повторите попытку через несколько секунд.",
+        "degradedDescription": "После выхода из спящего режима аудио восстановлено не полностью. Начните новую диктовку; если ошибка повторится, перезапустите ChordVox."
+      },
+      "failureActions": {
+        "retry": "Начать новую диктовку",
+        "openMicrophoneSettings": "Открыть настройки микрофона",
+        "openSoundSettings": "Открыть настройки звука"
+      },
+      "failures": {
+        "recording": {
+          "title": "Запись не началась",
+          "description": "Аудио и текст не были сохранены. Проверьте доступ к микрофону и выбранный вход, затем начните новую диктовку."
+        },
+        "transcription": {
+          "title": "Не удалось распознать речь",
+          "description": "Ошибка распознавания: {{reason}}. Текст не был вставлен или добавлен в историю. Устраните проблему и начните новую диктовку.",
+          "unknownReason": "Причина неизвестна. Попробуйте ещё раз; если ошибка повторяется, переключите движок распознавания в настройках."
+        },
+        "historySave": {
+          "title": "История не сохранена",
+          "description": "Текст вставлен в целевое приложение, но не добавлен в локальную историю расшифровок. Вставленный текст не затронут; при необходимости начните новую диктовку."
+        }
+      },
+      "reasoningRequiresPro": {
+        "description": "Для AI-улучшения нужен Pro. Эта диктовка вставлена без AI-улучшения; обновитесь или активируйте лицензию, чтобы снова включить улучшение."
+      },
+      "reasoningPreviewUsed": {
+        "title": "AI-улучшение выполнено",
+        "description": "Эта диктовка использовала Pro-превью AI-улучшения. Сегодня осталось {{remaining}} из {{limit}} превью; с Pro каждая диктовка улучшается автоматически."
+      },
+      "reasoningPreviewLimit": {
+        "title": "Лимит AI-превью достигнут",
+        "description": "Сегодняшние {{limit}} Pro-превью AI-улучшения уже использованы. Эта диктовка вставлена без AI-улучшения; перейдите на Pro, чтобы продолжить автоматически."
+      },
+      "modelMissingAction": "Скачать модель",
+      "usageNearLimit": {
+        "description": "Вы использовали {{percent}}% недельной облачной квоты (осталось примерно {{remaining}} слов). Когда она закончится, мы переключимся на локальную транскрипцию; вы также можете перейти на Pro или использовать свой API-ключ.",
+        "title": "Облачная транскрипция почти исчерпана"
+      },
+      "previousStillProcessing": {
+        "title": "Предыдущая диктовка ещё расшифровывается",
+        "description": "Это нажатие не начало новую запись. Дождитесь завершения текущей расшифровки и продиктуйте снова."
+      },
+      "modelMissingPreflight": {
+        "title": "Модель распознавания не загружена",
+        "description": "Модель {{model}} ещё не загружена, поэтому эту диктовку не удастся расшифровать. Сначала загрузите модель или переключите движок."
+      },
+      "proNudge": {
+        "title": "Вы завершили {{total}} диктовок",
+        "description": "Локальная диктовка навсегда бесплатна. Для ИИ-редактуры, расшифровки файлов и продвинутых сценариев загляните в Pro.",
+        "action": "Узнать о Pro"
+      }
+    },
+    "clipboard": {
+      "pasteFailed": {
+        "title": "Ошибка вставки из буфера обмена",
+        "description": "Распознавание завершено, и текст находится в буфере обмена, но автоматическая вставка не сработала, однако текст сохранён в локальной истории. Вставьте его вручную и проверьте системные разрешения ChordVox перед следующей диктовкой.",
+        "macosDescription": "Распознавание завершено, и текст находится в буфере обмена, но автоматическая вставка не сработала, однако текст сохранён в локальной истории. Сначала вставьте его вручную с помощью Cmd+V. Затем откройте «Системные настройки» -> «Конфиденциальность и безопасность» -> «Универсальный доступ», разрешите ChordVox и проверьте «Мониторинг ввода».",
+        "windowsDescription": "Распознавание завершено, и текст находится в буфере обмена, но автоматическая вставка не сработала, однако текст сохранён в локальной истории. Сначала вставьте его вручную с помощью Ctrl+V. Затем проверьте настройки конфиденциальности и безопасности Windows и ограничения защитного ПО.",
+        "linuxDescription": "Распознавание завершено, и текст находится в буфере обмена, но автоматическая вставка не сработала, однако текст сохранён в локальной истории. Сначала вставьте его вручную с помощью Ctrl+V. Затем проверьте ограничения среды и работу xdotool, wtype или ydotool.",
+        "autoPasteAccessibilityRequired": "Для автоматической вставки нужны разрешения Универсального доступа. Откройте Системные настройки > Конфиденциальность и безопасность > Универсальный доступ, разрешите ChordVox и повторите попытку. Текст уже скопирован в буфер обмена — вставьте его вручную с помощью Cmd+V.",
+        "detailPrefix": "Подробности: "
+      },
+      "accessibilityDialog": {
+        "standard": {
+          "title": "Требуется доступ к универсальному доступу",
+          "message": "ChordVox нужны права универсального доступа, чтобы вставлять текст в другие приложения.",
+          "detail": "Текущее состояние: копирование в буфер обмена работает, но вставка (эмуляция Cmd+V) не работает.\n\nКак исправить:\n1. Откройте системные настройки\n2. Перейдите в Конфиденциальность и безопасность -> Универсальный доступ\n3. Нажмите на значок замка и введите пароль\n4. Добавьте ChordVox в список и включите его\n5. Перезапустите ChordVox\n\nБез этого разрешения продиктованный текст будет только копироваться в буфер обмена и не будет вставляться автоматически."
+        },
+        "stuck": {
+          "title": "Сбросить права универсального доступа",
+          "message": "Возможно, ChordVox всё ещё использует старые права универсального доступа от предыдущей версии.",
+          "detail": "Частый случай: после пересборки или переустановки ChordVox macOS может сохранить устаревшие разрешения, которые блокируют новое приложение.\n\nКак исправить:\n1. Откройте Системные настройки -> Конфиденциальность и безопасность -> Универсальный доступ\n2. Удалите все старые записи \"ChordVox\"\n3. Также удалите записи вроде \"Electron\" или непонятные старые названия приложений\n4. Нажмите + и снова добавьте текущее приложение ChordVox\n5. Убедитесь, что флажок включён\n6. Перезапустите ChordVox\n\nБез этого разрешения текст будет только копироваться в буфер обмена и не будет вставляться автоматически."
+        }
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "invalidHotkey": "Недопустимая горячая клавиша",
+        "notRegistered": "Горячая клавиша не зарегистрирована",
+        "saved": "Горячая клавиша сохранена",
+        "error": "Ошибка горячей клавиши"
+      },
+      "errors": {
+        "enterValidHotkey": "Введите допустимую горячую клавишу",
+        "unsupportedShortcut": "Это сочетание клавиш не поддерживается.",
+        "couldNotRegister": "Не удалось зарегистрировать эту клавишу. Выберите другую.",
+        "failedToRegister": "Не удалось зарегистрировать горячую клавишу. Попробуйте ещё раз."
+      },
+      "messages": {
+        "nowUsing": "Теперь для диктовки используется {{hotkey}}"
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "Превышено время ожидания загрузки. Проверьте подключение к интернету и попробуйте снова.",
+        "notFound": "Не удалось подключиться к серверу загрузки. Проверьте подключение к интернету.",
+        "corrupted": "Загрузка не завершена или файл повреждён. Попробуйте ещё раз.",
+        "rateLimited": "Сервер загрузки ограничивает количество запросов. Подождите несколько минут и попробуйте снова.",
+        "downloadNodesUnavailable": "Узлы загрузки временно недоступны или модель не прошла проверку. Повторите попытку позже.",
+        "server": "Ошибка сервера ({{error}}). Попробуйте позже.",
+        "generic": "Ошибка загрузки: {{error}}",
+        "extractionFailed": "Модель скачана, но установка не удалась. Нажмите «Скачать» для повторной установки без повторной загрузки.",
+        "diskSpace": "Недостаточно свободного места на диске для завершения загрузки модели.",
+        "unknown": "Неизвестная ошибка",
+        "actions": {
+          "timeout": "Совет: переключитесь на более стабильную сеть (проводную или другой Wi-Fi) и повторите попытку. Если не помогает, выберите модель поменьше.",
+          "notFound": "Совет: убедитесь, что подключены к интернету, отключите VPN/прокси при необходимости и нажмите «Скачать» снова.",
+          "corrupted": "Совет: нажмите «Скачать» ещё раз — ChordVox продолжит и проверит модель.",
+          "rateLimited": "Совет: подождите 2–5 минут и повторите. Не запускайте несколько загрузок одновременно.",
+          "downloadNodesUnavailable": "Совет: подождите несколько минут и повторите. При повторных сбоях выберите другой размер модели или смените сеть.",
+          "server": "Совет: временная проблема на стороне сервера. Подождите несколько минут и повторите.",
+          "extractionFailed": "Совет: освободите минимум 2 ГБ на диске и нажмите «Скачать», чтобы повторить только установку.",
+          "diskSpace": "Совет: освободите место на диске и повторите. Модели Whisper tiny/base требуют около 150 МБ.",
+          "generic": "Совет: повторите загрузку. Если сбои продолжаются, смените сеть или выберите модель поменьше."
+        }
+      },
+      "downloadFailed": {
+        "title": "Ошибка загрузки"
+      },
+      "installationFailed": {
+        "title": "Ошибка установки"
+      },
+      "downloadInProgress": {
+        "title": "Загрузка в процессе",
+        "description": "Дождитесь завершения текущей загрузки или отмените её."
+      },
+      "modelDeleted": {
+        "title": "Модель удалена",
+        "descriptionWithSpace": "Модель успешно удалена! Освобождено {{sizeMb}} МБ дискового пространства.",
+        "description": "Модель успешно удалена!"
+      },
+      "deleteFailed": {
+        "title": "Ошибка удаления",
+        "description": "Не удалось удалить модель: {{error}}"
+      },
+      "cancelFailed": {
+        "title": "Не удалось отменить загрузку",
+        "description": "Не удалось отменить загрузку: {{error}}"
+      },
+      "downloadCancelled": {
+        "title": "Загрузка отменена",
+        "description": "Загрузка была отменена."
+      }
+    },
+    "permissions": {
+      "paths": {
+        "windowsMicrophone": "Параметры -> Конфиденциальность -> Микрофон",
+        "linuxSound": "системные настройки звука",
+        "defaultSound": "Системные настройки -> Звук -> Вход",
+        "linuxPrivacy": "системные настройки конфиденциальности",
+        "defaultPrivacy": "Системные настройки -> Конфиденциальность и безопасность -> Микрофон"
+      },
+      "micErrors": {
+        "accessFailed": "Не удалось получить доступ к микрофону. Попробуйте ещё раз.",
+        "noMicrophones": "Микрофоны не обнаружены. Подключите микрофон или выберите его в {{settingsPath}}.",
+        "permissionDenied": "Разрешение отклонено. Откройте {{privacyPath}} и разрешите доступ для ChordVox.",
+        "couldNotStart": "Не удалось запустить выбранный микрофон. Выберите устройство ввода в {{settingsPath}} и повторите тест.",
+        "noActiveInput": "Активное устройство ввода звука не найдено. Выберите микрофон в {{settingsPath}}.",
+        "unknown": "Ошибка доступа к микрофону: {{error}}. Выберите другое устройство ввода и попробуйте снова.",
+        "unknownFallback": "Неизвестная ошибка"
+      },
+      "settingsTitles": {
+        "microphone": "Настройки микрофона",
+        "sound": "Настройки звука",
+        "accessibility": "Настройки универсального доступа"
+      },
+      "settingsErrors": {
+        "unableToOpenMicrophone": "Не удалось открыть настройки микрофона. Откройте системные настройки вручную.",
+        "unableToOpenSound": "Не удалось открыть настройки звука. Откройте системные настройки вручную.",
+        "unableToOpenAccessibility": "Не удалось открыть настройки универсального доступа. Откройте системные настройки вручную."
+      },
+      "micUnavailable": "API микрофона недоступны в этой среде. Перезапустите приложение.",
+      "titles": {
+        "microphoneUnavailable": "Микрофон недоступен",
+        "microphonePermissionRequired": "Требуется разрешение на использование микрофона",
+        "accessibilityNeeded": "Требуются разрешения универсального доступа",
+        "readyToGo": "Всё готово!",
+        "waylandClipboardMode": "Режим буфера обмена в Wayland",
+        "optionalPasteTool": "Дополнительно: установите утилиту вставки",
+        "accessibilityRefreshNeeded": "Обновить разрешение универсального доступа"
+      },
+      "descriptions": {
+        "accessibilityNeeded": "Предоставьте разрешения универсального доступа в системных настройках для автоматической вставки текста.",
+        "windowsReady": "Windows не требует специальных разрешений для автоматической вставки. Всё готово!",
+        "linuxReadyWithMethod": "Автоматическая вставка доступна через {{method}}. Всё готово!",
+        "waylandClipboardMode": "Автоматическая вставка недоступна в этой сессии Wayland. ChordVox скопирует текст в буфер обмена, и вы сможете вставить его с помощью Ctrl+V.",
+        "optionalPasteTool": "Для автоматической вставки установите {{tool}}:\n\n{{installCmd}}{{waylandNote}}\n\nБез этого инструмента ChordVox будет копировать текст в буфер обмена, и вы сможете вставить его с помощью Ctrl+V.",
+        "accessibilityRefreshNeeded": "Если до обновления ChordVox уже был разрешён в разделе «Универсальный доступ», возможно, вам нужно удалить старую запись разрешения в «Системные настройки -> Конфиденциальность и безопасность -> Универсальный доступ» и выдать разрешение заново."
+      },
+      "alerts": {
+        "accessibilityNeeded": "Требуются разрешения универсального доступа! Предоставьте их в системных настройках.",
+        "accessibilityRefreshNeeded": "Если «Универсальный доступ» был включён ещё до обновления, но по-прежнему не работает, удалите старую запись разрешения ChordVox и выдайте её заново."
+      },
+      "notes": {
+        "waylandWtype": "\n\nПримечание: для приложений XWayland также работает xdotool.",
+        "waylandXwaylandOnly": "\n\nПримечание: автоматическая вставка работает только для приложений XWayland."
+      },
+      "labels": {
+        "defaultPasteTool": "xdotool",
+        "xdotoolXwayland": "xdotool (приложения XWayland)"
+      },
+      "accessibilityTestText": "Тест универсального доступа ChordVox",
+      "warning": {
+        "messages": {
+          "macos": "Проверьте настройки звука, чтобы выбрать устройство ввода",
+          "windows": "Проверьте настройки Windows, чтобы выбрать устройство ввода",
+          "linux": "Проверьте системные настройки звука, чтобы выбрать устройство ввода"
+        },
+        "soundLabel": "Звук",
+        "privacyLabel": "Конфиденциальность"
+      }
+    }
+  },
+  "auth": {
+    "cloudNotConfigured": "Облако не настроено",
+    "common": {
+      "back": "Назад",
+      "continue": "Продолжить",
+      "or": "или"
+    },
+    "emailStep": {
+      "continueWithEmail": "Продолжить с электронной почтой",
+      "continueWithoutAccount": "Продолжить без аккаунта",
+      "emailPlaceholder": "you@example.com"
+    },
+    "errors": {
+      "accountExistsSignIn": "Аккаунт с этой электронной почтой уже существует. Войдите в систему.",
+      "accountNotFoundCreate": "Аккаунт с этой электронной почтой не найден. Создайте аккаунт.",
+      "authNotConfigured": "Аутентификация не настроена",
+      "createAccountFailed": "Не удалось создать аккаунт",
+      "failedProviderSignIn": "Не удалось войти через {{provider}}",
+      "failedUserCheck": "Не удалось проверить аккаунт пользователя",
+      "generic": "Что-то пошло не так. Попробуйте ещё раз.",
+      "invalidCredentials": "Неверный адрес электронной почты или пароль",
+      "plusAliasUnsupported": "Алиасы электронной почты с символом «+» не поддерживаются"
+    },
+    "getStarted": "Начать",
+    "legal": {
+      "and": "и",
+      "prefix": "Продолжая, вы соглашаетесь с нашими",
+      "privacy": "Политикой конфиденциальности",
+      "suffix": "",
+      "terms": "Условиями использования"
+    },
+    "passwordForm": {
+      "createAccount": "Создать аккаунт",
+      "createAccountButton": "Создать аккаунт",
+      "createAccountLink": "Создать аккаунт",
+      "createPasswordPlaceholder": "Придумайте пароль",
+      "creatingAccount": "Создание аккаунта...",
+      "enterPasswordPlaceholder": "Введите пароль",
+      "forgotPassword": "Забыли пароль?",
+      "fullNamePlaceholder": "Полное имя",
+      "haveAccount": "Уже есть аккаунт?",
+      "newHere": "Впервые здесь?",
+      "passwordMinLength": "Пароль должен содержать не менее 8 символов",
+      "signIn": "Войти",
+      "signInLink": "Войти",
+      "signingIn": "Вход...",
+      "welcomeBack": "С возвращением"
+    },
+    "signedIn": {
+      "ready": "Готово",
+      "welcomeBack": "С возвращением",
+      "welcomeBackName": "С возвращением, {{name}}"
+    },
+    "social": {
+      "completeInBrowser": "Завершите вход в браузере",
+      "continueWithGoogle": "Продолжить с Google"
+    },
+    "welcomeSubtitle": "Голосовой ввод с упором на приватность, локально по умолчанию",
+    "welcomeTitle": "Добро пожаловать в ChordVox",
+    "localPrivacyHint": "Мы рекомендуем сначала использовать локальную расшифровку, чтобы ваш голос и текст по умолчанию оставались на этом устройстве. Переходите в облако позже только при необходимости."
+  },
+  "cleanupPrompt": "Очистка",
+  "developerSection": {
+    "currentLogFile": "Текущий файл логов",
+    "debugMode": {
+      "label": "Режим отладки",
+      "description": "Записывает подробные данные выполнения, чтобы упростить диагностику и устранение неполадок."
+    },
+    "description": "Собирайте подробные логи для диагностики проблем",
+    "openLogsFolder": "Открыть папку логов",
+    "performanceNote": {
+      "description": "Отладочное логирование непрерывно записывает данные на диск и может незначительно влиять на производительность. Отключайте, когда не занимаетесь устранением неполадок.",
+      "label": "Примечание"
+    },
+    "title": "Отладочное логирование",
+    "toasts": {
+      "copied": {
+        "description": "Путь к файлу логов скопирован в буфер обмена",
+        "title": "Скопировано"
+      },
+      "copyFailed": {
+        "description": "Произошла ошибка при копировании в буфер обмена.",
+        "title": "Не удалось скопировать"
+      },
+      "debugDisabled": {
+        "description": "Отладочное логирование отключено",
+        "title": "Отладочное логирование отключено"
+      },
+      "debugEnabled": {
+        "description": "Подробные логи записываются на диск",
+        "title": "Отладочное логирование включено"
+      },
+      "loadFailed": {
+        "description": "Что-то пошло не так. Попробуйте повторно открыть настройки.",
+        "title": "Не удалось загрузить настройки отладки"
+      },
+      "openLogsFailed": {
+        "description": "Произошла ошибка при открытии папки логов.",
+        "title": "Не удалось открыть папку логов"
+      },
+      "updateFailed": {
+        "description": "Что-то пошло не так. Попробуйте ещё раз.",
+        "title": "Не удалось обновить отладочное логирование"
+      }
+    },
+    "whatGetsLogged": {
+      "items": {
+        "apiRequests": "API-запросы",
+        "audioProcessing": "Обработка аудио",
+        "errorDetails": "Детали ошибок",
+        "ffmpegOperations": "Операции FFmpeg",
+        "systemDiagnostics": "Системная диагностика",
+        "transcriptionPipeline": "Конвейер транскрипции"
+      },
+      "title": "Что записывается в логи"
+    },
+    "localOnlyNotice": "Журналы хранятся локально на этом устройстве и никогда не загружаются автоматически.",
+    "trace": {
+      "clear": "Прозрачный",
+      "description": "Подробная история запусков перенесена в «Журналы вызовов». В этом разделе теперь остаются только компактная сводка отладки и действия по очистке.",
+      "emptyEvents": "Выберите забег слева, чтобы просмотреть подробные сведения о событиях.",
+      "emptySessions": "Следов звонков пока нет",
+      "errorPrefix": "Ошибка",
+      "eventLabel": "Подробности мероприятия",
+      "models": {
+        "reasoning": "Уточнение модели",
+        "transcription": "Модель транскрипции"
+      },
+      "phases": {
+        "paste": "Вставить",
+        "reasoning": "Уточнение",
+        "recording": "Запись",
+        "session": "Сессия",
+        "transcription": "Транскрипция"
+      },
+      "refresh": "Обновить",
+      "runId": "Идентификатор запуска",
+      "profileLabel": "Профиль",
+      "sessionLabel": "Отслеживание вызовов",
+      "showingLatest": "Показаны до {{count}} последних запусков",
+      "startedAt": "Началось",
+      "profiles": {
+        "primary": "Профиль 1",
+        "secondary": "Профиль 2"
+      },
+      "reasons": {
+        "aiFallback": "AI-улучшение пропущено; использована исходная расшифровка.",
+        "reasoningRequiresPro": "Для AI-улучшения нужен Pro; использована исходная расшифровка.",
+        "reasoningPreviewUsed": "Pro-превью AI-улучшения выполнено. Сегодня осталось {{remaining}} из {{limit}}.",
+        "reasoningPreviewLimit": "Сегодняшние {{limit}} Pro-превью AI-улучшения использованы; использована исходная расшифровка.",
+        "noReasoningModel": "Модель AI-улучшения не выбрана.",
+        "noTextForReasoning": "Нет текста расшифровки для AI-улучшения.",
+        "reasoningDisabled": "AI-улучшение отключено.",
+        "reasoningUnavailable": "AI-улучшение недоступно; использована исходная расшифровка."
+      },
+      "status": {
+        "cancelled": "Отменено",
+        "error": "Неуспешный",
+        "fallback": "Fallback",
+        "route": "Маршрутизация",
+        "skipped": "Пропущено",
+        "start": "В ходе выполнения",
+        "success": "Успех",
+        "unknown": "Неизвестный"
+      },
+      "title": "Вызов диагностики",
+      "toasts": {
+        "clearFailed": {
+          "description": "Не удалось очистить сохранённые диагностические записи. История расшифровок не затронута. Повторите попытку.",
+          "title": "Не удалось очистить диагностику"
+        },
+        "cleared": {
+          "description": "Сохранённые диагностические записи удалены. История расшифровок не затронута.",
+          "title": "Диагностика очищена"
+        },
+        "confirmClear": {
+          "title": "Очистить диагностические записи?",
+          "description": "Очистить все сохранённые диагностические трассировки? Действие нельзя отменить, но история расшифровок не будет удалена.",
+          "confirmText": "Очистить все"
+        },
+        "loadFailed": {
+          "description": "Не удалось загрузить сохранённые диагностические записи. История расшифровок не затронута. Повторите попытку позже.",
+          "title": "Не удалось загрузить диагностику"
+        }
+      },
+      "updatedAt": "Последнее обновление",
+      "summary": {
+        "overviewTitle": "Обзор запуска",
+        "timelineTitle": "Ход этапов",
+        "recordingDuration": "Длительность записи",
+        "transcriptionDuration": "Время распознавания",
+        "reasoningDuration": "Время ИИ",
+        "totalDuration": "Общее время обработки",
+        "durationSecondsValue": "{{value}} с",
+        "flowDuration": "Полная длительность процесса",
+        "failedAt": "Сбой на этапе",
+        "recentRuns": "Недавние запуски",
+        "failedRuns": "Неудачные запуски",
+        "lastUpdated": "Последнее обновление",
+        "latestFailure": "Последняя ошибка",
+        "noRecentFailures": "Недавних ошибок нет",
+        "callRecordsHint": "Чтобы посмотреть подробности по каждому запуску, откройте «Журналы вызовов» под разделом «Модели ИИ»."
+      }
+    }
+  },
+  "dictionarySuffix": "Суффикс словаря",
+  "emailVerification": {
+    "checkEmailDescription": "Мы отправили ссылку для подтверждения на",
+    "checkEmailTitle": "Проверьте почту",
+    "errors": {
+      "resendFailed": "Не удалось повторно отправить письмо. Попробуйте ещё раз.",
+      "serverUnreachable": "Не удалось подключиться к серверу. Проверьте соединение и попробуйте снова."
+    },
+    "resendButton": "Отправить письмо повторно",
+    "resendIn": "Повторная отправка через {{seconds}} с",
+    "verifiedDescription": "Ваш аккаунт настроен.",
+    "verifiedTitle": "Электронная почта подтверждена",
+    "waiting": "Ожидание подтверждения..."
+  },
+  "errorBoundary": {
+    "description": "Произошла непредвиденная ошибка. Перезагрузите, чтобы попробовать снова.",
+    "reload": "Перезагрузить",
+    "title": "Что-то пошло не так",
+    "tryAgain": "Повторить",
+    "context": {
+      "dictation": "Панель диктовки аварийно завершилась.",
+      "controlPanel": "Панель управления аварийно завершилась.",
+      "onboarding": "Процесс onboarding аварийно завершился.",
+      "authentication": "Шаг аутентификации аварийно завершился.",
+      "commandMenu": "Меню команд аварийно завершилось."
+    }
+  },
+  "forgotPassword": {
+    "back": "Назад",
+    "backToSignIn": "Вернуться к входу",
+    "emailPlaceholder": "Введите вашу электронную почту",
+    "goBack": "Вернуться",
+    "notConfigured": "Аутентификация ещё не настроена.",
+    "sendResetLink": "Отправить ссылку для сброса",
+    "sending": "Отправка...",
+    "subtitle": "Введите вашу электронную почту, и мы отправим вам ссылку для сброса пароля",
+    "success": {
+      "description": "Мы отправили ссылку для сброса пароля на",
+      "help": "Не получили письмо? Проверьте папку «Спам» или попробуйте снова.",
+      "title": "Проверьте почту",
+      "tryAnother": "Попробовать другой адрес"
+    },
+    "title": "Сброс пароля"
+  },
+  "fullPrompt": "Полный промпт",
+  "hotkeyGuidance": {
+    "blockedDescription": "Эти сочетания заблокированы, так как часто используются системой.",
+    "blockedTitle": "Заблокированные сочетания",
+    "description": "Используйте эти правила для выбора сочетания клавиш, которое не будет конфликтовать с системой.",
+    "examplesTitle": "Допустимые примеры",
+    "platforms": {
+      "linux": "Linux",
+      "macos": "macOS",
+      "windows": "Windows"
+    },
+    "recommended": {
+      "linux": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Super+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Ctrl+Shift+J",
+        "4": "Alt+Space"
+      },
+      "macos": {
+        "0": "⌥Space",
+        "1": "⌃⌥S",
+        "2": "⌃⌥D",
+        "3": "Fn",
+        "4": "⌘⇧J"
+      },
+      "windows": {
+        "0": "Ctrl+Alt+Space",
+        "1": "Ctrl+Shift+S",
+        "2": "Ctrl+Alt+D",
+        "3": "Win+Alt+K"
+      }
+    },
+    "recommendedTitle": "Рекомендуемые сочетания",
+    "rulesTitle": "Правила сочетаний",
+    "showAll": "Показать все",
+    "showFewer": "Показать меньше",
+    "title": "Справка по сочетаниям клавиш",
+    "validationRules": {
+      "0": "Необходимо использовать хотя бы один модификатор (Ctrl, Alt, Shift и т.д.)",
+      "1": "Нельзя использовать зарезервированные системные сочетания",
+      "2": "Одиночные клавиши без модификаторов не допускаются",
+      "3": "Некоторые сочетания могут конфликтовать с другими приложениями"
+    }
+  },
+  "hotkeyInput": {
+    "ariaLabel": "Нажмите комбинацию клавиш для назначения горячей клавиши",
+    "clickToChange": "Нажмите для изменения",
+    "clickToChangeLower": "нажмите для изменения",
+    "clickToSet": "Нажмите для назначения горячей клавиши",
+    "fnCaptureHint": "Нажмите клавишу для комбинации или отпустите для Globe",
+    "fnHeldHint": "+ клавиша или отпустите для Globe",
+    "globe": "Globe",
+    "hotkeyLabel": "Горячая клавиша",
+    "keyHint": "+ клавиша",
+    "listening": "Ожидание...",
+    "pressAnyKey": "Нажмите любую клавишу или Ctrl+Shift+K",
+    "pressAnyKeyMac": "Нажмите любую клавишу или ⌘⇧K",
+    "recording": "Запись",
+    "tryShortcut": "Попробуйте Ctrl+Shift+K",
+    "tryShortcutMac": "Попробуйте ⌘⇧K"
+  },
+  "languageSelector": {
+    "noLanguagesFound": "Языки не найдены",
+    "searchPlaceholder": "Поиск..."
+  },
+  "microphoneSettings": {
+    "builtIn": "(Встроенный)",
+    "errors": {
+      "unableToAccess": "Не удалось получить доступ к микрофону. Проверьте разрешения."
+    },
+    "helpText": "Выберите конкретный микрофон или используйте системные настройки по умолчанию.",
+    "inputDevice": "Устройство ввода",
+    "noBuiltInDetected": "Встроенный микрофон не обнаружен. Используется системный по умолчанию.",
+    "preferBuiltIn": {
+      "description": "Внешние микрофоны могут вызывать задержку или снижение качества транскрипции",
+      "label": "Предпочитать встроенный микрофон"
+    },
+    "selectPlaceholder": "Выберите микрофон",
+    "systemDefault": "Системный по умолчанию",
+    "unknownDevice": "Неизвестное устройство",
+    "using": "Используется:"
+  },
+  "pasteToolsInfo": {
+    "checking": "Проверка системных возможностей...",
+    "installCommands": {
+      "archLinux": "# Arch Linux",
+      "debianUbuntu": "# Debian / Ubuntu",
+      "debianUbuntuMint": "# Debian / Ubuntu / Mint",
+      "fedoraRhel": "# Fedora / RHEL"
+    },
+    "installPrefix": "Для автоматической вставки текста установите",
+    "methodReady": "для автоматической вставки текста",
+    "noteXwaylandAlso": "Примечание: для приложений XWayland также работает xdotool.",
+    "noteXwaylandOnly": "Примечание: автоматическая вставка работает только для приложений XWayland.",
+    "optionalEnableTitle": "Дополнительно: включите автоматическую вставку",
+    "readyTitle": "Автоматическая вставка готова",
+    "recheck": "Проверить снова",
+    "recheckChecking": "Проверка...",
+    "title": "Автоматическая вставка",
+    "usingMethodPrefix": "Используется",
+    "waylandClipboardDescription": "Автоматическая вставка недоступна в этой сессии Wayland. ChordVox скопирует текст в буфер обмена, и вы сможете вставить его вручную с помощью Ctrl+V.",
+    "waylandClipboardTitle": "Режим буфера обмена в Wayland",
+    "windowsReady": "Windows поддерживает автоматическую вставку из коробки. Настройка не требуется!",
+    "withoutToolPrefix": "Без этого инструмента ChordVox скопирует текст в буфер обмена. Вы сможете вставить его вручную с помощью Ctrl+V.",
+    "xwaylandAppsOnly": "автоматическая вставка работает только для приложений XWayland"
+  },
+  "promptStudio": {
+    "common": {
+      "copied": "Скопировано",
+      "copy": "Копировать",
+      "reset": "Сбросить",
+      "save": "Сохранить"
+    },
+    "defaultTestInput": "Hi CC, какая сегодня погода?",
+    "dialogs": {
+      "reset": {
+        "description": "Промпт сброшен до значения по умолчанию.",
+        "title": "Сброс завершён"
+      },
+      "saved": {
+        "description": "Ваш пользовательский промпт будет использоваться для всей последующей обработки ИИ.",
+        "title": "Промпт сохранён"
+      }
+    },
+    "edit": {
+      "agentNameLabel": "Имя агента:",
+      "cautionLabel": "Внимание",
+      "cautionTextPrefix": "Изменение этого промпта может повлиять на качество транскрипции.",
+      "cautionTextSuffix": "Сохраняйте заполнитель {{agentName}}, чтобы обнаружение агента работало корректно.",
+      "placeholder": "Введите пользовательский системный промпт..."
+    },
+    "tabs": {
+      "customize": "Настроить",
+      "test": "Тест",
+      "view": "Просмотр"
+    },
+    "test": {
+      "addressHint": "Попробуйте обратиться к «{{agentName}}» для проверки режима инструкций",
+      "aiModels": "ИИ-модели",
+      "baseUrlMissing": "Базовый URL для {{provider}} не указан. Добавьте его в настройках ИИ-моделей.",
+      "cleanup": "Очистка",
+      "disabledInSettingsPrefix": "ИИ-улучшение текста отключено.",
+      "disabledInSettingsSuffix": "Включите его в ИИ-моделях для тестирования промптов.",
+      "disabledReasoning": "ИИ-улучшение текста отключено. Включите его в ИИ-моделях для тестирования промптов.",
+      "failed": "Тест не пройден: {{error}}",
+      "inputLabel": "Ввод",
+      "inputPlaceholder": "Введите текст для тестирования...",
+      "instruction": "Инструкция",
+      "modelLabel": "Модель",
+      "noModelSelected": "Модель не выбрана",
+      "none": "Нет",
+      "outputLabel": "Результат",
+      "processing": "Обработка...",
+      "chordvoxCloud": "ChordVox Cloud",
+      "providerLabel": "Провайдер",
+      "run": "Запустить тест"
+    },
+    "view": {
+      "customPrompt": "Пользовательский промпт",
+      "defaultPrompt": "Промпт по умолчанию",
+      "modes": {
+        "agent": {
+          "description": "Активируется фразой «{{agentName}}» — выполняет команды, отвечает на вопросы, создаёт контент",
+          "label": "Агент"
+        },
+        "cleanup": {
+          "description": "Быстрый режим — убирает слова-паразиты, исправляет грамматику и пунктуацию",
+          "label": "Очистка"
+        }
+      },
+      "modified": "Изменён"
+    }
+  },
+  "resetPassword": {
+    "backToSignIn": "Вернуться к входу",
+    "confirmPasswordPlaceholder": "Подтвердите новый пароль",
+    "continue": "Продолжить",
+    "errors": {
+      "passwordMinLength": "Пароль должен содержать не менее 8 символов",
+      "passwordsDoNotMatch": "Пароли не совпадают"
+    },
+    "goBack": "Вернуться",
+    "newPasswordPlaceholder": "Новый пароль",
+    "notConfigured": "Аутентификация не настроена.",
+    "passwordMinLength": "Пароль должен содержать не менее 8 символов",
+    "resetButton": "Сбросить пароль",
+    "resetting": "Сброс...",
+    "subtitle": "Введите новый пароль ниже",
+    "success": {
+      "description": "Ваш пароль обновлён. Вы вошли в систему.",
+      "title": "Пароль успешно сброшен"
+    },
+    "title": "Создание нового пароля"
+  },
+  "settingsModal": {
+    "groups": {
+      "app": "Приложение",
+      "intelligence": "Интеллект",
+      "profile": "Профиль",
+      "speech": "Речь",
+      "system": "Система"
+    },
+    "sections": {
+      "account": {
+        "description": "Лицензия, активация и тариф",
+        "label": "Аккаунт"
+      },
+      "agentConfig": {
+        "description": "Настройка голосового агента",
+        "label": "Агент"
+      },
+      "aiModels": {
+        "description": "Очистка и улучшение текста",
+        "label": "ИИ-модели"
+      },
+      "developer": {
+        "description": "Логи, диагностика и данные",
+        "label": "Разработчик"
+      },
+      "dictionary": {
+        "description": "Пользовательские слова и фразы",
+        "label": "Словарь"
+      },
+      "general": {
+        "description": "Внешний вид, горячая клавиша и автозапуск",
+        "label": "Настройки"
+      },
+      "permissions": {
+        "description": "Микрофон и универсальный доступ",
+        "label": "Разрешения"
+      },
+      "privacy": {
+        "description": "Облачное резервное копирование и аналитика",
+        "label": "Конфиденциальность"
+      },
+      "prompts": {
+        "description": "Студия системных промптов",
+        "label": "Промпты"
+      },
+      "transcription": {
+        "description": "Движок распознавания речи",
+        "label": "Транскрипция"
+      },
+      "fileTranscription": {
+        "label": "Транскрибация файлов",
+        "description": "Транскрибируйте аудио и видеофайлы"
+      },
+      "hotkeys": {
+        "label": "Горячие клавиши",
+        "description": "Основная клавиша, профиль 2 и режим активации"
+      },
+      "transcriptionHistory": {
+        "label": "История расшифровок",
+        "description": "Просмотр сохранённых на устройстве диктовок"
+      },
+      "callRecords": {
+        "label": "Диагностические записи",
+        "description": "Недавно сохранённые этапы, сбои и длительность"
+      },
+      "context": {
+        "label": "Контекст",
+        "description": "Настройки улучшения с учетом контекста"
+      }
+    },
+    "title": "Настройки"
+  },
+  "settingsPage": {
+    "account": {
+      "badges": {
+        "free": "Бесплатный",
+        "freeForever": "Бесплатно навсегда",
+        "limitReached": "Лимит достигнут",
+        "pastDue": "Просрочен",
+        "pro": "Pro",
+        "trial": "Пробный"
+      },
+      "billing": {
+        "couldNotOpenDescription": "Не удалось открыть страницу оплаты. Попробуйте ещё раз.",
+        "couldNotOpenTitle": "Не удалось открыть оплату",
+        "manageBilling": "Управление оплатой",
+        "opening": "Открытие...",
+        "updatePaymentMethod": "Обновить способ оплаты"
+      },
+      "checkout": {
+        "couldNotOpenDescription": "Не удалось открыть страницу оформления. Попробуйте ещё раз.",
+        "couldNotOpenTitle": "Не удалось открыть оформление",
+        "opening": "Открытие...",
+        "upgradeToPro": "Перейти на Pro"
+      },
+      "disabled": "Отключено",
+      "featuresDisabled": "Функции аккаунта отключены",
+      "featuresDisabledDescription": "Установите VITE_NEON_AUTH_URL в файле .env для включения функций аккаунта.",
+      "notConfigured": "Аутентификация не настроена",
+      "notSignedIn": "Вы не вошли в систему",
+      "notSignedInDescription": "Создайте аккаунт, чтобы разблокировать премиум-функции.",
+      "offline": "Нет сети",
+      "pastDue": {
+        "description": "Сейчас вы на бесплатном плане. Обновите способ оплаты, чтобы вернуться к Pro.",
+        "title": "Не удалось обработать платёж"
+      },
+      "planDescriptions": {
+        "freeUsage": "{{used}} / {{limit}} слов на этой неделе",
+        "nextBilling": "Следующее списание: {{date}}",
+        "pastDue": "{{used}} / {{limit}} бесплатных слов на этой неделе — обновите платёж для восстановления Pro",
+        "trial": "Осталось {{days}} дней — безлимитные транскрипции",
+        "unlimited": "Без ограничений"
+      },
+      "planLabels": {
+        "free": "Бесплатный",
+        "pro": "Pro",
+        "trial": "Пробный"
+      },
+      "planTitle": "Тариф",
+      "rollingWeeklyLimit": "Скользящий недельный лимит",
+      "signOut": {
+        "failedDescription": "Произошла ошибка при выходе. Попробуйте ещё раз.",
+        "failedTitle": "Не удалось выйти",
+        "signOut": "Выйти",
+        "signingOut": "Выход..."
+      },
+      "signedIn": "Вы вошли",
+      "title": "Аккаунт",
+      "toasts": {
+        "approachingLimit": {
+          "description": "Вы использовали {{used}} из {{limit}} бесплатных слов на этой неделе. Перейдите на Pro для безлимитного использования.",
+          "title": "Приближение к недельному лимиту"
+        }
+      },
+      "trialCta": {
+        "button": "Начать пробный период на 7 дней",
+        "description": "Ниже можно запустить 7-дневный пробный период Pro и попробовать улучшение ИИ, расшифровку файлов, тесты Prompt Studio, BYOK и несколько сценариев с горячими клавишами. Бесплатный локальный голосовой ввод будет доступен все это время.",
+        "title": "Голосовой ввод бесплатно навсегда, плюс 7 дней Pro бесплатно"
+      },
+      "user": "Пользователь",
+      "wordsRemaining": "Осталось {{remaining}}",
+      "trialReminder": {
+        "title": "До конца пробного периода {{days}} дн.",
+        "description": "Купите лицензию сейчас, чтобы голосовой ввод, ИИ-редактура и автовставка продолжали работать без перерыва.",
+        "button": "Посмотреть лицензии",
+        "headline": "Высокоточная расшифровка речи навсегда доступна бесплатно.",
+        "subheadline": "Перейдите на Pro, чтобы открыть AI-улучшенные рабочие процессы, высокоточную расшифровку длинных файлов и полный доступ к топ-моделям вроде ChatGPT, Claude и Gemini."
+      },
+      "desktopLicense": {
+        "title": "Лицензия для настольных компьютеров",
+        "descriptionConfigured": "В этой сборке используются лицензии для настольных компьютеров, чтобы разблокировать Pro функции на этом устройстве.",
+        "descriptionNotConfigured": "Бесплатная местная транскрипция все еще работает. Если вам нужна активация Pro, обратитесь в службу поддержки.",
+        "currentStatusLabel": "Текущий статус",
+        "currentStatusDescription": "Доступна бесплатная местная транскрипция. Используйте платный лицензионный ключ, чтобы разблокировать Pro функции на этом устройстве.",
+        "currentStatusActiveDescription": "Pro активен на этом устройстве.",
+        "currentStatusTrialDescription": "Пробная версия Pro активна. {{days}} дней осталось для улучшения ИИ и других платных функций.",
+        "currentStatusTrialExpiredDescription": "Бесплатная местная транскрипция остается доступной. Введите лицензионный ключ Pro, чтобы снова разблокировать платные функции.",
+        "currentStatusNotConfigured": "Ретранслятор лицензий Creem еще не готов для этой сборки. Пожалуйста, свяжитесь со службой поддержки.",
+        "licenseApiUrlLabel": "Лицензия API URL",
+        "licenseApiUrlPlaceholder": "https://license.ваш-домен.com",
+        "licenseApiUrlDescription": "Установите это значение один раз, если вы маршрутизируете проверки лицензий Creem через собственный ретранслятор.",
+        "inputPlaceholder": "Введите лицензионный ключ",
+        "activatedHint": "Это устройство активировано. Используйте «Сменить ключ» только при замене лицензии.",
+        "actions": {
+          "activate": "Активировать",
+          "activating": "Активация",
+          "validate": "Подтвердить",
+          "checking": "Проверка",
+          "clear": "Прозрачный",
+          "changeKey": "Изменить ключ",
+          "save": "Сохранять",
+          "saving": "Сохранение"
+        },
+        "statusLabels": {
+          "active": "Активный",
+          "trial": "Pro Пробная версия",
+          "offlineGrace": "Офлайн Грейс",
+          "expired": "Истекший",
+          "invalid": "Неверный",
+          "notActivated": "Не активировано"
+        },
+        "meta": {
+          "plan": "План: {{plan}}",
+          "expires": "Срок действия истекает: {{date}}",
+          "expiresPermanent": "Срок действия: постоянный",
+          "lastCheck": "Последняя проверка: {{date}}"
+        },
+        "dialogs": {
+          "removeTitle": "Удалить сохраненную лицензию?",
+          "removeDescription": "Это устройство вернется в нелицензионный режим, пока вы не активируете его снова.",
+          "removeConfirm": "Удалять"
+        },
+        "toasts": {
+          "keyRequiredTitle": "Требуется лицензионный ключ",
+          "keyRequiredDescription": "Введите лицензионный ключ перед активацией.",
+          "activatedTitle": "Лицензия активирована",
+          "activatedDescription": "Теперь это устройство активировано.",
+          "activationFailedTitle": "Активация не удалась",
+          "activationFailedDescription": "Лицензионный ключ не удалось активировать.",
+          "activationLimitDescription": "Этот лицензионный ключ поддерживает только одно устройство. Для переключения устройств обратитесь в службу поддержки для сброса предыдущей активации.",
+          "serverNotReadyDescription": "Служба лицензирования еще не готова. Пожалуйста, свяжитесь со службой поддержки.",
+          "trialServerUnavailableDescription": "Для запуска пробной версии Pro требуется онлайн-проверка лицензии. Повторите попытку, когда сервис лицензирования будет доступен.",
+          "deviceNotActivatedDescription": "Этот лицензионный ключ не активирован на этом устройстве.",
+          "revokedDescription": "Этот лицензионный ключ был отозван. Пожалуйста, свяжитесь со службой поддержки.",
+          "expiredDescription": "Срок действия этого лицензионного ключа истек.",
+          "notActiveDescription": "Этот лицензионный ключ в настоящее время не активен.",
+          "activationUnexpectedError": "Непредвиденная ошибка при активации лицензии.",
+          "validatedTitle": "Лицензия подтверждена",
+          "validateFailedTitle": "Проверка лицензии не удалась",
+          "validatedDescription": "Лицензия действительна.",
+          "invalidDescription": "Лицензия недействительна.",
+          "validateUnexpectedError": "Непредвиденная ошибка при проверке статуса лицензии.",
+          "removedTitle": "Лицензия удалена",
+          "removedDescription": "Сохраненное состояние лицензии было очищено.",
+          "removeFailedTitle": "Не удалось удалить лицензию",
+          "removeFailedDescription": "Непредвиденная ошибка при удалении сохраненной лицензии.",
+          "licenseApiSavedTitle": "Лицензия API сохранена.",
+          "licenseApiSavedDescription": "Для активации лицензии теперь используется новый API URL.",
+          "licenseApiSaveFailedTitle": "Не удалось сохранить лицензию API.",
+          "licenseApiSaveFailedDescription": "Пожалуйста, проверьте URL и повторите попытку.",
+          "validatingTitle": "Проверка лицензии",
+          "validatingDescription": "Идёт запрос к серверу лицензий. Это может занять несколько секунд.",
+          "trialExpiredDescription": "На этом устройстве уже использован 7-дневный пробный период Pro. Бесплатный локальный голосовой ввод продолжает работать; посмотрите тарифы Pro только когда будете готовы продолжить с Pro."
+        }
+      },
+      "trialStartDialog": {
+        "title": "Запустить 7-дневный пробный период Pro?",
+        "description": "Пробный период включает улучшение ИИ, расшифровку файлов, BYOK, несколько сценариев с горячими клавишами и расширенные сценарии промптов. Бесплатный локальный голосовой ввод останется доступен и после его окончания.",
+        "confirm": "Начать пробный период на 7 дней",
+        "cancel": "Может быть позже",
+        "startedTitle": "7-дневный пробный период Pro начат",
+        "startedDescription": "Теперь вы можете попробовать улучшение ИИ, расшифровку файлов, BYOK, несколько сценариев с горячими клавишами и расширенные сценарии промптов.",
+        "notStartedTitle": "Пробный период не начат",
+        "unavailableDescription": "Пробный период не был начат. Бесплатный локальный голосовой ввод продолжает работать, и вы можете повторить попытку позже.",
+        "expiredTitle": "7-дневный пробный период Pro завершен",
+        "expiredDescription": "На этом устройстве уже использован {{days}}-дневный пробный период Pro. Бесплатный локальный голосовой ввод продолжает работать; нажмите «Посмотреть лицензии», когда захотите продолжить с Pro."
+      },
+      "efficiencyOverview": {
+        "title": "Обзор эффективности",
+        "description": "Автоматически рассчитывается по сохраненной истории расшифровок.",
+        "loadErrorTitle": "Не удалось загрузить статистику расшифровки",
+        "loadErrorDescription": "Повторите попытку чуть позже.",
+        "units": {
+          "words": "слов",
+          "characters": "знаков",
+          "mixed": "единиц слов/символов"
+        },
+        "duration": {
+          "subMinute": "< 1 мин",
+          "hoursAndMinutes": "{{hours}} ч {{minutes}} мин",
+          "minutesOnly": "{{minutes}} мин"
+        },
+        "speed": {
+          "perMinute": "{{speed}} {{unit}}/мин"
+        },
+        "cards": {
+          "completed": {
+            "label": "Завершённые диктовки",
+            "value_one": "{{formattedCount}} диктовка",
+            "value_few": "{{formattedCount}} диктовки",
+            "value_many": "{{formattedCount}} диктовок",
+            "value_other": "{{formattedCount}} диктовки",
+            "helper": "{{duration}} записи · от начала до конца"
+          },
+          "words": {
+            "label": "Всего слов",
+            "helper": "Сегодня {{total}} {{unit}}"
+          },
+          "saved": {
+            "label": "Сэкономленное время"
+          },
+          "speed": {
+            "label": "Средняя скорость диктовки"
+          }
+        },
+        "onboardingFunnel": {
+          "events": {
+            "first_successful_dictation": "Первая успешная диктовка",
+            "onboarding_completed": "Онбординг завершен",
+            "onboarding_started": "Онбординг начат",
+            "step_activation": "Достигнут шаг активации",
+            "step_permissions": "Достигнут шаг разрешений"
+          },
+          "localOnly": "Хранится только на этом устройстве — никогда не загружается",
+          "summary": {
+            "activatedIn": "Первая диктовка через {{duration}} после онбординга",
+            "completedIn": "Онбординг завершен за {{duration}}",
+            "durationHours": "{{value}} ч",
+            "durationMinutes": "{{value}} мин",
+            "durationSeconds": "{{value}} с",
+            "notActivated": "Успешных диктовок пока нет",
+            "notCompleted": "Онбординг не завершен (достигнуто: {{step}})"
+          },
+          "title": "Воронка онбординга (локально)"
+        }
+      },
+      "monthlyReminder": {
+        "badge": "Продление Pro через {{days}} дн.",
+        "headline": "Сэкономьте 25%, перейдя на годовой тариф Pro",
+        "description": "Ваша ежемесячная подписка будет продлена через {{days}} дн. Перейдите на годовой тариф сейчас, чтобы сэкономить 25% и продолжить работу с ИИ без прерываний.",
+        "button": "Перейти на годовой"
+      }
+    },
+    "callRecords": {
+      "overview": {
+        "cancelledNoStageData": "Этот запуск был отменён и не содержит данных этапов."
+      }
+    },
+    "agentConfig": {
+      "agentName": "Имя агента",
+      "cleanupExample": "Обычная диктовка очищается автоматически",
+      "cleanupMode": "Обычная диктовка",
+      "description": "Назовите своего AI-ассистента. Обычная диктовка очищается автоматически; произносите имя, когда хотите перевести, кратко изложить, переписать или сгенерировать текст.",
+      "dialogs": {
+        "updatedDescription": "Ваш ассистент теперь называется \"{{name}}\". Для обычной диктовки имя не нужно; скажите \"Hi {{name}}\", когда хотите перевести, кратко изложить, переписать или сгенерировать текст.",
+        "updatedTitle": "Имя агента обновлено"
+      },
+      "examplesTitle": "Примеры",
+      "helper": "Выберите что-то короткое и естественное для произношения",
+      "howItWorksDescription": "Для обычной диктовки не нужно обращаться к {{agentName}}. AI автоматически превращает речь в текст, который можно отправить или сохранить. Чтобы обработать только что сказанное, сначала произнесите текст, затем скажите \"Hi {{agentName}}, translate this into English\". Чтобы сразу создать новый текст, начните с \"Hi {{agentName}}\" и сформулируйте запрос.",
+      "howItWorksTitle": "Как это работает",
+      "instructionMode": "Режим ассистента",
+      "placeholder": "например, CC, Nova, Atlas...",
+      "save": "Сохранить",
+      "title": "Голосовой агент",
+      "examples": {
+        "normalDictation": {
+          "mode": "Обычная диктовка",
+          "input": "Встреча завтра в 15:00. Возьмите PRD, бюджетную таблицу и дизайн-файлы."
+        },
+        "processPrevious": {
+          "mode": "Обработать предыдущий текст",
+          "input": "Это описание продукта рассказывает о распознавании речи, автоматической очистке и AI-ассистенте. Hi {{agentName}}, translate this into English"
+        },
+        "directGenerate": {
+          "mode": "Создать напрямую",
+          "input": "Hi {{agentName}}, write an email telling the client we have a meeting tomorrow at 3 PM"
+        },
+        "format": {
+          "mode": "Формат",
+          "input": "Hi {{agentName}}, convert this to bullet points"
+        }
+      },
+      "styleRules": {
+        "addRule": "Добавить правило",
+        "pickAppsTitle": "Выберите приложения для стилей текста",
+        "chooseApps": "Выбрать приложения",
+        "changeApp": "Сменить приложение",
+        "advancedMatcher": "Дополнительно: настроить вручную",
+        "pickAppsFailed": "Не удалось открыть выбор приложений. Правило также можно добавить вручную.",
+        "manualAdd": "Добавить вручную",
+        "customPromptPlaceholder": "Введите здесь пользовательскую инструкцию по стилю...",
+        "delete": "Удалить",
+        "description": "Автоматически добавляет конкретные инструкции по тону и стилю для ИИ-правки в зависимости от активного приложения.",
+        "emptyRules": "Правил пока нет. Выберите приложение, чтобы начать.",
+        "matchTypeApp": "Название приложения содержит",
+        "matchTypeBundle": "Префикс Bundle ID",
+        "matchValuePlaceholder": "например, wechat или com.tencent.xin",
+        "styleKeyCasual": "Неформальный (разговорный)",
+        "styleKeyCustom": "Пользовательский (ваш prompt)",
+        "styleKeyProfessional": "Профессиональный (деловой/формальный)",
+        "styleKeyTechnical": "Технический (для разработчиков/точный)",
+        "title": "Правила стиля правки по приложениям"
+      }
+    },
+    "aiModels": {
+      "customSetup": "Пользовательская настройка",
+      "customSetupDescription": "Используйте собственного провайдера и API-ключ.",
+      "description": "Бесплатный локальный голосовой ввод остается доступным. Здесь можно настроить улучшение ИИ, BYOK и качество очистки; первое реальное действие Pro может запустить бесплатный 7-дневный пробный период.",
+      "enableTextCleanup": "ИИ-полировка текста",
+      "enableTextCleanupDescription": "ИИ автоматически полирует текст и умно оптимизирует ваш документ.",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "Просто работает. Настройка не требуется.",
+      "title": "ИИ-улучшение текста",
+      "trialHint": "Первое улучшение ИИ может запустить бесплатный 7-дневный пробный период Pro.",
+      "toasts": {
+        "switchedCloud": {
+          "description": "Улучшение текста будет использовать облачный сервис ChordVox.",
+          "title": "Переключено на ChordVox Cloud"
+        },
+        "switchedCustom": {
+          "description": "Настройте собственного провайдера и API-ключ.",
+          "title": "Переключено на пользовательскую настройку"
+        },
+        "savedCloud": {
+          "title": "Выбрано ChordVox Cloud"
+        },
+        "savedCustom": {
+          "title": "Выбрана пользовательская настройка"
+        },
+        "savedWhileOff": {
+          "description": "AI-полировка транскриптов сейчас неактивна; эти настройки применятся после включения."
+        }
+      },
+      "statusOn": "Активно",
+      "statusOff": "Неактивно",
+      "disabledHintWithTrial": "Сейчас неактивно. Настройки можно изменить в любое время; включите переключатель, чтобы начать 7-дневную пробную Pro-версию.",
+      "disabledHint": "Сейчас неактивно. Настройки можно изменить в любое время; включите переключатель, чтобы применять их к новым транскрипциям.",
+      "proRequiredDialog": {
+        "title": "ИИ-улучшение текста требует Pro",
+        "description": "На этом устройстве сейчас нет активного доступа Pro, поэтому ИИ-улучшение текста пока нельзя включить. Базовая диктовка продолжает работать; если бесплатные ИИ-превью на сегодня закончились, Pro включает автоматическое улучшение новых транскрипций.",
+        "trialExpiredTitle": "Пробный период Pro завершён",
+        "trialExpiredDescription": "На этом устройстве пробный период Pro уже использован, поэтому ИИ-улучшение текста не может оставаться включённым без Pro. Базовая диктовка продолжает работать; посмотрите цены Pro, когда захотите продолжить автоматическое улучшение.",
+        "unavailableTitle": "Не удалось включить ИИ-улучшение",
+        "unavailableDescription": "ChordVox не удалось проверить доступ Pro или начать пробный период сейчас. Базовая диктовка продолжает работать; попробуйте позже или сначала посмотрите цены Pro.",
+        "confirm": "Посмотреть цены Pro"
+      }
+    },
+    "developer": {
+      "clearCache": "Удалить модели",
+      "dataManagementDescription": "Управляйте локальными моделями и данными приложения",
+      "dataManagementTitle": "Управление данными",
+      "modelCache": "Локальные модели",
+      "open": "Открыть",
+      "removeModels": {
+        "confirmText": "Удалить модели",
+        "description": "Будут удалены загруженные локальные модели, управляемые здесь ({{path}}), что освободит дисковое пространство. При необходимости их можно скачать снова.",
+        "failedDescription": "Произошла ошибка при удалении моделей. Попробуйте ещё раз.",
+        "failedDescriptionShort": "Не удалось удалить кешированные модели.",
+        "failedTitle": "Не удалось удалить модели",
+        "successDescription": "Все кешированные модели удалены.",
+        "successTitle": "Модели удалены",
+        "title": "Удалить скачанные модели?"
+      },
+      "removing": "Удаление...",
+      "resetAll": {
+        "confirmText": "Удалить всё",
+        "description": "Все настройки, транскрипции и кешированные данные будут безвозвратно удалены. Приложение перезагрузится после сброса.",
+        "failedDescription": "Что-то пошло не так. Попробуйте ещё раз или переустановите приложение.",
+        "failedTitle": "Не удалось сбросить",
+        "successDescription": "Всё сброшено. Приложение сейчас перезагрузится.",
+        "successTitle": "Готово",
+        "title": "Сбросить все данные приложения"
+      },
+      "resetAppData": "Сбросить данные приложения",
+      "resetAppDataDescription": "Безвозвратно удалить все настройки, транскрипции и кешированные данные",
+      "settingsTransfer": {
+        "description": "Экспортируйте текущие настройки в файл или восстановите настройки из файла.",
+        "export": "Экспорт настроек",
+        "exportFailedDescription": "Не удалось экспортировать настройки. Пожалуйста, попробуйте еще раз.",
+        "exportFailedTitle": "Экспорт не удался",
+        "exportSuccessDescription": "Настройки экспортированы в: {{path}}.",
+        "exportSuccessTitle": "Экспорт выполнен успешно",
+        "import": "Импортировать настройки",
+        "importConfirmButton": "Импорт и перезапись",
+        "importConfirmDescription": "Это приведет к перезаписыванию текущих настроек и перезапуску приложения по завершении.",
+        "importConfirmTitle": "Импортировать настройки сейчас?",
+        "importFailedDescription": "Не удалось импортировать настройки. Пожалуйста, проверьте формат файла.",
+        "importFailedTitle": "Импорт не удался",
+        "importSuccessDescription": "Настройки импортированы. Приложение сейчас перезапустится.",
+        "importSuccessTitle": "Импорт выполнен успешно",
+        "title": "Резервное копирование настроек",
+        "importFailedWithReason": "Не удалось импортировать настройки: {{reason}}",
+        "importInvalidPayload": "Содержимое файла не является допустимой резервной копией настроек ChordVox.",
+        "importNoSettingsFound": "Не найдено настроек ChordVox для импорта. Пожалуйста, выберите файл резервной копии настроек ChordVox.",
+        "importSuccessWithWarningsDescription": "Настройки импортированы. Приложение сейчас перезапустится. Некоторые шаги синхронизации во время выполнения не удались, но восстановление настроек не было заблокировано."
+      },
+      "hotkeyDiagnostics": {
+        "title": "Диагностика горячих клавиш",
+        "description": "Проверьте текущий бэкенд горячих клавиш, состояние регистрации и более безопасные значения по умолчанию для этой платформы.",
+        "runtimeState": "Состояние выполнения",
+        "runtimeDescription": "Если горячая клавиша выглядит сохранённой, но ничего не делает, проверьте здесь, какой путь регистрации реально использует основной процесс.",
+        "refresh": "Обновить",
+        "platform": "Платформа",
+        "sessionType": "Тип сеанса",
+        "desktopSession": "Сеанс рабочего стола",
+        "backend": "Бэкенд горячих клавиш",
+        "primaryHotkey": "Основная горячая клавиша",
+        "secondaryHotkey": "Дополнительная горячая клавиша",
+        "primaryStatus": "Статус основной",
+        "secondaryStatus": "Статус дополнительной",
+        "registered": "Зарегистрирована",
+        "notRegistered": "Не зарегистрирована",
+        "recommendedTitle": "Рекомендуемое значение по умолчанию",
+        "recommendedDescription": "{{hotkey}} теперь является более безопасным значением по умолчанию на этой платформе. При первой установке и в сценариях отката приоритет будет у него.",
+        "warnings": {
+          "linuxSuper": "Текущая горячая клавиша Linux всё ещё включает Super/Meta, которые часто перехватываются ярлыками рабочего стола.",
+          "windowsSuper": "Текущая горячая клавиша Windows всё ещё включает Win/Super, из-за чего высок риск конфликта с системными сочетаниями."
+        },
+        "backends": {
+          "globe": "macOS Globe",
+          "globalShortcut": "Electron globalShortcut",
+          "windows-native": "Нативный слушатель Windows",
+          "gnome-wayland": "Нативное сочетание GNOME Wayland",
+          "native-modifier": "Нативный слушатель клавиш-модификаторов"
+        }
+      }
+    },
+    "dictionary": {
+      "add": "Добавить",
+      "addWordOrPhrase": "Добавить слово или фразу",
+      "agentNameAutoManaged": "Имя агента (управляется автоматически)",
+      "clearAll": "Очистить всё",
+      "clearDictionaryDescription": "Все слова из пользовательского словаря будут удалены. Это действие нельзя отменить.",
+      "clearDictionaryTitle": "Очистить словарь?",
+      "description": "Добавляйте слова, имена или технические термины для повышения точности транскрипции",
+      "howItWorksDescription": "Добавленные слова включаются в промпт ИИ, чтобы модель распознавала и сохраняла эти термины при очистке транскрипции.",
+      "howItWorksTitle": "Как это работает",
+      "noWords": "Слова ещё не добавлены",
+      "placeholder": "например, Kubernetes, Dr. Martinez, OpenAI...",
+      "pressEnterToAdd": "Нажмите Enter для добавления",
+      "removeWord": "Удалить слово",
+      "tipDescription": "Добавляйте имена собственные, технические термины или любые слова, которые могут быть распознаны неправильно.",
+      "tipLabel": "Совет",
+      "title": "Пользовательский словарь",
+      "wordsAppearHere": "Добавленные слова появятся здесь",
+      "yourWords": "Ваши слова",
+      "addToDictionary": "Добавить в словарь",
+      "ignoreSuggestion": "Игнорировать предложение",
+      "resetIgnored": "Сбросить игнорируемые предложения",
+      "loadingSuggestionHistory": "Анализ всей истории расшифровок…",
+      "suggestionHistoryLoadFailed": "Не удалось прочитать старые записи. Временно используются только загруженные записи.",
+      "syncFailedTitle": "Не удалось сохранить словарь",
+      "syncFailedDescription": "Изменение отменено, чтобы локальная расшифровка и ИИ оставались синхронизированы. Повторите попытку.",
+      "suggestionsTitle": "Предлагаемые слова"
+    },
+    "general": {
+      "appearance": {
+        "auto": "Авто",
+        "dark": "Тёмная",
+        "description": "Управляйте внешним видом ChordVox",
+        "light": "Светлая",
+        "theme": "Тема",
+        "themeDescription": "Выберите светлую, тёмную тему или следуйте системным настройкам",
+        "title": "Внешний вид"
+      },
+      "floatingIcon": {
+        "recordingAnimation": "Анимация записи",
+        "recordingAnimationDescription": "Выберите отклик плавающей панели во время записи и обработки",
+        "animationStyles": {
+          "flow": "Плавная линия",
+          "stardust": "Звездная пыль",
+          "nebula": "Туманность",
+          "planet": "Планета"
+        },
+        "description": "Управляйте видимостью значка диктовки на экране",
+        "title": "Плавающий значок"
+      },
+      "hotkey": {
+        "activationMode": "Режим активации",
+        "description": "Комбинация клавиш для запуска и остановки голосовой диктовки",
+        "title": "Горячая клавиша диктовки",
+        "secondary": {
+          "workflowsTitle": "Сценарии горячих клавиш Pro",
+          "workflowsDescription": "Назначьте разные клавиши для диктовки, перевода, редактирования и вопросов ИИ. Каждый сценарий хранит собственные модели транскрипции и ИИ.",
+          "actions": {
+            "dictate": {
+              "title": "Диктовка",
+              "description": "Преобразовать речь прямо в текст"
+            },
+            "translate": {
+              "title": "Перевод",
+              "description": "Продиктовать и получить другой язык"
+            },
+            "polish": {
+              "title": "Редактирование",
+              "description": "Создать ясный текст, готовый к отправке"
+            },
+            "chat": {
+              "title": "Спросить ИИ",
+              "description": "Произнести вопрос и вставить ответ"
+            }
+          },
+          "addWorkflow": "Добавить сценарий",
+          "emptyTitle": "Добавьте первый сценарий горячей клавиши",
+          "emptyDescription": "Выберите задачу, сочетание клавиш и модели. После этого одна клавиша запустит весь сценарий.",
+          "newWorkflow": "Новый сценарий горячей клавиши",
+          "editWorkflow": "Изменить сценарий горячей клавиши",
+          "editorDescription": "Последовательно выберите задачу, клавиши и модели.",
+          "cancelEdit": "Отмена",
+          "chooseAction": "1 Что должна делать эта горячая клавиша?",
+          "workflowName": "Название (необязательно)",
+          "targetLanguage": "Перевести на",
+          "shortcut": "2 Выберите горячую клавишу",
+          "modelsForWorkflow": "3 Выберите модели для сценария",
+          "modelsDescription": "Выберите модели в настройках, вернитесь сюда и примените текущие модели. После сохранения сценарий сохранит этот выбор.",
+          "useCurrentModels": "Использовать текущие модели",
+          "transcriptionModel": "Модель транскрипции",
+          "reasoningModel": "Модель ИИ",
+          "aiModelRequired": "Для перевода, редактирования и вопросов ИИ нужна модель ИИ.",
+          "duplicateHotkey": "Эта горячая клавиша уже используется другим сценарием.",
+          "saveWorkflow": "Сохранить сценарий",
+          "deleteWorkflow": "Удалить сценарий",
+          "workflowsSavedTitle": "Сценарии горячих клавиш сохранены",
+          "workflowsSavedDescription": "Активно сценариев: {{count}}.",
+          "title": "Профиль 2: дополнительная горячая клавиша + независимые модели",
+          "profileSavedState": "Настройки профиля 2 сохранены.",
+          "profileUnsavedState": "Настройки профиля 2 не сохранены (сначала установите модели, затем нажмите кнопку)",
+          "modelSetupTitle": "Выбрать модели профиля 2",
+          "saveCurrentAsProfile2": "Сохранить текущие настройки как профиль 2",
+          "profileEmptyHint": "Сохраните текущие модели транскрипции и рассуждения как Профиль 2 для быстрого переключения.",
+          "stepHotkeyTitle": "Задать дополнительную горячую клавишу",
+          "stepHotkeyDescription": "Нажмите сочетание клавиш, которое хотите использовать для профиля 2.",
+          "stepHotkeyReady": "Задано: {{hotkey}}",
+          "stepModelsTitle": "Выбрать модели профиля 2",
+          "stepModelsDescription": "С помощью кнопок «Выбрать модель транскрипции» и «Выбрать модель уточнения» ниже выберите модели для профиля 2.",
+          "stepSaveTitle": "Сохранить профиль 2",
+          "stepSaveDescription": "После выбора моделей нажмите «Сохранить», чтобы дополнительная горячая клавиша использовала эту конфигурацию.",
+          "stepSaveReady": "Профиль 2 сохранён и готов к использованию.",
+          "usageHint": "Как это работает: основная горячая клавиша продолжает использовать профиль 1. При нажатии дополнительной горячей клавиши ChordVox временно переключается на модели транскрипции и ИИ-уточнения профиля 2.",
+          "savedTitle": "Дополнительная горячая клавиша сохранена.",
+          "savedDescription": "Горячая клавиша Профильа 2 обновлена.",
+          "profileSavedTitle": "Профиль 2 сохранен.",
+          "profileSavedDescription": "Текущие настройки транскрипции и уточнения AI сохранены в профиль 2.",
+          "profileSavedVerifiedAt": "Сохранение подтверждено в {{time}}",
+          "profileSavedTranscriptionSummary": "Транскрипция: {{provider}} / {{model}}",
+          "profileSavedReasoningSummary": "Уточнить: {{provider}} / {{model}}",
+          "profileSavedReasoningDisabled": "Уточнить: отключено",
+          "profileSaveFailedTitle": "Не удалось сохранить профиль 2",
+          "profileSaveFailed": "Не удалось сохранить настройки Профильа 2. Пожалуйста, попробуйте еще раз.",
+          "registerFailed": "Не удалось зарегистрировать дополнительную горячую клавишу. Пожалуйста, выберите другой ярлык.",
+          "registerRetry": "Не удалось зарегистрировать дополнительную горячую клавишу. Пожалуйста, попробуйте еще раз.",
+          "requiresProTitle": "Pro открывает несколько сценариев горячих клавиш",
+          "requiresProDescription": "Назначьте отдельные клавиши и модели для диктовки, перевода, редактирования и вопросов ИИ. На подходящих устройствах доступна бесплатная 7-дневная пробная версия.",
+          "globeNotSupported": "Дополнительная горячая клавиша не поддерживает клавишу Globe/Fn.",
+          "rightModifierNotSupported": "Вторичная горячая клавиша не поддерживает одиночные модификаторы справа.",
+          "modifiersOnlyNotSupported": "Вторичная горячая клавиша не поддерживает комбинации, состоящие только из модификаторов.",
+          "modelSetupDescription": "Настройте отдельную модель транскрипции для другой частой ситуации; модель уточнения необязательна. Используйте другую горячую клавишу, чтобы запускать профиль 2, не меняя повседневную настройку.",
+          "chooseTranscriptionModel": "Выбрать модель транскрипции",
+          "chooseReasoningModel": "Выбрать модель уточнения",
+          "savedModelSnapshot": "Сохраненные модели профиля 2",
+          "currentModelSnapshot": "Текущий выбор",
+          "currentModelEmpty": "Сведения о текущей модели недоступны. Сначала проверьте настройки транскрипции и моделей ИИ.",
+          "savedModelEmpty": "Ещё не сохранено. После сохранения дополнительная горячая клавиша будет использовать эту конфигурацию транскрипции; уточнение применяется, только когда оно включено в Профиле 2.",
+          "saveAndEnableProfile2": "Сохранить Профиль 2",
+          "updateProfile2": "Обновить модели Профиля 2",
+          "setupReadyBadge": "Профиль 2 готов",
+          "setupNeedsHotkeyBadge": "Сначала задайте доп. горячую клавишу",
+          "setupNeedsSaveBadge": "Сохраните модели, чтобы завершить",
+          "stepModelsReady": "Модели сохранены. Чтобы изменить их, выберите другие модели и обновите Профиль 2.",
+          "saveNeedsHotkey": "Задайте доступную дополнительную горячую клавишу перед сохранением Профиля 2.",
+          "saveReadyHint": "После сохранения дополнительная горячая клавиша использует конфигурацию из раздела «Текущий выбор»; уточнение ИИ не будет включено автоматически.",
+          "saveUpdateHint": "Профиль 2 уже совпадает с текущим выбором.",
+          "profileSavedReasoningDisabledWithModel": "Уточнить: отключено; выбрано {{provider}} / {{model}}",
+          "unsavedChangeNotice": "Новая модель пока только в предпросмотре слева. Профиль 2 справа всё ещё использует прежнюю конфигурацию.",
+          "savedModelSnapshotStale": "Профиль 2 использует",
+          "profile2UpToDate": "Профиль 2 актуален",
+          "setupUnsavedChangesBadge": "Несохранённые изменения",
+          "stepModelsChanged": "Текущий выбор изменился. Нажмите «Обновить модели Профиля 2», прежде чем дополнительная горячая клавиша начнёт использовать новые модели.",
+          "saveUnsavedChangesHint": "Текущий выбор слева изменился. Обновление перезапишет Профиль 2 справа.",
+          "profile2LiveSnapshot": "Модели Профиля 2"
+        },
+        "diagnostics": {
+          "title": "Диагностика горячих клавиш",
+          "description": "Подтвердите активный бэкенд горячих клавиш, состояние регистрации и напрямую проверьте цепочку пробуждения.",
+          "refresh": "Обновить",
+          "testWake": "Проверить цепочку пробуждения",
+          "platform": "Платформа",
+          "backend": "Бэкенд горячих клавиш",
+          "primaryHotkey": "Основная горячая клавиша",
+          "secondaryHotkey": "Дополнительная горячая клавиша",
+          "primaryStatus": "Статус основной",
+          "secondaryStatus": "Статус дополнительной",
+          "registered": "Зарегистрирована",
+          "notRegistered": "Не зарегистрирована",
+          "recommendedTitle": "Рекомендуемое значение по умолчанию",
+          "recommendedDescription": "{{hotkey}} — более безопасное значение по умолчанию на этой платформе. При первой установке и в сценариях автоматического отката теперь приоритет у него.",
+          "warnings": {
+            "linuxSuper": "Текущая горячая клавиша Linux всё ещё включает Super/Meta, которые часто перехватываются ярлыками рабочего стола.",
+            "windowsSuper": "Текущая горячая клавиша Windows всё ещё включает Win/Super, из-за чего высок риск конфликта с системными сочетаниями.",
+            "macosCommandSpace": "Command+Space часто перехватывается Spotlight или переключением источника ввода в macOS."
+          },
+          "backends": {
+            "globe": "macOS Globe",
+            "globalShortcut": "Electron globalShortcut",
+            "windows-native": "Нативный слушатель Windows",
+            "gnome-wayland": "Нативное сочетание GNOME Wayland",
+            "native-modifier": "Нативный слушатель клавиш-модификаторов"
+          }
+        },
+        "availability": {
+          "checking": "Проверка доступности…",
+          "free": "Доступно — ни одно другое приложение не использует эту комбинацию.",
+          "owned": "Сейчас зарегистрировано в ChordVox.",
+          "conflict": "Уже используется другим приложением или системой. Выберите другую комбинацию.",
+          "invalid": "Эта комбинация недействительна.",
+          "native": "Обрабатывается нативным слушателем клавиш — конфликты видны только при регистрации."
+        }
+      },
+      "microphone": {
+        "description": "Выберите устройство ввода для диктовки",
+        "title": "Микрофон"
+      },
+      "soundEffects": {
+        "dictationSounds": "Звуки диктовки",
+        "dictationSoundsDescription": "Воспроизводить звуковой сигнал при начале и окончании записи",
+        "cueStyles": {
+          "off": "Выкл.",
+          "electronic": "Электронный",
+          "droplet1": "Капля 1",
+          "droplet2": "Капля 2"
+        },
+        "title": "Звук и анимация"
+      },
+      "startup": {
+        "launchAtLogin": "Запускать при входе",
+        "launchAtLoginDescription": "Автоматически запускать ChordVox при входе в систему",
+        "title": "Автозапуск",
+        "autoCheckUpdate": "Автоматическая проверка обновлений",
+        "autoCheckUpdateDescription": "Автоматически проверять наличие и загружать новые версии при запуске ChordVox (без автоматической установки)",
+        "menuBarIcon": "Значок в строке меню",
+        "menuBarIconDescription": "Показывает ChordVox в строке меню macOS. Выключение и повторное включение принудительно пересоздает значок."
+      },
+      "updates": {
+        "badges": {
+          "dev": "Dev",
+          "latest": "Последняя",
+          "update": "Обновление"
+        },
+        "checkForUpdates": "Проверить обновления",
+        "checking": "Проверка...",
+        "currentVersion": "Текущая версия",
+        "devMode": "Запущено в режиме разработки",
+        "dialogs": {
+          "almostThere": {
+            "description": "Обновление почти готово. Подождите немного.",
+            "title": "Почти готово"
+          },
+          "checkFailed": {
+            "description": "У нас возникли проблемы с проверкой обновлений. Пожалуйста, повторите попытку позже.",
+            "title": "Не удалось проверить обновления"
+          },
+          "downloadFailed": {
+            "description": "Не удалось скачать обновление. Попробуйте ещё раз.",
+            "title": "Не удалось скачать обновление"
+          },
+          "installFailed": {
+            "description": "Не удалось установить обновление. Попробуйте ещё раз.",
+            "title": "Не удалось установить обновление"
+          },
+          "installUpdate": {
+            "confirmText": "Установить и перезапустить",
+            "description": "ChordVox перезапустится для применения обновления.",
+            "title": "Установить обновление"
+          },
+          "noUpdates": {
+            "description": "У вас установлена последняя версия.",
+            "title": "Обновлений нет"
+          },
+          "updateAvailable": {
+            "description": "Доступно обновление: v{{version}}",
+            "title": "Доступно обновление",
+            "fallbackItems": [
+              "Получите последние исправления стабильности и улучшения интерфейса.",
+              "Улучшает распознавание речи, состояние лицензии и установку на разных платформах.",
+              "Обновитесь, чтобы сократить известные проблемы и сохранить поддержку будущих функций."
+            ],
+            "valueIntro": "Это обновление дает вам:"
+          },
+          "updateError": {
+            "description": "Произошла ошибка при обновлении. Попробуйте ещё раз.",
+            "title": "Ошибка обновления"
+          },
+          "manualUpdateAvailable": {
+            "confirmText": "Открыть страницу загрузки",
+            "description": "Доступна версия v{{version}}. Автоматическая загрузка недоступна в этой среде, поэтому откройте страницу выпуска для обновления.",
+            "title": "Доступно обновление"
+          }
+        },
+        "downloadUpdate": "Скачать обновление {{version}}",
+        "downloading": "Загрузка... {{progress}}%",
+        "installAndRestart": "Установить и перезапустить",
+        "latestVersion": "У вас установлена последняя версия",
+        "newVersion": "Доступна новая версия",
+        "newVersionAvailable": "Доступна новая версия",
+        "restarting": "Перезапуск...",
+        "title": "Обновления",
+        "versionPlaceholder": "—",
+        "whatsNew": "Что нового в v{{version}}",
+        "openReleasePage": "Открыть страницу загрузки"
+      },
+      "notifications": {
+        "fileTranscriptionCompletion": "Уведомление о завершении транскрибации файла",
+        "fileTranscriptionCompletionDescription": "Показывать уведомление ChordVox после завершения транскрибации файла. Работает даже в неподписанных тестовых сборках macOS."
+      },
+      "pasteConfirm": {
+        "description": "Показывает 5-секундное окно подтверждения перед вставкой длинного текста, чтобы можно было отменить или вставить сразу.",
+        "label": "Подтверждение вставки длинного текста",
+        "thresholdDescription": "Минимальное количество символов для показа окна подтверждения",
+        "thresholdLabel": "Порог длины"
+      },
+      "tailCommands": {
+        "description": "Скажите \"отменить диктовку\" или \"не выводить\" в конце диктовки, чтобы отбросить ее, или \"начать заново\", чтобы перезапустить запись.",
+        "label": "Завершающие голосовые команды"
+      }
+    },
+    "permissions": {
+      "accessibilityDescription": "Нужно для автоматической вставки после транскрипции. ChordVox не записывает нажатия клавиш.",
+      "accessibilityTitle": "Универсальный доступ",
+      "description": "Проверяйте и управляйте системными разрешениями, необходимыми для работы ChordVox",
+      "microphoneDescription": "Необходимо для записи голоса и диктовки",
+      "microphoneTitle": "Микрофон",
+      "systemDescription": "Проверьте основные системные разрешения, которые нужны ChordVox для записи, диктовки и автоматической вставки.",
+      "systemTitle": "Системные разрешения",
+      "microphoneTest": {
+        "title": "Проверка входа микрофона",
+        "description": "Перед диктовкой запустите 8-секундную проверку уровня входного сигнала.",
+        "start": "Начать проверку на 8 секунд",
+        "stop": "Остановить проверку",
+        "meterLabel": "Текущий уровень входа микрофона",
+        "listening": "Проверяем сигнал микрофона…",
+        "heardLive": "Входной сигнал обнаружен",
+        "success": "Микрофон принимает звук.",
+        "silent": "Пригодный входной сигнал не обнаружен. Проверьте выбранный микрофон и уровень входа.",
+        "idle": "После запуска проверки говорите с обычной громкостью.",
+        "privacyNote": "Проверка измеряет только текущую громкость. Она не записывает, не распознаёт и не сохраняет аудио.",
+        "openPrivacySettings": "Открыть настройки конфиденциальности микрофона",
+        "openSoundSettings": "Открыть настройки звука",
+        "errors": {
+          "permission": "Доступ к микрофону запрещён. Разрешите его в системных настройках и повторите проверку.",
+          "device": "Выбранный микрофон недоступен. Выберите другое устройство ввода и повторите проверку.",
+          "unavailable": "Проверка микрофона в реальном времени недоступна на этом устройстве.",
+          "unknown": "Не удалось запустить проверку микрофона. Проверьте настройки входа и повторите попытку."
+        }
+      },
+      "resetAccessibility": {
+        "description": "ChordVox будет удалён из разрешений универсального доступа. Вам потребуется повторно предоставить доступ в Системные настройки > Конфиденциальность и безопасность > Универсальный доступ.",
+        "label": "Сбросить разрешения универсального доступа",
+        "rowDescription": "После каждого обновления ChordVox автовставка может перестать работать, пока вы не предоставите доступ заново: сначала удалите старую запись ChordVox, затем добавьте текущую ChordVox.app.",
+        "title": "Сбросить разрешения универсального доступа"
+      },
+      "macAccessibilityDrag": {
+        "description": "Откройте Универсальный доступ, затем перетащите значок ChordVox слева в список приложений и включите его.",
+        "dragCardHint": "Нет в списке? Перетащите меня сюда или нажмите +.",
+        "dragLabel": "Перетащить ChordVox в список приложений Универсального доступа",
+        "openSettings": "Открыть Универсальный доступ",
+        "openScreenRecording": "Открыть запись экрана",
+        "packagedOnly": "Перетаскивание для авторизации доступно в упакованном приложении. В режиме разработки добавьте текущее приложение вручную.",
+        "revealApp": "Открыть Универсальный доступ",
+        "openAccessibility": "Открыть Универсальный доступ",
+        "screenRecordingDescription": "Откройте запись экрана, затем перетащите значок ChordVox слева в список приложений и включите его.",
+        "screenRecordingDragLabel": "Перетащить ChordVox в список приложений записи экрана",
+        "title": "Разрешить как при установке приложения",
+        "grantedLabel": "Готово ✓"
+      },
+      "test": "Тест",
+      "testAndGrant": "Проверить и предоставить",
+      "title": "Разрешения",
+      "troubleshoot": "Диагностика",
+      "troubleshootingTitle": "Устранение неполадок"
+    },
+    "privacy": {
+      "cloudBackup": "Облачное резервное копирование",
+      "cloudBackupDescription": "Сохраняйте транскрипции в облаке, чтобы никогда их не потерять.",
+      "description": "Контролируйте, какие данные покидают ваше устройство. По умолчанию всё отключено.",
+      "title": "Конфиденциальность",
+      "usageAnalytics": "Помочь быстрее исправлять проблемы",
+      "usageAnalyticsDescription": "Если включить эту функцию, ChordVox будет отправлять небольшой объём отфильтрованных с учётом конфиденциальности данных об ошибках приложения и ходе первоначальной настройки, чтобы мы могли быстрее находить и исправлять проблемы. Эта функция никогда не загружает текст расшифровки, аудио или введённые данные, и её можно отключить в любое время.",
+      "transcriptionHistory": "Сохранить историю транскрипции",
+      "transcriptionHistoryDescription": "Если этот параметр отключен, ChordVox по-прежнему будет расшифровывать и вставлять, но не будет сохранять новые записи истории."
+    },
+    "prompts": {
+      "description": "Просматривайте, настраивайте и тестируйте единый системный промпт, который управляет очисткой текста и обнаружением инструкций",
+      "title": "Студия промптов",
+      "requiresProDescription": "Редактирование промптов остается бесплатным. Запуск ИИ-тестов может запустить бесплатный 7-дневный пробный период Pro.",
+      "requiresProTitle": "Для Prompt Studio требуется Pro"
+    },
+    "transcription": {
+      "customSetup": "Пользовательская настройка",
+      "customSetupDescription": "Используйте собственного провайдера и API-ключ.",
+      "description": "Выберите, как ChordVox будет транскрибировать вашу речь",
+      "chordvoxCloud": "ChordVox Cloud",
+      "chordvoxCloudDescription": "Просто работает. Настройка не требуется.",
+      "title": "Распознавание речи",
+      "toasts": {
+        "switchedCloud": {
+          "description": "Транскрипция будет использовать облачный сервис ChordVox.",
+          "title": "Переключено на ChordVox Cloud"
+        },
+        "switchedCustom": {
+          "description": "Настройте собственного провайдера и API-ключ.",
+          "title": "Переключено на пользовательскую настройку"
+        }
+      },
+      "storageLocation": {
+        "label": "Место хранения моделей",
+        "description": "Управляйте моделями streaming, Whisper, Parakeet и IBM Granite / Cohere из одного места.",
+        "rootLabel": "Единый каталог моделей",
+        "streamingFolderLabel": "Каталог транскрипции в реальном времени",
+        "streamingFolderHint": "Модели транскрипции в реальном времени автоматически сохраняются в подпапке streaming-models внутри этого каталога.",
+        "saveFailedTitle": "Не удалось сохранить папку моделей",
+        "saveFailedDescription": "Модели остались в текущей папке. Проверьте свободное место и права доступа, затем повторите попытку.",
+        "migrating": "Перемещение моделей {{completed}}/{{total}}…",
+        "migrationCompleteTitle": "Папка моделей обновлена",
+        "migrationCompleteDescription": "Все установленные модели были проверены до переключения на новую папку.",
+        "migrationCompleteWithCopies": "Новая папка готова. Некоторые проверенные копии остались в старой папке, так как очистку не удалось завершить.",
+        "normalizedTitle": "Используется безопасная папка моделей",
+        "normalizedDescription": "Вы выбрали корень диска. ChordVox будет сохранять модели в {{path}}, чтобы приложение никогда не сохраняло и не очищало файлы напрямую в корне диска."
+      },
+      "streaming": {
+        "clearAllButton": "Удалить все модели",
+        "models": {
+          "zipformerHighAccuracy": {
+            "name": "Потоковая точность (китайский)",
+            "description": "xlarge INT8, высокая точность китайского при сбалансированной скорости"
+          },
+          "zipformerHighestAccuracyFp16": {
+            "name": "Максимальная точность (китайский, FP16)",
+            "description": "Более крупная FP16-модель с максимальной точностью китайского в реальном времени"
+          },
+          "zipformerFastRealtime": {
+            "name": "Быстрая в реальном времени (китайский)",
+            "description": "Лучше всего для повседневной диктовки: плавно, легче для CPU и уже достаточно точно"
+          },
+          "nemotronEnglishRealtime": {
+            "name": "Nemotron Streaming En 0.6B (только английский)",
+            "description": "Англоязычная модель транскрипции в реальном времени с низкой задержкой"
+          }
+        },
+        "toasts": {
+          "downloadInProgressTitle": "Загрузка уже выполняется",
+          "downloadInProgressDescription": "Дождитесь завершения текущей загрузки модели.",
+          "modelReadyTitle": "Модель готова",
+          "modelReadyDescription": "Потоковая модель загружена и установлена.",
+          "downloadFailedTitle": "Ошибка загрузки",
+          "downloadFailedDescription": "Не удалось загрузить потоковую модель. Попробуйте ещё раз.",
+          "downloadCancelledTitle": "Загрузка отменена",
+          "downloadCancelledDescription": "Текущая загрузка потоковой модели отменена.",
+          "deleteDialogTitle": "Удалить потоковую модель",
+          "deleteDialogDescription": "Удалить «{{model}}»? Перед следующим использованием её нужно будет скачать заново.",
+          "deleteSuccessTitle": "Модель удалена",
+          "deleteSuccessDescription": "«{{model}}» удалена.",
+          "deleteFailedTitle": "Не удалось удалить",
+          "deleteFailedDescription": "Не удалось удалить потоковую модель. Попробуйте ещё раз.",
+          "clearFailedTitle": "Не удалось очистить",
+          "clearFailedDescription": "Не удалось очистить потоковые модели. Попробуйте ещё раз."
+        },
+        "defaultRecommendedBadge": "По умолчанию",
+        "deprecatedBadge": "Устаревшая отключена",
+        "deprecatedModelDescription": "Эта устаревшая модель больше не рекомендуется. Среда выполнения вместо неё использует «{{replacement}}». Удалите её, чтобы освободить место.",
+        "highAccuracyBadge": "Высокие требования"
+      }
+    },
+    "fileTranscription": {
+      "title": "Транскрибация файлов",
+      "description": "Транскрибируйте один аудио- или видеофайл и сохраните результат в истории. Ваша первая транскрибация файла может запустить бесплатную 7-дневную пробную версию Pro.",
+      "chooseFile": "Выбрать файл",
+      "cancelButton": "Отменить расшифровку",
+      "cancelledTitle": "Расшифровка файла отменена",
+      "cancelledDescription": "ChordVox больше не ждёт этот файл. Вы можете выбрать другой файл.",
+      "chooseFileDescription": "Выберите аудио- или видеофайл для транскрибации прямо в ChordVox.",
+      "route": {
+        "label": "Текущий маршрут",
+        "provider": "Движок транскрибации",
+        "model": "Текущая модель",
+        "currentProviderHint": "Транскрибация файлов будет использовать уже выбранный вами движок транскрибации.",
+        "currentModelHint": "Транскрибация файлов продолжит использовать модель, которая сейчас привязана к этому маршруту.",
+        "syncBadge": "Строго следует текущему выбору",
+        "streamingProvider": "Локальный стриминг",
+        "streamingTitle": "Локальная потоковая транскрибация",
+        "streamingDescription": "Транскрибация файла следует вашей текущей модели реального времени и не переключается автоматически на режим высокой точности.",
+        "localTitle": "Локальная транскрибация",
+        "localDescription": "Транскрибация файла использует ту же локальную модель и настройки, что выбраны в разделе «Транскрибация».",
+        "cloudTitle": "Облачная / BYOK транскрибация",
+        "cloudDescription": "Транскрибация файла использует того же облачного провайдера и ту же модель, что выбраны в разделе «Транскрибация».",
+        "currentRouteHint": "Текущий маршрут транскрибации файла: {{provider}} / {{model}}",
+        "switchHint": "Чтобы сменить маршрут, откройте настройки «Транскрибация» в боковой панели.",
+        "switchButton": "Открыть транскрибацию"
+      },
+      "supportedFormats": "Поддерживаются распространённые аудио- и видеоформаты, такие как mp3, wav, m4a, mp4, mov и webm.",
+      "dropzoneTitle": "Перетащите сюда аудио- или видеофайлы",
+      "dropzoneDescription": "Можно также нажать здесь. Будет использован тот же поток, что и у кнопки выбора файла.",
+      "dropzoneActiveDescription": "Отпустите файл, чтобы проверить доступ Pro и сразу запустить транскрибацию.",
+      "dropzoneBusyTitle": "Сейчас уже обрабатывается файл",
+      "dropzoneBusyDescription": "Дождитесь завершения текущей транскрибации, прежде чем перетаскивать или выбирать другой файл.",
+      "emptyStateTitle": "Транскрибация файла ещё не запускалась",
+      "emptyStateDescription": "Выберите файл или перетащите его сюда, и ход задачи появится в этой панели.",
+      "currentFile": "Текущий файл",
+      "historyButton": "Открыть историю",
+      "progressLabel": "Прогресс",
+      "progressTitle": "Ход задачи",
+      "progressDescription": "Показывает текущий файл, общий прогресс и активный этап обработки.",
+      "stages": {
+        "idle": "Расшифровка начнется автоматически после выбора файла.",
+        "preparing": "Подготовка файла...",
+        "transcribing": "Транскрибация файла...",
+        "enhancing": "AI улучшает текст...",
+        "saving": "Сохранение результата...",
+        "complete": "Транскрибация файла завершена.",
+        "short": {
+          "idle": "Ожидание",
+          "preparing": "Подготовка",
+          "transcribing": "Транскрибация",
+          "enhancing": "Улучшение",
+          "saving": "Сохранение",
+          "complete": "Готово"
+        }
+      },
+      "trialHint": "Ваша первая транскрибация файла может запустить бесплатную 7-дневную пробную версию Pro."
+    },
+    "context": {
+      "title": "Улучшение с учетом контекста",
+      "description": "Помогает ИИ редактировать текст с учетом приложения, окна, видимого текста и опционального визуального контекста. Контекст немного увеличивает время обработки.",
+      "enableContext": "Включить контекстную обработку",
+      "enableContextDescription": "Использует контекст, чтобы ИИ-редактирование лучше подходило текущей задаче. Обычно это лишь немного медленнее.",
+      "privacyNotice": "ИИ-редактирование лучше подходит приложению и содержимому, с меньшим количеством ручных правок.",
+      "permissions": "Доступ к контексту",
+      "accessibility": "Универсальный доступ",
+      "screenRecording": "Запись экрана",
+      "accessibilityPermission": "Разрешение универсального доступа",
+      "accessibilityPermissionDescription": "Нужно для чтения активного приложения, заголовка окна и видимого текста.",
+      "screenRecordingPermission": "Разрешение на запись экрана",
+      "screenRecordingPermissionDescription": "Опциональный визуальный контекст для сложных страниц, таблиц и макетов.",
+      "grant": "Разрешить",
+      "visionCapability": "Визуальные возможности",
+      "currentModel": "Текущая модель",
+      "notSelected": "Не выбрано",
+      "testVision": "Проверить зрение",
+      "testingVision": "Проверка...",
+      "visionSupported": "Визуальный ввод поддерживается",
+      "visionNotSupported": "Визуальный ввод не поддерживается",
+      "visionNotSupportedHint": "Текущая модель не поддерживает изображения. Контекст будет использовать только текст.",
+      "howItWorks": "Как это работает",
+      "howItWorksItem1": "Учитывает приложение и окно во время диктовки",
+      "howItWorksItem2": "Использует видимый текст для более точных формулировок и структуры",
+      "howItWorksItem3": "Добавляет скриншот только при включенном Screen Vision",
+      "howItWorksItem4": "Выдает текст, лучше подходящий приложению и задаче",
+      "platformLimitation": "Полное улучшение с учетом контекста (текст из универсального доступа + снимок экрана) сейчас доступно только на macOS. Поддержка Windows и Linux запланирована в будущей версии.",
+      "enableTextContext": "Текстовый контекст",
+      "enableTextContextDescription": "Использует активное приложение, заголовок окна и видимый текст, чтобы ИИ-редактирование подходило задаче. Обычно это лишь немного медленнее.",
+      "enableVisionContext": "Визуальный контекст экрана",
+      "enableVisionContextDescription": "Опциональный скриншот-контекст для сложных страниц, таблиц и макетов. При включении дополнительно создается и анализируется изображение, поэтому AI-улучшение может занять больше времени. По умолчанию выключен.",
+      "dictionaryPointer": "Имена, бренды или термины распознаются неверно? Добавьте их в пользовательский словарь.",
+      "sensitiveAppsTitle": "Защита данных в конфиденциальных приложениях",
+      "sensitiveAppsDescription": "Когда одно из этих приложений находится на переднем плане, ChordVox пропускает его до чтения текста или создания снимка экрана, поэтому пароли, ключи и другие конфиденциальные данные не попадают в контекст.",
+      "sensitiveAppsChoose": "Добавить защищённые приложения",
+      "sensitiveAppsSelected": "Защищённые приложения",
+      "sensitiveAppsAdvanced": "Дополнительно: добавить вручную",
+      "sensitiveProcessNames": "Имена приложений / процессов",
+      "sensitiveProcessNamesPlaceholder": "1Password\nКорпоративное хранилище",
+      "sensitiveBundleIds": "Идентификаторы пакетов macOS",
+      "sensitiveBundleIdsPlaceholder": "com.agilebits.onepassword\ncom.company.secureapp",
+      "sensitiveAppsSaved": "Список исключений сохранён.",
+      "sensitiveAppsSaveFailed": "Не удалось сохранить список исключений.",
+      "sensitiveAppsHint": "Выбор сохраняется автоматически. Текст и снимки экрана пропускаются, когда защищённое приложение находится на переднем плане.",
+      "visionTestFailed": "Проверка зрения не выполнена: {{reason}}",
+      "openDictionary": "Открыть словарь"
+    }
+  },
+  "models": {
+    "descriptions": {
+      "parakeet": {
+        "parakeet_tdt_0_6b_v3": "Быстрое многоязычное распознавание с автоопределением языка (25 языков)",
+        "parakeet_tdt_0_6b_v2": "Высокоточная английская ASR с пунктуацией и капитализацией"
+      },
+      "whisper": {
+        "tiny": "Самый быстрый, низкое качество",
+        "base": "Хороший баланс",
+        "small": "Лучше качество, медленнее",
+        "medium": "Высокое качество",
+        "large": "Лучшее качество, самый медленный",
+        "turbo": "Быстрый с хорошим качеством",
+        "belle_large_v3_zh_punct_full": "Полная GGML-модель пунктуации, оптимизированная для китайского",
+        "belle_large_v3_turbo_zh_full": "Turbo Full GGML-модель, настроенная для более быстрой китайской транскрипции"
+      },
+      "transcription": {
+        "openai_gpt_4o_mini_transcribe": "Быстрая и точная транскрипция",
+        "openai_gpt_4o_transcribe": "Максимально точная транскрипция",
+        "openai_whisper_1": "Оригинальная модель Whisper",
+        "groq_whisper_large_v3": "Самая качественная модель Whisper на Groq",
+        "groq_whisper_large_v3_turbo": "Скорость в 216 раз быстрее реального времени",
+        "mistral_voxtral_mini_latest": "Быстрая многоязычная транскрипция",
+        "soniox_stt_rt_v4": "Транскрипция в реальном времени с низкой задержкой для более чем 60 языков",
+        "deepgram_nova_3": "Высокоточная облачная модель транскрипции от Deepgram",
+        "google_chirp_3": "Флагманская модель Google Cloud для высокоточной многоязычной транскрипции"
+      },
+      "cloud": {
+        "openai_gpt_5_2": "Новейшая флагманская модель с рассуждением",
+        "openai_gpt_5_mini": "Быстрая и экономичная",
+        "openai_gpt_5_nano": "Сверхбыстрая, низкая задержка",
+        "openai_gpt_4_1": "Надёжная базовая модель, контекст 1M",
+        "openai_gpt_4_1_mini": "Компактная версия GPT-4.1",
+        "openai_gpt_4_1_nano": "Минимальная задержка GPT-4.1",
+        "anthropic_claude_sonnet_4_5": "Сбалансированная производительность",
+        "anthropic_claude_haiku_4_5": "Быстрая с почти передовым интеллектом",
+        "anthropic_claude_opus_4_5": "Самая мощная модель Claude",
+        "gemini_gemini_3_pro_preview": "Флагманская модель нового поколения для сложных рассуждений",
+        "gemini_gemini_3_flash_preview": "Сверхбыстрая высокопроизводительная модель нового поколения",
+        "gemini_gemini_2_5_flash_lite": "Минимальная задержка и стоимость",
+        "groq_qwen_qwen3_32b": "Мощная модель с рассуждением, контекст 131K",
+        "groq_openai_gpt_oss_120b": "Открытая флагманская модель OpenAI, 500 т/с",
+        "groq_openai_gpt_oss_20b": "Быстрая открытая модель, 1000 т/с",
+        "groq_llama_3_3_70b_versatile": "Универсальная модель Meta, 280 т/с",
+        "groq_llama_3_1_8b_instant": "Сверхбыстрая 560 т/с, контекст 131K",
+        "groq_mixtral_8x7b_32768": "Контекст 32K, смесь экспертов",
+        "groq_gemma2_9b_it": "Эффективная модель Google",
+        "openai_gpt_5_5": "Новейшая frontier-модель для сложной профессиональной работы",
+        "openai_gpt_5_4": "Frontier-модель с контекстом 1,05 млн",
+        "openai_gpt_5_4_mini": "Сильная mini-модель для высоконагруженных задач",
+        "openai_gpt_5_4_nano": "Самая дешёвая модель класса GPT-5.4 для простых задач",
+        "anthropic_claude_opus_4_7": "Самая мощная модель Claude для сложного рассуждения и кодинга",
+        "anthropic_claude_sonnet_4_6": "Лучшее сочетание скорости и интеллекта",
+        "gemini_gemini_3_1_pro_preview": "Новейшая Gemini 3 Pro Preview для агентных рабочих процессов",
+        "gemini_gemini_3_1_flash_lite_preview": "Самая экономичная модель Gemini 3.1",
+        "gemini_gemini_2_5_flash": "Стабильная модель с низкой задержкой и сильным рассуждением",
+        "groq_compound": "Готовая к продакшену агентная система со встроенными инструментами",
+        "groq_llama_4_scout": "Preview-модель для оценки, контекст 131K"
+      },
+      "local": {
+        "qwen_qwen3_8b_q4_k_m": "Новейшая Qwen3 с поддержкой режима размышления",
+        "qwen_qwen3_8b_q5_k_m": "Более качественная Qwen3 с режимом размышления",
+        "qwen_qwen3_4b_q4_k_m": "Компактная Qwen3 со способностью к рассуждению",
+        "qwen_qwen3_1_7b_q8_0": "Маленькая, но способная модель Qwen3",
+        "qwen_qwen3_0_6b_q8_0": "Миниатюрная Qwen3 для маломощных устройств",
+        "qwen_qwen3_32b_q4_k_m": "Самая мощная локальная Qwen3 с глубоким рассуждением",
+        "qwen_qwen2_5_0_5b_instruct_q5_k_m": "Самая маленькая модель, быстрая, но с ограничениями",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "Маленькая модель для базовых задач",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "Сбалансированная модель общего назначения",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "Большая модель высокого качества (Q4_K_M)",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "Большая модель, качественное рассуждение (Q5_K_M)",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "Быстрая и эффективная модель для инструкций",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "Более качественная модель для инструкций",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "Миниатюрная модель для маломощных устройств",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "Маленькая, но способная многоязычная модель",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "Мощная модель с отличной производительностью",
+        "openai_oss_gpt_oss_20b_mxfp4": "Открытая модель OpenAI для потребительского оборудования"
+      },
+      "paraformer": {
+        "paraformer_large_zh": "Полноточный model.onnx, локальная офлайн-ASR для китайского / английского с запускаемой по требованию средой sherpa-onnx"
+      },
+      "granite": {
+        "granite_4_0_1b_speech": "Корпоративная ASR-модель Apache-2.0 для высокоточной английской транскрипции, развёрнутая через Transformers или vLLM"
+      },
+      "cohere": {
+        "cohere_transcribe_03_2026": "ASR-модель 2B с максимальной точностью и закрытым доступом Hugging Face, развёрнутая через Transformers или vLLM"
+      }
+    },
+    "providerBadges": {
+      "paraformerChineseRecommended": "Выбор для китайского",
+      "nvidiaEnglishRecommended": "Выбор для английского"
+    },
+    "badges": {
+      "parakeet": {
+        "parakeet_tdt_0_6b_v2": "Английская ASR"
+      },
+      "paraformer": {
+        "paraformer_large_zh": "Полная точность"
+      },
+      "granite": {
+        "granite_4_0_1b_speech": "Высокая точность для английского"
+      },
+      "cohere": {
+        "cohere_transcribe_03_2026": "Максимальная точность"
+      },
+      "whisper": {
+        "belle_large_v3_zh_punct_full": "Китайская пунктуация",
+        "belle_large_v3_turbo_zh_full": "Быстрый китайский"
+      }
+    }
+  },
+  "transcriptionModes": {
+    "realTime": {
+      "label": "Расшифровка в реальном времени",
+      "cardDescription": "Говорите и сразу видите текст · Локально · Низкая задержка · Приватно",
+      "switchedTitle": "Переключено на расшифровку в реальном времени",
+      "switchedDescription": "Говорите и сразу видите текст благодаря локальной обработке с низкой задержкой",
+      "modelsLabel": "Модели расшифровки в реальном времени",
+      "clearModelsTitle": "Удалить модели расшифровки в реальном времени",
+      "clearModelsDescription": "Удалить все загруженные модели расшифровки в реальном времени? Потом их придется скачать заново.",
+      "clearedModelsTitle": "Модели расшифровки в реальном времени удалены",
+      "clearedModelsDescription": "Все загруженные модели расшифровки в реальном времени удалены.",
+      "downloadHint": "Перед использованием расшифровки в реальном времени скачайте локальную модель.",
+      "defaultEnabledTitle": "Расшифровка в реальном времени включена по умолчанию",
+      "defaultEnabledDescription": "Диктовка по горячей клавише по умолчанию использует локальную расшифровку в реальном времени. Модель по умолчанию — «{{defaultModelName}}». При необходимости ниже можно настроить более точную расшифровку."
+    },
+    "highAccuracy": {
+      "label": "Высокоточная расшифровка",
+      "optionalLabel": "Высокоточная расшифровка (необязательно)",
+      "cardDescription": "Расшифровка после записи для более высокой точности, но медленнее · Облачный API или локальные модели",
+      "switchedTitle": "Переключено на высокоточную расшифровку",
+      "switchedDescription": "Расшифровывает после записи для более высокой точности, но медленнее",
+      "onboardingDescription": "Лучше всего подходит для длинных диктовок и встреч: точнее, но медленнее, с вариантами облачного API или локальных моделей."
+    }
+  },
+  "modelStatusBanner": {
+    "readyTitle": "Локальная модель готова",
+    "readyToastDescription": "Диктовка теперь автоматически возвращается к локальной транскрипции в реальном времени.",
+    "readyDescription": "Диктовка автоматически вернётся к локальной транскрипции в реальном времени, а управлять моделями можно дальше из настроек.",
+    "errorTitle": "Не удалось подготовить локальную модель",
+    "errorDescription": "Можно повторить загрузку или переключиться на облачный вариант в настройках.",
+    "loadingTitle": "Подготовка локальной модели",
+    "loadingDescription": "Модель: {{model}} · {{percentage}}% · После готовности приложение автоматически вернётся к локальному режиму.",
+    "unsupportedEnvironment": "Эта среда не поддерживает загрузку локальных моделей.",
+    "retryFailed": "Повторная загрузка не удалась. Попробуйте ещё раз позже.",
+    "retry": "Повторить",
+    "settings": "Настройки транскрипции"
+  }
+}

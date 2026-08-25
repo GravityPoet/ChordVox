@@ -1,0 +1,67 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "chordvox-license-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-02",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "api.chordvox.com/",
+      "zone_name": "chordvox.com"
+    },
+    {
+      "pattern": "api.chordvox.com/health*",
+      "zone_name": "chordvox.com"
+    },
+    {
+      "pattern": "api.chordvox.com/v1/*",
+      "zone_name": "chordvox.com"
+    }
+  ],
+  "vars": {
+    "ENVIRONMENT": "production",
+    "CREEM_API_BASE_URL": "https://api.creem.io",
+    "LICENSE_DEFAULT_PRODUCT_ID": "chordvox-pro",
+    "LICENSE_DEFAULT_OFFLINE_GRACE_HOURS": "168",
+    "LICENSE_DEFAULT_TRIAL_DAYS": "7",
+    "LICENSE_SERVER_ALLOWED_ORIGINS": "https://chordvox.com,https://www.chordvox.com",
+    "INTERNAL_OWNER_PLAN": "owner",
+    "INTERNAL_OWNER_MAX_ACTIVATIONS": "5"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "chordvox-license-prod",
+      "database_id": "bd32f770-540f-41d3-8226-0c9f201bfc73"
+    }
+  ],
+  "env": {
+    "staging": {
+      "name": "chordvox-license-worker-staging",
+      "workers_dev": true,
+      "routes": [],
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "CREEM_API_BASE_URL": "https://api.creem.io",
+        "LICENSE_DEFAULT_PRODUCT_ID": "chordvox-pro",
+        "LICENSE_DEFAULT_OFFLINE_GRACE_HOURS": "168",
+        "LICENSE_DEFAULT_TRIAL_DAYS": "7",
+        "LICENSE_SERVER_ALLOWED_ORIGINS": "https://chordvox.com,https://www.chordvox.com",
+        "INTERNAL_OWNER_PLAN": "owner",
+        "INTERNAL_OWNER_MAX_ACTIVATIONS": "5"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "chordvox-license-staging",
+          "database_id": "a2a76421-1f90-451a-8b21-96aefd333764"
+        }
+      ]
+    }
+  }
+}

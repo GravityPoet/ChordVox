@@ -1,0 +1,1003 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 1.5.0)"
+        required: true
+        type: string
+      source_sha:
+        description: "Source commit SHA from ChordVox-Pro/main (40 chars)"
+        required: true
+        type: string
+      real_dictation_verified_sha:
+        description: "Source SHA that already passed npm run verify:release:dictation with the fixed audio fixture and local Whisper model"
+        required: true
+        type: string
+      windows_delivery:
+        description: "How to deliver Windows assets to GitHub release"
+        required: false
+        default: "actions"
+        type: choice
+        options:
+          - actions
+          - utm-manual
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref || github.event.inputs.version }}
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+  HAS_PUBLIC_RELEASE_TOKEN: ${{ secrets.GH_TOKEN != '' }}
+  PUBLIC_RELEASE_REPO: ${{ vars.PUBLIC_RELEASE_REPO != '' && vars.PUBLIC_RELEASE_REPO || 'GravityPoet/ChordVox' }}
+
+jobs:
+  resolve-release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      tag: ${{ steps.meta.outputs.tag }}
+      source_sha: ${{ steps.meta.outputs.source_sha }}
+      source_ref: ${{ steps.meta.outputs.source_ref }}
+      real_dictation_verified_sha: ${{ steps.meta.outputs.real_dictation_verified_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release version/tag
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            SOURCE_SHA="${{ github.event.inputs.source_sha }}"
+            SOURCE_REF="${GITHUB_REF_NAME}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+            SOURCE_SHA="${GITHUB_SHA}"
+            SOURCE_REF="${GITHUB_REF_NAME}"
+          fi
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$ ]]; then
+            echo "Invalid version: $VERSION"
+            exit 1
+          fi
+          if ! [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid source SHA: $SOURCE_SHA"
+            exit 1
+          fi
+          REAL_DICTATION_VERIFIED_SHA="${{ github.event.inputs.real_dictation_verified_sha }}"
+          if ! [[ "$REAL_DICTATION_VERIFIED_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid real dictation verification SHA: $REAL_DICTATION_VERIFIED_SHA"
+            exit 1
+          fi
+          if [ "$REAL_DICTATION_VERIFIED_SHA" != "$SOURCE_SHA" ]; then
+            echo "Real dictation release gate must pass on the exact source SHA."
+            echo "source_sha=$SOURCE_SHA"
+            echo "real_dictation_verified_sha=$REAL_DICTATION_VERIFIED_SHA"
+            exit 1
+          fi
+          if [ -z "$SOURCE_REF" ]; then
+            echo "Unable to resolve source ref"
+            exit 1
+          fi
+
+          SOURCE_TRACKING_REF="refs/remotes/origin/${SOURCE_REF}"
+          git fetch origin "${SOURCE_REF}:${SOURCE_TRACKING_REF}" --force
+          git cat-file -e "${SOURCE_SHA}^{commit}" || {
+            echo "Source SHA does not exist in repository: $SOURCE_SHA"
+            exit 1
+          }
+          if ! git merge-base --is-ancestor "$SOURCE_SHA" "$SOURCE_TRACKING_REF"; then
+            echo "Source SHA is not on origin/${SOURCE_REF}: $SOURCE_SHA"
+            exit 1
+          fi
+
+          PACKAGE_VERSION="$(git show "${SOURCE_SHA}:package.json" | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])')"
+          if [ "$PACKAGE_VERSION" != "$VERSION" ]; then
+            echo "Release version does not match package.json at the source SHA."
+            echo "workflow_version=$VERSION"
+            echo "package_version=$PACKAGE_VERSION"
+            exit 1
+          fi
+
+          TAG="v${VERSION}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "source_sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "source_ref=$SOURCE_REF" >> "$GITHUB_OUTPUT"
+          echo "real_dictation_verified_sha=$REAL_DICTATION_VERIFIED_SHA" >> "$GITHUB_OUTPUT"
+          echo "Resolved release: $TAG from source ref: $SOURCE_REF source SHA: $SOURCE_SHA"
+
+  release-quality-gates:
+    needs: resolve-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Pin npm version
+        run: npm install -g npm@11.9.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit production and build dependencies
+        run: npm audit --audit-level=high
+
+      - name: Run release quality gates
+        run: npm run verify:ci
+
+      - name: Verify license worker typecheck and deployment bundles
+        run: |
+          npm --prefix services/license-worker ci --ignore-scripts
+          npm --prefix services/license-worker run check
+          npm --prefix services/license-worker run wrangler:check
+
+  build-linux:
+    needs: [resolve-release, release-quality-gates]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Verify checked out source SHA
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          if [ "$ACTUAL_SHA" != "$EXPECTED_SOURCE_SHA" ]; then
+            echo "Source SHA mismatch. expected=$EXPECTED_SOURCE_SHA actual=$ACTUAL_SHA"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Pin npm version
+        run: npm install -g npm@11.9.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Linux packaging dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y binutils rpm libx11-dev libxtst-dev xvfb dbus-x11
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: linux-ubuntu24-glibc235-x64-bin-${{ hashFiles('scripts/download-*.js', 'scripts/build-linux-fast-paste.js', 'resources/linux-fast-paste.c') }}
+
+      - name: Prepare Linux native resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run prebuild:linux
+          test -x resources/bin/linux-fast-paste
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron
+          key: linux-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: linux-electron-
+
+      - name: Cache fixed release dictation model
+        uses: actions/cache@v4
+        with:
+          path: .cache/release-dictation-model
+          key: release-dictation-model-${{ hashFiles('scripts/download-release-dictation-model.js') }}
+
+      - name: Prepare fixed release dictation model
+        run: npm run download:release-dictation-model
+
+      - name: Build Linux artifacts
+        run: |
+          npm run build:linux:package -- --publish never --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }} --config.extraMetadata.releaseSourceSha=${{ needs.resolve-release.outputs.source_sha }}
+          npm run verify:linux:package
+        env:
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          CHORDVOX_EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+
+      - name: Verify packaged Linux fixed-WAV dictation and trusted-click paste
+        shell: bash
+        env:
+          CHORDVOX_PACKAGED_EXPECTED_PLATFORM: linux
+          CHORDVOX_PACKAGED_EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+          CHORDVOX_PACKAGED_EVIDENCE_PATH: ${{ github.workspace }}/dist/native-runtime-evidence-linux.json
+          CHORDVOX_PACKAGED_DICTATION_WHISPER_MODEL: ${{ github.workspace }}/.cache/release-dictation-model/ggml-tiny.bin
+        run: |
+          set -euo pipefail
+          APP_EXECUTABLE="$(find dist/linux-unpacked -maxdepth 1 -type f \( -name 'chordvox' -o -name 'ChordVox' \) -print -quit)"
+          test -n "$APP_EXECUTABLE"
+          test -x "$APP_EXECUTABLE"
+          CHORDVOX_PACKAGED_APP_EXECUTABLE="$APP_EXECUTABLE" \
+            xvfb-run -a dbus-run-session -- npm run verify:packaged:dictation
+
+      - name: Generate Linux release manifest
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+          RELEASE_REAL_DICTATION_VERIFIED_SHA: ${{ needs.resolve-release.outputs.real_dictation_verified_sha }}
+        run: |
+          set -euo pipefail
+          MANIFEST="dist/release-manifest-linux.json"
+          mapfile -t FILES < <(find dist -maxdepth 1 -type f \( -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" -o -name "*.tar.gz" -o -name "latest-linux.yml" -o -name "native-runtime-evidence-linux.json" \) | sort)
+          if [ "${#FILES[@]}" -eq 0 ]; then
+            echo "No Linux assets found for manifest generation"
+            exit 1
+          fi
+
+          {
+            echo "{"
+            echo "  \"tag\": \"${RELEASE_TAG}\","
+            echo "  \"version\": \"${RELEASE_VERSION}\","
+            echo "  \"sourceSha\": \"${RELEASE_SOURCE_SHA}\","
+            echo "  \"realDictationVerifiedSha\": \"${RELEASE_REAL_DICTATION_VERIFIED_SHA}\","
+            echo "  \"platform\": \"linux-x64\","
+            echo "  \"generatedAt\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\","
+            echo "  \"assets\": ["
+            for i in "${!FILES[@]}"; do
+              file="${FILES[$i]}"
+              name="$(basename "$file")"
+              size="$(wc -c < "$file" | tr -d '[:space:]')"
+              sha="$(sha256sum "$file" | awk '{print $1}')"
+              comma=","
+              if [ "$i" -eq "$((${#FILES[@]} - 1))" ]; then
+                comma=""
+              fi
+              echo "    {\"name\":\"${name}\",\"sha256\":\"${sha}\",\"sizeBytes\":${size}}${comma}"
+            done
+            echo "  ]"
+            echo "}"
+          } > "$MANIFEST"
+
+      - name: Stage Linux release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-linux-x64
+          if-no-files-found: error
+          retention-days: 3
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+            dist/latest-linux.yml
+            dist/release-manifest-linux.json
+            dist/native-runtime-evidence-linux.json
+
+  build-windows:
+    if: ${{ github.event.inputs.windows_delivery != 'utm-manual' }}
+    needs: [resolve-release, release-quality-gates]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Verify checked out source SHA
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          if [ "$ACTUAL_SHA" != "$EXPECTED_SOURCE_SHA" ]; then
+            echo "Source SHA mismatch. expected=$EXPECTED_SOURCE_SHA actual=$ACTUAL_SHA"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Pin npm version
+        run: npm install -g npm@11.9.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: windows-x64-bin-${{ hashFiles('scripts/download-*.js') }}
+
+      - name: Prepare Windows native resources
+        shell: pwsh
+        run: |
+          npm run prebuild:win
+          if (!(Test-Path "resources/bin/windows-key-listener.exe")) {
+            throw "Missing resources/bin/windows-key-listener.exe after prebuild:win"
+          }
+          if (!(Test-Path "resources/bin/windows-fast-paste.exe")) {
+            throw "Missing resources/bin/windows-fast-paste.exe after prebuild:win"
+          }
+          if (!(Test-Path "resources/bin/nircmd.exe")) {
+            throw "Missing resources/bin/nircmd.exe after prebuild:win"
+          }
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/AppData/Local/electron/Cache
+          key: windows-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: windows-electron-
+
+      - name: Cache fixed release dictation model
+        uses: actions/cache@v4
+        with:
+          path: .cache/release-dictation-model
+          key: release-dictation-model-${{ hashFiles('scripts/download-release-dictation-model.js') }}
+
+      - name: Prepare fixed release dictation model
+        run: npm run download:release-dictation-model
+
+      - name: Require Windows Authenticode signing inputs
+        shell: pwsh
+        env:
+          WIN_CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
+          WINDOWS_PUBLISHER_NAME: ${{ vars.WINDOWS_PUBLISHER_NAME }}
+        run: |
+          foreach ($name in @("WIN_CSC_LINK", "WIN_CSC_KEY_PASSWORD", "WINDOWS_PUBLISHER_NAME")) {
+            $value = [Environment]::GetEnvironmentVariable($name)
+            if ([string]::IsNullOrWhiteSpace($value)) {
+              throw "Missing required Windows signing input: $name"
+            }
+          }
+          if ($env:WINDOWS_PUBLISHER_NAME -cne "ChordVox Local Code Signing") {
+            throw "WINDOWS_PUBLISHER_NAME must remain 'ChordVox Local Code Signing'"
+          }
+
+      - name: Build Windows artifacts
+        run: |
+          npm run build:win:package -- --publish never --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }} --config.extraMetadata.releaseSourceSha=${{ needs.resolve-release.outputs.source_sha }}
+          npm run verify:win:package
+        env:
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          CHORDVOX_EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+          WIN_CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
+          WINDOWS_PUBLISHER_NAME: ${{ vars.WINDOWS_PUBLISHER_NAME }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+
+      - name: Normalize Windows release asset filenames
+        shell: pwsh
+        env:
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+        run: |
+          $latestPath = "dist/latest.yml"
+          if (!(Test-Path $latestPath)) {
+            throw "Missing dist/latest.yml"
+          }
+
+          $latestLines = Get-Content -Path $latestPath
+          $pathLine = $latestLines | Where-Object { $_ -match "^\s*path:\s*(.+?)\s*$" } | Select-Object -First 1
+          if (-not $pathLine) {
+            throw "Could not read installer path from latest.yml"
+          }
+          $expectedInstallerName = ($pathLine -replace "^\s*path:\s*", "").Trim()
+          $expectedInstallerName = $expectedInstallerName -replace '^[''"]|[''"]$', ''
+          if ([string]::IsNullOrWhiteSpace($expectedInstallerName)) {
+            throw "latest.yml path is empty"
+          }
+          $expectedInstallerName = Split-Path -Leaf $expectedInstallerName
+          $expectedPortableName = "ChordVox-$env:RELEASE_VERSION.exe"
+          $expectedBlockmapName = "$expectedInstallerName.blockmap"
+
+          $sizeLine = $latestLines | Where-Object { $_ -match "^\s*size:\s*([0-9]+)\s*$" } | Select-Object -First 1
+          if (-not $sizeLine) {
+            throw "Could not read installer size from latest.yml"
+          }
+          $installerSize = [int64](($sizeLine -replace "^\s*size:\s*", "").Trim())
+
+          $releaseExes = Get-ChildItem -Path dist -Filter "*.exe" -File |
+            Where-Object {
+              $_.Name -like "*$env:RELEASE_VERSION*" -and
+              $_.Name -notin @("windows-fast-paste.exe", "windows-key-listener.exe", "nircmd.exe")
+            }
+          $installer = @($releaseExes | Where-Object { $_.Length -eq $installerSize })
+          if ($installer.Count -ne 1) {
+            throw "Could not uniquely identify Windows installer by latest.yml size"
+          }
+          $portable = @($releaseExes | Where-Object { $_.FullName -ne $installer[0].FullName })
+          if ($portable.Count -ne 1) {
+            throw "Could not uniquely identify Windows portable exe"
+          }
+          $blockmap = @(Get-ChildItem -Path dist -Filter "*.blockmap" -File | Where-Object { $_.Name -like "*$env:RELEASE_VERSION*" })
+          if ($blockmap.Count -ne 1) {
+            throw "Could not uniquely identify Windows blockmap"
+          }
+
+          function Move-ReleaseAsset {
+            param(
+              [System.IO.FileInfo] $Source,
+              [string] $ExpectedName
+            )
+            $destination = Join-Path "dist" $ExpectedName
+            $existingDestination = Resolve-Path -LiteralPath $destination -ErrorAction SilentlyContinue
+            if ($existingDestination -and $Source.FullName -eq $existingDestination.ProviderPath) {
+              return
+            }
+            Remove-Item -LiteralPath $destination -Force -ErrorAction SilentlyContinue
+            Move-Item -LiteralPath $Source.FullName -Destination $destination -Force
+          }
+
+          Move-ReleaseAsset -Source $installer[0] -ExpectedName $expectedInstallerName
+          Move-ReleaseAsset -Source $portable[0] -ExpectedName $expectedPortableName
+          Move-ReleaseAsset -Source $blockmap[0] -ExpectedName $expectedBlockmapName
+
+          $expected = @($expectedInstallerName, $expectedPortableName, $expectedBlockmapName, "latest.yml")
+          foreach ($name in $expected) {
+            if (!(Test-Path (Join-Path "dist" $name))) {
+              throw "Missing normalized Windows release asset: $name"
+            }
+          }
+
+      - name: Verify Windows Authenticode signatures
+        shell: pwsh
+        env:
+          WINDOWS_PUBLISHER_NAME: ${{ vars.WINDOWS_PUBLISHER_NAME }}
+        run: |
+          & certutil.exe -addstore -f Root "resources/windows/chordvox-local-code-signing.cer"
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to trust the pinned ChordVox self-signed certificate in the ephemeral runner Root store"
+          }
+          $trusted = @(Import-Certificate `
+            -FilePath "resources/windows/chordvox-local-code-signing.cer" `
+            -CertStoreLocation "Cert:\CurrentUser\TrustedPeople")
+          if ($trusted.Count -ne 1) {
+            throw "Failed to trust the pinned ChordVox self-signed certificate for verification"
+          }
+          npm run verify:win:authenticode -- -SourceSha "${{ needs.resolve-release.outputs.source_sha }}" -EvidencePath "dist/windows-authenticode-evidence.json"
+
+      - name: Verify packaged Windows fixed-WAV dictation and trusted-click paste
+        shell: pwsh
+        env:
+          CHORDVOX_PACKAGED_EXPECTED_PLATFORM: win32
+          CHORDVOX_PACKAGED_EVIDENCE_PATH: ${{ github.workspace }}\dist\native-runtime-evidence-windows.json
+          CHORDVOX_PACKAGED_DICTATION_WHISPER_MODEL: ${{ github.workspace }}\.cache\release-dictation-model\ggml-tiny.bin
+          CHORDVOX_PACKAGED_DISABLE_GPU: "1"
+        run: |
+          $env:CHORDVOX_PACKAGED_APP_EXECUTABLE = (Resolve-Path "dist/win-unpacked/ChordVox.exe").ProviderPath
+          npm run verify:packaged:dictation
+
+      - name: Generate Windows release manifest
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+          RELEASE_REAL_DICTATION_VERIFIED_SHA: ${{ needs.resolve-release.outputs.real_dictation_verified_sha }}
+        run: |
+          $patterns = @(
+            "*.exe",
+            "*.zip",
+            "*.blockmap",
+            "latest.yml",
+            "windows-authenticode-evidence.json",
+            "native-runtime-evidence-windows.json"
+          )
+          $files = @()
+          foreach ($pattern in $patterns) {
+            $files += Get-ChildItem -Path dist -Filter $pattern -File -ErrorAction SilentlyContinue
+          }
+          $files = $files | Sort-Object Name -Unique
+          if ($files.Count -eq 0) {
+            Write-Error "No Windows assets found for manifest generation"
+            exit 1
+          }
+
+          $authenticodeEvidence = Get-Content -Raw "dist/windows-authenticode-evidence.json" | ConvertFrom-Json
+          $nativeRuntimeEvidence = Get-Content -Raw "dist/native-runtime-evidence-windows.json" | ConvertFrom-Json
+          if ($authenticodeEvidence.sourceSha -ne $env:RELEASE_SOURCE_SHA) {
+            throw "Authenticode evidence source SHA mismatch"
+          }
+          if ($nativeRuntimeEvidence.sourceSha -ne $env:RELEASE_SOURCE_SHA) {
+            throw "Windows native runtime evidence source SHA mismatch"
+          }
+
+          $assets = @()
+          foreach ($file in $files) {
+            $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLower()
+            $assets += [ordered]@{
+              name = $file.Name
+              sha256 = $hash
+              sizeBytes = $file.Length
+            }
+          }
+
+          $manifest = [ordered]@{
+            tag = "$env:RELEASE_TAG"
+            version = "$env:RELEASE_VERSION"
+            sourceSha = "$env:RELEASE_SOURCE_SHA"
+            realDictationVerifiedSha = "$env:RELEASE_REAL_DICTATION_VERIFIED_SHA"
+            platform = "windows-x64"
+            authenticode = [ordered]@{
+              publisherName = $authenticodeEvidence.publisherName
+              signerThumbprint = $authenticodeEvidence.signerThumbprint
+              evidenceSha256 = (Get-FileHash -Path "dist/windows-authenticode-evidence.json" -Algorithm SHA256).Hash.ToLower()
+            }
+            nativeRuntimeEvidenceSha256 = (Get-FileHash -Path "dist/native-runtime-evidence-windows.json" -Algorithm SHA256).Hash.ToLower()
+            generatedAt = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+            assets = $assets
+          }
+
+          $manifest | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 dist/release-manifest-windows.json
+
+      - name: Stage Windows release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows-x64
+          if-no-files-found: error
+          retention-days: 3
+          path: |
+            dist/*.exe
+            dist/*.zip
+            dist/*.blockmap
+            dist/latest.yml
+            dist/release-manifest-windows.json
+            dist/windows-authenticode-evidence.json
+            dist/native-runtime-evidence-windows.json
+
+  build-macos:
+    needs: [resolve-release, release-quality-gates]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            runner: macos-15-intel
+          - arch: arm64
+            runner: macos-15
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Verify checked out source SHA
+        shell: bash
+        env:
+          EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          if [ "$ACTUAL_SHA" != "$EXPECTED_SOURCE_SHA" ]; then
+            echo "Source SHA mismatch. expected=$EXPECTED_SOURCE_SHA actual=$ACTUAL_SHA"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Pin npm version
+        run: npm install -g npm@11.9.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache fixed release dictation model
+        uses: actions/cache@v4
+        with:
+          path: .cache/release-dictation-model
+          key: release-dictation-model-${{ hashFiles('scripts/download-release-dictation-model.js') }}
+
+      - name: Prepare fixed release dictation model
+        run: npm run download:release-dictation-model
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: macos-${{ matrix.arch }}-bin-${{ hashFiles('scripts/download-*.js', 'scripts/build-globe-listener.js', 'resources/macos-globe-listener.swift') }}
+
+      - name: Download whisper.cpp binaries
+        run: node scripts/download-whisper-cpp.js --current --platform darwin --arch ${{ matrix.arch }}
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download llama-server binaries
+        run: node scripts/download-llama-server.js --current --platform darwin --arch ${{ matrix.arch }}
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Download sherpa-onnx binaries
+        run: node scripts/download-sherpa-onnx.js --current --platform darwin --arch ${{ matrix.arch }}
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron
+          key: macos-${{ matrix.arch }}-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: macos-${{ matrix.arch }}-electron-
+
+      - name: Require pinned macOS signing identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${{ secrets.CHORDVOX_MACOS_CERTIFICATE_BASE64 }}" || {
+            echo "Missing CHORDVOX_MACOS_CERTIFICATE_BASE64." >&2
+            exit 1
+          }
+          test -n "${{ secrets.CHORDVOX_MACOS_CERTIFICATE_PASSWORD }}" || {
+            echo "Missing CHORDVOX_MACOS_CERTIFICATE_PASSWORD." >&2
+            exit 1
+          }
+
+      - name: Setup macOS Code Signing
+        env:
+          CHORDVOX_MACOS_CERTIFICATE_BASE64: ${{ secrets.CHORDVOX_MACOS_CERTIFICATE_BASE64 }}
+          CHORDVOX_MACOS_CERTIFICATE_PASSWORD: ${{ secrets.CHORDVOX_MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+          CERTIFICATE_PATH="$RUNNER_TEMP/chordvox-signing.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/chordvox-signing.keychain-db"
+
+          printf '%s' "$CHORDVOX_MACOS_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
+
+          security create-keychain -p "runner" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "runner" "$KEYCHAIN_PATH"
+
+          security import "$CERTIFICATE_PATH" \
+            -P "$CHORDVOX_MACOS_CERTIFICATE_PASSWORD" \
+            -T /usr/bin/codesign \
+            -T /usr/bin/security \
+            -k "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          CHORDVOX_SIGNING_CERT_SHA1="$(
+            /usr/bin/openssl x509 \
+              -in resources/mac/chordvox-local-signing.crt \
+              -noout -fingerprint -sha1 \
+              | cut -d= -f2 \
+              | tr -d ':'
+          )"
+          test -n "$CHORDVOX_SIGNING_CERT_SHA1"
+          sudo -n security add-trusted-cert -d -r trustRoot -p codeSign \
+            -k /Library/Keychains/System.keychain resources/mac/chordvox-local-signing.crt
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign: -s -k "runner" "$KEYCHAIN_PATH"
+          security find-identity -v -p codesigning "$KEYCHAIN_PATH" \
+            | grep -F '"ChordVox Local Code Signing"'
+          echo "CHORDVOX_SIGNING_KEYCHAIN=$KEYCHAIN_PATH" >> "$GITHUB_ENV"
+          echo "CHORDVOX_SIGNING_CERT_SHA1=$CHORDVOX_SIGNING_CERT_SHA1" >> "$GITHUB_ENV"
+
+      - name: Build macOS artifacts (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run verify:dmg-config
+          npm run prebuild:mac:customer
+          npm run build:production
+          node scripts/build-mac-dmg.js --arch "${{ matrix.arch }}" \
+            --config.extraMetadata.version=${{ needs.resolve-release.outputs.version }}
+        env:
+          TARGET_ARCH: ${{ matrix.arch }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          CHORDVOX_RELEASE_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Verify packaged macOS helpers (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          CHORDVOX_EXPECTED_SOURCE_SHA="${{ needs.resolve-release.outputs.source_sha }}" \
+            node scripts/verify-mac-package.js --platform mac "dist/.mac-dmg-work/mac-${{ matrix.arch }}/ChordVox.app"
+
+      - name: Verify packaged macOS fixed-WAV dictation (${{ matrix.arch }})
+        shell: bash
+        env:
+          CHORDVOX_PACKAGED_EXPECTED_PLATFORM: darwin
+          CHORDVOX_PACKAGED_EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+          CHORDVOX_PACKAGED_EVIDENCE_PATH: ${{ github.workspace }}/dist/native-runtime-evidence-macos-${{ matrix.arch }}.json
+          CHORDVOX_PACKAGED_DICTATION_WHISPER_MODEL: ${{ github.workspace }}/.cache/release-dictation-model/ggml-tiny.bin
+        run: |
+          set -euo pipefail
+          CHORDVOX_PACKAGED_APP_EXECUTABLE="${GITHUB_WORKSPACE}/dist/.mac-dmg-work/mac-${{ matrix.arch }}/ChordVox.app/Contents/MacOS/ChordVox" \
+            npm run verify:packaged:dictation
+
+      - name: Install macOS package for installed acceptance (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/install-macos-local-build.sh "dist/.mac-dmg-work/mac-${{ matrix.arch }}/ChordVox.app"
+
+      - name: Verify installed macOS fixed-WAV dictation (${{ matrix.arch }})
+        shell: bash
+        env:
+          CHORDVOX_PACKAGED_EXPECTED_PLATFORM: darwin
+          CHORDVOX_PACKAGED_EXPECTED_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+          CHORDVOX_PACKAGED_EVIDENCE_PATH: ${{ github.workspace }}/dist/native-runtime-evidence-macos-${{ matrix.arch }}-installed.json
+          CHORDVOX_PACKAGED_DICTATION_WHISPER_MODEL: ${{ github.workspace }}/.cache/release-dictation-model/ggml-tiny.bin
+        run: npm run verify:installed:dictation
+
+      - name: Generate macOS release manifest (${{ matrix.arch }})
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ needs.resolve-release.outputs.source_sha }}
+          RELEASE_REAL_DICTATION_VERIFIED_SHA: ${{ needs.resolve-release.outputs.real_dictation_verified_sha }}
+        run: |
+          set -euo pipefail
+          MANIFEST="dist/release-manifest-macos-${{ matrix.arch }}.json"
+          FILES=()
+          while IFS= read -r file; do
+            FILES+=("$file")
+          done < <(find dist -maxdepth 1 -type f \( -name "*.dmg" -o -name "*.zip" -o -name "*.zip.blockmap" -o -name "*.dmg.blockmap" -o -name "native-runtime-evidence-macos-${{ matrix.arch }}.json" -o -name "native-runtime-evidence-macos-${{ matrix.arch }}-installed.json" \) | sort)
+          if [ "${#FILES[@]}" -eq 0 ]; then
+            echo "No macOS assets found for manifest generation"
+            exit 1
+          fi
+
+          {
+            echo "{"
+            echo "  \"tag\": \"${RELEASE_TAG}\","
+            echo "  \"version\": \"${RELEASE_VERSION}\","
+            echo "  \"sourceSha\": \"${RELEASE_SOURCE_SHA}\","
+            echo "  \"realDictationVerifiedSha\": \"${RELEASE_REAL_DICTATION_VERIFIED_SHA}\","
+            echo "  \"platform\": \"macos-${{ matrix.arch }}\","
+            echo "  \"generatedAt\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\","
+            echo "  \"assets\": ["
+            for i in "${!FILES[@]}"; do
+              file="${FILES[$i]}"
+              name="$(basename "$file")"
+              size="$(wc -c < "$file" | tr -d '[:space:]')"
+              sha="$(shasum -a 256 "$file" | awk '{print $1}')"
+              comma=","
+              if [ "$i" -eq "$((${#FILES[@]} - 1))" ]; then
+                comma=""
+              fi
+              echo "    {\"name\":\"${name}\",\"sha256\":\"${sha}\",\"sizeBytes\":${size}}${comma}"
+            done
+            echo "  ]"
+            echo "}"
+          } > "$MANIFEST"
+
+      - name: Stage macOS release artifacts (${{ matrix.arch }})
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-macos-${{ matrix.arch }}
+          if-no-files-found: error
+          retention-days: 3
+          path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.zip.blockmap
+            dist/*.dmg.blockmap
+            dist/latest-mac.yml
+            dist/native-runtime-evidence-macos-${{ matrix.arch }}.json
+            dist/native-runtime-evidence-macos-${{ matrix.arch }}-installed.json
+            dist/release-manifest-macos-${{ matrix.arch }}.json
+
+      - name: Cleanup Certificates
+        if: always()
+        run: |
+          if [ -n "${CHORDVOX_SIGNING_CERT_SHA1:-}" ]; then
+            sudo -n security delete-certificate \
+              -Z "$CHORDVOX_SIGNING_CERT_SHA1" \
+              /Library/Keychains/System.keychain || true
+          fi
+          security delete-keychain "$RUNNER_TEMP/chordvox-signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/chordvox-signing.p12"
+
+  publish-release:
+    needs: [resolve-release, release-quality-gates, build-linux, build-windows, build-macos]
+    if: >-
+      ${{
+        always() &&
+        needs.resolve-release.result == 'success' &&
+        needs.release-quality-gates.result == 'success' &&
+        needs.build-linux.result == 'success' &&
+        needs.build-macos.result == 'success' &&
+        (needs.build-windows.result == 'success' || github.event.inputs.windows_delivery == 'utm-manual')
+      }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-release.outputs.source_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install metadata parser
+        run: npm ci --ignore-scripts
+
+      - name: Download Linux release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-linux-x64
+          path: release-assets/linux-x64
+
+      - name: Download Windows release artifacts
+        if: github.event.inputs.windows_delivery != 'utm-manual'
+        uses: actions/download-artifact@v4
+        with:
+          name: release-windows-x64
+          path: release-assets/windows-x64
+
+      - name: Download Intel macOS release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-macos-x64
+          path: release-assets/macos-x64
+
+      - name: Download Apple Silicon macOS release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-macos-arm64
+          path: release-assets/macos-arm64
+
+      - name: Merge and verify macOS update metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/merge-mac-update-metadata.js \
+            release-assets/macos-x64/latest-mac.yml \
+            release-assets/macos-arm64/latest-mac.yml \
+            release-assets/latest-mac.yml
+
+      - name: Create draft, upload the complete asset set, then publish
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ needs.resolve-release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.resolve-release.outputs.version }}
+          WINDOWS_DELIVERY: ${{ github.event.inputs.windows_delivery }}
+        run: |
+          set -euo pipefail
+          REPO="${PUBLIC_RELEASE_REPO}"
+          TAG="${RELEASE_TAG}"
+          VERSION="${RELEASE_VERSION}"
+          TEMPLATE_PATH="docs/RELEASE_NOTES_TEMPLATE.md"
+
+          if [ "$REPO" != "${GITHUB_REPOSITORY}" ] && [ "${HAS_PUBLIC_RELEASE_TOKEN}" != "true" ]; then
+            echo "Publishing to ${REPO} requires GH_TOKEN with access to that repository."
+            exit 1
+          fi
+          if [ ! -f "$TEMPLATE_PATH" ]; then
+            echo "Release notes template not found: $TEMPLATE_PATH"
+            exit 1
+          fi
+
+          python3 - "$VERSION" "$TEMPLATE_PATH" > release-notes.md <<'PY'
+          import pathlib
+          import sys
+
+          version = sys.argv[1]
+          template_path = pathlib.Path(sys.argv[2])
+          template = template_path.read_text(encoding="utf-8")
+          if "{{VERSION}}" not in template:
+              raise SystemExit(f"Missing {{VERSION}} placeholder in {template_path}")
+          rendered = template.replace("{{VERSION}}", version)
+          sys.stdout.write(rendered)
+          if not rendered.endswith("\n"):
+              sys.stdout.write("\n")
+          PY
+
+          if gh release view "$TAG" -R "$REPO" >/dev/null 2>&1; then
+            IS_DRAFT="$(gh api "repos/${REPO}/releases/tags/${TAG}" --jq '.draft')"
+            if [ "$IS_DRAFT" != "true" ]; then
+              echo "Refusing to replace assets on an already-public release: $TAG"
+              exit 1
+            fi
+            gh release edit "$TAG" -R "$REPO" --title "ChordVox v${VERSION}" --notes-file release-notes.md
+          else
+            gh release create "$TAG" -R "$REPO" --draft --title "ChordVox v${VERSION}" --notes-file release-notes.md
+          fi
+
+          ASSETS=()
+          while IFS= read -r asset; do
+            ASSETS+=("$asset")
+          done < <(
+            find release-assets -type f \
+              ! -path 'release-assets/macos-x64/latest-mac.yml' \
+              ! -path 'release-assets/macos-arm64/latest-mac.yml' \
+              | sort
+          )
+          if [ "${#ASSETS[@]}" -eq 0 ]; then
+            echo "No staged release assets found."
+            exit 1
+          fi
+
+          DUPLICATE_NAMES="$(printf '%s\n' "${ASSETS[@]}" | xargs -n1 basename | sort | uniq -d)"
+          if [ -n "$DUPLICATE_NAMES" ]; then
+            echo "Duplicate release asset names are not allowed:"
+            echo "$DUPLICATE_NAMES"
+            exit 1
+          fi
+
+          gh release upload "$TAG" "${ASSETS[@]}" -R "$REPO" --clobber
+
+          EXPECTED_NAMES="$(mktemp)"
+          ACTUAL_NAMES="$(mktemp)"
+          printf '%s\n' "${ASSETS[@]}" | xargs -n1 basename | sort -u > "$EXPECTED_NAMES"
+          gh release view "$TAG" -R "$REPO" --json assets --jq '.assets[].name' | sort -u > "$ACTUAL_NAMES"
+
+          UNEXPECTED_ASSETS="$(comm -13 "$EXPECTED_NAMES" "$ACTUAL_NAMES")"
+          if [ -n "$UNEXPECTED_ASSETS" ]; then
+            echo "Removing assets left by an earlier draft attempt:"
+            echo "$UNEXPECTED_ASSETS"
+            while IFS= read -r asset_name; do
+              [ -n "$asset_name" ] || continue
+              gh release delete-asset "$TAG" "$asset_name" -R "$REPO" --yes
+            done <<< "$UNEXPECTED_ASSETS"
+            gh release view "$TAG" -R "$REPO" --json assets --jq '.assets[].name' | sort -u > "$ACTUAL_NAMES"
+          fi
+
+          MISSING_ASSETS="$(comm -23 "$EXPECTED_NAMES" "$ACTUAL_NAMES")"
+          if [ -n "$MISSING_ASSETS" ]; then
+            echo "Release is missing one or more staged assets:"
+            echo "$MISSING_ASSETS"
+            exit 1
+          fi
+          UNEXPECTED_ASSETS="$(comm -13 "$EXPECTED_NAMES" "$ACTUAL_NAMES")"
+          if [ -n "$UNEXPECTED_ASSETS" ]; then
+            echo "Release still contains assets that were not staged by this run:"
+            echo "$UNEXPECTED_ASSETS"
+            exit 1
+          fi
+
+          node scripts/verify-release-assets.js \
+            --repo "$REPO" \
+            --tag "$TAG" \
+            --dir release-assets \
+            --exclude macos-x64/latest-mac.yml \
+            --exclude macos-arm64/latest-mac.yml
+
+          if [ "$WINDOWS_DELIVERY" = "utm-manual" ]; then
+            echo "All automated assets uploaded. Release remains a draft until verified Windows assets are added manually."
+          else
+            gh release edit "$TAG" -R "$REPO" --draft=false --latest
+            echo "Published complete release $TAG."
+          fi

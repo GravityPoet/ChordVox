@@ -1,0 +1,191 @@
+[
+  {
+    "id": "zipformer-ctc-zh-large-fp16",
+    "name": "快速实时（中文）",
+    "nameEn": "Fast Realtime (Chinese)",
+    "size": "297MB",
+    "sizeBytes": 311749110,
+    "dirName": "sherpa-onnx-streaming-zipformer-ctc-zh-fp16-2025-06-30",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-ctc-zh-fp16-2025-06-30.tar.bz2",
+    "archiveSizeBytes": 280100839,
+    "sha256": "4fbf38c2ff7ba412b41f80a35de5f12643b56861e8e221191d2cc261c555d1d6",
+    "mirrorPath": "sherpa-onnx-streaming-zipformer-ctc-zh-fp16-2025-06-30.tar.bz2",
+    "mirrors": [
+      {
+        "url": "https://www.modelscope.cn/models/ChillMars/sherpa-onnx-streaming-zipformer-ctc-zh-fp16-2025-06-30/resolve/master/sherpa-onnx-streaming-zipformer-ctc-zh-fp16-2025-06-30.tar.bz2",
+        "kind": "modelscope",
+        "label": "ModelScope 魔搭（国内镜像）"
+      }
+    ],
+    "modelType": "zipformer2Ctc",
+    "language": "zh",
+    "tier": "fast-realtime",
+    "default": true,
+    "recommended": true,
+    "rtf": "0.14",
+    "files": [
+      {
+        "path": "model.fp16.onnx",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-ctc-zh-fp16-2025-06-30/resolve/main/model.fp16.onnx",
+        "sizeBytes": 311728482,
+        "sha256": "901ce500e596a46075db0c25c6d06d52b5e489b01918bb8429011149b37fdf53"
+      },
+      {
+        "path": "tokens.txt",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-ctc-zh-fp16-2025-06-30/resolve/main/tokens.txt",
+        "sizeBytes": 20628,
+        "sha256": "6193c7ea1c96d0d9a1e9652789b40d13a8a913b434a5451e93158f5a09fd6652"
+      }
+    ],
+    "modelFileName": "model.fp16.onnx"
+  },
+  {
+    "id": "zipformer-ctc-zh-xlarge",
+    "name": "高精度实时（中文）",
+    "nameEn": "High Accuracy Realtime (Chinese)",
+    "size": "728MB",
+    "sizeBytes": 763363328,
+    "dirName": "sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30.tar.bz2",
+    "archiveSizeBytes": 590044704,
+    "sha256": "23f32059d502e87f4fe4b1a17dbedb65582bb0c42950b3d615f218bb25feafd5",
+    "mirrorPath": "sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30.tar.bz2",
+    "mirrors": [
+      {
+        "url": "https://www.modelscope.cn/models/ChillMars/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30/resolve/master/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30.tar.bz2",
+        "kind": "modelscope",
+        "label": "ModelScope 魔搭（国内镜像）"
+      }
+    ],
+    "modelType": "zipformer2Ctc",
+    "language": "zh",
+    "tier": "high-accuracy-realtime",
+    "files": [
+      {
+        "path": "model.int8.onnx",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30/resolve/main/model.int8.onnx",
+        "sizeBytes": 763031377,
+        "sha256": "5c04e1ba8c200e9ca1a9229d46641ce06fa563162e60d9997ef92c306549aa05"
+      },
+      {
+        "path": "tokens.txt",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30/resolve/main/tokens.txt",
+        "sizeBytes": 18626,
+        "sha256": "6722bd1585f46f84456b29c3550a343a3cc375b971645773c02ed8e0b4e2405c"
+      },
+      {
+        "path": "bpe.model",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30/resolve/main/bpe.model",
+        "sizeBytes": 263956,
+        "sha256": "867a7355801cb43939962ad757ba1cb7941b6171b5a6902772483b4e3a623377"
+      }
+    ],
+    "rtf": "0.4"
+  },
+  {
+    "id": "zipformer-ctc-zh-xlarge-fp16",
+    "name": "流式最高精度（中文，较大）",
+    "nameEn": "Highest Accuracy (Chinese, FP16)",
+    "size": "1.5GB",
+    "sizeBytes": 1610612736,
+    "dirName": "sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-fp16-2025-06-30",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-fp16-2025-06-30.tar.bz2",
+    "archiveSizeBytes": 1335125607,
+    "sha256": "602c0e49dfe81f977c138fb3cb0a2e8ef486fe5f232f817de09d0959eddabea6",
+    "mirrorPath": "sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-fp16-2025-06-30.tar.bz2",
+    "mirrors": [
+      {
+        "url": "https://www.modelscope.cn/models/ChillMars/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-fp16-2025-06-30/resolve/master/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-fp16-2025-06-30.tar.bz2",
+        "kind": "modelscope",
+        "label": "ModelScope 魔搭（国内镜像）"
+      }
+    ],
+    "modelType": "zipformer2Ctc",
+    "modelFileName": "model.fp16.onnx",
+    "language": "zh",
+    "tier": "highest-accuracy",
+    "requiresExternalNodeRuntime": true,
+    "files": [
+      {
+        "path": "model.fp16.onnx",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-fp16-2025-06-30/resolve/main/model.fp16.onnx",
+        "sizeBytes": 1498499282,
+        "sha256": "a95df15500e94bc72e844ba5d9bf72e58bb19112e1a367c1341365d6c58be783"
+      },
+      {
+        "path": "tokens.txt",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-fp16-2025-06-30/resolve/main/tokens.txt",
+        "sizeBytes": 18626,
+        "sha256": "6722bd1585f46f84456b29c3550a343a3cc375b971645773c02ed8e0b4e2405c"
+      },
+      {
+        "path": "bpe.model",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-fp16-2025-06-30/resolve/main/bpe.model",
+        "sizeBytes": 263956,
+        "sha256": "867a7355801cb43939962ad757ba1cb7941b6171b5a6902772483b4e3a623377"
+      }
+    ],
+    "hidden": true,
+    "deprecated": true,
+    "replacedBy": "zipformer-ctc-zh-xlarge"
+  },
+  {
+    "id": "nemotron-streaming-en-0.6b",
+    "name": "Nemotron Streaming En 0.6B（英文专用）",
+    "nameEn": "Nemotron Streaming En 0.6B (English only)",
+    "size": "631MB",
+    "sizeBytes": 661919397,
+    "dirName": "sherpa-onnx-nemotron-speech-streaming-en-0.6b-int8-2026-01-14",
+    "downloadUrl": "https://huggingface.co/csukuangfj/sherpa-onnx-nemotron-speech-streaming-en-0.6b-int8-2026-01-14",
+    "modelType": "transducer",
+    "encoderFileName": "encoder.int8.onnx",
+    "decoderFileName": "decoder.int8.onnx",
+    "joinerFileName": "joiner.int8.onnx",
+    "language": "en",
+    "tier": "english-realtime",
+    "files": [
+      {
+        "path": "encoder.int8.onnx",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-nemotron-speech-streaming-en-0.6b-int8-2026-01-14/resolve/main/encoder.int8.onnx",
+        "sizeBytes": 652916830,
+        "sha256": "2f6ae81fe4ccd69ef04cdf048ecd49628e2d3148a6195e152a91b4d2497952dc"
+      },
+      {
+        "path": "decoder.int8.onnx",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-nemotron-speech-streaming-en-0.6b-int8-2026-01-14/resolve/main/decoder.int8.onnx",
+        "sizeBytes": 7257753,
+        "sha256": "1fb1795cb46e7d0e99b2e096eae83f7e324294e895975a1a894b0384cbbe37f6"
+      },
+      {
+        "path": "joiner.int8.onnx",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-nemotron-speech-streaming-en-0.6b-int8-2026-01-14/resolve/main/joiner.int8.onnx",
+        "sizeBytes": 1735862,
+        "sha256": "a3f41dccc0f67f37e4210051d1c39a29d473c841cfc32fe574135bac890db91d"
+      },
+      {
+        "path": "tokens.txt",
+        "url": "https://huggingface.co/csukuangfj/sherpa-onnx-nemotron-speech-streaming-en-0.6b-int8-2026-01-14/resolve/main/tokens.txt",
+        "sizeBytes": 8952,
+        "sha256": "dc0b4584ab2e4ddbf888425c076c61b736e7356a015250db7d307e6f1a8188ff"
+      }
+    ],
+    "license": {
+      "id": "other",
+      "name": "NVIDIA Open Model License",
+      "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/"
+    },
+    "provenance": {
+      "primarySource": "Hugging Face",
+      "primarySourceModel": "nvidia/nemotron-speech-streaming-en-0.6b",
+      "primarySourceUrl": "https://huggingface.co/nvidia/nemotron-speech-streaming-en-0.6b",
+      "runtimePackageSource": "csukuangfj Hugging Face sherpa-onnx export",
+      "runtimePackageUrl": "https://huggingface.co/csukuangfj/sherpa-onnx-nemotron-speech-streaming-en-0.6b-int8-2026-01-14",
+      "runtimePackageMirrorUrl": "https://huggingface.co/csukuangfj/sherpa-onnx-nemotron-speech-streaming-en-0.6b-int8-2026-01-14/tree/main",
+      "notes": [
+        "English-specific streaming ASR model for the English onboarding path.",
+        "Uses encoder.int8.onnx, decoder.int8.onnx, joiner.int8.onnx, and tokens.txt with sherpa-onnx online transducer config.",
+        "Before release, archive the NVIDIA model license page, runtime package URL, download date, and sha256 hash."
+      ]
+    }
+  }
+]

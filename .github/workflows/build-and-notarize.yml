@@ -1,0 +1,359 @@
+name: Build and Verify
+
+on:
+  push:
+    branches: [main, develop]
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+      - ".github/ISSUE_TEMPLATE/**"
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+      - ".github/ISSUE_TEMPLATE/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN != '' && secrets.GH_TOKEN || github.token }}
+
+# Customer installers are published by release.yml. This workflow validates
+# packages without retaining duplicate Actions artifacts.
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Pin npm version
+        run: npm install -g npm@11.9.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run package quality gates
+        run: npm run verify:ci
+
+      - name: Verify license worker typecheck and deployment bundles
+        run: |
+          npm --prefix services/license-worker ci --ignore-scripts
+          npm --prefix services/license-worker run check
+          npm --prefix services/license-worker run wrangler:check
+
+  build-linux:
+    needs: quality-gates
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Pin npm version
+        run: npm install -g npm@11.9.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: linux-ubuntu24-glibc235-x64-bin-${{ hashFiles('scripts/download-*.js', 'scripts/build-linux-fast-paste.js', 'resources/linux-fast-paste.c') }}
+
+      - name: Install Linux build and packaging dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y binutils rpm libx11-dev libxtst-dev
+
+      - name: Prepare Linux native resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run prebuild:linux
+          test -x resources/bin/linux-fast-paste
+          test -x resources/bin/node-runtime/linux-x64/bin/node
+          test -x resources/bin/llama-server-linux-x64
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron
+          key: linux-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: linux-electron-
+
+      - name: Build Application
+        run: |
+          npm run build:linux:package -- --publish never --config.extraMetadata.releaseSourceSha=${{ github.sha }}
+          npm run verify:linux:package
+        env:
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          CHORDVOX_EXPECTED_SOURCE_SHA: ${{ github.sha }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+
+      - name: Verify Linux package set
+        shell: bash
+        run: |
+          set -euo pipefail
+          for pattern in 'dist/*.AppImage' 'dist/*.deb' 'dist/*.rpm' 'dist/*.tar.gz'; do
+            if ! compgen -G "$pattern" > /dev/null; then
+              echo "Missing required Linux artifact: $pattern" >&2
+              exit 1
+            fi
+          done
+  build-windows:
+    needs: quality-gates
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Pin npm version
+        run: npm install -g npm@11.9.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: windows-x64-bin-${{ hashFiles('scripts/download-*.js') }}
+
+      - name: Prepare Windows native resources
+        shell: pwsh
+        run: |
+          npm run prebuild:win
+          if ($LASTEXITCODE -ne 0) {
+            throw "npm run prebuild:win failed with exit code $LASTEXITCODE"
+          }
+          @(
+            "resources/bin/windows-key-listener.exe",
+            "resources/bin/windows-fast-paste.exe",
+            "resources/bin/nircmd.exe",
+            "resources/bin/node-runtime/win32-x64/node.exe",
+            "resources/bin/llama-server-win32-x64.exe"
+          ) | ForEach-Object {
+            if (!(Test-Path $_)) { throw "Missing required Windows native resource: $_" }
+          }
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/AppData/Local/electron/Cache
+          key: windows-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: windows-electron-
+
+      - name: Build Application
+        run: |
+          npm run build:win:package -- --publish never --config.extraMetadata.releaseSourceSha=${{ github.sha }}
+          npm run verify:win:package
+        env:
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          CHORDVOX_EXPECTED_SOURCE_SHA: ${{ github.sha }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+
+      - name: Verify Windows package set
+        shell: pwsh
+        run: |
+          $installers = @(Get-ChildItem -Path dist -Filter *.exe -File)
+          if ($installers.Count -lt 2) {
+            throw "Expected NSIS and portable Windows installers; found $($installers.Count)."
+          }
+  build-macos:
+    needs: quality-gates
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            runner: macos-15-intel
+          - arch: arm64
+            runner: macos-15
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Pin npm version
+        run: npm install -g npm@11.9.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache fixed release dictation model
+        uses: actions/cache@v4
+        with:
+          path: .cache/release-dictation-model
+          key: release-dictation-model-${{ hashFiles('scripts/download-release-dictation-model.js') }}
+
+      - name: Prepare fixed release dictation model
+        run: npm run download:release-dictation-model
+
+      - name: Cache native binaries
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: macos-${{ matrix.arch }}-bin-${{ hashFiles('scripts/download-*.js', 'scripts/build-globe-listener.js', 'resources/macos-globe-listener.swift') }}
+
+      - name: Cache Electron
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron
+          key: macos-${{ matrix.arch }}-electron-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: macos-${{ matrix.arch }}-electron-
+
+      - name: Require pinned macOS signing identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${{ secrets.CHORDVOX_MACOS_CERTIFICATE_BASE64 }}" || {
+            echo "Missing CHORDVOX_MACOS_CERTIFICATE_BASE64." >&2
+            exit 1
+          }
+          test -n "${{ secrets.CHORDVOX_MACOS_CERTIFICATE_PASSWORD }}" || {
+            echo "Missing CHORDVOX_MACOS_CERTIFICATE_PASSWORD." >&2
+            exit 1
+          }
+
+      - name: Setup macOS Code Signing
+        env:
+          CHORDVOX_MACOS_CERTIFICATE_BASE64: ${{ secrets.CHORDVOX_MACOS_CERTIFICATE_BASE64 }}
+          CHORDVOX_MACOS_CERTIFICATE_PASSWORD: ${{ secrets.CHORDVOX_MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+          CERTIFICATE_PATH="$RUNNER_TEMP/chordvox-signing.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/chordvox-signing.keychain-db"
+
+          printf '%s' "$CHORDVOX_MACOS_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
+
+          security create-keychain -p "runner" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "runner" "$KEYCHAIN_PATH"
+
+          security import "$CERTIFICATE_PATH" \
+            -P "$CHORDVOX_MACOS_CERTIFICATE_PASSWORD" \
+            -T /usr/bin/codesign \
+            -T /usr/bin/security \
+            -k "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          CHORDVOX_SIGNING_CERT_SHA1="$(
+            /usr/bin/openssl x509 \
+              -in resources/mac/chordvox-local-signing.crt \
+              -noout -fingerprint -sha1 \
+              | cut -d= -f2 \
+              | tr -d ':'
+          )"
+          test -n "$CHORDVOX_SIGNING_CERT_SHA1"
+          sudo -n security add-trusted-cert -d -r trustRoot -p codeSign \
+            -k /Library/Keychains/System.keychain resources/mac/chordvox-local-signing.crt
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign: -s -k "runner" "$KEYCHAIN_PATH"
+          security find-identity -v -p codesigning "$KEYCHAIN_PATH" \
+            | grep -F '"ChordVox Local Code Signing"'
+          echo "CHORDVOX_SIGNING_KEYCHAIN=$KEYCHAIN_PATH" >> "$GITHUB_ENV"
+          echo "CHORDVOX_SIGNING_CERT_SHA1=$CHORDVOX_SIGNING_CERT_SHA1" >> "$GITHUB_ENV"
+
+      - name: Build Application (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run verify:dmg-config
+          npm run prebuild:mac:customer
+          npm run build:production
+          node scripts/build-mac-dmg.js --arch "${{ matrix.arch }}"
+        env:
+          TARGET_ARCH: ${{ matrix.arch }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
+          VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL }}
+          VITE_CHORDVOX_API_URL: ${{ vars.VITE_CHORDVOX_API_URL }}
+          VITE_CHORDVOX_OAUTH_CALLBACK_URL: ${{ vars.VITE_CHORDVOX_OAUTH_CALLBACK_URL }}
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          CHORDVOX_RELEASE_SOURCE_SHA: ${{ github.sha }}
+
+      - name: Verify packaged macOS helpers (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          CHORDVOX_EXPECTED_SOURCE_SHA="${{ github.sha }}" \
+            node scripts/verify-mac-package.js --platform mac "dist/.mac-dmg-work/mac-${{ matrix.arch }}/ChordVox.app"
+
+      - name: Verify packaged macOS fixed-WAV dictation (${{ matrix.arch }})
+        shell: bash
+        env:
+          CHORDVOX_PACKAGED_EXPECTED_PLATFORM: darwin
+          CHORDVOX_PACKAGED_EXPECTED_SOURCE_SHA: ${{ github.sha }}
+          CHORDVOX_PACKAGED_EVIDENCE_PATH: ${{ github.workspace }}/dist/native-runtime-evidence-macos-${{ matrix.arch }}.json
+          CHORDVOX_PACKAGED_DICTATION_WHISPER_MODEL: ${{ github.workspace }}/.cache/release-dictation-model/ggml-tiny.bin
+        run: |
+          set -euo pipefail
+          CHORDVOX_PACKAGED_APP_EXECUTABLE="${GITHUB_WORKSPACE}/dist/.mac-dmg-work/mac-${{ matrix.arch }}/ChordVox.app/Contents/MacOS/ChordVox" \
+            npm run verify:packaged:dictation
+
+      - name: Install macOS package for installed acceptance (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/install-macos-local-build.sh "dist/.mac-dmg-work/mac-${{ matrix.arch }}/ChordVox.app"
+
+      - name: Verify installed macOS fixed-WAV dictation (${{ matrix.arch }})
+        shell: bash
+        env:
+          CHORDVOX_PACKAGED_EXPECTED_PLATFORM: darwin
+          CHORDVOX_PACKAGED_EXPECTED_SOURCE_SHA: ${{ github.sha }}
+          CHORDVOX_PACKAGED_EVIDENCE_PATH: ${{ github.workspace }}/dist/native-runtime-evidence-macos-${{ matrix.arch }}-installed.json
+          CHORDVOX_PACKAGED_DICTATION_WHISPER_MODEL: ${{ github.workspace }}/.cache/release-dictation-model/ggml-tiny.bin
+        run: npm run verify:installed:dictation
+
+      - name: Verify macOS package set (${{ matrix.arch }})
+        shell: bash
+        run: |
+          set -euo pipefail
+          for pattern in 'dist/*.dmg' 'dist/*-mac.zip'; do
+            if ! compgen -G "$pattern" > /dev/null; then
+              echo "Missing required macOS artifact: $pattern" >&2
+              exit 1
+            fi
+          done
+      - name: Cleanup Certificates
+        if: always()
+        run: |
+          if [ -n "${CHORDVOX_SIGNING_CERT_SHA1:-}" ]; then
+            sudo -n security delete-certificate \
+              -Z "$CHORDVOX_SIGNING_CERT_SHA1" \
+              /Library/Keychains/System.keychain || true
+          fi
+          security delete-keychain "$RUNNER_TEMP/chordvox-signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/chordvox-signing.p12"

@@ -1,0 +1,242 @@
+{
+  "appId": "com.gravitypoet.chordvox",
+  "productName": "ChordVox",
+  "protocols": {
+    "name": "ChordVox Protocol",
+    "schemes": ["chordvox"]
+  },
+  "directories": {
+    "output": "dist"
+  },
+  "extraMetadata": {
+    "main": "build/electron/main.js",
+    "license": "UNLICENSED"
+  },
+  "electronFuses": {
+    "runAsNode": false,
+    "enableCookieEncryption": false,
+    "enableNodeOptionsEnvironmentVariable": false,
+    "enableNodeCliInspectArguments": false,
+    "enableEmbeddedAsarIntegrityValidation": true,
+    "onlyLoadAppFromAsar": true,
+    "loadBrowserProcessSpecificV8Snapshot": false,
+    "grantFileProtocolExtraPrivileges": true
+  },
+  "npmRebuild": true,
+  "buildDependenciesFromSource": false,
+  "files": [
+    "build/electron/**/*",
+    "package.json",
+    "node_modules/**/*",
+    "src/dist/**/*",
+    "!node_modules/.cache/**/*",
+    "!src/node_modules/**/*",
+    "!**/*.map",
+    "!**/*.ts",
+    "!**/*.tsx",
+    "!**/*.test.*",
+    "!**/*.spec.*",
+    "!**/__tests__/**/*",
+    "!**/node_modules/electron/**",
+    "!**/node_modules/electron-builder/**",
+    "!**/node_modules/app-builder-bin/**",
+    "!**/node_modules/app-builder-lib/**",
+    "!**/node_modules/builder-util/**",
+    "!**/node_modules/dmg-builder/**",
+    "!**/node_modules/7zip-bin/**",
+    "!**/node_modules/typescript/**",
+    "!**/node_modules/prettier/**",
+    "!**/node_modules/eslint/**",
+    "!**/node_modules/eslint-*/**",
+    "!**/node_modules/@eslint/**",
+    "!**/node_modules/@typescript-eslint/**",
+    "!**/node_modules/globals/**",
+    "!**/node_modules/vite/**",
+    "!**/node_modules/@vitejs/**",
+    "!**/node_modules/esbuild/**",
+    "!**/node_modules/@esbuild/**",
+    "!**/node_modules/rollup/**",
+    "!**/node_modules/@rollup/**",
+    "!**/node_modules/postcss/**",
+    "!**/node_modules/autoprefixer/**",
+    "!**/node_modules/tailwindcss/**",
+    "!**/node_modules/@tailwindcss/**",
+    "!**/node_modules/lightningcss*/**",
+    "!**/node_modules/react/**",
+    "!**/node_modules/react-dom/**",
+    "!**/node_modules/lucide-react/**",
+    "!**/node_modules/@radix-ui/**",
+    "!**/node_modules/class-variance-authority/**",
+    "!**/node_modules/clsx/**",
+    "!**/node_modules/tailwind-merge/**",
+    "!**/node_modules/tw-animate-css/**",
+    "!**/node_modules/react-markdown/**",
+    "!**/node_modules/shadcn-ui/**",
+    "!**/node_modules/@types/**",
+    "!**/node_modules/concurrently/**",
+    "!**/node_modules/cross-env/**",
+    "!**/node_modules/@electron/notarize/**",
+    "!**/node_modules/**/test/**",
+    "!**/node_modules/**/tests/**",
+    "!**/node_modules/**/*.ts",
+    "!**/node_modules/**/*.map",
+    "!**/node_modules/**/CHANGELOG*",
+    "!**/node_modules/**/.github/**"
+  ],
+  "asarUnpack": [
+    "build/electron/sherpaStreamingWorker.js",
+    "build/electron/databaseWorker.js",
+    "**/node_modules/ffmpeg-static/**/*",
+    "**/node_modules/better-sqlite3/**/*",
+    "**/node_modules/sherpa-onnx-node/**/*",
+    "**/node_modules/sherpa-onnx-*/**/*",
+    "**/node_modules/tar/**/*",
+    "**/node_modules/@isaacs/fs-minipass/**/*",
+    "**/node_modules/chownr/**/*",
+    "**/node_modules/minipass/**/*",
+    "**/node_modules/minizlib/**/*",
+    "**/node_modules/yallist/**/*"
+  ],
+  "extraResources": [
+    "src/assets/**/*",
+    "resources/legal/**/*"
+  ],
+  "mac": {
+    "category": "public.app-category.productivity",
+    "target": ["dmg", "zip"],
+    "icon": "src/assets/icon.icns",
+    "gatekeeperAssess": false,
+    "hardenedRuntime": true,
+    "entitlements": "resources/mac/entitlements.mac.plist",
+    "entitlementsInherit": "resources/mac/entitlements.mac.plist",
+    "identity": "ChordVox Local Code Signing",
+    "forceCodeSigning": true,
+    "additionalArguments": ["--timestamp=none"],
+    "notarize": false,
+    "extendInfo": {
+      "LSUIElement": false,
+      "NSMicrophoneUsageDescription": "ChordVox needs microphone access for speech-to-text transcription.",
+      "NSAccessibilityUsageDescription": "ChordVox needs accessibility permissions to paste transcribed text into other applications."
+    },
+    "extraResources": [
+      {
+        "from": "resources/bin/",
+        "to": "bin/",
+        "filter": [
+          "macos-*",
+          "whisper-cpp-darwin-*",
+          "whisper-server-darwin-*",
+          "llama-server-darwin-*",
+          "sherpa-onnx-*-darwin-*",
+          "node-runtime/darwin-*/**/*",
+          "*.dylib"
+        ]
+      }
+    ]
+  },
+  "win": {
+    "target": ["nsis", "portable"],
+    "icon": "src/assets/icon.ico",
+    "forceCodeSigning": true,
+    "extraResources": [
+      {
+        "from": "resources/bin/",
+        "to": "bin/",
+        "filter": [
+          "nircmd.exe",
+          "windows-*",
+          "whisper-cpp-win32-*",
+          "whisper-server-win32-*",
+          "llama-server-win32-*",
+          "sherpa-onnx-*-win32-*",
+          "node-runtime/win32-*/**/*",
+          "*.dll"
+        ]
+      }
+    ]
+  },
+  "linux": {
+    "target": ["AppImage", "deb", "rpm", "tar.gz"],
+    "icon": "src/assets/icon.png",
+    "category": "Utility",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "extraResources": [
+      {
+        "from": "resources/bin/",
+        "to": "bin/",
+        "filter": [
+          "linux-*",
+          "whisper-cpp-linux-*",
+          "whisper-server-linux-*",
+          "llama-server-linux-*",
+          "sherpa-onnx-*-linux-*",
+          "node-runtime/linux-*/**/*",
+          "*.so*"
+        ]
+      }
+    ]
+  },
+  "flatpak": {
+    "runtime": "org.freedesktop.Platform",
+    "runtimeVersion": "24.08",
+    "sdk": "org.freedesktop.Sdk",
+    "useWaylandFlags": true,
+    "finishArgs": [
+      "--socket=wayland",
+      "--socket=fallback-x11",
+      "--share=network",
+      "--share=ipc",
+      "--device=dri",
+      "--socket=pulseaudio",
+      "--filesystem=home",
+      "--filesystem=xdg-documents",
+      "--filesystem=xdg-download",
+      "--talk-name=org.freedesktop.Notifications",
+      "--talk-name=org.freedesktop.portal.Desktop"
+    ]
+  },
+  "deb": {
+    "afterRemove": "resources/linux/after-remove.sh",
+    "fpm": [
+      "--deb-suggests",
+      "xdotool",
+      "--deb-suggests",
+      "wtype",
+      "--deb-recommends",
+      "wl-clipboard"
+    ]
+  },
+  "rpm": {
+    "fpm": [
+      "--rpm-tag",
+      "Suggests: xdotool",
+      "--rpm-tag",
+      "Suggests: wtype",
+      "--rpm-tag",
+      "Recommends: wl-clipboard"
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "include": "resources/nsis/cleanup-models.nsh"
+  },
+  "dmg": {
+    "title": "ChordVox",
+    "icon": "src/assets/icon.icns",
+    "backgroundColor": "#fbf7ef",
+    "window": {
+      "width": 1040,
+      "height": 560
+    }
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "GravityPoet",
+    "repo": "ChordVox",
+    "private": false,
+    "releaseType": "release"
+  }
+}

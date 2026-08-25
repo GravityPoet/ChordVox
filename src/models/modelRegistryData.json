@@ -1,0 +1,942 @@
+{
+  "parakeetModels": {
+    "parakeet-tdt-0.6b-v2": {
+      "name": "Parakeet TDT 0.6B v2",
+      "description": "High-accuracy English ASR with punctuation and capitalization",
+      "badge": "English ASR",
+      "badgeKey": "models.badges.parakeet.parakeet_tdt_0_6b_v2",
+      "size": "661MB",
+      "sizeMb": 661,
+      "language": "en",
+      "supportedLanguages": ["en"],
+      "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemo-parakeet-tdt-0.6b-v2-int8.tar.bz2",
+      "archiveFileName": "sherpa-onnx-nemo-parakeet-tdt-0.6b-v2-int8.tar.bz2",
+      "archiveSizeBytes": 482468385,
+      "sha256": "157c157bc51155e03e37d2466522a3a737dd9c72bb25f36eb18912964161e1ad",
+      "mirrorPath": "sherpa-onnx-nemo-parakeet-tdt-0.6b-v2-int8.tar.bz2",
+      "extractDir": "sherpa-onnx-nemo-parakeet-tdt-0.6b-v2-int8",
+      "descriptionKey": "models.descriptions.parakeet.parakeet_tdt_0_6b_v2"
+    },
+    "parakeet-tdt-0.6b-v3": {
+      "name": "Parakeet TDT 0.6B v3",
+      "description": "Fast European-language ASR with auto language detection (25 languages, no Chinese)",
+      "size": "680MB",
+      "sizeMb": 680,
+      "language": "multilingual",
+      "supportedLanguages": [
+        "bg",
+        "hr",
+        "cs",
+        "da",
+        "nl",
+        "en",
+        "et",
+        "fi",
+        "fr",
+        "de",
+        "el",
+        "hu",
+        "it",
+        "lv",
+        "lt",
+        "mt",
+        "pl",
+        "pt",
+        "ro",
+        "sk",
+        "sl",
+        "es",
+        "sv",
+        "ru",
+        "uk"
+      ],
+      "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8.tar.bz2",
+      "archiveFileName": "sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8.tar.bz2",
+      "archiveSizeBytes": 487170055,
+      "sha256": "5793d0fd397c5778d2cf2126994d58e9d56b1be7c04d13c7a15bb1b4eafb16bf",
+      "mirrorPath": "sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8.tar.bz2",
+      "extractDir": "sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8",
+      "descriptionKey": "models.descriptions.parakeet.parakeet_tdt_0_6b_v3"
+    }
+  },
+  "paraformerModels": {
+    "paraformer-large-zh": {
+      "name": "Paraformer-Large",
+      "description": "Full-precision Chinese and English offline ASR",
+      "badge": "Full precision",
+      "badgeKey": "models.badges.paraformer.paraformer_large_zh",
+      "size": "824MB",
+      "sizeMb": 824,
+      "expectedSizeBytes": 863821140,
+      "language": "zh-en",
+      "supportedLanguages": ["zh", "en"],
+      "recommended": true,
+      "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-paraformer-zh-2023-03-28.tar.bz2",
+      "archiveFileName": "sherpa-onnx-paraformer-zh-2023-03-28.tar.bz2",
+      "archiveSizeBytes": 1035472389,
+      "sha256": "ff11c47660477a395d150fb693db9687cdd8b78ee04d42b5b69ff4ef78a76cbb",
+      "mirrorPath": "sherpa-onnx-paraformer-zh-2023-03-28.tar.bz2",
+      "extractDir": "sherpa-onnx-paraformer-zh-2023-03-28",
+      "modelFileName": "model.onnx",
+      "tokensFileName": "tokens.txt",
+      "extractedFiles": [
+        {
+          "path": "model.onnx",
+          "sizeBytes": 863821140,
+          "sha256": "3883fdb54abe1ab077997c8e14cf0532fc2498f8fb5eb118cd53d4ba05e4d169"
+        },
+        {
+          "path": "tokens.txt",
+          "sizeBytes": 75756,
+          "sha256": "59aba8873a2ed1e122c25fee421e25f283b63290efbde85c1f01a853d83cb6e6"
+        }
+      ],
+      "license": {
+        "id": "Apache-2.0",
+        "name": "Apache License 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "provenance": {
+        "primarySource": "ModelScope",
+        "primarySourceModel": "damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch",
+        "primarySourceUrl": "https://www.modelscope.cn/models/damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/summary",
+        "runtimePackageSource": "k2-fsa/sherpa-onnx GitHub release",
+        "runtimePackageUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-paraformer-zh-2023-03-28.tar.bz2",
+        "runtimePackageMirrorUrl": "https://huggingface.co/csukuangfj/sherpa-onnx-paraformer-zh-2023-03-28",
+        "conversionReferenceUrl": "https://k2-fsa.github.io/sherpa/onnx/pretrained_models/offline-paraformer/paraformer-models.html#csukuangfj-sherpa-onnx-paraformer-zh-2023-03-28-chinese-english",
+        "notes": [
+          "Use the ModelScope Apache-2.0 model page as the commercial license basis.",
+          "Use the full-precision model.onnx runtime file, not model.int8.onnx.",
+          "Do not use Hugging Face funasr/paraformer-zh MODEL_LICENSE as the commercial license basis.",
+          "Before release, archive the ModelScope license page, runtime package URL, download date, and sha256 hash."
+        ]
+      },
+      "descriptionKey": "models.descriptions.paraformer.paraformer_large_zh"
+    }
+  },
+  "punctuationModels": {
+    "ct-transformer-zh-en-int8": {
+      "name": "CT-Transformer 智能标点",
+      "description": "ML punctuation restoration for Chinese and English (CT-Transformer, int8)",
+      "badge": "AI punctuation",
+      "size": "62MB",
+      "sizeMb": 62,
+      "expectedSizeBytes": 75519198,
+      "language": "zh-en",
+      "supportedLanguages": ["zh", "en"],
+      "recommended": true,
+      "modelVersion": "2024-04-12",
+      "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/punctuation-models/sherpa-onnx-punct-ct-transformer-zh-en-vocab272727-2024-04-12-int8.tar.bz2",
+      "archiveFileName": "sherpa-onnx-punct-ct-transformer-zh-en-vocab272727-2024-04-12-int8.tar.bz2",
+      "archiveSizeBytes": 64717756,
+      "sha256": "c0d5aa5f8eeb686032345e180bedf39319dc2e0556781c6264bcadba8328a6e1",
+      "mirrorPath": "sherpa-onnx-punct-ct-transformer-zh-en-vocab272727-2024-04-12-int8.tar.bz2",
+      "extractDir": "sherpa-onnx-punct-ct-transformer-zh-en-vocab272727-2024-04-12-int8",
+      "modelFileName": "model.int8.onnx",
+      "license": {
+        "id": "Apache-2.0",
+        "name": "Apache License 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "provenance": {
+        "runtimePackageSource": "k2-fsa/sherpa-onnx GitHub release",
+        "runtimePackageUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/punctuation-models/sherpa-onnx-punct-ct-transformer-zh-en-vocab272727-2024-04-12-int8.tar.bz2",
+        "modelPage": "https://k2-fsa.github.io/sherpa/onnx/punctuation/pretrained.html"
+      }
+    }
+  },
+  "graniteModels": {
+    "granite-4.0-1b-speech": {
+      "name": "IBM Granite Speech",
+      "description": "Enterprise ASR model for high-accuracy English transcription",
+      "badge": "English high accuracy",
+      "badgeKey": "models.badges.granite.granite_4_0_1b_speech",
+      "size": "4.64GB",
+      "sizeMb": 4423,
+      "expectedSizeBytes": 4636336800,
+      "language": "multilingual",
+      "supportedLanguages": ["en", "fr", "de", "es", "pt", "ja"],
+      "runtimeKind": "transformers-vllm",
+      "runtimeSupported": true,
+      "downloadBaseUrl": "https://huggingface.co/ibm-granite/granite-4.0-1b-speech/resolve/main/",
+      "mirrorPathRoot": "granite-4.0-1b-speech",
+      "files": [
+        {
+          "path": ".eval_results/open_asr_leaderboard.yaml",
+          "sizeBytes": 2128,
+          "sha256": "e9d7ecb45410411c4c72a69aecce5ea4531ad967c6285c99884fd396c5a82ef8"
+        },
+        {
+          "path": ".gitattributes",
+          "sizeBytes": 1798,
+          "sha256": "175131bcd4df86d78f25b574a9be978143bbc1cfa67e51dc1c06df7cf1619ca1"
+        },
+        {
+          "path": "README.md",
+          "sizeBytes": 16325,
+          "sha256": "29466fa9692e2feacbe6b688833299196ebcbbdb3eb7f901ee935739cba6120a"
+        },
+        {
+          "path": "added_tokens.json",
+          "sizeBytes": 26,
+          "sha256": "b4956ad3505e979f2f25cc2e2be2163d8e23730f854b6c5a14ed106f3dd90549"
+        },
+        {
+          "path": "chat_template.jinja",
+          "sizeBytes": 193,
+          "sha256": "e3219da52634178f68696475ea4518ade9d1b5c9a71b825f28312b73afc432c0"
+        },
+        {
+          "path": "config.json",
+          "sizeBytes": 2324,
+          "sha256": "28f340731fbd08cec8f89586682f73d9df4c23e6a7cfd7edc02ba12ae913261e"
+        },
+        {
+          "path": "merges.txt",
+          "sizeBytes": 916646,
+          "sha256": "b6fe424e334903f7fb84d3a106d9730455f4744b9fe3c21ee136d97a00e72502"
+        },
+        {
+          "path": "model-00001-of-00003.safetensors",
+          "sizeBytes": 2143518808,
+          "sha256": "2ed1c8a94a3ea0bebc3faa93490cc1b5543ed0d33e345c26f4b0ca878ad12f8e"
+        },
+        {
+          "path": "model-00002-of-00003.safetensors",
+          "sizeBytes": 2143963456,
+          "sha256": "cbc16c9712d1174fa77dcfba36b6bfa32961ec6c713d9494fce8d61b657809be"
+        },
+        {
+          "path": "model-00003-of-00003.safetensors",
+          "sizeBytes": 339045512,
+          "sha256": "1f9ea0edb2847633edcdf257c8d5d3cd8be751cab2cefb039452ec689fe7f6fc"
+        },
+        {
+          "path": "model.safetensors.index.json",
+          "sizeBytes": 84396,
+          "sha256": "dec67acdc06e74d87650a54a4b5fbb07bfcdb4ed9fd1b95edef8651f5d64599b"
+        },
+        {
+          "path": "preprocessor_config.json",
+          "sizeBytes": 336,
+          "sha256": "382a6f26300937721969b01909c96c2e519620b6781f7b45cb8b2e348a932d87"
+        },
+        {
+          "path": "processor_config.json",
+          "sizeBytes": 80,
+          "sha256": "13edc723022827cc3620ba2e2b4bcf52287b365d77e60a31227f0a4b7dea5f9c"
+        },
+        {
+          "path": "special_tokens_map.json",
+          "sizeBytes": 579,
+          "sha256": "c08676c49fd7969a3130f72be6d4bf34da66aa484a6e21dffe359893a1bd5f2e"
+        },
+        {
+          "path": "tokenizer.json",
+          "sizeBytes": 7153607,
+          "sha256": "43ca88fd0519c64ef93fa0a90cbc4e560fe485b5ba60348a86bc3c624f37918e"
+        },
+        {
+          "path": "tokenizer_config.json",
+          "sizeBytes": 17882,
+          "sha256": "de233c19cd9efa63738f7481f318fc2048060f751ac9fd7957b131c43226b403"
+        },
+        {
+          "path": "vocab.json",
+          "sizeBytes": 1612704,
+          "sha256": "8af71076de8b0b626eed0f4c984faf0a7c062479164b2a31308a948524d4f69c"
+        }
+      ],
+      "modelPageUrl": "https://huggingface.co/ibm-granite/granite-4.0-1b-speech",
+      "license": {
+        "id": "Apache-2.0",
+        "name": "Apache License 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "descriptionKey": "models.descriptions.granite.granite_4_0_1b_speech"
+    }
+  },
+  "cohereModels": {
+    "cohere-transcribe-03-2026": {
+      "name": "Cohere Transcribe",
+      "description": "Highest-accuracy 2B ASR model with gated Hugging Face access",
+      "badge": "Highest accuracy",
+      "badgeKey": "models.badges.cohere.cohere_transcribe_03_2026",
+      "size": "2B params",
+      "language": "multilingual",
+      "supportedLanguages": [
+        "en",
+        "fr",
+        "de",
+        "it",
+        "es",
+        "pt",
+        "el",
+        "nl",
+        "pl",
+        "zh",
+        "ja",
+        "ko",
+        "vi",
+        "ar"
+      ],
+      "runtimeKind": "transformers-vllm",
+      "runtimeSupported": false,
+      "gated": true,
+      "modelPageUrl": "https://huggingface.co/CohereLabs/cohere-transcribe-03-2026",
+      "license": {
+        "id": "Apache-2.0",
+        "name": "Apache License 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "descriptionKey": "models.descriptions.cohere.cohere_transcribe_03_2026"
+    }
+  },
+  "whisperModels": {
+    "large": {
+      "name": "Large",
+      "description": "Best quality, slowest",
+      "size": "3GB",
+      "sizeMb": 3000,
+      "expectedSizeBytes": 3095033483,
+      "fileName": "ggml-large-v3.bin",
+      "downloadUrl": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3.bin",
+      "sha256": "64d182b440b98d5203c4f9bd541544d84c605196c4f7b845dfa11fb23594d1e2",
+      "mirrorPath": "ggml-large-v3.bin",
+      "descriptionKey": "models.descriptions.whisper.large"
+    },
+    "turbo": {
+      "name": "Turbo",
+      "description": "Fast with good quality",
+      "size": "1.6GB",
+      "sizeMb": 1600,
+      "expectedSizeBytes": 1624555275,
+      "fileName": "ggml-large-v3-turbo.bin",
+      "downloadUrl": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin",
+      "sha256": "1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69",
+      "mirrorPath": "ggml-large-v3-turbo.bin",
+      "recommended": true,
+      "descriptionKey": "models.descriptions.whisper.turbo"
+    },
+    "belle-whisper-large-v3-zh-punct-full": {
+      "name": "BELLE Whisper v3 Punct (Full)",
+      "description": "Full GGML punctuation model optimized for Chinese",
+      "badge": "Chinese punctuation",
+      "badgeKey": "models.badges.whisper.belle_large_v3_zh_punct_full",
+      "size": "3.0GB",
+      "sizeMb": 2952,
+      "expectedSizeBytes": 3095033483,
+      "fileName": "ggml-belle-large-v3-zh-punct-full.bin",
+      "downloadUrl": "https://huggingface.co/dixyes/Belle-whisper-large-v3-zh-punct-GGML/resolve/main/ggml-model.bin",
+      "sha256": "860985277fdb1bdd31afb1c2643ca0fed837585e6a1da009d2f7551b2aec327d",
+      "mirrorPath": "ggml-belle-large-v3-zh-punct-full.bin",
+      "descriptionKey": "models.descriptions.whisper.belle_large_v3_zh_punct_full"
+    },
+    "belle-whisper-large-v3-turbo-zh-full": {
+      "name": "BELLE Whisper v3 Turbo",
+      "description": "Turbo Full GGML model tuned for faster Chinese transcription",
+      "badge": "Faster Chinese",
+      "badgeKey": "models.badges.whisper.belle_large_v3_turbo_zh_full",
+      "size": "1.6GB",
+      "sizeMb": 1549,
+      "expectedSizeBytes": 1624555275,
+      "fileName": "ggml-belle-large-v3-turbo-zh-full.bin",
+      "downloadUrl": "https://huggingface.co/BELLE-2/Belle-whisper-large-v3-turbo-zh-ggml/resolve/main/ggml-model.bin",
+      "sha256": "2a3bba5bfdb4d4da3d9949a83b405711727ca1941d4d5810895e077eb3cb4d99",
+      "mirrorPath": "ggml-belle-large-v3-turbo-zh-full.bin",
+      "descriptionKey": "models.descriptions.whisper.belle_large_v3_turbo_zh_full"
+    }
+  },
+  "transcriptionProviders": [
+    {
+      "id": "openai",
+      "name": "OpenAI",
+      "baseUrl": "https://api.openai.com/v1",
+      "models": [
+        {
+          "id": "gpt-4o-mini-transcribe",
+          "name": "GPT-4o Mini Transcribe",
+          "description": "Fast and accurate transcription",
+          "descriptionKey": "models.descriptions.transcription.openai_gpt_4o_mini_transcribe"
+        },
+        {
+          "id": "gpt-4o-transcribe",
+          "name": "GPT-4o Transcribe",
+          "description": "Most accurate transcription",
+          "descriptionKey": "models.descriptions.transcription.openai_gpt_4o_transcribe"
+        },
+        {
+          "id": "whisper-1",
+          "name": "OpenAI Whisper (whisper-1)",
+          "description": "Legacy Whisper API model",
+          "descriptionKey": "models.descriptions.transcription.openai_whisper_1"
+        }
+      ]
+    },
+    {
+      "id": "groq",
+      "name": "Groq",
+      "baseUrl": "https://api.groq.com/openai/v1",
+      "models": [
+        {
+          "id": "whisper-large-v3",
+          "name": "Whisper Large v3",
+          "description": "Highest quality Groq Whisper model",
+          "descriptionKey": "models.descriptions.transcription.groq_whisper_large_v3"
+        },
+        {
+          "id": "whisper-large-v3-turbo",
+          "name": "Whisper Large v3 Turbo",
+          "description": "216x real-time speed",
+          "descriptionKey": "models.descriptions.transcription.groq_whisper_large_v3_turbo"
+        }
+      ]
+    },
+    {
+      "id": "soniox",
+      "name": "Soniox",
+      "baseUrl": "wss://stt-rt.soniox.com/transcribe-websocket",
+      "models": [
+        {
+          "id": "stt-rt-v4",
+          "name": "STT Real-Time v4",
+          "description": "Low-latency real-time transcription for 60+ languages",
+          "descriptionKey": "models.descriptions.transcription.soniox_stt_rt_v4"
+        }
+      ]
+    },
+    {
+      "id": "deepgram",
+      "name": "Deepgram",
+      "baseUrl": "https://api.deepgram.com/v1/listen",
+      "models": [
+        {
+          "id": "nova-3",
+          "name": "Nova-3",
+          "description": "Deepgram cloud transcription model for accurate prerecorded audio transcription",
+          "descriptionKey": "models.descriptions.transcription.deepgram_nova_3"
+        }
+      ]
+    },
+    {
+      "id": "google-cloud",
+      "name": "Google Cloud",
+      "baseUrl": "https://us-speech.googleapis.com/v2/projects/PROJECT_ID/locations/us/recognizers/_:recognize",
+      "models": [
+        {
+          "id": "chirp_3",
+          "name": "Chirp 3",
+          "description": "Google Cloud Speech-to-Text flagship model for high-accuracy multilingual transcription",
+          "descriptionKey": "models.descriptions.transcription.google_chirp_3"
+        }
+      ]
+    },
+    {
+      "id": "doubao",
+      "name": "Doubao",
+      "baseUrl": "wss://openspeech.bytedance.com/api/v3/sauc/bigmodel_nostream",
+      "models": [
+        {
+          "id": "doubao-streaming-auto",
+          "name": "自动",
+          "description": "优先使用流式 2.0，失败时自动回退到流式 1.0"
+        },
+        {
+          "id": "doubao-seedasr-streaming-2.0",
+          "name": "流式 2.0",
+          "description": "使用豆包流式语音识别模型 2.0"
+        },
+        {
+          "id": "doubao-bigasr-streaming-1.0",
+          "name": "流式 1.0（兼容）",
+          "description": "兼容旧资源，使用豆包流式语音识别模型 1.0"
+        }
+      ]
+    }
+  ],
+  "cloudProviders": [
+    {
+      "id": "openai",
+      "name": "OpenAI",
+      "models": [
+        {
+          "id": "gpt-5.5",
+          "name": "GPT-5.5",
+          "description": "Newest frontier model for complex professional work",
+          "descriptionKey": "models.descriptions.cloud.openai_gpt_5_5"
+        },
+        {
+          "id": "gpt-5.4",
+          "name": "GPT-5.4",
+          "description": "Frontier model with 1.05M context",
+          "descriptionKey": "models.descriptions.cloud.openai_gpt_5_4"
+        },
+        {
+          "id": "gpt-5.4-mini",
+          "name": "GPT-5.4 Mini",
+          "description": "Strong mini model for high-volume workloads",
+          "descriptionKey": "models.descriptions.cloud.openai_gpt_5_4_mini"
+        },
+        {
+          "id": "gpt-5.4-nano",
+          "name": "GPT-5.4 Nano",
+          "description": "Cheapest GPT-5.4-class model for simple tasks",
+          "descriptionKey": "models.descriptions.cloud.openai_gpt_5_4_nano"
+        },
+        {
+          "id": "gpt-5.2",
+          "name": "GPT-5.2",
+          "description": "Previous frontier model",
+          "descriptionKey": "models.descriptions.cloud.openai_gpt_5_2"
+        },
+        {
+          "id": "gpt-4.1",
+          "name": "GPT-4.1",
+          "description": "Stable baseline, 1M context",
+          "descriptionKey": "models.descriptions.cloud.openai_gpt_4_1"
+        }
+      ]
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "models": [
+        {
+          "id": "claude-opus-4-7",
+          "name": "Claude Opus 4.7",
+          "description": "Most capable Claude model for complex reasoning and coding",
+          "descriptionKey": "models.descriptions.cloud.anthropic_claude_opus_4_7"
+        },
+        {
+          "id": "claude-sonnet-4-6",
+          "name": "Claude Sonnet 4.6",
+          "description": "Best combination of speed and intelligence",
+          "descriptionKey": "models.descriptions.cloud.anthropic_claude_sonnet_4_6"
+        },
+        {
+          "id": "claude-haiku-4-5",
+          "name": "Claude Haiku 4.5",
+          "description": "Fastest Claude model with near-frontier intelligence",
+          "descriptionKey": "models.descriptions.cloud.anthropic_claude_haiku_4_5"
+        }
+      ]
+    },
+    {
+      "id": "gemini",
+      "name": "Google Gemini",
+      "models": [
+        {
+          "id": "gemini-3.1-pro-preview",
+          "name": "Gemini 3.1 Pro",
+          "description": "Latest Gemini 3 Pro preview for agentic workflows",
+          "descriptionKey": "models.descriptions.cloud.gemini_gemini_3_1_pro_preview"
+        },
+        {
+          "id": "gemini-3-flash-preview",
+          "name": "Gemini 3 Flash",
+          "description": "Ultra-fast, high-capability next-gen model",
+          "descriptionKey": "models.descriptions.cloud.gemini_gemini_3_flash_preview"
+        },
+        {
+          "id": "gemini-3.1-flash-lite-preview",
+          "name": "Gemini 3.1 Flash-Lite",
+          "description": "Most cost-efficient Gemini 3.1 model",
+          "descriptionKey": "models.descriptions.cloud.gemini_gemini_3_1_flash_lite_preview"
+        },
+        {
+          "id": "gemini-2.5-flash",
+          "name": "Gemini 2.5 Flash",
+          "description": "Stable low-latency model with strong reasoning",
+          "descriptionKey": "models.descriptions.cloud.gemini_gemini_2_5_flash"
+        }
+      ]
+    },
+    {
+      "id": "groq",
+      "name": "Groq",
+      "models": [
+        {
+          "id": "openai/gpt-oss-120b",
+          "name": "GPT-OSS 120B",
+          "description": "OpenAI flagship open-weight model on Groq",
+          "descriptionKey": "models.descriptions.cloud.groq_openai_gpt_oss_120b"
+        },
+        {
+          "id": "groq/compound",
+          "name": "Groq Compound",
+          "description": "Production agentic system with built-in tools",
+          "descriptionKey": "models.descriptions.cloud.groq_compound"
+        },
+        {
+          "id": "llama-3.3-70b-versatile",
+          "name": "Llama 3.3 70B",
+          "description": "Production versatile model, 131K context",
+          "descriptionKey": "models.descriptions.cloud.groq_llama_3_3_70b_versatile"
+        },
+        {
+          "id": "openai/gpt-oss-20b",
+          "name": "GPT-OSS 20B",
+          "description": "Fast production open-weight model",
+          "descriptionKey": "models.descriptions.cloud.groq_openai_gpt_oss_20b"
+        },
+        {
+          "id": "llama-3.1-8b-instant",
+          "name": "Llama 3.1 8B",
+          "description": "Ultra-fast production model, 131K context",
+          "descriptionKey": "models.descriptions.cloud.groq_llama_3_1_8b_instant"
+        },
+        {
+          "id": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "name": "Llama 4 Scout",
+          "description": "Preview model for evaluation, 131K context",
+          "descriptionKey": "models.descriptions.cloud.groq_llama_4_scout"
+        },
+        {
+          "id": "qwen/qwen3-32b",
+          "name": "Qwen3 32B",
+          "description": "Preview reasoning model, 131K context",
+          "disableThinking": true,
+          "descriptionKey": "models.descriptions.cloud.groq_qwen_qwen3_32b"
+        }
+      ]
+    },
+    {
+      "id": "cerebras",
+      "name": "Cerebras",
+      "models": [
+        {
+          "id": "gpt-oss-120b",
+          "name": "GPT-OSS 120B",
+          "description": "OpenAI GPT OSS 120B on Cerebras"
+        },
+        {
+          "id": "gemma-4-31b",
+          "name": "Gemma 4 31B",
+          "description": "Gemma 4 31B on Cerebras"
+        }
+      ]
+    },
+    {
+      "id": "openrouter",
+      "name": "OpenRouter",
+      "models": []
+    }
+  ],
+  "localProviders": [
+    {
+      "id": "qwen",
+      "name": "Qwen",
+      "baseUrl": "https://huggingface.co",
+      "promptTemplate": "<|im_start|>system\n{system}<|im_end|>\n<|im_start|>user\n{user}<|im_end|>\n<|im_start|>assistant\n",
+      "models": [
+        {
+          "id": "qwen3-8b-q4_k_m",
+          "name": "Qwen3 8B",
+          "size": "5.0GB",
+          "sizeBytes": 5027783488,
+          "description": "Latest Qwen3 with thinking mode support",
+          "fileName": "Qwen3-8B-Q4_K_M.gguf",
+          "quantization": "q4_k_m",
+          "contextLength": 131072,
+          "hfRepo": "Qwen/Qwen3-8B-GGUF",
+          "recommended": true,
+          "descriptionKey": "models.descriptions.local.qwen_qwen3_8b_q4_k_m",
+          "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785"
+        },
+        {
+          "id": "qwen3-8b-q5_k_m",
+          "name": "Qwen3 8B (Q5)",
+          "size": "5.9GB",
+          "sizeBytes": 5851112224,
+          "description": "Higher quality Qwen3 with thinking mode",
+          "fileName": "Qwen3-8B-Q5_K_M.gguf",
+          "quantization": "q5_k_m",
+          "contextLength": 131072,
+          "hfRepo": "Qwen/Qwen3-8B-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen3_8b_q5_k_m",
+          "sha256": "068bae163faa96ad48032daf4e071a6a28fe67d8dcc95367609c2ff165e52738"
+        },
+        {
+          "id": "qwen3-4b-q4_k_m",
+          "name": "Qwen3 4B",
+          "size": "2.5GB",
+          "sizeBytes": 2497280256,
+          "description": "Compact Qwen3 with reasoning capabilities",
+          "fileName": "Qwen3-4B-Q4_K_M.gguf",
+          "quantization": "q4_k_m",
+          "contextLength": 131072,
+          "hfRepo": "Qwen/Qwen3-4B-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen3_4b_q4_k_m",
+          "sha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5"
+        },
+        {
+          "id": "qwen3-1.7b-q8_0",
+          "name": "Qwen3 1.7B",
+          "size": "1.8GB",
+          "sizeBytes": 1834426016,
+          "description": "Small but capable Qwen3 model",
+          "fileName": "Qwen3-1.7B-Q8_0.gguf",
+          "quantization": "q8_0",
+          "contextLength": 131072,
+          "hfRepo": "Qwen/Qwen3-1.7B-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen3_1_7b_q8_0",
+          "sha256": "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a"
+        },
+        {
+          "id": "qwen3-0.6b-q8_0",
+          "name": "Qwen3 0.6B",
+          "size": "0.6GB",
+          "sizeBytes": 639446688,
+          "description": "Tiny Qwen3 for edge devices",
+          "fileName": "Qwen3-0.6B-Q8_0.gguf",
+          "quantization": "q8_0",
+          "contextLength": 131072,
+          "hfRepo": "Qwen/Qwen3-0.6B-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen3_0_6b_q8_0",
+          "sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031"
+        },
+        {
+          "id": "qwen3-32b-q4_k_m",
+          "name": "Qwen3 32B",
+          "size": "19.8GB",
+          "sizeBytes": 19762149024,
+          "description": "Most powerful local Qwen3 with deep reasoning",
+          "fileName": "Qwen3-32B-Q4_K_M.gguf",
+          "quantization": "q4_k_m",
+          "contextLength": 131072,
+          "hfRepo": "Qwen/Qwen3-32B-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen3_32b_q4_k_m",
+          "sha256": "efd971561896866f0e910cce52761ca77b1b138090c7f15fe284676d57d1f689"
+        },
+        {
+          "id": "qwen2.5-0.5b-instruct-q5_k_m",
+          "name": "Qwen2.5 0.5B",
+          "size": "0.5GB",
+          "sizeBytes": 522186592,
+          "description": "Smallest model, fast but limited capabilities",
+          "fileName": "qwen2.5-0.5b-instruct-q5_k_m.gguf",
+          "quantization": "q5_k_m",
+          "contextLength": 32768,
+          "hfRepo": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen2_5_0_5b_instruct_q5_k_m",
+          "sha256": "041474553fcabfc2a2d67903f9d2c2e50bd92528e670da4f33b5d0ce6e59fd55"
+        },
+        {
+          "id": "qwen2.5-1.5b-instruct-q5_k_m",
+          "name": "Qwen2.5 1.5B",
+          "size": "1.3GB",
+          "sizeBytes": 1285494304,
+          "description": "Small model, good for basic tasks",
+          "fileName": "qwen2.5-1.5b-instruct-q5_k_m.gguf",
+          "quantization": "q5_k_m",
+          "contextLength": 32768,
+          "hfRepo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen2_5_1_5b_instruct_q5_k_m",
+          "sha256": "b46661073c18e5b56a41fa320975f866a00def1ff08feef4718e013258896f8c"
+        },
+        {
+          "id": "qwen2.5-3b-instruct-q5_k_m",
+          "name": "Qwen2.5 3B",
+          "size": "2.4GB",
+          "sizeBytes": 2438740384,
+          "description": "Balanced model for general use",
+          "fileName": "qwen2.5-3b-instruct-q5_k_m.gguf",
+          "quantization": "q5_k_m",
+          "contextLength": 32768,
+          "hfRepo": "Qwen/Qwen2.5-3B-Instruct-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen2_5_3b_instruct_q5_k_m",
+          "sha256": "2c63dde5f2c9ab1fd64d47dee2d34dade6ba9ff62442d1d20b5342310c982081"
+        },
+        {
+          "id": "qwen2.5-7b-instruct-q4_k_m",
+          "name": "Qwen2.5 7B",
+          "size": "4.7GB",
+          "sizeBytes": 4683074240,
+          "description": "Large model with high quality (Q4_K_M)",
+          "fileName": "Qwen2.5-7B-Instruct-Q4_K_M.gguf",
+          "quantization": "q4_k_m",
+          "contextLength": 128000,
+          "hfRepo": "bartowski/Qwen2.5-7B-Instruct-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen2_5_7b_instruct_q4_k_m",
+          "sha256": "65b8fcd92af6b4fefa935c625d1ac27ea29dcb6ee14589c55a8f115ceaaa1423"
+        },
+        {
+          "id": "qwen2.5-7b-instruct-q5_k_m",
+          "name": "Qwen2.5 7B (Q5)",
+          "size": "5.4GB",
+          "sizeBytes": 5444831936,
+          "description": "Large model, high quality reasoning (Q5_K_M)",
+          "fileName": "Qwen2.5-7B-Instruct-Q5_K_M.gguf",
+          "quantization": "q5_k_m",
+          "contextLength": 128000,
+          "hfRepo": "bartowski/Qwen2.5-7B-Instruct-GGUF",
+          "descriptionKey": "models.descriptions.local.qwen_qwen2_5_7b_instruct_q5_k_m",
+          "sha256": "2e998d7e181c8756c5ffc55231b9ee1cdc9d3acec4245d6e27d32bd8e738c474"
+        }
+      ]
+    },
+    {
+      "id": "mistral",
+      "name": "Mistral AI",
+      "baseUrl": "https://huggingface.co",
+      "promptTemplate": "[INST] {system}\n\n{user} [/INST]",
+      "models": [
+        {
+          "id": "mistral-7b-instruct-v0.3-q4_k_m",
+          "name": "Mistral 7B Instruct v0.3",
+          "size": "4.4GB",
+          "sizeBytes": 4372812000,
+          "description": "Fast and efficient instruction model",
+          "fileName": "Mistral-7B-Instruct-v0.3-Q4_K_M.gguf",
+          "quantization": "q4_k_m",
+          "contextLength": 32768,
+          "hfRepo": "bartowski/Mistral-7B-Instruct-v0.3-GGUF",
+          "recommended": true,
+          "descriptionKey": "models.descriptions.local.mistral_mistral_7b_instruct_v0_3_q4_k_m",
+          "sha256": "1270d22c0fbb3d092fb725d4d96c457b7b687a5f5a715abe1e818da303e562b6"
+        },
+        {
+          "id": "mistral-7b-instruct-v0.3-q5_k_m",
+          "name": "Mistral 7B Instruct v0.3 (Q5)",
+          "size": "5.1GB",
+          "sizeBytes": 5136175328,
+          "description": "Higher quality instruction model",
+          "fileName": "Mistral-7B-Instruct-v0.3-Q5_K_M.gguf",
+          "quantization": "q5_k_m",
+          "contextLength": 32768,
+          "hfRepo": "bartowski/Mistral-7B-Instruct-v0.3-GGUF",
+          "descriptionKey": "models.descriptions.local.mistral_mistral_7b_instruct_v0_3_q5_k_m",
+          "sha256": "0374072546aaf1257d1e34610edb11b691730d8ef7d44b5629693a2dd8e8d472"
+        }
+      ]
+    },
+    {
+      "id": "llama",
+      "name": "Meta Llama",
+      "baseUrl": "https://huggingface.co",
+      "promptTemplate": "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{system}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{user}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+      "models": [
+        {
+          "id": "llama-3.2-1b-instruct-q4_k_m",
+          "name": "Llama 3.2 1B",
+          "size": "0.8GB",
+          "sizeBytes": 807694464,
+          "description": "Tiny model for edge devices",
+          "fileName": "Llama-3.2-1B-Instruct-Q4_K_M.gguf",
+          "quantization": "q4_k_m",
+          "contextLength": 131072,
+          "hfRepo": "bartowski/Llama-3.2-1B-Instruct-GGUF",
+          "descriptionKey": "models.descriptions.local.llama_llama_3_2_1b_instruct_q4_k_m",
+          "sha256": "6f85a640a97cf2bf5b8e764087b1e83da0fdb51d7c9fab7d0fece9385611df83"
+        },
+        {
+          "id": "llama-3.2-3b-instruct-q4_k_m",
+          "name": "Llama 3.2 3B",
+          "size": "2.0GB",
+          "sizeBytes": 2019377696,
+          "description": "Small but capable multilingual model",
+          "fileName": "Llama-3.2-3B-Instruct-Q4_K_M.gguf",
+          "quantization": "q4_k_m",
+          "contextLength": 131072,
+          "hfRepo": "bartowski/Llama-3.2-3B-Instruct-GGUF",
+          "recommended": true,
+          "descriptionKey": "models.descriptions.local.llama_llama_3_2_3b_instruct_q4_k_m",
+          "sha256": "6c1a2b41161032677be168d354123594c0e6e67d2b9227c84f296ad037c728ff"
+        },
+        {
+          "id": "llama-3.1-8b-instruct-q4_k_m",
+          "name": "Llama 3.1 8B",
+          "size": "4.9GB",
+          "sizeBytes": 4920739232,
+          "description": "Powerful model with great performance",
+          "fileName": "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+          "quantization": "q4_k_m",
+          "contextLength": 131072,
+          "hfRepo": "bartowski/Meta-Llama-3.1-8B-Instruct-GGUF",
+          "descriptionKey": "models.descriptions.local.llama_llama_3_1_8b_instruct_q4_k_m",
+          "sha256": "7b064f5842bf9532c91456deda288a1b672397a54fa729aa665952863033557c"
+        }
+      ]
+    },
+    {
+      "id": "openai-oss",
+      "name": "OpenAI OSS",
+      "baseUrl": "https://huggingface.co",
+      "promptTemplate": "<|im_start|>system\n{system}<|im_end|>\n<|im_start|>user\n{user}<|im_end|>\n<|im_start|>assistant\n",
+      "models": [
+        {
+          "id": "gpt-oss-20b-mxfp4",
+          "name": "GPT-OSS 20B",
+          "size": "12.1GB",
+          "sizeBytes": 12109566560,
+          "description": "OpenAI's open-weight model for consumer hardware",
+          "fileName": "gpt-oss-20b-mxfp4.gguf",
+          "quantization": "mxfp4",
+          "contextLength": 128000,
+          "hfRepo": "ggml-org/gpt-oss-20b-GGUF",
+          "recommended": true,
+          "descriptionKey": "models.descriptions.local.openai_oss_gpt_oss_20b_mxfp4",
+          "sha256": "be37a636aca0fc1aae0d32325f82f6b4d21495f06823b5fbc1898ae0303e9935"
+        }
+      ]
+    }
+  ],
+  "chordvoxCloudModels": {
+    "tiers": [
+      {
+        "id": "fast",
+        "label": "Fast",
+        "provider": "groq",
+        "models": [
+          {
+            "id": "llama-3.3-70b-versatile",
+            "name": "Llama 3.3 70B",
+            "description": "Fast, high-quality reasoning",
+            "recommended": true
+          },
+          {
+            "id": "llama-3.1-8b-instant",
+            "name": "Llama 3.1 8B",
+            "description": "Ultra-fast, low latency"
+          }
+        ]
+      },
+      {
+        "id": "balanced",
+        "label": "Balanced",
+        "provider": "openrouter",
+        "models": [
+          {
+            "id": "anthropic/claude-sonnet-4",
+            "name": "Claude Sonnet 4",
+            "description": "Balanced performance and quality",
+            "recommended": true
+          },
+          {
+            "id": "google/gemini-2.5-flash",
+            "name": "Gemini 2.5 Flash",
+            "description": "Fast with strong reasoning"
+          }
+        ]
+      },
+      {
+        "id": "quality",
+        "label": "Quality",
+        "provider": "openrouter",
+        "models": [
+          {
+            "id": "anthropic/claude-opus-4",
+            "name": "Claude Opus 4",
+            "description": "Most capable, highest quality",
+            "recommended": true
+          },
+          {
+            "id": "openai/gpt-4.1",
+            "name": "GPT-4.1",
+            "description": "Strong general-purpose reasoning"
+          }
+        ]
+      }
+    ]
+  }
+}

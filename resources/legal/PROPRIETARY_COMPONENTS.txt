@@ -1,0 +1,52 @@
+ChordVox Pro — Proprietary Component Boundary
+Version 1.0 — 24 July 2026
+
+This notice describes the licensing boundary of customer builds produced from
+the private GravityPoet/ChordVox-Pro repository. It is not a claim of ownership
+over third-party code, public AGPL repositories, or customer data.
+
+Proprietary first-party portions
+--------------------------------
+
+Subject to the exclusions below, GravityPoet's original ChordVox Pro
+implementations and modifications are Proprietary Code, including:
+
+- the production Electron main-process and preload implementation;
+- AI-assisted polishing and advanced workflow implementation;
+- AI-Bridge desktop routing, validation, and orchestration implementation;
+- the desktop License Key client, entitlement UI, and activation workflow;
+- Pro-only workflow, updater, packaging, signing, and integrity integration; and
+- other original code identified as part of a commercial ChordVox Pro build.
+
+Exclusions
+----------
+
+The proprietary classification does not include:
+
+- code or copies distributed from the public ChordVox, AppSift, OpenFind, or
+  rime-smart-simplified repositories under GNU AGPL-3.0;
+- the historical upstream MIT-licensed code identified in NOTICE.txt;
+- third-party libraries, binaries, models, fonts, or assets governed by their
+  own licenses;
+- a contributor's code unless GravityPoet has the rights needed to distribute
+  that code under the commercial terms; or
+- customer content, recordings, API keys, configuration, or other customer
+  data.
+
+Release-specific rule
+---------------------
+
+The license delivered with a particular copy controls that copy. Commercial
+terms do not retroactively relicense an earlier MIT or AGPL copy. ChordVox
+v1.5.132 and later may be delivered as commercial ChordVox Pro only when the
+artifact includes the matching commercial license and notices.
+
+Security boundary
+-----------------
+
+Production bundling, minification, ASAR integrity, code signing, and License
+Key checks raise the cost of tampering and prevent accidental shipment of raw
+source files. They do not make client-side code secret or impossible to reverse
+engineer. The customer device is treated as untrusted: server private keys,
+license peppers, administrative tokens, payment secrets, and shared backend
+credentials must remain on controlled server infrastructure.

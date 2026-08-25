@@ -1,0 +1,69 @@
+Open Source Notices
+===================
+
+Upstream component: historical upstream project
+Source: upstream GitHub repository
+License: MIT
+
+--- Begin MIT License (OpenWhispr) ---
+MIT License
+
+Copyright (c) 2024 OpenWhispr Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+--- End MIT License (OpenWhispr) ---
+
+
+Third-Party Model Notice: Paraformer
+====================================
+
+Component: Paraformer speech recognition model
+Authors: Alibaba DAMO Academy / FunASR contributors
+Primary source (offline): https://www.modelscope.cn/models/iic/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx/summary
+Runtime package (offline): https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-paraformer-zh-2023-09-14.tar.bz2
+Conversion reference (offline): https://k2-fsa.github.io/sherpa/onnx/pretrained_models/offline-paraformer/paraformer-models.html#csukuangfj-sherpa-onnx-paraformer-zh-2023-09-14-chinese-english
+Primary source (streaming): https://www.modelscope.cn/models/damo/speech_paraformer_asr_nat-zh-cn-16k-common-vocab8404-online/summary
+Runtime package (streaming): https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-paraformer-bilingual-zh-en.tar.bz2
+Conversion reference (streaming): https://k2-fsa.github.io/sherpa/onnx/pretrained_models/online-paraformer/paraformer-models.html#csukuangfj-sherpa-onnx-streaming-paraformer-bilingual-zh-en-chinese-english
+License: Apache License, Version 2.0
+Full license text: resources/legal/APACHE-2.0.txt
+
+The commercial license basis for this product model is the ModelScope
+Apache-2.0 distribution path. Do not use the Hugging Face
+funasr/paraformer-zh custom MODEL_LICENSE path as the commercial license
+basis for this model.
+
+
+Third-Party Model Notice: BELLE Whisper
+=======================================
+
+Component: BELLE Whisper speech recognition models
+Authors: BELLE-2 contributors
+Runtime package (Full Chinese punctuation): https://huggingface.co/dixyes/Belle-whisper-large-v3-zh-punct-GGML/resolve/main/ggml-model.bin
+Runtime package (Turbo Full Chinese): https://huggingface.co/BELLE-2/Belle-whisper-large-v3-turbo-zh-ggml/resolve/main/ggml-model.bin
+Primary upstream (Chinese punctuation): https://huggingface.co/BELLE-2/Belle-whisper-large-v3-zh-punct
+Primary upstream (Turbo Chinese): https://huggingface.co/BELLE-2/Belle-whisper-large-v3-turbo-zh
+Runtime: whisper.cpp-compatible GGML model files
+License: Apache License, Version 2.0
+Full license text: resources/legal/APACHE-2.0.txt
+
+The commercial license basis for these product model entries is the
+Apache-2.0 license shown on the Hugging Face model cards for the GGML runtime
+packages and upstream BELLE model pages. Do not imply that BELLE-2,
+Hugging Face, whisper.cpp, or OpenAI endorses or certifies ChordVox.

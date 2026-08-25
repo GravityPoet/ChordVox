@@ -1,0 +1,3740 @@
+@import "tailwindcss";
+@import "./styles/pill-v2.css";
+@import "./styles/premium-motion.css";
+
+@theme {
+  /* ChordVox Theme — registers color tokens with Tailwind v4.
+     These are the light-mode defaults; .dark overrides them below. */
+  --color-primary: oklch(0.58 0.21 258);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #171717;
+  --color-muted: #f5f5f5;
+  /* neutral-600: lifts secondary text to WCAG AA on white. The /70–/85 opacity
+     variants used across the UI would sit near 3:1 with the old #737373; this
+     base keeps the dominant /80 tier above 4.5:1. .dark overrides below. */
+  --color-muted-foreground: #525252;
+  --color-accent: oklch(0.55 0.22 285);
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e5e5e5;
+  --color-input: #f5f5f5;
+  --color-ring: oklch(0.58 0.21 258);
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-card: #ffffff;
+  --color-card-foreground: #171717;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #171717;
+  --color-link: #2563eb;
+  --color-success: #16a34a;
+  --color-success-foreground: #ffffff;
+  --color-warning: #d97706;
+  --color-warning-foreground: #ffffff;
+  --color-info: #2563eb;
+  --color-info-foreground: #ffffff;
+
+  /* Surface hierarchy — light mode equivalents */
+  --color-surface-0: #ffffff;
+  --color-surface-1: #fafafa;
+  --color-surface-2: #ffffff;
+  --color-surface-3: #f5f5f5;
+  --color-surface-raised: #f0f0f0;
+
+  /* Border states — light mode equivalents */
+  --color-border-hover: #d4d4d4;
+  --color-border-active: #2563eb;
+}
+
+:root {
+  /* Typography — Latin-first stack; CJK is dispatched per-language below
+     (html[lang] is kept in sync by applyDocumentDirection in src/utils/textDirection.ts).
+     ja intentionally has no explicit CJK entries: system fallback (Hiragino / Yu Gothic)
+     renders Japanese glyph forms correctly; adding SC fonts here would corrupt them. */
+  --font-family-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Arial,
+    "Noto Sans", sans-serif;
+  --font-family-display:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue",
+    "Segoe UI", Arial, "Noto Sans", sans-serif;
+  --font-family-mono:
+    "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+  /* Opacities */
+  --opacity-high: 0.9;
+
+  /* Border Radius — Apple HIG inspired, generous rounding for premium feel */
+  --radius-sm: 0.25rem; /* 4px  - minimal rounding */
+  --radius-md: 0.5rem; /* 8px  - standard */
+  --radius-lg: 0.75rem; /* 12px - cards, panels */
+  --radius-xl: 1rem; /* 16px - large panels */
+
+  /* UI surface materials */
+  --ui-warning-ink: #92400e;
+  --ui-glass-panel-bg: rgba(247, 250, 255, 0.58);
+  --ui-glass-panel-bg-soft: rgba(248, 251, 255, 0.48);
+  --ui-glass-panel-bg-hover: rgba(247, 250, 255, 0.68);
+  --ui-glass-panel-border: rgba(255, 255, 255, 0.72);
+  --ui-glass-panel-border-soft: rgba(255, 255, 255, 0.62);
+  --ui-glass-panel-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --ui-glass-panel-shadow-hover: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+  --ui-glass-panel-featured-bg: linear-gradient(
+    135deg,
+    rgba(252, 254, 255, 0.76) 0%,
+    rgba(238, 245, 255, 0.62) 100%
+  );
+  --ui-glass-panel-featured-border: rgba(52, 128, 252, 0.18);
+  --ui-glass-panel-featured-shadow: 0 20px 44px -32px rgba(52, 128, 252, 0.35);
+  --ui-glass-panel-selected-bg: rgba(233, 242, 255, 0.68);
+  --ui-glass-panel-selected-border: rgba(52, 128, 252, 0.24);
+  --ui-glass-panel-selected-shadow: var(--shadow-selected-glow);
+  --ui-glass-panel-accent-bg: linear-gradient(
+    135deg,
+    rgba(245, 250, 255, 0.74) 0%,
+    rgba(229, 240, 255, 0.64) 100%
+  );
+  --ui-glass-panel-accent-border: rgba(52, 128, 252, 0.18);
+  --ui-glass-panel-accent-shadow: 0 12px 28px -22px rgba(52, 128, 252, 0.32);
+  --ui-glass-panel-chrome-bg: rgba(244, 248, 255, 0.72);
+  --ui-glass-panel-chrome-border: rgba(255, 255, 255, 0.76);
+  --ui-glass-panel-chrome-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+  --ui-glass-panel-success-bg: linear-gradient(
+    135deg,
+    rgba(246, 255, 251, 0.82) 0%,
+    rgba(236, 252, 243, 0.74) 100%
+  );
+  --ui-glass-panel-success-border: rgba(34, 197, 94, 0.2);
+  --ui-glass-panel-success-shadow: 0 20px 44px -32px rgba(34, 197, 94, 0.28);
+  --ui-glass-panel-warning-bg: linear-gradient(
+    135deg,
+    rgba(255, 252, 240, 0.84) 0%,
+    rgba(255, 247, 222, 0.74) 100%
+  );
+  --ui-glass-panel-warning-border: rgba(245, 158, 11, 0.22);
+  --ui-glass-panel-warning-shadow: 0 20px 44px -32px rgba(245, 158, 11, 0.25);
+  --ui-glass-panel-modal-bg: linear-gradient(
+    135deg,
+    rgba(252, 254, 255, 0.66) 0%,
+    rgba(242, 248, 255, 0.78) 100%
+  );
+  --ui-glass-panel-modal-border: rgba(255, 255, 255, 0.8);
+  --ui-glass-panel-modal-shadow: var(--shadow-modal);
+  --ui-glass-divider: rgba(214, 224, 240, 0.68);
+  --ui-glass-chip-bg: rgba(255, 255, 255, 0.38);
+  --ui-glass-chip-border: rgba(255, 255, 255, 0.68);
+  --ui-glass-chip-featured-bg: rgba(255, 255, 255, 0.46);
+  --ui-glass-chip-featured-border: rgba(52, 128, 252, 0.18);
+  --ui-glass-chip-accent-bg: rgba(52, 128, 252, 0.12);
+  --ui-glass-chip-accent-border: rgba(52, 128, 252, 0.18);
+  --ui-glass-chip-selected-bg: rgba(52, 128, 252, 0.1);
+  --ui-glass-chip-selected-border: rgba(52, 128, 252, 0.2);
+  --ui-glass-chip-success-bg: rgba(248, 255, 250, 0.44);
+  --ui-glass-chip-success-border: rgba(34, 197, 94, 0.2);
+  --ui-glass-chip-warning-bg: rgba(255, 251, 240, 0.46);
+  --ui-glass-chip-warning-border: rgba(245, 158, 11, 0.22);
+  --ui-glass-chip-muted-bg: rgba(0, 0, 0, 0.04);
+  --ui-glass-chip-muted-border: rgba(255, 255, 255, 0.4);
+  --ui-glass-specular: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.35) 26%,
+    rgba(255, 255, 255, 0.1) 54%,
+    rgba(255, 255, 255, 0.35) 100%
+  );
+  --ui-glass-edge-highlight:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76), inset 0 -1px 0 rgba(255, 255, 255, 0.18);
+  --ui-glass-chip-edge-highlight:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62), inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+  --ui-shell-bg:
+    radial-gradient(140% 90% at 50% 0%, rgba(110, 165, 255, 0.1) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(253, 254, 255, 0.98) 0%, rgba(244, 248, 253, 0.96) 100%);
+  --ui-shell-sheen:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 24%),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      transparent 42%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+  --ui-shell-noise:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.36) 0%, transparent 32%),
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.52) 0%, transparent 36%);
+  --ui-content-surface: linear-gradient(
+    180deg,
+    rgba(252, 254, 255, 0.94) 0%,
+    rgba(246, 249, 255, 0.92) 100%
+  );
+  --ui-content-surface-border: rgba(221, 230, 244, 0.94);
+  --ui-content-surface-shadow: 0 32px 64px -44px rgba(48, 78, 132, 0.18);
+  --ui-content-panel-bg:
+    radial-gradient(120% 100% at 0% 0%, rgba(110, 165, 255, 0.07) 0%, transparent 50%),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(243, 248, 255, 0.1) 55%,
+      rgba(243, 248, 255, 0.1) 100%
+    );
+  --ui-content-panel-bg-subtle:
+    radial-gradient(120% 100% at 0% 0%, rgba(110, 165, 255, 0.05) 0%, transparent 48%),
+    linear-gradient(
+      135deg,
+      rgba(253, 254, 255, 0.12) 0%,
+      rgba(244, 249, 255, 0.06) 60%,
+      rgba(244, 249, 255, 0.06) 100%
+    );
+  --ui-content-panel-border: rgba(255, 255, 255, 0.78);
+  --ui-content-panel-shadow:
+    0 0 0 1px rgba(206, 220, 242, 0.55), 0 18px 44px -34px rgba(69, 114, 196, 0.24);
+  --ui-content-panel-shadow-hover:
+    0 0 0 1px rgba(196, 213, 240, 0.66), 0 24px 52px -34px rgba(69, 114, 196, 0.3);
+  --ui-content-panel-hero-bg: linear-gradient(
+    135deg,
+    rgba(251, 253, 255, 0.96) 0%,
+    rgba(238, 245, 255, 0.92) 55%,
+    rgba(240, 247, 255, 0.88) 100%
+  );
+  --ui-content-panel-hero-border: rgba(199, 216, 244, 0.92);
+  --ui-content-panel-hero-shadow: 0 28px 64px -40px rgba(69, 114, 196, 0.26);
+  --ui-content-accent-wash: radial-gradient(
+    130% 100% at 16% 0%,
+    rgba(99, 161, 255, 0.09) 0%,
+    transparent 58%
+  );
+  --ui-content-stat-bg:
+    radial-gradient(130% 120% at 12% 0%, rgba(110, 165, 255, 0.08) 0%, transparent 54%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(241, 247, 255, 0.08) 100%);
+  --ui-content-stat-border: rgba(255, 255, 255, 0.72);
+  --ui-content-stat-shadow:
+    0 0 0 1px rgba(208, 221, 242, 0.5), 0 14px 36px -30px rgba(69, 114, 196, 0.2);
+  --ui-content-option-active-bg: linear-gradient(
+    135deg,
+    rgba(242, 247, 255, 0.94) 0%,
+    rgba(232, 241, 255, 0.92) 100%
+  );
+  --ui-content-option-active-border: rgba(90, 145, 255, 0.34);
+  --ui-content-option-active-shadow: 0 22px 50px -34px rgba(58, 116, 227, 0.22);
+
+  /* Model picker premium effects (light mode) */
+  --shadow-metallic-light: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover-subtle: 0 2px 8px -2px rgba(0, 0, 0, 0.1);
+
+  /* Card & surface depth shadows (light mode) — Apple-style薄阴影，不用外发光 */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 0 8px 24px -4px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.18);
+
+  /* Selected-state stroke — 极细内描边 + 几乎看不见的外光，保持克制 */
+  --shadow-selected-glow:
+    inset 0 0 0 1px oklch(0.58 0.21 258 / 0.18), 0 0 16px -4px oklch(0.58 0.21 258 / 0.2);
+
+  /* Liquid Glass material system — physical parameters */
+  --glass-blur: 40px;
+  --glass-saturate: 120%;
+  --glass-shadow: 0 8px 32px -4px oklch(0 0 0 / 0.32), 0 2px 8px oklch(0 0 0 / 0.12);
+  --glass-inner-highlight: inset 0 1px 0 oklch(1 0 0 / 0.12);
+  --glass-ambient-glow:
+    radial-gradient(ellipse 80% 60% at 15% 10%, rgba(110, 165, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(160, 120, 255, 0.05) 0%, transparent 55%);
+  --glass-4layer-edge:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 6px 0 rgba(255, 255, 255, 0.04),
+    inset 0 2px 4px -2px rgba(255, 255, 255, 0.18), inset 0 -2px 4px -2px rgba(0, 0, 0, 0.25);
+
+  /*
+   * Semantic material aliases (layered glass discipline):
+   *
+   * --material-chrome-*  → Navigation/control layer (sidebar, titlebar, tabs, toolbars)
+   *                        Full glass (backdrop-filter). Maps to --ui-glass-panel-chrome-*.
+   *
+   * --material-content-* → Content layer (card bodies, lists, forms, tables)
+   *                        Glass allowed on top-level cards (Tier 1).
+   *                        Nested cards (Tier 2) use tint only, no second backdrop-filter.
+   *                        Max nesting depth: 2. Avoid glass-on-glass stacking.
+   */
+  --material-chrome-bg: var(--ui-glass-panel-chrome-bg);
+  --material-chrome-border: var(--ui-glass-panel-chrome-border);
+  --material-chrome-shadow: var(--ui-glass-panel-chrome-shadow);
+  --material-content-bg: var(--ui-content-panel-bg);
+  --material-content-border: var(--ui-content-panel-border);
+  --material-content-shadow: var(--ui-content-panel-shadow);
+}
+
+/* Simplified Chinese: explicit CJK fallback (zh prefix also matches zh-cn) */
+:root:lang(zh) {
+  --font-family-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB",
+    "Helvetica Neue", "Segoe UI", Arial, "Microsoft YaHei UI", "Microsoft YaHei",
+    "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  --font-family-display:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC",
+    "Hiragino Sans GB", "Helvetica Neue", "Segoe UI", Arial, "Microsoft YaHei UI",
+    "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+}
+
+/* Traditional Chinese: must come AFTER :lang(zh) to win the cascade */
+:root:lang(zh-tw) {
+  --font-family-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", "Helvetica Neue", "Segoe UI",
+    Arial, "Microsoft JhengHei UI", "Microsoft JhengHei", "Source Han Sans TC", "Noto Sans CJK TC",
+    sans-serif;
+  --font-family-display:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang TC",
+    "Helvetica Neue", "Segoe UI", Arial, "Microsoft JhengHei UI", "Microsoft JhengHei",
+    "Source Han Sans TC", "Noto Sans CJK TC", sans-serif;
+}
+
+.dark {
+  /* Dark mode — clear surface hierarchy: bg < muted < card < popover */
+  --color-background: oklch(0.09 0.004 260);
+  --color-foreground: oklch(0.95 0 0);
+  --color-card: oklch(0.14 0.006 255);
+  --color-card-foreground: oklch(0.95 0 0);
+  --color-popover: oklch(0.16 0.007 255);
+  --color-popover-foreground: oklch(0.95 0 0);
+  --color-primary: oklch(0.62 0.22 260);
+  --color-primary-foreground: oklch(0.99 0 0);
+  --color-secondary: oklch(0.17 0.005 260);
+  --color-secondary-foreground: oklch(0.92 0 0);
+  --color-muted: oklch(0.12 0.005 260);
+  --color-muted-foreground: oklch(0.52 0.01 250);
+  --color-accent: oklch(0.68 0.2 285);
+  --color-accent-foreground: oklch(0.99 0 0);
+  --color-destructive: oklch(0.6 0.25 25);
+  --color-destructive-foreground: oklch(0.99 0 0);
+  --color-border: oklch(0.22 0.006 250);
+  --color-input: oklch(0.2 0.007 255);
+  --color-ring: oklch(0.62 0.22 260);
+  --color-success: oklch(0.7 0.18 145);
+  --color-success-foreground: oklch(0.99 0 0);
+  --color-warning: oklch(0.75 0.15 70);
+  --color-warning-foreground: oklch(0.15 0 0);
+  --color-info: oklch(0.68 0.2 240);
+  --color-info-foreground: oklch(0.99 0 0);
+
+  /* Surface hierarchy — layered depth system (cooler blue-shifted) */
+  --color-surface-0: oklch(0.09 0.004 260);
+  --color-surface-1: oklch(0.24 0.008 255);
+  --color-surface-2: oklch(0.27 0.01 255);
+  --color-surface-3: oklch(0.3 0.012 255);
+  --color-surface-raised: oklch(0.33 0.014 255);
+
+  /* Border states */
+  --color-border-hover: oklch(0.27 0.01 255);
+  --color-border-active: oklch(0.45 0.15 260);
+  --color-link: oklch(0.64 0.09 250);
+
+  /* Card depth shadows — deeper in dark mode for clearer surface separation */
+  --shadow-card: 0 1px 3px oklch(0 0 0 / 0.45), 0 1px 2px oklch(0 0 0 / 0.3);
+  --shadow-card-hover: 0 4px 12px oklch(0 0 0 / 0.5), 0 2px 4px oklch(0 0 0 / 0.35);
+  --shadow-elevated: 0 12px 28px -4px oklch(0 0 0 / 0.55);
+  --shadow-modal: 0 28px 56px -12px oklch(0 0 0 / 0.65);
+
+  /* Model picker premium effects */
+  --shadow-metallic-dark: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-selected-glow:
+    inset 0 0 0 1px oklch(0.62 0.22 260 / 0.32), 0 1px 6px -2px oklch(0.62 0.22 260 / 0.22);
+  --shadow-card-hover-subtle: 0 2px 8px -2px rgba(0, 0, 0, 0.15);
+
+  --ui-warning-ink: oklch(0.75 0.15 70);
+  --ui-glass-panel-bg: rgba(36, 42, 59, 0.72);
+  --ui-glass-panel-bg-soft: rgba(36, 42, 59, 0.68);
+  --ui-glass-panel-bg-hover: rgba(43, 50, 69, 0.78);
+  --ui-glass-panel-border: rgba(255, 255, 255, 0.08);
+  --ui-glass-panel-border-soft: rgba(255, 255, 255, 0.1);
+  --ui-glass-panel-shadow: var(--shadow-card);
+  --ui-glass-panel-shadow-hover: var(--shadow-card-hover);
+  --ui-glass-panel-featured-bg: linear-gradient(
+    135deg,
+    rgba(36, 42, 59, 0.78) 0%,
+    rgba(24, 28, 39, 0.72) 100%
+  );
+  --ui-glass-panel-featured-border: rgba(99, 186, 247, 0.18);
+  --ui-glass-panel-featured-shadow: var(--shadow-card-hover);
+  --ui-glass-panel-selected-bg: rgba(49, 61, 88, 0.78);
+  --ui-glass-panel-selected-border: rgba(99, 186, 247, 0.24);
+  --ui-glass-panel-selected-shadow: var(--shadow-selected-glow);
+  --ui-glass-panel-accent-bg: linear-gradient(
+    135deg,
+    rgba(36, 50, 74, 0.8) 0%,
+    rgba(28, 39, 58, 0.74) 100%
+  );
+  --ui-glass-panel-accent-border: rgba(99, 186, 247, 0.18);
+  --ui-glass-panel-accent-shadow: var(--shadow-card-hover);
+  --ui-glass-panel-chrome-bg: rgba(25, 30, 41, 0.82);
+  --ui-glass-panel-chrome-border: rgba(255, 255, 255, 0.08);
+  --ui-glass-panel-chrome-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+  --ui-glass-panel-success-bg: linear-gradient(
+    135deg,
+    rgba(27, 61, 46, 0.76) 0%,
+    rgba(22, 45, 36, 0.72) 100%
+  );
+  --ui-glass-panel-success-border: rgba(74, 222, 128, 0.18);
+  --ui-glass-panel-success-shadow: var(--shadow-card-hover);
+  --ui-glass-panel-warning-bg: linear-gradient(
+    135deg,
+    rgba(66, 45, 18, 0.78) 0%,
+    rgba(48, 33, 16, 0.72) 100%
+  );
+  --ui-glass-panel-warning-border: rgba(251, 191, 36, 0.18);
+  --ui-glass-panel-warning-shadow: var(--shadow-card-hover);
+  --ui-glass-panel-modal-bg: rgba(30, 35, 48, 0.92);
+  --ui-glass-panel-modal-border: rgba(255, 255, 255, 0.12);
+  --ui-glass-panel-modal-shadow: var(--shadow-modal);
+  --ui-glass-divider: rgba(74, 85, 104, 0.42);
+  --ui-glass-chip-bg: rgba(255, 255, 255, 0.08);
+  --ui-glass-chip-border: rgba(255, 255, 255, 0.1);
+  --ui-glass-chip-featured-bg: rgba(255, 255, 255, 0.1);
+  --ui-glass-chip-featured-border: rgba(99, 186, 247, 0.18);
+  --ui-glass-chip-accent-bg: rgba(99, 186, 247, 0.12);
+  --ui-glass-chip-accent-border: rgba(99, 186, 247, 0.2);
+  --ui-glass-chip-selected-bg: rgba(99, 186, 247, 0.14);
+  --ui-glass-chip-selected-border: rgba(99, 186, 247, 0.24);
+  --ui-glass-chip-success-bg: rgba(74, 222, 128, 0.12);
+  --ui-glass-chip-success-border: rgba(74, 222, 128, 0.2);
+  --ui-glass-chip-warning-bg: rgba(251, 191, 36, 0.12);
+  --ui-glass-chip-warning-border: rgba(251, 191, 36, 0.18);
+  --ui-glass-chip-muted-bg: rgba(255, 255, 255, 0.06);
+  --ui-glass-chip-muted-border: rgba(255, 255, 255, 0.1);
+  --ui-glass-specular: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.18) 24%,
+    rgba(255, 255, 255, 0.04) 54%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  --ui-glass-edge-highlight:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+  --ui-glass-chip-edge-highlight:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  --glass-ambient-glow:
+    radial-gradient(ellipse 80% 60% at 15% 10%, rgba(96, 152, 255, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(140, 110, 255, 0.04) 0%, transparent 55%);
+  --glass-4layer-edge:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04), inset 0 0 6px 0 rgba(255, 255, 255, 0.03),
+    inset 0 2px 4px -2px rgba(255, 255, 255, 0.08), inset 0 -2px 4px -2px rgba(0, 0, 0, 0.4);
+  --ui-shell-bg:
+    radial-gradient(140% 90% at 50% 0%, rgba(96, 152, 255, 0.1) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(10, 13, 22, 0.98) 0%, rgba(13, 16, 28, 0.98) 100%);
+  --ui-shell-sheen:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 20%),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 42%,
+      rgba(255, 255, 255, 0.04) 100%
+    );
+  --ui-shell-noise:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.08) 0%, transparent 34%),
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.12) 0%, transparent 32%);
+  --ui-content-surface: linear-gradient(
+    180deg,
+    rgba(18, 23, 36, 0.96) 0%,
+    rgba(15, 19, 31, 0.96) 100%
+  );
+  --ui-content-surface-border: rgba(255, 255, 255, 0.08);
+  --ui-content-surface-shadow: 0 28px 60px -40px rgba(0, 0, 0, 0.5);
+  --ui-content-panel-bg:
+    radial-gradient(120% 100% at 0% 0%, rgba(96, 152, 255, 0.08) 0%, transparent 50%),
+    linear-gradient(
+      135deg,
+      rgba(32, 39, 55, 0.28) 0%,
+      rgba(25, 32, 48, 0.2) 55%,
+      rgba(28, 36, 54, 0.18) 100%
+    );
+  --ui-content-panel-bg-subtle:
+    radial-gradient(120% 100% at 0% 0%, rgba(96, 152, 255, 0.06) 0%, transparent 48%),
+    linear-gradient(
+      135deg,
+      rgba(29, 35, 50, 0.22) 0%,
+      rgba(24, 30, 45, 0.14) 60%,
+      rgba(26, 34, 52, 0.12) 100%
+    );
+  --ui-content-panel-border: rgba(255, 255, 255, 0.12);
+  --ui-content-panel-shadow: 0 24px 52px -38px rgba(0, 0, 0, 0.45);
+  --ui-content-panel-shadow-hover: 0 28px 60px -38px rgba(0, 0, 0, 0.54);
+  --ui-content-panel-hero-bg: linear-gradient(
+    135deg,
+    rgba(32, 40, 56, 0.96) 0%,
+    rgba(25, 36, 56, 0.94) 55%,
+    rgba(27, 38, 58, 0.9) 100%
+  );
+  --ui-content-panel-hero-border: rgba(108, 153, 255, 0.2);
+  --ui-content-panel-hero-shadow: 0 30px 70px -42px rgba(28, 74, 173, 0.34);
+  --ui-content-accent-wash: radial-gradient(
+    130% 100% at 16% 0%,
+    rgba(96, 152, 255, 0.08) 0%,
+    transparent 58%
+  );
+  --ui-content-stat-bg:
+    radial-gradient(130% 120% at 12% 0%, rgba(96, 152, 255, 0.08) 0%, transparent 54%),
+    linear-gradient(135deg, rgba(33, 40, 56, 0.3) 0%, rgba(27, 33, 48, 0.2) 100%);
+  --ui-content-stat-border: rgba(255, 255, 255, 0.1);
+  --ui-content-stat-shadow: 0 18px 42px -34px rgba(0, 0, 0, 0.4);
+  --ui-content-option-active-bg: linear-gradient(
+    135deg,
+    rgba(39, 49, 69, 0.96) 0%,
+    rgba(31, 43, 67, 0.92) 100%
+  );
+  --ui-content-option-active-border: rgba(108, 153, 255, 0.26);
+  --ui-content-option-active-shadow: 0 26px 54px -36px rgba(43, 88, 188, 0.28);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+    transition:
+      background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+      color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+      transform 120ms cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family-sans);
+    font-feature-settings:
+      "liga" 1,
+      "kern" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Electron specific styles */
+  html,
+  body {
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  /* Make dictation window (App) transparent, but keep control panel solid */
+  html:has(body .dictation-window),
+  body:has(.dictation-window),
+  body:has(.dictation-window) #root {
+    height: 100vh;
+    min-height: 100vh;
+    background: transparent !important;
+    overflow: hidden !important;
+  }
+
+  html:has(body .completion-alert-window),
+  body:has(.completion-alert-window),
+  body:has(.completion-alert-window) #root {
+    background: transparent !important;
+    overflow: hidden !important;
+  }
+}
+
+/* ChordVox Brand Typography */
+.brand-heading {
+  font-family: var(--font-family-sans);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.brand-body {
+  font-family: var(--font-family-sans);
+  line-height: 1.6;
+}
+
+.brand-script {
+  font-family: var(--font-family-sans);
+  font-style: italic;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+/* CJK headings: negative tracking is a Latin (SF Pro) convention;
+   it cramps square CJK glyphs, so reset for zh and ja */
+:lang(zh) h1,
+:lang(zh) h2,
+:lang(zh) h3,
+:lang(zh) h4,
+:lang(zh) h5,
+:lang(zh) h6,
+:lang(zh) .brand-heading,
+:lang(ja) h1,
+:lang(ja) h2,
+:lang(ja) h3,
+:lang(ja) h4,
+:lang(ja) h5,
+:lang(ja) h6,
+:lang(ja) .brand-heading {
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* Modern Button Styling - handled by button component */
+button {
+  font-family: var(--font-family-sans);
+  cursor: pointer;
+}
+
+kbd,
+code,
+pre {
+  font-family: var(--font-family-mono);
+}
+
+/* Phase 4: pressed micro-interaction — 80ms spring snap */
+button:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 80ms;
+}
+
+/* Ensure all interactive elements have pointer cursor */
+button:hover,
+[role="button"]:hover,
+.cursor-pointer:hover,
+svg:hover,
+[data-icon]:hover,
+.icon:hover {
+  cursor: pointer;
+}
+
+/* Premium input styling with subtle depth */
+input,
+textarea {
+  border-radius: var(--radius-md);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+  font-family: var(--font-family-sans);
+  box-shadow: inset 0 1px 2px oklch(from var(--color-foreground) l c h / 0.06);
+}
+
+/* Light mode inputs — clean, follows token system */
+:root input,
+:root textarea {
+  background-color: var(--color-input);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+}
+
+:root input:focus,
+:root textarea:focus {
+  border-color: var(--color-ring);
+  box-shadow: 0 0 0 2px oklch(from var(--color-ring) l c h / 0.15);
+  background-color: var(--color-background);
+}
+
+/* Dark mode inputs — recessed, but no longer a black hole */
+.dark input,
+.dark textarea {
+  background-color: var(--color-input);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.dark input:focus,
+.dark textarea:focus {
+  border-color: var(--color-border-active);
+  box-shadow:
+    0 0 0 2px oklch(from var(--color-ring) l c h / 0.15),
+    inset 0 1px 2px rgba(0, 0, 0, 0.22);
+}
+
+/* Card styling moved to shadcn card.tsx component */
+
+/* ========================================
+   Liquid Glass Utility Classes
+   ======================================== */
+
+/* TitleBar: frosted glass bar */
+.titlebar-glass {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.04) 100%),
+    var(--ui-glass-panel-chrome-bg);
+  border-bottom: 1px solid var(--ui-glass-panel-chrome-border);
+  box-shadow: var(--ui-glass-panel-chrome-shadow), var(--ui-glass-edge-highlight);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+}
+
+:root .titlebar-glass {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 100%),
+    var(--ui-glass-panel-chrome-bg);
+  border-bottom-color: var(--ui-glass-panel-chrome-border);
+}
+
+.app-glass-shell {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 90% 70% at 12% 8%, rgba(99, 142, 255, 0.42) 0%, transparent 56%),
+    radial-gradient(ellipse 80% 65% at 88% 18%, rgba(168, 120, 255, 0.38) 0%, transparent 54%),
+    radial-gradient(ellipse 85% 70% at 78% 92%, rgba(255, 120, 190, 0.3) 0%, transparent 55%),
+    radial-gradient(ellipse 75% 60% at 20% 88%, rgba(90, 200, 230, 0.3) 0%, transparent 52%),
+    var(--ui-shell-bg);
+  background-size:
+    200% 200%,
+    180% 180%,
+    220% 220%,
+    190% 190%,
+    100% 100%;
+  animation: lg-aurora-drift 24s ease-in-out infinite;
+}
+
+@keyframes lg-aurora-drift {
+  0% {
+    background-position:
+      0% 0%,
+      100% 100%,
+      50% 50%,
+      80% 20%,
+      0% 0%;
+  }
+  33% {
+    background-position:
+      30% 60%,
+      70% 30%,
+      20% 80%,
+      50% 70%,
+      0% 0%;
+  }
+  66% {
+    background-position:
+      60% 30%,
+      30% 70%,
+      80% 20%,
+      20% 50%,
+      0% 0%;
+  }
+  100% {
+    background-position:
+      0% 0%,
+      100% 100%,
+      50% 50%,
+      80% 20%,
+      0% 0%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-glass-shell {
+    animation: none;
+  }
+}
+
+.app-glass-shell::before,
+.app-glass-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.app-glass-shell::before {
+  background: var(--ui-shell-sheen);
+  opacity: 0.9;
+}
+
+.app-glass-shell::after {
+  background: var(--ui-shell-noise);
+  mix-blend-mode: screen;
+  opacity: 0.72;
+}
+
+.app-glass-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Native Liquid Glass mode: the control-panel window is transparent and a real
+   NSGlassEffectView is mounted behind the page (windowManager applyGlass). The
+   stock `body { background: #fff }` (opaque) painted right over it, hiding the OS
+   glass entirely — THE reason no glass was ever visible. Clear the opaque body/root
+   here so the material shows through the shell's thin tint. data-native-glass lives
+   on the control panel <html> only, so the dictation window is unaffected.
+   Rollback: delete this rule. */
+[data-native-glass],
+[data-native-glass] body,
+[data-native-glass] #root {
+  background-color: transparent;
+}
+
+/* Native Liquid Glass mode: reduce CSS background opacity so real NSGlassEffectView shows through */
+[data-native-glass] .app-glass-shell {
+  /* Real NSGlassEffectView sits BEHIND this transparent webview. The canvas must
+     be a THIN translucent tint (~0.44), not an opaque fill — an opaque background
+     hides the OS Liquid Glass and leaves a flat panel (the bug behind "看不到玻璃").
+     A light neutral tint is all Apple uses; the material itself carries the depth
+     and the saturate(180%) on panels pulls color from what shows through.
+     Rollback: git checkout. */
+  background: linear-gradient(180deg, rgba(246, 249, 253, 0.16) 0%, rgba(238, 244, 251, 0.12) 100%);
+  background-size: 100% 100%;
+  animation: none;
+}
+
+[data-native-glass] .app-glass-shell::before {
+  opacity: 0.2;
+}
+
+[data-native-glass] .app-glass-shell::after {
+  opacity: 0.15;
+}
+
+[data-native-glass] .settings-modal-shell {
+  /* Settings modal shares the translucent canvas (see .app-glass-shell) — a touch
+     more tint than the page so the modal reads as a focused layer over the glass. */
+  background: linear-gradient(180deg, rgba(247, 250, 254, 0.2) 0%, rgba(240, 245, 252, 0.16) 100%);
+  background-size: 100% 100%;
+  animation: none;
+}
+
+[data-native-glass] .settings-modal-shell::before {
+  opacity: 0.1;
+}
+
+[data-native-glass] .settings-modal-shell::after {
+  opacity: 0.05;
+}
+
+/* Dark mode native glass.
+   Both selector forms: `.dark` lives on <html> AND <body> (useTheme.ts) while
+   data-native-glass lives on <html> — same-element form survives if the
+   body.dark mirror is ever removed. */
+[data-native-glass].dark .app-glass-shell,
+[data-native-glass] .dark .app-glass-shell {
+  /* Translucent dark tint over the real dark glass — see light shell note. */
+  background: linear-gradient(180deg, rgba(18, 22, 33, 0.46) 0%, rgba(13, 17, 27, 0.4) 100%);
+  background-size: 100% 100%;
+  animation: none;
+}
+
+[data-native-glass].dark .settings-modal-shell,
+[data-native-glass] .dark .settings-modal-shell {
+  /* Focused modal layer: a touch more dark tint than the page over the glass. */
+  background: linear-gradient(180deg, rgba(16, 20, 31, 0.56) 0%, rgba(11, 15, 25, 0.5) 100%);
+  background-size: 100% 100%;
+  animation: none;
+}
+
+/* Dark glass legibility: secondary text sat near the contrast floor on the
+   nearly-transparent shell (verified on-device) — lift muted ink only when
+   real glass is behind the page. */
+[data-native-glass].dark,
+[data-native-glass] .dark {
+  --color-muted-foreground: oklch(0.65 0.012 250);
+}
+
+/* Vibrancy fallback is weaker than NSGlassEffectView — keep more body */
+[data-native-glass="vibrancy"] .app-glass-shell {
+  background: linear-gradient(180deg, rgba(248, 250, 255, 0.55) 0%, rgba(242, 246, 253, 0.45) 100%);
+}
+[data-native-glass="vibrancy"].dark .app-glass-shell,
+[data-native-glass="vibrancy"] .dark .app-glass-shell {
+  background: linear-gradient(180deg, rgba(9, 12, 21, 0.55) 0%, rgba(13, 16, 28, 0.5) 100%);
+}
+[data-native-glass="vibrancy"] .settings-modal-shell {
+  background: linear-gradient(180deg, rgba(248, 250, 255, 0.5) 0%, rgba(242, 246, 253, 0.42) 100%);
+}
+[data-native-glass="vibrancy"].dark .settings-modal-shell,
+[data-native-glass="vibrancy"] .dark .settings-modal-shell {
+  background: linear-gradient(180deg, rgba(13, 16, 28, 0.52) 0%, rgba(10, 13, 22, 0.46) 100%);
+}
+
+/* == Apple-UI baseline (2026-06): panel-tier transparency for native glass ==
+   Only when real glass (NSGlassEffectView / vibrancy / acrylic) sits behind
+   the page. Non-native platforms keep the stock opaque panels above.
+   Rollback: delete this whole block (tag: pre-apple-ui). */
+[data-native-glass] {
+  /* Apple "Regular" glass: moderate translucent body (~0.40 light tint) so panels
+     READ as glass on the neutral canvas — saturate 180% + specular edge carry the
+     premium look, not a heavy fill. */
+  --ui-content-panel-bg:
+    radial-gradient(120% 100% at 0% 0%, rgba(150, 185, 255, 0.11) 0%, transparent 50%),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.26) 0%,
+      rgba(245, 249, 255, 0.2) 55%,
+      rgba(245, 249, 255, 0.18) 100%
+    );
+  --ui-content-panel-bg-subtle:
+    radial-gradient(120% 100% at 0% 0%, rgba(150, 185, 255, 0.09) 0%, transparent 48%),
+    linear-gradient(
+      135deg,
+      rgba(253, 254, 255, 0.2) 0%,
+      rgba(246, 250, 255, 0.16) 60%,
+      rgba(246, 250, 255, 0.15) 100%
+    );
+  --ui-content-stat-bg:
+    radial-gradient(130% 120% at 12% 0%, rgba(150, 185, 255, 0.12) 0%, transparent 54%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.24) 0%, rgba(244, 249, 255, 0.18) 100%);
+  --ui-content-panel-hero-bg: linear-gradient(
+    135deg,
+    rgba(252, 253, 255, 0.4) 0%,
+    rgba(241, 247, 255, 0.32) 55%,
+    rgba(243, 248, 255, 0.3) 100%
+  );
+}
+
+[data-native-glass] .premium-panel {
+  backdrop-filter: blur(18px) saturate(180%) brightness(1.04);
+  -webkit-backdrop-filter: blur(18px) saturate(180%) brightness(1.04);
+}
+
+/* Stat cards had no blur of their own — fine while opaque, required once
+   the fill drops below ~0.5 or desktop texture bleeds through the text. */
+[data-native-glass] .premium-stat-card {
+  backdrop-filter: blur(16px) saturate(180%) brightness(1.04);
+  -webkit-backdrop-filter: blur(16px) saturate(180%) brightness(1.04);
+}
+
+[data-native-glass] .premium-panel--hero .premium-stat-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.46) 0%, rgba(250, 252, 255, 0.32) 100%);
+}
+
+[data-native-glass] .settings-overview-hero .premium-stat-card {
+  background:
+    radial-gradient(130% 140% at 8% 0%, rgba(120, 170, 255, 0.16) 0%, transparent 54%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(248, 251, 255, 0.24) 100%);
+}
+
+/* Dark mode — both selector forms: .dark lives on <html> AND <body> */
+[data-native-glass].dark,
+[data-native-glass] .dark {
+  --ui-content-panel-bg:
+    radial-gradient(120% 100% at 0% 0%, rgba(110, 165, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(
+      135deg,
+      rgba(38, 46, 64, 0.5) 0%,
+      rgba(30, 38, 56, 0.42) 55%,
+      rgba(32, 40, 60, 0.4) 100%
+    );
+  --ui-content-panel-bg-subtle:
+    radial-gradient(120% 100% at 0% 0%, rgba(110, 165, 255, 0.09) 0%, transparent 48%),
+    linear-gradient(
+      135deg,
+      rgba(34, 42, 60, 0.42) 0%,
+      rgba(28, 35, 52, 0.35) 60%,
+      rgba(30, 38, 58, 0.33) 100%
+    );
+  --ui-content-stat-bg:
+    radial-gradient(130% 120% at 12% 0%, rgba(110, 165, 255, 0.13) 0%, transparent 54%),
+    linear-gradient(135deg, rgba(38, 46, 64, 0.46) 0%, rgba(30, 38, 56, 0.38) 100%);
+  --ui-content-panel-hero-bg: linear-gradient(
+    135deg,
+    rgba(40, 50, 70, 0.62) 0%,
+    rgba(30, 42, 62, 0.54) 55%,
+    rgba(32, 44, 64, 0.5) 100%
+  );
+}
+
+[data-native-glass].dark .premium-panel--hero .premium-stat-card,
+[data-native-glass] .dark .premium-panel--hero .premium-stat-card {
+  background: linear-gradient(180deg, rgba(44, 53, 73, 0.65) 0%, rgba(33, 41, 59, 0.53) 100%);
+}
+
+[data-native-glass].dark .settings-overview-hero .premium-stat-card,
+[data-native-glass] .dark .settings-overview-hero .premium-stat-card {
+  background:
+    radial-gradient(130% 140% at 8% 0%, rgba(96, 152, 255, 0.1) 0%, transparent 54%),
+    linear-gradient(180deg, rgba(44, 53, 73, 0.57) 0%, rgba(33, 41, 59, 0.43) 100%);
+}
+
+.settings-modal-shell {
+  background:
+    radial-gradient(ellipse 90% 70% at 12% 8%, rgba(99, 142, 255, 0.38) 0%, transparent 56%),
+    radial-gradient(ellipse 80% 65% at 88% 18%, rgba(168, 120, 255, 0.34) 0%, transparent 54%),
+    radial-gradient(ellipse 85% 70% at 78% 92%, rgba(255, 120, 190, 0.26) 0%, transparent 55%),
+    radial-gradient(ellipse 75% 60% at 20% 88%, rgba(90, 200, 230, 0.26) 0%, transparent 52%),
+    linear-gradient(180deg, rgba(248, 250, 255, 0.88) 0%, rgba(242, 246, 253, 0.85) 100%);
+  background-size:
+    200% 200%,
+    180% 180%,
+    220% 220%,
+    190% 190%,
+    100% 100%;
+  animation: lg-aurora-drift 24s ease-in-out infinite;
+}
+
+/* ============================================================
+   Settings type scale — aligned to macOS HIG text styles.
+   Native macOS baseline: Body 13px, minimum 10px. Every size class
+   in use across the settings panel is funnelled into 8 steps —
+   10 · 11 · 12 · 13 · 15 · 17 · 22 · 26 — collapsing the prior
+   ~20-way fragmentation. This SUPERSEDES the old ad-hoc remap that
+   silently enlarged classes (text-[13px]→14px, text-xs→12.5px …),
+   which made the Tailwind class name lie about the rendered size.
+
+   Role → step (from the live UI):
+     Caption / badge .................. 10  (PRO, 已激活, 版本号)
+     Subheadline / eyebrow / group .... 11  (更新·主题, API Key, 应用/语音)
+     Callout / secondary copy ......... 12  (区块/行说明, metric label)
+     Body / Headline / sidebar item ... 13  (正文, 卡片标题, 账户)
+     Title 3 / section heading ........ 15  (效率概览, 音效与动效)
+     Title 2 / section hero ........... 17  (当前状态, 语音转文字)
+     Title 1 / version value .......... 22  (1.5.128)
+     Large Title / metric value ....... 26  (4 分钟, 573 字)
+   Rollback tag: pre-macos-typescale (restore this block from git).
+   ============================================================ */
+
+/* Caption — 10px (macOS Caption 1/2 · Footnote) */
+.settings-modal-shell .text-\[9px\],
+.settings-modal-shell .text-\[10px\] {
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+/* Subheadline / eyebrow / sidebar group label — 11px */
+.settings-modal-shell .text-\[10\.5px\],
+.settings-modal-shell .text-\[11px\] {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+/* Callout / secondary copy — 12px */
+.settings-modal-shell .text-xs,
+.settings-modal-shell .text-\[12px\],
+.settings-modal-shell .text-\[12\.5px\] {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Body / Headline / sidebar item — 13px (macOS native body) */
+.settings-modal-shell .text-sm,
+.settings-modal-shell .text-\[13px\],
+.settings-modal-shell .text-\[14px\] {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Title 3 / section heading — 15px */
+.settings-modal-shell .text-base,
+.settings-modal-shell .text-\[15px\],
+.settings-modal-shell .text-\[16px\] {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+/* Title 2 / section hero heading — 17px */
+.settings-modal-shell .text-lg,
+.settings-modal-shell .text-\[17px\],
+.settings-modal-shell .text-\[18px\] {
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+/* Title 1 / version value — 22px */
+.settings-modal-shell .text-xl,
+.settings-modal-shell .text-\[20px\],
+.settings-modal-shell .text-\[22px\] {
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+/* Large Title / metric value — 26px */
+.settings-modal-shell .text-2xl,
+.settings-modal-shell .text-\[24px\] {
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+/* Sidebar nav (chrome layer) — 1px above body so the menu reads
+   comfortably in the wide Electron sidebar. macOS Finder/Settings
+   sidebar sits at 13pt; 14px compensates for CJK + window scale.
+   Overrides the per-class type scale above (same specificity, later
+   in source), so it wins for both compact and roomy sidebar variants. */
+.settings-modal-shell .settings-sidebar-item {
+  font-size: 14px;
+}
+
+.settings-modal-shell .settings-sidebar-item > .flex-1 {
+  font-weight: 500;
+}
+
+.settings-modal-shell .settings-sidebar-item--active > .flex-1 {
+  font-weight: 600;
+}
+
+.settings-modal-shell::before {
+  background: var(--glass-ambient-glow), var(--ui-shell-sheen);
+  opacity: 0.34;
+}
+
+.settings-modal-shell::after {
+  opacity: 0.12;
+  mix-blend-mode: normal;
+}
+
+.settings-modal-shell {
+  --glass-4layer-edge:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.54),
+    inset 0 -1px 0 rgba(190, 209, 238, 0.14);
+  --ui-content-panel-shadow:
+    0 0 0 1px rgba(205, 220, 244, 0.42), 0 12px 30px -28px rgba(48, 78, 132, 0.16);
+  --ui-content-panel-shadow-hover:
+    0 0 0 1px rgba(196, 213, 240, 0.52), 0 14px 34px -28px rgba(48, 78, 132, 0.2);
+  --ui-content-panel-hero-shadow:
+    0 0 0 1px rgba(184, 205, 244, 0.48), 0 14px 34px -30px rgba(69, 114, 196, 0.18);
+  --ui-content-stat-shadow:
+    0 0 0 1px rgba(208, 221, 242, 0.4), 0 8px 22px -22px rgba(48, 78, 132, 0.14);
+  --ui-content-option-active-shadow:
+    0 0 0 1px rgba(166, 198, 255, 0.68), 0 0 0 3px rgba(96, 165, 250, 0.08),
+    0 10px 26px -24px rgba(69, 114, 196, 0.18);
+}
+
+.settings-modal-shell .mode-depth-card,
+.settings-modal-shell .premium-option-card.mode-depth-card {
+  box-shadow:
+    0 0 0 1px rgba(221, 230, 244, 0.48),
+    0 8px 22px -22px rgba(48, 78, 132, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -1px 0 rgba(214, 226, 244, 0.16);
+}
+
+.settings-modal-shell .mode-depth-card::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2),
+    transparent 38%,
+    rgba(221, 232, 248, 0.06) 100%
+  );
+}
+
+.settings-modal-shell .mode-depth-card--active,
+.settings-modal-shell .premium-option-card.mode-depth-card.mode-depth-card--active {
+  box-shadow:
+    0 0 0 1px rgba(166, 198, 255, 0.78),
+    0 0 0 3px rgba(96, 165, 250, 0.09),
+    0 10px 26px -24px rgba(69, 114, 196, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(187, 211, 250, 0.18);
+}
+
+.settings-modal-shell .mode-depth-panel {
+  box-shadow:
+    0 0 0 1px rgba(221, 230, 244, 0.46),
+    0 10px 26px -24px rgba(48, 78, 132, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    inset 0 -1px 0 rgba(214, 226, 244, 0.14);
+}
+
+.dark .settings-modal-shell {
+  background:
+    radial-gradient(ellipse 90% 70% at 12% 8%, rgba(70, 120, 255, 0.5) 0%, transparent 56%),
+    radial-gradient(ellipse 80% 65% at 88% 18%, rgba(140, 100, 255, 0.44) 0%, transparent 54%),
+    radial-gradient(ellipse 85% 70% at 78% 92%, rgba(255, 100, 170, 0.36) 0%, transparent 55%),
+    radial-gradient(ellipse 75% 60% at 20% 88%, rgba(70, 180, 220, 0.36) 0%, transparent 52%),
+    linear-gradient(180deg, rgba(13, 16, 28, 0.88) 0%, rgba(10, 13, 22, 0.85) 100%);
+  background-size:
+    200% 200%,
+    180% 180%,
+    220% 220%,
+    190% 190%,
+    100% 100%;
+  animation: lg-aurora-drift 24s ease-in-out infinite;
+}
+
+/* ControlPanel history list surface */
+.control-panel-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0.03) 42%,
+      rgba(255, 255, 255, 0.08) 100%
+    ),
+    var(--ui-glass-panel-bg);
+  border: 1px solid var(--ui-glass-panel-border);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 24px 48px -28px rgba(20, 35, 70, 0.32),
+    var(--glass-shadow),
+    var(--glass-inner-highlight),
+    var(--ui-glass-edge-highlight);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+}
+
+:root .control-panel-surface {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(255, 255, 255, 0.12) 42%,
+      rgba(255, 255, 255, 0.22) 100%
+    ),
+    var(--ui-glass-panel-bg);
+  border-color: var(--ui-glass-panel-border);
+  box-shadow:
+    0 24px 48px -30px rgba(52, 128, 252, 0.16),
+    var(--glass-shadow),
+    var(--glass-inner-highlight),
+    var(--ui-glass-edge-highlight);
+}
+
+.control-panel-surface::before,
+.control-panel-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.control-panel-surface::before {
+  background: var(--ui-glass-specular);
+  opacity: 0.8;
+}
+
+.control-panel-surface::after {
+  inset: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18),
+    transparent 28%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  opacity: 0.72;
+}
+
+.control-panel-surface > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--ui-glass-panel-border);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.05) 36%,
+      rgba(255, 255, 255, 0.1) 100%
+    ),
+    var(--ui-glass-panel-bg);
+  box-shadow: var(--ui-glass-panel-shadow), var(--ui-glass-edge-highlight);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-panel::before,
+.glass-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.glass-panel::before {
+  background: var(--ui-glass-specular);
+  opacity: 1;
+}
+
+.glass-panel::after {
+  inset: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.14),
+    transparent 34%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  opacity: 0.78;
+}
+
+.glass-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-panel--soft {
+  border-color: var(--ui-glass-panel-border-soft);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%),
+    var(--ui-glass-panel-bg-soft);
+}
+
+.dark .glass-panel--soft {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%),
+    var(--ui-glass-panel-bg-soft);
+}
+
+.dark .hotkey-lock-overlay {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(42, 50, 69, 0.46) 0%, rgba(26, 33, 48, 0.4) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.dark .agent-name-input {
+  background: linear-gradient(180deg, rgba(34, 41, 57, 0.9) 0%, rgba(26, 32, 46, 0.88) 100%);
+  border-color: rgba(255, 255, 255, 0.13);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Selected / featured glass cards — Apple Liquid Glass "selected" treatment:
+   a crisp top rim light + accent glow + raised drop shadow (reads as the pane
+   lifting toward the light), plus a single soft specular sweep on selection.
+   Replaces the old static diagonal hairline, which read as a cheap scratch.
+   The prismatic blue/pink lines were removed; chromatic detail belongs on the
+   rim, not painted across the card center. Lift is expressed via shadow only
+   (no transform) so it never clobbers an element's existing hover transform. */
+.glass-panel--featured {
+  border-color: var(--ui-glass-panel-featured-border);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.15) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    var(--ui-glass-panel-featured-shadow),
+    0 12px 28px -16px rgba(52, 128, 252, 0.4),
+    var(--glass-4layer-edge);
+  backdrop-filter: blur(16px) saturate(140%) brightness(1.04);
+  -webkit-backdrop-filter: blur(14px) saturate(180%) brightness(1.05);
+}
+
+.dark .glass-panel--featured {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    var(--ui-glass-panel-featured-shadow),
+    0 12px 30px -16px rgba(0, 0, 0, 0.55),
+    var(--glass-4layer-edge);
+}
+
+.dark .glass-panel--selected {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.08) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    var(--ui-glass-panel-selected-shadow),
+    0 12px 30px -16px rgba(0, 0, 0, 0.55),
+    var(--glass-4layer-edge);
+}
+
+.glass-panel--selected {
+  border-color: var(--ui-glass-panel-selected-border);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.18) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    var(--ui-glass-panel-selected-shadow),
+    0 12px 28px -16px rgba(52, 128, 252, 0.4),
+    var(--glass-4layer-edge);
+  backdrop-filter: blur(16px) saturate(140%) brightness(1.04);
+  -webkit-backdrop-filter: blur(14px) saturate(180%) brightness(1.05);
+}
+
+/* One-time specular sweep across the card the moment it becomes selected.
+   Layer 1 = the moving light band (clipped by .glass-panel overflow:hidden +
+   border-radius); layer 2 = the same inner edge highlight the base ::after
+   carries, so nothing is lost once the sweep settles off-canvas. */
+.glass-panel--selected::after,
+.glass-panel--featured::after {
+  inset: 1px;
+  background:
+    linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.5) 50%, transparent 65%),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.14),
+      transparent 34%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
+  background-size:
+    220% 100%,
+    100% 100%;
+  background-position:
+    -160% 0,
+    0 0;
+  background-repeat: no-repeat;
+  opacity: 0.78;
+  animation: glass-sweep 0.7s ease-out 1;
+}
+
+@keyframes glass-sweep {
+  from {
+    background-position:
+      -160% 0,
+      0 0;
+  }
+  to {
+    background-position:
+      160% 0,
+      0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-panel--selected::after,
+  .glass-panel--featured::after {
+    animation: none;
+  }
+}
+
+.glass-panel--accent {
+  border-color: var(--ui-glass-panel-accent-border);
+  background: var(--ui-glass-panel-accent-bg);
+  box-shadow: var(--ui-glass-panel-accent-shadow), var(--ui-glass-edge-highlight);
+}
+
+.glass-panel--chrome {
+  border-color: var(--ui-glass-panel-chrome-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.06) 100%),
+    var(--ui-glass-panel-chrome-bg);
+  box-shadow: var(--ui-glass-panel-chrome-shadow), var(--ui-glass-edge-highlight);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-panel--success {
+  border-color: var(--ui-glass-panel-success-border);
+  background: var(--ui-glass-panel-success-bg);
+  box-shadow: var(--ui-glass-panel-success-shadow), var(--ui-glass-edge-highlight);
+}
+
+.glass-panel--warning {
+  border-color: var(--ui-glass-panel-warning-border);
+  background: var(--ui-glass-panel-warning-bg);
+  box-shadow: var(--ui-glass-panel-warning-shadow), var(--ui-glass-edge-highlight);
+}
+
+.glass-panel--modal {
+  border-color: var(--ui-glass-panel-modal-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%),
+    var(--ui-glass-panel-modal-bg);
+  box-shadow: var(--ui-glass-panel-modal-shadow), var(--ui-glass-edge-highlight);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.completion-alert-window {
+  background: transparent;
+  color: var(--color-foreground);
+}
+
+.completion-alert-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.2) 100%),
+    linear-gradient(135deg, rgba(248, 255, 251, 0.98) 0%, rgba(231, 250, 240, 0.94) 100%);
+  background-color: rgba(246, 255, 250, 0.94);
+  box-shadow:
+    0 22px 48px -30px rgba(22, 101, 52, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.72) inset,
+    var(--ui-glass-edge-highlight);
+  padding: 14px;
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+}
+
+.dark .completion-alert-surface {
+  border-color: rgba(74, 222, 128, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%),
+    linear-gradient(135deg, rgba(28, 74, 50, 0.94) 0%, rgba(18, 48, 36, 0.9) 100%);
+  background-color: rgba(18, 46, 34, 0.9);
+  box-shadow:
+    0 22px 48px -30px rgba(0, 0, 0, 0.72),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    var(--ui-glass-edge-highlight);
+}
+
+.completion-alert-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46) 0%, transparent 44%),
+    radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.16) 0%, transparent 44%);
+}
+
+.completion-alert-surface > * {
+  position: relative;
+  z-index: 1;
+}
+
+.completion-alert-description {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.completion-alert-icon {
+  display: inline-flex;
+  height: 40px;
+  width: 40px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgba(34, 197, 94, 0.26);
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--color-success);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 12px 24px -18px rgba(22, 101, 52, 0.52);
+}
+
+.dark .completion-alert-icon {
+  background: rgba(34, 197, 94, 0.18);
+}
+
+.completion-alert-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 2;
+  display: inline-flex;
+  height: 26px;
+  width: 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--color-muted-foreground);
+}
+
+.completion-alert-close:hover {
+  background: rgba(255, 255, 255, 0.42);
+  color: var(--color-foreground);
+}
+
+.dark .completion-alert-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.language-selector__dropdown--onboarding {
+  border-radius: 1.25rem;
+  border-color: rgba(255, 255, 255, 0.9);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(249, 251, 255, 0.92) 100%),
+    linear-gradient(135deg, rgba(246, 250, 255, 0.94) 0%, rgba(238, 244, 255, 0.9) 100%);
+  box-shadow:
+    0 28px 64px -34px rgba(69, 114, 196, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(220, 230, 246, 0.45);
+  backdrop-filter: blur(30px) saturate(120%);
+  -webkit-backdrop-filter: blur(30px) saturate(120%);
+}
+
+.language-selector__dropdown--onboarding::before {
+  opacity: 0.56;
+}
+
+.language-selector__dropdown--onboarding::after {
+  inset: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.58) 0%,
+    rgba(255, 255, 255, 0.16) 34%,
+    rgba(255, 255, 255, 0.22) 100%
+  );
+  opacity: 0.7;
+}
+
+.dark .language-selector__dropdown--onboarding {
+  border-color: rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(180deg, rgba(35, 41, 56, 0.96) 0%, rgba(28, 33, 46, 0.94) 100%),
+    linear-gradient(135deg, rgba(43, 50, 70, 0.88) 0%, rgba(31, 38, 54, 0.92) 100%);
+  box-shadow:
+    0 28px 64px -32px rgba(0, 0, 0, 0.46),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(28px) saturate(120%);
+  -webkit-backdrop-filter: blur(28px) saturate(120%);
+}
+
+.dark .language-selector__dropdown--onboarding::before {
+  opacity: 0.2;
+}
+
+.dark .language-selector__dropdown--onboarding::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 36%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+  opacity: 0.52;
+}
+
+.glass-panel--hoverable {
+  transition:
+    border-color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel--hoverable:hover {
+  border-color: var(--color-border-hover);
+  background: var(--ui-glass-panel-bg-hover);
+  box-shadow: var(--ui-glass-panel-shadow-hover);
+}
+
+.glass-chip {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--ui-glass-chip-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.04) 100%),
+    var(--ui-glass-chip-bg);
+  box-shadow: var(--ui-glass-panel-shadow), var(--ui-glass-chip-edge-highlight);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--ui-glass-specular);
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.glass-chip > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-chip--featured {
+  border-color: var(--ui-glass-chip-featured-border);
+  background: var(--ui-glass-chip-featured-bg);
+}
+
+.glass-chip--accent {
+  border-color: var(--ui-glass-chip-accent-border);
+  background: var(--ui-glass-chip-accent-bg);
+}
+
+.glass-chip--selected {
+  border-color: var(--ui-glass-chip-selected-border);
+  background: var(--ui-glass-chip-selected-bg);
+}
+
+.glass-chip--success {
+  border-color: var(--ui-glass-chip-success-border);
+  background: var(--ui-glass-chip-success-bg);
+}
+
+.glass-chip--warning {
+  border-color: var(--ui-glass-chip-warning-border);
+  background: var(--ui-glass-chip-warning-bg);
+}
+
+.glass-chip--muted {
+  border-color: var(--ui-glass-chip-muted-border);
+  background: var(--ui-glass-chip-muted-bg);
+  box-shadow: none;
+}
+
+.settings-canvas {
+  position: relative;
+  background: var(--ui-content-surface);
+  border: 1px solid var(--ui-content-surface-border);
+  box-shadow: var(--ui-content-surface-shadow);
+}
+
+.settings-canvas::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--ui-content-accent-wash);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.settings-canvas > * {
+  position: relative;
+  z-index: 1;
+}
+
+.settings-shell-pane::before,
+.settings-shell-pane::after {
+  opacity: 0;
+}
+
+/* Content canvas keeps its ambient color wash — re-enable the ::before that the
+   fused-pane reset above turns off. One soft top light only, so the canvas
+   reads as evenly lit glass instead of patchy color. */
+.settings-canvas.settings-shell-pane::before {
+  opacity: 1;
+  background: radial-gradient(90% 60% at 30% 0%, rgba(110, 165, 255, 0.06) 0%, transparent 60%);
+}
+
+.dark .settings-canvas.settings-shell-pane::before {
+  background: radial-gradient(90% 60% at 30% 0%, rgba(96, 152, 255, 0.06) 0%, transparent 60%);
+}
+
+/* Fused panes, macOS Settings style: no floating-card borders or shadows —
+   sidebar and content run edge-to-edge, separated by a single hairline. */
+.settings-shell-pane--sidebar {
+  border: 0;
+  border-right: 1px solid rgba(212, 222, 238, 0.62);
+  background: linear-gradient(180deg, rgba(250, 252, 255, 0.94) 0%, rgba(243, 248, 255, 0.9) 100%);
+  box-shadow: none;
+}
+
+.settings-shell-pane--content {
+  border: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(249, 251, 255, 0.95) 100%);
+  box-shadow: none;
+}
+
+.dark .settings-shell-pane--sidebar {
+  border: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(28, 33, 46, 0.9) 0%, rgba(22, 27, 38, 0.86) 100%);
+  box-shadow: none;
+}
+
+.dark .settings-shell-pane--content {
+  border: 0;
+  background: linear-gradient(180deg, rgba(26, 31, 43, 0.94) 0%, rgba(20, 25, 36, 0.9) 100%);
+  box-shadow: none;
+}
+
+/* Native glass canvas: thin the panes so the real glass (NSGlassEffectView /
+   acrylic) shows through. Base values above stay near-opaque for css-only. */
+[data-native-glass] .settings-shell-pane--sidebar {
+  /* Flat uniform veil (no top→bottom ramp) so the pane reads as one consistent
+     glass material; the blur(20-28px) from glass-depth-pulse diffuses whatever
+     desktop sits behind into an even wash instead of patchy transparency. */
+  background: rgba(247, 250, 255, 0.16);
+}
+
+[data-native-glass] .settings-shell-pane--content {
+  /* Match the sidebar exactly — same flat veil + same frost — so the whole sheet
+     reads as one continuous glass at a single transparency, split only by the
+     hairline divider (macOS Settings style). */
+  background: rgba(247, 250, 255, 0.16);
+  backdrop-filter: blur(20px) saturate(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(115%);
+}
+
+[data-native-glass].dark .settings-shell-pane--sidebar,
+[data-native-glass] .dark .settings-shell-pane--sidebar {
+  background: rgba(25, 30, 42, 0.38);
+}
+
+[data-native-glass].dark .settings-shell-pane--content,
+[data-native-glass] .dark .settings-shell-pane--content {
+  background: rgba(25, 30, 42, 0.38);
+  backdrop-filter: blur(20px) saturate(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(115%);
+}
+
+/* Vibrancy is weaker than NSGlassEffectView — keep more body */
+[data-native-glass="vibrancy"] .settings-shell-pane--sidebar {
+  background: linear-gradient(180deg, rgba(250, 252, 255, 0.6) 0%, rgba(243, 248, 255, 0.52) 100%);
+}
+
+[data-native-glass="vibrancy"] .settings-shell-pane--content {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.54) 0%, rgba(249, 251, 255, 0.46) 100%);
+}
+
+[data-native-glass="vibrancy"].dark .settings-shell-pane--sidebar,
+[data-native-glass="vibrancy"] .dark .settings-shell-pane--sidebar {
+  background: linear-gradient(180deg, rgba(28, 33, 46, 0.62) 0%, rgba(22, 27, 38, 0.56) 100%);
+}
+
+[data-native-glass="vibrancy"].dark .settings-shell-pane--content,
+[data-native-glass="vibrancy"] .dark .settings-shell-pane--content {
+  background: linear-gradient(180deg, rgba(26, 31, 43, 0.66) 0%, rgba(20, 25, 36, 0.6) 100%);
+}
+
+.settings-sidebar-item {
+  border: 1px solid transparent;
+  background: transparent;
+  transform: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    color 120ms ease;
+}
+
+.settings-sidebar-item:active {
+  transform: none;
+}
+
+.settings-sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.54);
+  border-color: rgba(220, 228, 240, 0.72);
+}
+
+.settings-sidebar-item--active {
+  border-color: rgba(172, 198, 245, 0.74);
+  background: linear-gradient(180deg, rgba(237, 244, 255, 0.84) 0%, rgba(228, 237, 250, 0.74) 100%);
+  box-shadow:
+    0 6px 18px -18px rgba(52, 128, 252, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.48);
+}
+
+.settings-sidebar-item__icon {
+  background: transparent;
+}
+
+.settings-sidebar-item__icon--active {
+  background: rgba(255, 255, 255, 0.56);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.64);
+}
+
+.dark .settings-sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .settings-sidebar-item--active {
+  border-color: rgba(99, 186, 247, 0.22);
+  background: linear-gradient(180deg, rgba(40, 55, 80, 0.72) 0%, rgba(35, 48, 70, 0.68) 100%);
+  box-shadow:
+    0 10px 20px -18px rgba(99, 186, 247, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .settings-sidebar-item__icon--active {
+  background: rgba(99, 186, 247, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.premium-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ui-content-panel-border);
+  border-radius: var(--radius-xl);
+  background: var(--ui-content-panel-bg);
+  box-shadow:
+    var(--ui-content-panel-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
+}
+
+.premium-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 28%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.premium-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    inset 0 -1px 0 rgba(188, 203, 229, 0.26),
+    var(--glass-4layer-edge);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* 内容子元素抬到玻璃伪层之上; 排除装饰 .border-beam — 它须保持自身的
+   absolute inset:0 描边覆盖, 否则被强拉成 relative inline 会占 ~22px 流空间
+   (放首子→顶部空, 放末子→底部空), 且 inset:0 失效导致 hover 流光描不准边框. */
+.premium-panel > *:not(.border-beam) {
+  position: relative;
+  z-index: 1;
+}
+
+.premium-panel--subtle {
+  background: var(--ui-content-panel-bg-subtle);
+  border-color: rgba(226, 235, 247, 0.98);
+  box-shadow:
+    var(--ui-content-panel-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.premium-panel--subtle::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 32%);
+  opacity: 0.95;
+}
+
+.premium-panel--subtle::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74),
+    inset 0 -1px 0 rgba(194, 210, 236, 0.3);
+}
+
+.dark .premium-panel {
+  box-shadow:
+    var(--ui-content-panel-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .premium-panel::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+}
+
+.dark .premium-panel--subtle {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    var(--ui-content-panel-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.dark .premium-panel--subtle::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 34%);
+  opacity: 0.85;
+}
+
+.dark .premium-panel--subtle::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.premium-panel--hero {
+  background:
+    radial-gradient(110% 135% at 8% -18%, rgba(80, 145, 255, 0.08) 0%, transparent 58%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border-color: var(--ui-content-panel-hero-border);
+  box-shadow: var(--ui-content-panel-hero-shadow), var(--glass-4layer-edge);
+  backdrop-filter: blur(16px) saturate(140%) brightness(1.04);
+  -webkit-backdrop-filter: blur(14px) saturate(180%) brightness(1.05);
+}
+
+.premium-panel--hero::before {
+  background:
+    linear-gradient(135deg, transparent 47%, rgba(140, 180, 255, 0.07) 50%, transparent 53%),
+    linear-gradient(135deg, transparent 47%, rgba(255, 140, 200, 0.06) 50%, transparent 53%),
+    var(--ui-glass-specular);
+  opacity: 1;
+}
+
+.dark .premium-panel--hero {
+  background:
+    radial-gradient(110% 135% at 8% -18%, rgba(82, 145, 255, 0.07) 0%, transparent 58%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
+}
+
+/* Premium aurora — 粉蓝紫流动渐变, scoped to settings-modal hero cards only.
+   Other surfaces (ControlPanel float, general chrome) stay on the neutral
+   apple-glass baseline by design. Coordinated with the Pro card: same hue path,
+   blue-weighted (258 blue → 276 violet → 300 soft-magenta → 250 blue) with the
+   magenta pulled off 312 and de-chroma'd so blue dominates and pink reads 淡雅,
+   lower chroma/alpha and a slower cycle. Reuses the pro-aurora keyframe; only the
+   oversized top gradient
+   layer pans — the accent wash and base panel fill are sized 100% so they hold
+   still. */
+.settings-modal-shell .premium-panel--hero {
+  background:
+    linear-gradient(
+      135deg,
+      oklch(0.9 0.06 258 / 0.18) 0%,
+      oklch(0.89 0.07 276 / 0.14) 32%,
+      oklch(0.87 0.075 300 / 0.12) 56%,
+      oklch(0.89 0.065 250 / 0.14) 80%,
+      oklch(0.9 0.06 258 / 0.1) 100%
+    ),
+    radial-gradient(110% 135% at 8% -18%, rgba(80, 145, 255, 0.06) 0%, transparent 58%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
+  background-size:
+    300% 300%,
+    100% 100%,
+    100% 100%;
+  animation: pro-aurora 16s ease-in-out infinite;
+}
+
+.dark .settings-modal-shell .premium-panel--hero {
+  background:
+    linear-gradient(
+      135deg,
+      oklch(0.55 0.1 258 / 0.28) 0%,
+      oklch(0.51 0.095 276 / 0.22) 32%,
+      oklch(0.49 0.1 300 / 0.2) 56%,
+      oklch(0.53 0.09 250 / 0.24) 80%,
+      oklch(0.55 0.1 258 / 0.16) 100%
+    ),
+    radial-gradient(110% 135% at 8% -18%, rgba(82, 145, 255, 0.05) 0%, transparent 58%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%);
+  background-size:
+    300% 300%,
+    100% 100%,
+    100% 100%;
+}
+
+.settings-modal-shell .transcription-mode-section.premium-panel--hero {
+  box-shadow:
+    0 0 0 1px rgba(198, 216, 246, 0.58),
+    0 16px 38px -34px rgba(69, 114, 196, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(202, 219, 246, 0.18);
+}
+
+.settings-modal-shell .transcription-mode-section.premium-panel--hero::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    inset 0 -1px 0 rgba(188, 207, 240, 0.12);
+}
+
+.settings-modal-shell .transcription-mode-section .mode-depth-card,
+.settings-modal-shell .transcription-mode-section .premium-option-card.mode-depth-card {
+  box-shadow:
+    0 0 0 1px rgba(221, 230, 244, 0.5),
+    0 10px 26px -26px rgba(48, 78, 132, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -1px 0 rgba(214, 226, 244, 0.18);
+}
+
+.settings-modal-shell .transcription-mode-section .mode-depth-card::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2),
+    transparent 38%,
+    rgba(221, 232, 248, 0.06) 100%
+  );
+}
+
+.settings-modal-shell .transcription-mode-section .mode-depth-card--active,
+.settings-modal-shell
+  .transcription-mode-section
+  .premium-option-card.mode-depth-card.mode-depth-card--active {
+  box-shadow:
+    0 0 0 1px rgba(166, 198, 255, 0.82),
+    0 0 0 3px rgba(96, 165, 250, 0.1),
+    0 12px 30px -28px rgba(69, 114, 196, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(187, 211, 250, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-modal-shell .premium-panel--hero {
+    animation: none;
+  }
+}
+
+/* Full-strength aurora — opt-in per card (via .aurora-full marker, or the
+   transcription-history card's own class). Stronger chroma/alpha and a faster
+   cycle than the coordinated hero wash, so promoted cards read as 满级. Kept
+   translucent (not the Pro card's near-opaque fill) so the dark card text on
+   these toggle rows stays readable. */
+.settings-modal-shell .premium-panel.aurora-full,
+.settings-modal-shell .file-transcription-section .file-drop-zone,
+.settings-modal-shell .account-status-card,
+.settings-modal-shell .call-records-history-card {
+  background:
+    linear-gradient(
+      135deg,
+      oklch(0.91 0.06 258 / 0.78) 0%,
+      oklch(0.85 0.085 276 / 0.7) 32%,
+      oklch(0.81 0.09 300 / 0.62) 56%,
+      oklch(0.86 0.085 250 / 0.72) 78%,
+      oklch(0.91 0.06 258 / 0.6) 100%
+    ),
+    var(--ui-content-accent-wash), var(--ui-content-panel-hero-bg);
+  background-size:
+    300% 300%,
+    100% 100%,
+    100% 100%;
+  animation: pro-aurora 6s linear infinite;
+}
+
+.dark .settings-modal-shell .premium-panel.aurora-full,
+.dark .settings-modal-shell .file-transcription-section .file-drop-zone,
+.dark .settings-modal-shell .account-status-card,
+.dark .settings-modal-shell .call-records-history-card {
+  background:
+    linear-gradient(
+      135deg,
+      oklch(0.5 0.12 258 / 0.78) 0%,
+      oklch(0.44 0.11 276 / 0.7) 32%,
+      oklch(0.4 0.115 300 / 0.62) 56%,
+      oklch(0.45 0.11 250 / 0.72) 78%,
+      oklch(0.5 0.12 258 / 0.6) 100%
+    ),
+    var(--ui-content-accent-wash), var(--ui-content-panel-hero-bg);
+  background-size:
+    300% 300%,
+    100% 100%,
+    100% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-modal-shell .premium-panel.aurora-full,
+  .settings-modal-shell .file-transcription-section .file-drop-zone,
+  .settings-modal-shell .account-status-card,
+  .settings-modal-shell .call-records-history-card {
+    animation: none;
+  }
+}
+
+/* The drop-zone now wears the aurora fill like the promoted cards. Its
+   drag-affordance dashed border reads as odd over the vivid gradient, so give it
+   a solid edge to match the other aurora surfaces (e.g. the route summary bar). */
+.settings-modal-shell .file-transcription-section .file-drop-zone {
+  border-style: solid;
+}
+
+/* 总览卡（更新 + 主题）回到纯苹果液态玻璃，不叠粉蓝紫 aurora。它和其它 hero 卡
+   共用 .premium-panel--hero（会被 1624 的 aurora-wash 命中），所以这里用更高
+   特异度单独把 aurora 覆盖层、动画和 300% 背景尺寸还原成基线玻璃。镜像下方
+   .settings-overview-hero 的基线 background，视觉与其它非 aurora 玻璃面一致。 */
+.settings-modal-shell .settings-overview-hero.premium-panel--hero {
+  background:
+    radial-gradient(110% 110% at 8% -18%, rgba(80, 145, 255, 0.09) 0%, transparent 54%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
+  background-size: auto;
+  box-shadow:
+    0 0 0 1px rgba(132, 173, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  animation: none;
+}
+
+.settings-modal-shell .settings-overview-hero.premium-panel--hero::before {
+  background: var(--ui-glass-specular);
+  opacity: 0.82;
+}
+
+.settings-modal-shell .settings-overview-hero.premium-panel--hero::after {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 36%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  opacity: 0.78;
+}
+
+.dark .settings-modal-shell .settings-overview-hero.premium-panel--hero {
+  background:
+    radial-gradient(110% 135% at 8% -18%, rgba(82, 145, 255, 0.12) 0%, transparent 58%),
+    var(--ui-content-accent-wash), var(--ui-content-panel-hero-bg);
+}
+
+/* 方案 A — 抬高基线玻璃中性档. 设置弹窗 (.settings-modal-shell) 与主控制面板
+   浮窗 (ControlPanel) 共享 .app-glass-shell 根, 一条规则覆盖两窗里偏扁的普通玻璃
+   面板. 只加水光 (specular 高光边 + 顶部 sheen + 浮起阴影), 中性不加色. 排除:
+   .aurora-full 渐变卡 (按用户要求渐变卡走自己的调色), hero (已是最强层级) 与
+   subtle (本就更亮), 以保持 hero > panel > chip 分层不被糊平. */
+.app-glass-shell
+  .premium-panel:not(.aurora-full):not(.premium-panel--hero):not(.premium-panel--subtle) {
+  box-shadow:
+    var(--ui-content-panel-shadow),
+    0 10px 28px -18px rgba(69, 114, 196, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.66);
+}
+
+.app-glass-shell
+  .premium-panel:not(.aurora-full):not(.premium-panel--hero):not(.premium-panel--subtle)::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 30%);
+  opacity: 0.9;
+}
+
+.app-glass-shell
+  .premium-panel:not(.aurora-full):not(.premium-panel--hero):not(.premium-panel--subtle)::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(188, 203, 229, 0.3);
+}
+
+.dark
+  .app-glass-shell
+  .premium-panel:not(.aurora-full):not(.premium-panel--hero):not(.premium-panel--subtle) {
+  box-shadow:
+    var(--ui-content-panel-shadow),
+    0 12px 30px -20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark
+  .app-glass-shell
+  .premium-panel:not(.aurora-full):not(.premium-panel--hero):not(.premium-panel--subtle)::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.premium-panel--interactive {
+  transition:
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-panel--interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ui-content-panel-shadow-hover);
+}
+
+.premium-stat-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ui-content-stat-border);
+  border-radius: var(--radius-lg);
+  background: var(--ui-content-stat-bg);
+  box-shadow:
+    var(--ui-content-stat-shadow),
+    0 16px 34px -24px rgba(56, 84, 144, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(18px) saturate(180%) brightness(1.05);
+}
+
+/* Liquid sheen: a slow diagonal light that drifts across the glass — the
+   "alive"/responsive quality of Apple Liquid Glass. Light mode; reduced-motion
+   safe. This was the missing piece that made stat cards read as flat. */
+.premium-stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(255, 255, 255, 0.28) 47%,
+    rgba(255, 255, 255, 0.05) 53%,
+    transparent 72%
+  );
+  background-size: 250% 250%;
+  background-position: 0% 50%;
+  animation: glass-sheen-drift 11s ease-in-out infinite;
+  opacity: 0.85;
+}
+
+/* Specular rim + depth edge (Apple 4-layer): bright top highlight, 1px ring,
+   soft bottom shadow — reads as a tactile glass object, not a flat card. */
+.premium-stat-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 0 rgba(188, 203, 229, 0.26),
+    var(--glass-4layer-edge);
+  opacity: 0.92;
+}
+
+.premium-stat-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes glass-sheen-drift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-stat-card::before {
+    animation: none;
+  }
+}
+
+.dark .premium-stat-card::before {
+  opacity: 0.42;
+}
+
+.dark .premium-stat-card::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+}
+
+/* Inside a hero panel the gradient backdrop already supplies the color —
+   nested stat cards drop their own tint and read as plain glass chips,
+   otherwise the two color layers blend into a muddy pink. They still need
+   a solid-enough fill, bright border and lift shadow to separate from the
+   equally light hero backdrop. */
+.premium-panel--hero .premium-stat-card {
+  border-color: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(250, 252, 255, 0.6) 100%);
+  box-shadow:
+    0 0 0 1px rgba(199, 216, 244, 0.55),
+    0 16px 36px -26px rgba(69, 114, 196, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.dark .premium-panel--hero .premium-stat-card {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(44, 53, 73, 0.78) 0%, rgba(33, 41, 59, 0.64) 100%);
+  box-shadow:
+    0 16px 36px -26px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+.settings-overview-hero {
+  border-color: rgba(132, 173, 255, 0.56);
+  background:
+    radial-gradient(110% 110% at 8% -18%, rgba(80, 145, 255, 0.09) 0%, transparent 54%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
+  box-shadow:
+    0 0 0 1px rgba(132, 173, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.settings-overview-hero .premium-stat-card {
+  border-color: rgba(255, 255, 255, 0.86);
+  background:
+    radial-gradient(
+      120% 120% at 8% 0%,
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(255, 255, 255, 0.1) 36%,
+      transparent 62%
+    ),
+    radial-gradient(130% 130% at 100% 100%, rgba(80, 145, 255, 0.1) 0%, transparent 56%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(250, 253, 255, 0.32) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 20px 44px -30px rgba(48, 78, 132, 0.34),
+    0 6px 18px -14px rgba(30, 52, 96, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    inset 0 -1px 0 rgba(176, 202, 244, 0.22);
+  backdrop-filter: blur(18px) saturate(165%) brightness(1.04);
+  -webkit-backdrop-filter: blur(18px) saturate(165%) brightness(1.04);
+}
+
+.settings-overview-hero .premium-stat-card::before {
+  background:
+    linear-gradient(
+      115deg,
+      transparent 24%,
+      rgba(255, 255, 255, 0.34) 46%,
+      rgba(255, 255, 255, 0.06) 56%,
+      transparent 74%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 36%);
+  opacity: 0.9;
+}
+
+.settings-overview-hero .premium-stat-card::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74),
+    inset 0 -1px 0 rgba(178, 201, 238, 0.2);
+}
+
+.settings-overview-hero .premium-stat-card .glass-chip {
+  border-color: rgba(160, 193, 255, 0.42);
+  background:
+    radial-gradient(100% 100% at 20% 0%, rgba(255, 255, 255, 0.46) 0%, transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(232, 241, 255, 0.16) 100%),
+    rgba(225, 236, 255, 0.2);
+  box-shadow:
+    0 10px 22px -15px rgba(69, 114, 196, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(157, 186, 234, 0.18);
+}
+
+:root:not(.dark) .settings-overview-hero {
+  box-shadow:
+    0 0 0 1px rgba(132, 173, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark .settings-overview-hero {
+  border-color: rgba(108, 153, 255, 0.3);
+  background:
+    radial-gradient(110% 135% at 8% -18%, rgba(82, 145, 255, 0.12) 0%, transparent 58%),
+    var(--ui-content-accent-wash), var(--ui-content-panel-hero-bg);
+  box-shadow:
+    0 0 0 1px rgba(108, 153, 255, 0.16),
+    0 28px 72px -42px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.dark .settings-overview-hero .premium-stat-card {
+  border-color: rgba(255, 255, 255, 0.14);
+  background:
+    radial-gradient(130% 140% at 8% 0%, rgba(96, 152, 255, 0.06) 0%, transparent 54%),
+    linear-gradient(180deg, rgba(44, 53, 73, 0.68) 0%, rgba(33, 41, 59, 0.5) 100%);
+  box-shadow:
+    0 18px 42px -30px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Transparent tray that previews the recording animation in settings: the
+   glass page shows through, and a true-to-life miniature sits centered —
+   a capsule strip for bar styles, a round deep-space orb for nebula.
+   Replicates the dv accent palette locally so the wave components render
+   standalone, outside the .dv-capsule scope. Fixed height keeps the row
+   from jumping when switching styles. */
+.recording-anim-preview {
+  --dv-accent-cool-rgb: 120, 180, 255;
+  --dv-accent-mid-rgb: 140, 160, 240;
+  --dv-accent-warm-rgb: 180, 200, 240;
+  --dv-accent-success-rgb: 160, 240, 200;
+  /* Capsule-scoped timing var the bar aurora sweeps depend on. */
+  --dv-stream-duration: calc(var(--dv-tempo) * 1.25);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96px;
+}
+
+/* Mirror the live recording accents per style so the preview colors match
+   the real capsule. Keep in sync with the
+   .dv-capsule[data-state="recording"][data-style=...] overrides in pill-v2.css. */
+.recording-anim-preview[data-style="flow"] {
+  --dv-accent-cool-rgb: 86, 232, 255;
+  --dv-accent-mid-rgb: 122, 176, 255;
+  --dv-accent-warm-rgb: 182, 112, 255;
+  --dv-stream-duration: calc(var(--dv-tempo) * 1.125);
+}
+
+.recording-anim-preview[data-style="stardust"],
+.recording-anim-preview[data-style="nebula"],
+.recording-anim-preview[data-style="planet"] {
+  --dv-accent-cool-rgb: 116, 236, 255;
+  --dv-accent-mid-rgb: 255, 164, 108;
+  --dv-accent-warm-rgb: 255, 102, 188;
+}
+
+/* Miniature of the real floating capsule (504x104, same ~4.85:1 ratio).
+   position:relative keeps composited (animated) particles clipped —
+   a static overflow ancestor loses the clip once they get layerized. */
+.recording-anim-preview__capsule {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 62px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(30, 35, 48, 0.92) 0%, rgba(19, 23, 33, 0.95) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 12px 30px -20px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+/* Round deep-space orb mirroring the real shell-less nebula window. The
+   galaxy is designed at 132px, so render it full-size and scale down;
+   darker than the live orb so it reads on the light glass page. */
+.nebula-orb-preview {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(14, 12, 34, 0.8),
+    rgba(10, 10, 28, 0.45) 55%,
+    transparent 72%
+  );
+}
+
+.nebula-orb-preview__stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 132px;
+  height: 132px;
+  transform: translate(-50%, -50%) scale(0.66);
+}
+
+/* Shimmer sweep across determinate download progress fills. The global
+   reduced-motion override freezes the animation automatically. */
+.download-bar-fill {
+  position: relative;
+  overflow: hidden;
+}
+
+.download-bar-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: download-shimmer 1.8s linear infinite;
+}
+
+@keyframes download-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.file-transcription-section > .grid > .premium-panel {
+  border-color: rgba(255, 255, 255, 0.72);
+  background:
+    radial-gradient(110% 120% at 8% -12%, rgba(92, 164, 255, 0.08) 0%, transparent 52%),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.34) 0%,
+      rgba(244, 249, 255, 0.2) 58%,
+      rgba(241, 247, 255, 0.16) 100%
+    );
+  box-shadow:
+    0 0 0 1px rgba(221, 231, 248, 0.46),
+    0 24px 54px -38px rgba(48, 78, 132, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -1px 0 rgba(210, 224, 246, 0.28);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+}
+
+.file-transcription-section > .grid > .premium-panel::before {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.36) 0%, transparent 42%),
+    radial-gradient(circle at 18% 0%, rgba(82, 145, 255, 0.06) 0%, transparent 46%);
+  opacity: 0.58;
+}
+
+.file-transcription-section > .grid > .premium-panel::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 0 rgba(188, 203, 229, 0.18);
+  opacity: 0.72;
+}
+
+.file-transcription-section .file-drop-zone,
+.file-route-summary-card,
+.file-progress-empty-card,
+.file-progress-note {
+  border-color: rgba(255, 255, 255, 0.62);
+  background:
+    radial-gradient(120% 140% at 10% 0%, rgba(92, 164, 255, 0.1) 0%, transparent 52%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(248, 251, 255, 0.16) 100%);
+  box-shadow:
+    0 0 0 1px rgba(220, 231, 248, 0.36),
+    0 16px 34px -28px rgba(48, 78, 132, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74),
+    inset 0 -1px 0 rgba(204, 220, 244, 0.18);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+}
+
+.file-transcription-section .file-drop-zone:hover,
+.file-transcription-section .file-drop-zone--hover {
+  background:
+    radial-gradient(120% 140% at 10% 0%, rgba(82, 145, 255, 0.09) 0%, transparent 52%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.44) 0%, rgba(239, 246, 255, 0.22) 100%);
+}
+
+.dark .file-route-metrics .premium-stat-card {
+  border-color: rgba(255, 255, 255, 0.13);
+  background: linear-gradient(180deg, rgba(45, 54, 74, 0.94) 0%, rgba(34, 42, 60, 0.9) 100%);
+  box-shadow:
+    0 18px 44px -34px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.dark .file-transcription-section > .grid > .premium-panel {
+  border-color: rgba(255, 255, 255, 0.11);
+  background:
+    radial-gradient(110% 120% at 8% -12%, rgba(92, 164, 255, 0.08) 0%, transparent 52%),
+    linear-gradient(135deg, rgba(34, 41, 58, 0.46) 0%, rgba(25, 32, 48, 0.34) 100%);
+  box-shadow:
+    0 22px 52px -38px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.dark .file-transcription-section .file-drop-zone,
+.dark .file-route-summary-card,
+.dark .file-progress-empty-card,
+.dark .file-progress-note {
+  border-color: rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(120% 140% at 10% 0%, rgba(92, 164, 255, 0.12) 0%, transparent 52%),
+    linear-gradient(180deg, rgba(34, 41, 57, 0.5) 0%, rgba(25, 31, 44, 0.38) 100%);
+  box-shadow:
+    0 16px 34px -28px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.call-records-history-card,
+.call-records-table-shell {
+  border-color: rgba(255, 255, 255, 0.68);
+  background:
+    radial-gradient(120% 100% at 10% -12%, rgba(92, 164, 255, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(248, 251, 255, 0.14) 100%);
+  box-shadow:
+    0 0 0 1px rgba(221, 230, 244, 0.38),
+    0 22px 48px -34px rgba(48, 78, 132, 0.24),
+    0 2px 8px -6px rgba(48, 78, 132, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74),
+    inset 0 -1px 0 rgba(214, 226, 244, 0.24);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+}
+
+.call-records-history-card::before,
+.call-records-table-shell::before {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.32) 0%, transparent 44%),
+    radial-gradient(circle at 0% 0%, rgba(82, 145, 255, 0.1) 0%, transparent 42%);
+  opacity: 0.52;
+}
+
+.call-records-history-card::after,
+.call-records-table-shell::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2),
+    transparent 32%,
+    rgba(221, 232, 248, 0.12) 100%
+  );
+  opacity: 0.7;
+}
+
+.call-records-overview-card,
+.call-records-timeline {
+  border-color: rgba(255, 255, 255, 0.56);
+  background:
+    radial-gradient(120% 140% at 8% 0%, rgba(92, 164, 255, 0.08) 0%, transparent 52%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(248, 251, 255, 0.12) 100%);
+  box-shadow:
+    0 0 0 1px rgba(221, 230, 244, 0.28),
+    0 14px 30px -28px rgba(48, 78, 132, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+}
+
+.dark .call-records-history-card {
+  border-color: rgba(99, 186, 247, 0.14);
+  background:
+    linear-gradient(180deg, rgba(48, 58, 78, 0.78) 0%, rgba(34, 42, 59, 0.72) 100%),
+    var(--ui-glass-panel-bg-soft);
+  box-shadow:
+    0 16px 40px -32px rgba(0, 0, 0, 0.46),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .call-records-table-shell {
+  border-color: rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(180deg, rgba(25, 31, 44, 0.84) 0%, rgba(18, 23, 34, 0.82) 100%),
+    var(--ui-glass-panel-bg-soft);
+  box-shadow:
+    0 18px 44px -36px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.dark .call-records-overview-card,
+.dark .call-records-timeline {
+  border-color: rgba(255, 255, 255, 0.11);
+  background: linear-gradient(180deg, rgba(35, 42, 58, 0.72) 0%, rgba(26, 32, 45, 0.68) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.dark .prompt-content-panel {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(36, 43, 60, 0.84) 0%, rgba(28, 34, 49, 0.8) 100%);
+  box-shadow:
+    0 18px 44px -38px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.mode-depth-card,
+.premium-option-card.mode-depth-card {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.8);
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(110, 165, 255, 0.07) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.52) 0%, rgba(245, 249, 255, 0.38) 100%);
+  box-shadow:
+    0 0 0 1px rgba(221, 230, 244, 0.55),
+    0 20px 44px -34px rgba(48, 78, 132, 0.22),
+    0 2px 8px -6px rgba(48, 78, 132, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(214, 226, 244, 0.42);
+}
+
+.mode-depth-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2),
+    transparent 34%,
+    rgba(221, 232, 248, 0.14) 100%
+  );
+  opacity: 0.9;
+}
+
+.mode-depth-card--active,
+.premium-option-card.mode-depth-card.mode-depth-card--active {
+  border-color: rgba(93, 148, 255, 0.46);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(87, 157, 255, 0.14) 0%, transparent 46%),
+    linear-gradient(180deg, rgba(251, 253, 255, 0.78) 0%, rgba(238, 245, 255, 0.66) 100%);
+  box-shadow:
+    0 0 0 1px rgba(176, 203, 255, 0.78),
+    0 24px 54px -36px rgba(69, 114, 196, 0.3),
+    0 2px 10px -6px rgba(69, 114, 196, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    inset 0 -1px 0 rgba(187, 211, 250, 0.64);
+}
+
+.mode-depth-card > *,
+.mode-depth-panel > *,
+/* 同 .premium-panel: 排除装饰 .border-beam, 否则被强拉 relative inline 占 ~22px
+   流空间挤在卡顶, 造成 41px 顶部空洞 / 19px 底部的上重不对称. */
+.account-status-card > *:not(.border-beam) {
+  position: relative;
+  z-index: 1;
+}
+
+.mode-depth-panel {
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.78);
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(110, 165, 255, 0.06) 0%, transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(245, 249, 255, 0.36) 100%);
+  box-shadow:
+    0 0 0 1px rgba(221, 230, 244, 0.52),
+    0 20px 46px -36px rgba(48, 78, 132, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -1px 0 rgba(214, 226, 244, 0.38);
+}
+
+.mode-depth-row {
+  transition:
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mode-depth-row--active {
+  background:
+    radial-gradient(circle at 0% 50%, rgba(87, 157, 255, 0.16) 0%, transparent 38%),
+    linear-gradient(90deg, rgba(238, 246, 255, 0.82) 0%, rgba(255, 255, 255, 0.34) 100%);
+  box-shadow:
+    inset 3px 0 0 rgba(86, 143, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.56);
+}
+
+.account-status-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(87, 157, 255, 0.1) 0%, transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56) 0%, rgba(245, 249, 255, 0.42) 100%);
+  box-shadow:
+    0 28px 68px -44px rgba(69, 114, 196, 0.3),
+    0 2px 10px -7px rgba(48, 78, 132, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -1px 0 rgba(195, 213, 242, 0.46);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+.account-status-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.24),
+    transparent 31%,
+    rgba(210, 226, 250, 0.14) 100%
+  );
+}
+
+.account-status-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  /* 顶 24 加长上方呼吸(beam 已脱流, 不再靠幽灵撑空间); 侧 20 / 头底 16 不变. */
+  padding: 1.5rem 1.25rem 1rem;
+}
+
+.account-status-card__body {
+  /* 底 24 与 header 顶 24 上下对称呼应; 顶 16 / 侧 20 不变. */
+  padding: 1rem 1.25rem 1.5rem;
+}
+
+/* Apple liquid-glass chip — neutral white-glass fill so it never clashes with the
+   aurora card; status reads from the ink color, not a saturated background.
+   Tailwind v4: ring/base-border neutralized so only this glass edge shows. */
+.account-status-card .account-status-card__badge {
+  min-height: 1.9rem;
+  flex-shrink: 0;
+  padding-inline: 0.95rem;
+  border: 1px solid var(--ui-glass-chip-border);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-ring-offset-shadow: 0 0 #0000;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.12) 100%),
+    var(--ui-glass-chip-bg);
+  backdrop-filter: blur(8px) saturate(130%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 2px 6px -3px rgba(48, 78, 132, 0.22);
+}
+/* Trial / active: keep the green ink clean and vivid on the glass chip. */
+.account-status-card .account-status-card__badge.text-success {
+  color: color-mix(in oklab, var(--color-success) 90%, white 10%);
+}
+
+.dark .account-status-card .account-status-card__badge {
+  border-color: rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%),
+    rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 2px 6px -3px rgba(0, 0, 0, 0.4);
+}
+.dark .account-status-card .account-status-card__badge.text-success {
+  color: color-mix(in oklab, var(--color-success) 88%, white 12%);
+}
+
+.account-status-card__input {
+  border-color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(220, 228, 240, 0.72),
+    inset 0 1px 2px rgba(48, 78, 132, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.account-status-card__meta {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--color-muted-foreground);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.dark .mode-depth-card,
+.dark .premium-option-card.mode-depth-card {
+  border-color: rgba(255, 255, 255, 0.11);
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(96, 152, 255, 0.07) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(42, 50, 68, 0.72) 0%, rgba(30, 37, 53, 0.64) 100%);
+  box-shadow:
+    0 18px 44px -36px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .mode-depth-card--active,
+.dark .premium-option-card.mode-depth-card.mode-depth-card--active {
+  border-color: rgba(99, 186, 247, 0.28);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(82, 145, 255, 0.06) 0%, transparent 42%),
+    linear-gradient(180deg, rgba(44, 55, 78, 0.88) 0%, rgba(31, 39, 58, 0.82) 100%);
+  box-shadow:
+    0 22px 52px -38px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.dark .mode-depth-panel {
+  border-color: rgba(255, 255, 255, 0.11);
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(96, 152, 255, 0.06) 0%, transparent 48%),
+    linear-gradient(180deg, rgba(38, 46, 64, 0.7) 0%, rgba(28, 34, 49, 0.62) 100%);
+  box-shadow:
+    0 18px 44px -38px rgba(0, 0, 0, 0.54),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .mode-depth-row--active {
+  background:
+    radial-gradient(circle at 0% 50%, rgba(82, 145, 255, 0.1) 0%, transparent 38%),
+    linear-gradient(90deg, rgba(41, 55, 82, 0.72) 0%, rgba(31, 39, 58, 0.28) 100%);
+  box-shadow:
+    inset 3px 0 0 rgba(99, 186, 247, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.dark .account-status-card {
+  border-color: rgba(119, 178, 255, 0.18);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(82, 145, 255, 0.06) 0%, transparent 48%),
+    linear-gradient(180deg, rgba(42, 50, 68, 0.7) 0%, rgba(28, 35, 51, 0.62) 100%);
+  box-shadow:
+    0 24px 64px -44px rgba(0, 0, 0, 0.62),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.dark .account-status-card__input {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.36);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.premium-option-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ui-content-panel-border);
+  border-radius: var(--radius-lg);
+  background: var(--ui-content-panel-bg-subtle);
+  box-shadow: var(--ui-content-stat-shadow);
+  transition:
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-option-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ui-content-panel-shadow-hover);
+}
+
+.premium-option-card--active {
+  background: var(--ui-content-option-active-bg);
+  border-color: var(--ui-content-option-active-border);
+  box-shadow: var(--ui-content-option-active-shadow);
+}
+
+.premium-option-card.premium-option-card--active::after,
+.mode-depth-card.mode-depth-card--active::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+  background:
+    linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.46) 50%, transparent 65%),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.14),
+      transparent 38%,
+      rgba(221, 232, 248, 0.07) 100%
+    );
+  background-size:
+    220% 100%,
+    100% 100%;
+  background-position:
+    -160% 0,
+    0 0;
+  background-repeat: no-repeat;
+  opacity: 0.76;
+  animation: glass-sweep 0.7s ease-out 1;
+}
+
+.premium-option-card.premium-option-card--active > *,
+.mode-depth-card.mode-depth-card--active > * {
+  position: relative;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-option-card.premium-option-card--active::after,
+  .mode-depth-card.mode-depth-card--active::after {
+    animation: none;
+  }
+}
+
+/* Native glass: option / mode cards (transcription mode, general, activation)
+   also turn glass-thin so the aurora refracts through. Active state reads as a
+   brighter accent-tinted glass — NOT an opaque block. Placed after the base
+   rules so it wins the 0,2,0 specificity tie by source order; the triple-class
+   mode-depth selectors win outright. Rollback: delete this block. */
+[data-native-glass] .premium-option-card,
+[data-native-glass] .premium-option-card.mode-depth-card,
+[data-native-glass] .mode-depth-panel {
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(150, 185, 255, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.44) 0%, rgba(245, 249, 255, 0.36) 100%);
+  backdrop-filter: blur(18px) saturate(180%) brightness(1.04);
+  -webkit-backdrop-filter: blur(18px) saturate(180%) brightness(1.04);
+}
+
+[data-native-glass] .premium-option-card--active,
+[data-native-glass] .mode-depth-card--active,
+[data-native-glass] .premium-option-card.mode-depth-card.mode-depth-card--active {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(120, 170, 255, 0.16) 0%, transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58) 0%, rgba(244, 249, 255, 0.46) 100%);
+}
+
+[data-native-glass].dark .premium-option-card,
+[data-native-glass] .dark .premium-option-card,
+[data-native-glass].dark .premium-option-card.mode-depth-card,
+[data-native-glass] .dark .premium-option-card.mode-depth-card,
+[data-native-glass].dark .mode-depth-panel,
+[data-native-glass] .dark .mode-depth-panel {
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(110, 165, 255, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(38, 46, 64, 0.44) 0%, rgba(30, 38, 56, 0.36) 100%);
+  backdrop-filter: blur(18px) saturate(180%) brightness(1.04);
+  -webkit-backdrop-filter: blur(18px) saturate(180%) brightness(1.04);
+}
+
+[data-native-glass].dark .premium-option-card--active,
+[data-native-glass] .dark .premium-option-card--active,
+[data-native-glass].dark .mode-depth-card--active,
+[data-native-glass] .dark .mode-depth-card--active,
+[data-native-glass].dark .premium-option-card.mode-depth-card.mode-depth-card--active,
+[data-native-glass] .dark .premium-option-card.mode-depth-card.mode-depth-card--active {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(90, 150, 255, 0.18) 0%, transparent 62%),
+    linear-gradient(180deg, rgba(46, 58, 84, 0.55) 0%, rgba(34, 44, 66, 0.45) 100%);
+}
+
+.sidebar-scroll-fade {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 8px,
+    black calc(100% - 8px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 8px,
+    black calc(100% - 8px),
+    transparent 100%
+  );
+}
+
+.hotkey-keycap-hero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--ui-content-panel-border) 92%, white 8%);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(246, 249, 255, 0.84) 100%),
+    var(--ui-content-stat-bg);
+  box-shadow:
+    0 10px 22px rgba(31, 58, 110, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.86) inset,
+    0 -1px 0 rgba(170, 192, 226, 0.16) inset;
+  transition:
+    transform 160ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 160ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 160ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hotkey-keycap-hero:active {
+  transform: translateY(1px) scale(0.985);
+  box-shadow:
+    0 6px 14px rgba(31, 58, 110, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+
+.dark .hotkey-keycap-hero {
+  border-color: color-mix(in srgb, var(--ui-content-panel-border) 88%, white 12%);
+  background:
+    linear-gradient(180deg, rgba(41, 53, 76, 0.96) 0%, rgba(24, 33, 49, 0.92) 100%),
+    var(--ui-content-stat-bg);
+  box-shadow:
+    0 12px 26px rgba(4, 10, 22, 0.44),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.2) inset;
+}
+
+.file-drop-zone {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  border: 1px dashed var(--ui-content-panel-border);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--ui-content-panel-bg-subtle) 88%, transparent);
+  box-shadow: var(--ui-content-stat-shadow);
+  padding: 1rem;
+  cursor: pointer;
+  transition:
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.file-drop-zone:hover {
+  transform: translateY(-1px);
+  border-color: var(--ui-content-option-active-border);
+  box-shadow: var(--ui-content-panel-shadow-hover);
+}
+
+.file-drop-zone--hover {
+  border-color: var(--ui-content-option-active-border);
+  background: var(--ui-content-option-active-bg);
+  box-shadow: var(--ui-content-panel-shadow-hover);
+}
+
+.file-drop-zone--disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  transform: none;
+}
+
+/* Link styling */
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+a:hover {
+  color: var(--color-link);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* ---- Premium UI Utilities ---- */
+
+/* Monochrome icon theming - explicit light/dark handling */
+.icon-monochrome {
+  filter: none;
+  transition: filter 150ms ease;
+}
+
+.dark .icon-monochrome {
+  filter: invert(1);
+}
+
+/* Toast — dark Regular glass: readable above any app content without becoming a black slab. */
+.toast-surface {
+  background:
+    radial-gradient(140% 110% at 12% -24%, rgba(103, 151, 255, 0.16) 0%, transparent 48%),
+    radial-gradient(110% 100% at 96% 120%, rgba(168, 112, 255, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(42, 45, 58, 0.86) 0%, rgba(17, 19, 27, 0.8) 100%);
+  background-color: rgba(18, 20, 28, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.24),
+    0 16px 40px -18px rgba(0, 0, 0, 0.72),
+    0 4px 14px -6px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(22px) saturate(135%);
+  -webkit-backdrop-filter: blur(22px) saturate(135%);
+}
+
+@keyframes toast-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Model picker LED pulse animation */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 6px oklch(0.62 0.22 260 / 0.4);
+    opacity: 0.8;
+  }
+  50% {
+    box-shadow: 0 0 8px oklch(0.62 0.22 260 / 0.6);
+    opacity: 1;
+  }
+}
+
+/* Spinner rotation for downloading state */
+@keyframes spinner-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scale-in animation for completion */
+@keyframes scale-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Floating mic success feedback */
+@keyframes mic-success-pop {
+  0% {
+    transform: scale(0.72) rotate(-8deg);
+    opacity: 0;
+  }
+  65% {
+    transform: scale(1.08) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes mic-success-glow {
+  0% {
+    transform: scale(0.989);
+    box-shadow:
+      inset 0 0 0 rgba(255, 255, 255, 0),
+      0 12px 40px -8px rgba(0, 0, 0, 0.48),
+      0 4px 16px -4px rgba(0, 0, 0, 0.28);
+  }
+  35% {
+    transform: scale(1);
+    box-shadow:
+      inset 0 0 26px rgba(190, 232, 255, 0.16),
+      0 12px 40px -8px rgba(0, 0, 0, 0.48),
+      0 4px 16px -4px rgba(0, 0, 0, 0.28);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow:
+      inset 0 0 12px rgba(126, 146, 255, 0.1),
+      0 12px 40px -8px rgba(0, 0, 0, 0.48),
+      0 4px 16px -4px rgba(0, 0, 0, 0.28);
+  }
+}
+
+.dictation-window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.dictation-window--dialog-only {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.dialog-overlay--clear {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.dialog-overlay--clear.reasoning-limit-dialog__overlay {
+  background: rgba(255, 255, 255, 0.34) !important;
+  backdrop-filter: blur(10px) saturate(112%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(112%) !important;
+}
+
+.reasoning-limit-dialog {
+  border-color: rgba(191, 215, 248, 0.94);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 251, 255, 0.98) 100%), #ffffff;
+  box-shadow:
+    0 28px 64px -28px rgba(30, 64, 120, 0.34),
+    0 0 0 1px rgba(255, 255, 255, 0.92) inset;
+  backdrop-filter: blur(18px) saturate(108%);
+  -webkit-backdrop-filter: blur(18px) saturate(108%);
+}
+
+.reasoning-limit-dialog__description {
+  color: rgba(39, 39, 42, 0.78);
+}
+
+.reasoning-limit-dialog__value {
+  border-color: rgba(147, 197, 253, 0.72);
+  background: rgba(239, 246, 255, 0.92);
+  color: rgba(63, 63, 70, 0.86);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.dark .dialog-overlay--clear.reasoning-limit-dialog__overlay {
+  background: rgba(0, 0, 0, 0.28) !important;
+}
+
+.dark .reasoning-limit-dialog {
+  border-color: rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(180deg, rgba(35, 41, 56, 0.98) 0%, rgba(25, 30, 42, 0.98) 100%), #1e2330;
+  box-shadow:
+    0 28px 64px -20px rgba(0, 0, 0, 0.72),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+
+.dark .reasoning-limit-dialog__description {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.dark .reasoning-limit-dialog__value {
+  border-color: rgba(99, 186, 247, 0.3);
+  background: rgba(35, 50, 76, 0.92);
+  color: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.dictation-window--compact {
+  align-items: flex-end;
+}
+
+.dictation-window__overlay {
+  position: relative;
+  z-index: 50;
+  overflow: visible;
+  box-sizing: border-box;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.dictation-window__overlay--full {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  /* Pin the capsule to the bottom: the overlay window is bottom-anchored and
+     grows upward when it expands (e.g. WITH_TOAST), so flex-end keeps the
+     capsule fixed at the screen bottom instead of drifting toward the top. */
+  align-items: flex-end;
+  justify-content: center;
+  overflow: visible;
+}
+
+.dictation-window__overlay--compact {
+  display: inline-flex;
+  width: max-content;
+  height: max-content;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+  padding: 0;
+}
+
+.dictation-window--compact .dictation-window__overlay--compact {
+  margin-bottom: 2px;
+}
+
+.dictation-window__chrome {
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.dictation-window__chrome--nebula {
+  --dictation-nebula-size: 132px;
+  --dictation-close-size: 24px;
+  --dictation-nebula-preview-height: 36px;
+  --dictation-nebula-preview-gap: 10px;
+  align-items: flex-start;
+}
+
+.dictation-window__chrome--nebula .dictation-floating-close {
+  position: absolute;
+  /* Align to the rendered galaxy's optical center. Centering against the full
+     132px shell moves this control 27px too low beside the visible ellipse. */
+  top: 27px;
+  right: 38px;
+  width: var(--dictation-close-size);
+  height: var(--dictation-close-size);
+  margin: 0;
+}
+
+.dictation-mic--nebula {
+  position: relative;
+  display: flex;
+  width: 258px;
+  height: var(--dictation-nebula-size);
+  flex-direction: column;
+  align-items: center;
+  /* The nebula button's wide layout box is needed for the streaming preview,
+     but it would otherwise cover the close control's optical position. Let
+     only the rendered capsule receive pointer hits; bubbled events still
+     reach this button's drag/toggle handlers. */
+  pointer-events: none;
+}
+
+.dictation-mic--nebula .dv-capsule {
+  pointer-events: auto;
+}
+
+.streaming-transcript-preview {
+  position: absolute;
+  bottom: calc(100% + var(--dictation-nebula-preview-gap));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 258px;
+  height: var(--dictation-nebula-preview-height);
+  padding: 0 16px;
+  overflow: hidden;
+  border: 1px solid rgba(189, 221, 255, 0.18);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(116, 236, 255, 0.13), transparent 62%),
+    linear-gradient(180deg, rgba(29, 33, 48, 0.86), rgba(13, 16, 28, 0.8));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 10px 24px -16px rgba(0, 0, 0, 0.72);
+  color: rgba(247, 249, 255, 0.96);
+  backdrop-filter: blur(10px) saturate(112%);
+  -webkit-backdrop-filter: blur(10px) saturate(112%);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  opacity: 0;
+}
+
+.streaming-transcript-preview[data-visible="true"] {
+  visibility: visible;
+  animation: streaming-transcript-preview-enter 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.streaming-transcript-preview::before {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(170, 226, 255, 0.48), transparent);
+}
+
+.streaming-transcript-preview__text {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 13.5px;
+  font-weight: 560;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-align: center;
+  text-overflow: clip;
+  text-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.9),
+    0 0 16px rgba(116, 236, 255, 0.22);
+  white-space: nowrap;
+}
+
+.streaming-transcript-preview[data-placeholder="true"] .streaming-transcript-preview__text {
+  color: rgba(239, 244, 255, 0.72);
+  font-weight: 500;
+}
+
+@keyframes streaming-transcript-preview-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.dictation-floating-close {
+  position: relative;
+  z-index: 10;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-left: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(10, 10, 18, 0.88);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.82);
+  transition:
+    opacity 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+  color: rgba(255, 255, 255, 0.98);
+}
+
+.dictation-window__chrome[data-close-ready="true"] .dictation-floating-close,
+.dictation-floating-close:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.dictation-floating-close:hover {
+  background: rgba(200, 30, 30, 0.85);
+  border-color: rgba(255, 100, 100, 0.4);
+  transform: scale(1.12);
+}
+
+.dictation-floating-close:active {
+  transform: scale(0.92);
+  transition-duration: 80ms;
+}
+
+.dictation-floating-close__icon {
+  color: rgba(255, 255, 255, 0.98);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.38));
+}
+
+.dictation-window button {
+  outline: none;
+}
+
+.dictation-window button:focus {
+  outline: none;
+}
+
+.dictation-window button:focus-visible {
+  /*
+   * The microphone button is a transparent 258x132 layout box around the
+   * visible capsule.  Drawing the focus ring on the button itself produces
+   * an oversized rectangle around the nebula (especially at Retina scale).
+   * The visible capsule below owns the keyboard focus treatment instead.
+   */
+  outline: none;
+  box-shadow: none;
+}
+
+.dictation-window__chrome > button:focus-visible .dv-capsule {
+  outline: 2px solid rgba(255, 255, 255, 0.94);
+  outline-offset: 3px;
+  transform: translateY(-1px);
+}
+
+.dictation-window__chrome > button:focus-visible .dv-capsule::before {
+  opacity: 1;
+}
+
+.dictation-window__chrome > button:focus-visible .dv-capsule__halo {
+  box-shadow: 0 0 30px 2px rgba(180, 206, 255, 0.22);
+}
+
+.dictation-floating-close:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  outline: 2px solid rgba(255, 255, 255, 0.94);
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 4px rgba(146, 186, 255, 0.18),
+    0 10px 26px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.dictation-command-menu-shell {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  background: transparent;
+  padding: 0;
+}
+
+.dictation-command-menu {
+  width: 188px;
+  padding: 8px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(20, 20, 30, 0.96), rgba(12, 12, 18, 0.94));
+  box-shadow:
+    0 18px 32px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(22px) saturate(130%);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dictation-command-menu__item {
+  width: 100%;
+  min-height: 38px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(245, 248, 255, 0.86);
+  background: transparent;
+  transition:
+    background-color 140ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 140ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 140ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dictation-command-menu__item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dictation-command-menu__item:active {
+  transform: scale(0.985);
+}
+
+.dictation-command-menu__item--primary {
+  color: rgba(255, 255, 255, 0.94);
+  background: linear-gradient(90deg, rgba(126, 146, 255, 0.16), rgba(99, 186, 247, 0.12));
+}
+
+.dictation-command-menu__item--primary:hover {
+  background: linear-gradient(90deg, rgba(126, 146, 255, 0.22), rgba(99, 186, 247, 0.16));
+}
+
+@media (max-width: 640px) {
+  .dictation-window__overlay--compact {
+    padding: 0;
+  }
+}
+
+/* Indeterminate progress bar sweep */
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+:hover::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
+
+:hover::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ---- Accessibility: Reduced Transparency ---- */
+@media (prefers-reduced-transparency: reduce) {
+  .toast-surface {
+    background: linear-gradient(180deg, rgba(42, 45, 58, 0.96) 0%, rgba(17, 19, 27, 0.95) 100%);
+    background-color: rgba(18, 20, 28, 0.96);
+    backdrop-filter: blur(16px) saturate(115%);
+    -webkit-backdrop-filter: blur(16px) saturate(115%);
+  }
+
+  .glass-panel--featured,
+  .glass-panel--selected {
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+  }
+
+  .premium-panel--hero {
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+  }
+
+  .premium-panel,
+  .premium-stat-card {
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+  }
+
+  .settings-modal-shell::before {
+    background: var(--ui-shell-sheen);
+  }
+}
+
+/* ---- Accessibility: Reduced Motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
