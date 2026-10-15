@@ -24,4 +24,4 @@ Before submitting a Pull Request:
 
 ## Contact
 
-For security disclosures or licensing inquiries, please contact `gravitypoet@icloud.com`.
+For security disclosures or licensing inquiries, please contact `gravitypoet&#64;icloud.com`.

@@ -133,7 +133,7 @@ Once you open the release page, click the file that matches your system:
 
 - 📦 [All Releases](https://github.com/GravityPoet/ChordVox/releases)
 - 📖 [Legacy Technical README](docs/README_LEGACY.md)
-- 📬 Contact: `gravitypoet@icloud.com`
+- 📬 Contact: `gravitypoet&#64;icloud.com`
 
 ---
 
@@ -142,5 +142,5 @@ Once you open the release page, click the file that matches your system:
 ChordVox Community Edition is open source under the **[AGPL-3.0 License](./LICENSE)**.
 
 - **Open Source Free Use:** Free for individual and enterprise use in accordance with AGPL-3.0 terms.
-- **Commercial Dual-License:** For proprietary integration or closed-source redistribution without AGPL-3.0 copyleft obligations, please contact `gravitypoet@icloud.com`.
+- **Commercial Dual-License:** For proprietary integration or closed-source redistribution without AGPL-3.0 copyleft obligations, please contact `gravitypoet&#64;icloud.com`.
 - **Third-Party Attributions:** See [NOTICE](./NOTICE) and [Open Source Notices](./resources/legal/OPEN_SOURCE_NOTICES.txt).

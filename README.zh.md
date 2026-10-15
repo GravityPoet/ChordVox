@@ -133,7 +133,7 @@
 
 - 📦 [所有版本](https://github.com/GravityPoet/ChordVox/releases)
 - 📖 [完整技术文档](docs/README_LEGACY.md)
-- 📬 联系方式：`gravitypoet@icloud.com`
+- 📬 联系方式：`gravitypoet&#64;icloud.com`
 
 ---
 
@@ -142,5 +142,5 @@
 ChordVox 社区版基于 **[AGPL-3.0 许可证](./LICENSE)** 开源。
 
 - **开源自由使用：** 任何个人或企业均可在遵守 AGPL-3.0 条款的前提下免费使用和分发。
-- **商业双重授权：** 若企业需要闭源集成或免除 AGPL-3.0 传染义务，请联系 `gravitypoet@icloud.com` 获取商业授权。
+- **商业双重授权：** 若企业需要闭源集成或免除 AGPL-3.0 传染义务，请联系 `gravitypoet&#64;icloud.com` 获取商业授权。
 - **第三方开源致谢：** 详见 [NOTICE](./NOTICE) 与 [开源组件声明](./resources/legal/OPEN_SOURCE_NOTICES.txt)。

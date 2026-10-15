@@ -42,9 +42,9 @@ export default function SupportDropdown({ className }: SupportDropdownProps) {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={async () => {
-            const result = await window.electronAPI?.openExternal("mailto:gravitypoet@icloud.com");
+            const result = await window.electronAPI?.openExternal("mailto:gravitypoet\u0040icloud.com");
             if (!result?.success) {
-              openExternal("https://mail.google.com/mail/?view=cm&to=gravitypoet@icloud.com");
+              openExternal("https://mail.google.com/mail/?view=cm&to=gravitypoet%40icloud.com");
             }
           }}
         >
