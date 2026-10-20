@@ -120,12 +120,12 @@
 
 进入下载页后，直接点击与你系统对应的文件即可：
 
-- macOS（Apple Silicon）：`ChordVox-*-arm64.dmg`
+- macOS 14 及以上（Apple Silicon）：`ChordVox-*-arm64.dmg`
 - Windows（x64）：`ChordVox-Setup-*.exe`
-- Linux（x64）：`ChordVox-*-linux-x86_64.AppImage`、`ChordVox-*-linux-amd64.deb` 或 `ChordVox-*-linux-x86_64.rpm`
+- Linux（x64）：`ChordVox-*-x86_64.AppImage`、`ChordVox-*-linux-amd64.deb` 或 `ChordVox-*-linux-x86_64.rpm`
 
 > [!IMPORTANT]
-> **macOS 首次启动**：macOS 客户版使用 ChordVox 固定自签名证书，但未经 Apple 公证。打开 DMG 后，把 `ChordVox.app` 拖到 `Applications`，再从 `Applications` 打开；每台新 Mac 首次安装通常需要到“系统设置 > 隐私与安全性”选择“仍要打开”。只有仍打不开时，再回到 DMG 双击右侧 `Fix & Open.command`，它只会解除已安装 App 的隔离标记并打开 ChordVox。
+> **macOS 首次启动**：macOS 客户版使用 ChordVox 固定自签名证书，但未经 Apple 公证。打开 DMG，把 `ChordVox.app` 拖到 `Applications`，再从 Applications 打开。若首次被拦截，先点“完成”，打开“系统设置 > 隐私与安全”，向下滚动到“安全性”，选择“打开”或“仍要打开”并按提示确认。若没有放行按钮，请先从 Applications 再次尝试打开，再返回安全性区域。
 
 > 本地离线语音识别永久免费；AI 增强、文件转录、BYOK 和高级工作流可按需使用 Pro 能力。
 

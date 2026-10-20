@@ -120,12 +120,12 @@ Standard dictation tools are frustrating: they leave in every filler word, garbl
 
 Once you open the release page, click the file that matches your system:
 
-- macOS (Apple Silicon): `ChordVox-*-arm64.dmg`
+- macOS 14+ (Apple Silicon): `ChordVox-*-arm64.dmg`
 - Windows (x64): `ChordVox-Setup-*.exe`
-- Linux (x64): `ChordVox-*-linux-x86_64.AppImage`, `ChordVox-*-linux-amd64.deb`, or `ChordVox-*-linux-x86_64.rpm`
+- Linux (x64): `ChordVox-*-x86_64.AppImage`, `ChordVox-*-linux-amd64.deb`, or `ChordVox-*-linux-x86_64.rpm`
 
 > [!IMPORTANT]
-> **Essential for macOS First Launch**: The macOS customer build uses ChordVox's stable self-signed certificate and is not Apple-notarized. Drag `ChordVox.app` into `Applications`, then open it from Applications. On each new Mac, you will normally need to choose **Open Anyway** in **System Settings > Privacy & Security** once. If it is still blocked, go back to the DMG and double-click `Fix & Open.command` on the right — it only removes the quarantine flag from the installed app and then opens ChordVox.
+> **Essential for macOS First Launch**: The macOS customer build uses ChordVox's stable self-signed certificate and is not Apple-notarized. Drag `ChordVox.app` into `Applications`, then open it from Applications. If macOS blocks the first launch, click **Done**, open **System Settings > Privacy & Security**, scroll to **Security**, and choose **Open** or **Open Anyway**. If no option appears, try opening ChordVox from Applications again and return to Security.
 
 > Free forever local speech-to-text. AI enhancement, file transcription, BYOK, and advanced workflows are available through optional Pro features.
 
